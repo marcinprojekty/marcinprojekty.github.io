@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Przypomnienia o płatnościach w Arkuszu Google</title>
+<meta name="description" content="Arkusz Google, który codziennie przypomina kontrahentom o fakturach z Twojego Gmaila, a po terminie przygotowuje przedsądowe wezwanie do zapłaty w PDF z odsetkami. Dane zostają u Ciebie.">
+<meta property="og:title" content="Przypomnienia o płatnościach w Arkuszu Google">
+<meta property="og:description" content="Uprzejme przypomnienia o fakturach wysyłane automatycznie z Twojego Gmaila i wezwanie do zapłaty w PDF. Wersja darmowa do 3 faktur.">
+<meta property="og:image" content="przypomnienia-okladka.jpg">
+<style>
+  :root {
+    --bg: #f5f6f8; --surface: #ffffff; --ink: #18212b; --muted: #5d6875;
+    --line: #e1e5ea; --accent: #e2681c; --accent-ink: #ffffff; --navy: #1f3a5f; --chip: #eef1f5;
+    --ok-bg: #e6f4ea; --ok: #137333; --warn-bg: #fff8c5; --warn: #6b5300;
+    --today-bg: #ffe9c7; --today: #8a4b00; --late-bg: #fbe3e3; --late: #a50e0e;
+    --sheet-head: #1f3a5f; --sheet-auto: #5f6b7a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12161b; --surface: #1a2028; --ink: #e9edf2; --muted: #a2adb9;
+      --line: #2b333d; --accent: #f08a45; --accent-ink: #15110d; --navy: #9cc0ea; --chip: #232a33;
+      --ok-bg: #173323; --ok: #8fd6a5; --warn-bg: #3a3313; --warn: #f1dd85;
+      --today-bg: #44301a; --today: #ffc58a; --late-bg: #47201f; --late: #ff9d95;
+      --sheet-head: #2a4a75; --sheet-auto: #46525f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12161b; --surface: #1a2028; --ink: #e9edf2; --muted: #a2adb9;
+    --line: #2b333d; --accent: #f08a45; --accent-ink: #15110d; --navy: #9cc0ea; --chip: #232a33;
+    --ok-bg: #173323; --ok: #8fd6a5; --warn-bg: #3a3313; --warn: #f1dd85;
+    --today-bg: #44301a; --today: #ffc58a; --late-bg: #47201f; --late: #ff9d95;
+    --sheet-head: #2a4a75; --sheet-auto: #46525f;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+  header.top { padding: 22px 0 8px; }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; text-decoration: none; }
+  .mono { width: 38px; height: 38px; border-radius: 10px; background: var(--navy); color: var(--bg); display: grid; place-items: center; font-weight: 800; font-size: 19px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: inherit; font-weight: 700; text-decoration: none; border-radius: 999px; padding: 12px 20px; border: 2px solid transparent; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn.ghost { border-color: var(--line); background: var(--surface); }
+  @media (max-width: 520px) { header.top .btn { padding: 8px 14px; font-size: 14px; } }
+
+  .hero { padding-top: 34px; padding-bottom: 26px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 36px; align-items: center; }
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .hero h1 { font-size: clamp(30px, 4.8vw, 48px); line-height: 1.08; margin: 0 0 14px; letter-spacing: -0.01em; text-wrap: balance; }
+  .hero p.lead { font-size: 18px; color: var(--muted); margin: 0 0 22px; max-width: 54ch; }
+  .cta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .note { font-size: 14px; color: var(--muted); margin-top: 12px; }
+  @media (max-width: 900px) { .hero { grid-template-columns: 1fr; gap: 26px; } }
+
+  /* Arkusz */
+  .sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 12px 32px rgba(16, 24, 40, .10); }
+  .sheet-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .sheet-bar b { color: var(--ink); }
+  .sheet-bar .menu { margin-left: auto; font-weight: 700; color: var(--ink); background: var(--chip); padding: 3px 9px; border-radius: 6px; }
+  .sheet-scroll { overflow-x: auto; }
+  @media (max-width: 520px) { .sheet-bar .tab { display: none; } }
+  table.grid { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 12.5px; }
+  table.grid th { background: var(--sheet-head); color: #fff; text-align: left; font-weight: 700; padding: 8px 7px; white-space: nowrap; }
+  table.grid th.auto { background: var(--sheet-auto); }
+  table.grid td { padding: 7px 7px; border-top: 1px solid var(--line); white-space: nowrap; }
+  table.grid td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.grid tr.paid td { color: var(--muted); }
+  .st { display: inline-block; font-weight: 700; padding: 2px 8px; border-radius: 6px; font-size: 12px; }
+  .st.ok { background: var(--ok-bg); color: var(--ok); font-weight: 600; }
+  .st.warn { background: var(--warn-bg); color: var(--warn); font-weight: 600; }
+  .st.today { background: var(--today-bg); color: var(--today); }
+  .st.late { background: var(--late-bg); color: var(--late); }
+  .sent { color: var(--muted); font-size: 12px; }
+  .box { display: inline-block; width: 13px; height: 13px; border: 1.5px solid var(--muted); border-radius: 3px; vertical-align: -2px; }
+  .box.on { background: var(--muted); }
+
+  section { padding: 34px 0; }
+  h2 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.15; margin: 0 0 8px; text-wrap: balance; }
+  .sub { color: var(--muted); margin: 0 0 24px; max-width: 64ch; }
+
+  /* Oś czasu */
+  .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .step { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; position: relative; }
+  .step .when { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  .step:nth-child(1) .when { color: var(--warn); }
+  .step:nth-child(2) .when { color: var(--today); }
+  .step:nth-child(3) .when, .step:nth-child(4) .when { color: var(--late); }
+  .step h3 { margin: 0 0 6px; font-size: 18px; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .timeline { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .timeline { grid-template-columns: 1fr; } }
+
+  /* Mail i PDF */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 860px) { .duo { grid-template-columns: 1fr; } }
+  .mail { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .mail-head { padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .mail-head .subj { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .mail-head .meta { color: var(--muted); }
+  .mail-body { padding: 16px; font-size: 15px; white-space: pre-line; }
+  .doc { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px; box-shadow: 0 12px 32px rgba(16, 24, 40, .10); }
+  .doc img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  .caption { font-size: 14px; color: var(--muted); margin-top: 10px; }
+
+  /* Funkcje */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .feature { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .feature h3 { margin: 0 0 6px; font-size: 17px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .features { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .features { grid-template-columns: 1fr; } }
+
+  /* Cennik */
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .plan { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+  .plan.best { border: 2px solid var(--accent); }
+  .plan .name { font-weight: 800; font-size: 18px; }
+  .plan .price { font-size: 34px; font-weight: 800; line-height: 1; }
+  .plan .price small { font-size: 15px; font-weight: 600; color: var(--muted); }
+  .plan ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; }
+  .plan .btn { margin-top: auto; }
+  .badge { align-self: flex-start; background: var(--accent); color: var(--accent-ink); font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 999px; }
+  @media (max-width: 860px) { .plans { grid-template-columns: 1fr; } }
+
+  /* FAQ */
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+  summary { font-weight: 700; cursor: pointer; }
+  details p { margin: 10px 0 0; color: var(--muted); }
+
+  footer { padding: 30px 0 44px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 20px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><span class="mono">M</span><span>Marcin – projekty</span></a>
+    <a class="btn ghost" href="#cennik">Cennik</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">Arkusz Google + Twój Gmail</span>
+      <h1>Przypomnienia o płatnościach, które wysyłają się same</h1>
+      <p class="lead">Wpisujesz faktury do arkusza. Arkusz codziennie rano sprawdza terminy i wysyła kontrahentom uprzejme przypomnienia z Twojego Gmaila, a po terminie przygotowuje przedsądowe wezwanie do zapłaty w PDF z odsetkami.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://docs.google.com/spreadsheets/d/1_CR0NoqUiiz55AziofRHmF4lVoLRYPq3fCeVFhMMHEE/copy">Pobierz wersję darmową</a>
+        <a class="btn ghost" href="#cennik">Pełna wersja: cennik</a>
+      </div>
+      <p class="note">Wersja darmowa obsługuje 3 niezapłacone faktury. Bez instalowania programów i bez zakładania kont.</p>
+    </div>
+
+    <div class="sheet" role="img" aria-label="Podgląd arkusza z fakturami i statusami płatności">
+      <div class="sheet-bar"><b>Przypomnienia o płatnościach</b><span class="tab">· Faktury</span><span class="menu">Przypomnienia ▾</span></div>
+      <div class="sheet-scroll">
+        <table class="grid">
+          <thead>
+            <tr><th>Kontrahent</th><th>Kwota</th><th>Termin</th><th>Zapł.</th><th class="auto">Status</th><th class="auto">Wysłane</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Kwiaciarnia Bukiet</td><td class="num">1 845,00 zł</td><td>26.10</td><td><span class="box"></span></td><td><span class="st warn">Za 3 dni</span></td><td class="sent">przed terminem 23.10</td></tr>
+            <tr><td>Auto Serwis Nowak</td><td class="num">3 690,00 zł</td><td>23.10</td><td><span class="box"></span></td><td><span class="st today">Dziś termin</span></td><td class="sent">w dniu terminu 23.10</td></tr>
+            <tr><td>Studio Lilia</td><td class="num">615,00 zł</td><td>15.10</td><td><span class="box"></span></td><td><span class="st late">Po terminie 8 dni</span></td><td class="sent">po terminie 22.10</td></tr>
+            <tr><td>Hurtownia Budmat</td><td class="num">12 300,00 zł</td><td>07.10</td><td><span class="box"></span></td><td><span class="st late">Po terminie 16 dni</span></td><td class="sent">wezwanie 23.10</td></tr>
+            <tr class="paid"><td>Pracownia Neon</td><td class="num">2 460,00 zł</td><td>03.10</td><td><span class="box on"></span></td><td><span class="st ok">Zapłacona</span></td><td class="sent">po terminie 10.10</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2>Cztery przypomnienia, zanim zaczniesz dzwonić</h2>
+      <p class="sub">Domyślny harmonogram możesz zmienić w ustawieniach. Do jednej faktury wychodzi najwyżej jeden mail dziennie, a każdy etap tylko raz.</p>
+      <div class="timeline">
+        <div class="step"><div class="when">3 dni przed terminem</div><h3>Uprzejme przypomnienie</h3><p>Kwota, termin i numer konta w jednym miejscu, żeby przelew zajął klientowi minutę.</p></div>
+        <div class="step"><div class="when">W dniu terminu</div><h3>Dziś mija termin</h3><p>Krótka wiadomość z danymi do przelewu.</p></div>
+        <div class="step"><div class="when">7 dni po terminie</div><h3>Zaległa płatność</h3><p>Prośba o wpłatę albo informację, kiedy przelew dotrze.</p></div>
+        <div class="step"><div class="when">14 dni po terminie</div><h3>Wezwanie do zapłaty</h3><p>Gotowy PDF z odsetkami. Domyślnie trafia najpierw do Ciebie do sprawdzenia.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap duo">
+      <div>
+        <h2>Brzmi jak Ty, nie jak automat</h2>
+        <p class="sub">Treść każdego maila zmieniasz w zakładce Szablony. Mail wychodzi z Twojej skrzynki, pod nazwą Twojej firmy, a odpowiedzi trafiają do Ciebie.</p>
+        <div class="mail" aria-label="Przykładowe przypomnienie">
+          <div class="mail-head">
+            <div class="subj">Przypomnienie o płatności: faktura FV/10/2026/014</div>
+            <div class="meta">Od: Pracownia Mebli Dębowy Stół · Do: Kwiaciarnia Bukiet</div>
+          </div>
+          <div class="mail-body">Dzień dobry,
+
+uprzejmie przypominamy, że 26.10.2026 mija termin płatności faktury nr FV/10/2026/014 na kwotę 1 845,00 zł.
+
+Numer konta: 00 1111 2222 3333 4444 5555 6666
+Tytuł przelewu: FV/10/2026/014
+
+Jeśli przelew jest już w drodze, prosimy zignorować tę wiadomość.
+
+Pozdrawiamy
+Anna Kowalska
+Pracownia Mebli Dębowy Stół</div>
+        </div>
+      </div>
+      <div>
+        <div class="doc"><img src="przypomnienia-wezwanie.jpg" width="794" height="780" alt="Przykładowe przedsądowe wezwanie do zapłaty w PDF z należnością główną, odsetkami i sumą do zapłaty" loading="lazy"></div>
+        <p class="caption">Wezwanie do zapłaty w PDF: należność, odsetki za opóźnienie w transakcjach handlowych, opcjonalnie rekompensata 40/70/100 EUR po kursie NBP.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Co dostajesz</h2>
+      <p class="sub">Jeden arkusz Google z gotowym automatem. Kopiujesz go na swój Dysk, wpisujesz dane firmy i faktury, włączasz codzienną wysyłkę.</p>
+      <div class="features">
+        <div class="feature"><h3>Dane zostają u Ciebie</h3><p>Faktury i kontrahenci są tylko w Twoim arkuszu na Twoim koncie Google. Nikt poza Tobą nie ma do nich dostępu.</p></div>
+        <div class="feature"><h3>Działa bez komputera</h3><p>Sprawdzanie odbywa się na serwerach Google codziennie o wybranej godzinie, także gdy masz wyłączony komputer.</p></div>
+        <div class="feature"><h3>Podgląd przed wysyłką</h3><p>Jednym kliknięciem widzisz, co pójdzie dziś i do kogo. Wszystko, co wyszło, zapisuje się w dzienniku.</p></div>
+        <div class="feature"><h3>Status każdej faktury</h3><p>Kolory od razu pokazują, co jest przed terminem, co dziś, a co zalega. Po zaznaczeniu „Zapłacona” przypomnienia się zatrzymują.</p></div>
+        <div class="feature"><h3>Odsetki i rekompensata</h3><p>Wezwanie samo liczy odsetki za opóźnienie i może doliczyć rekompensatę 40, 70 lub 100 EUR według kursu NBP.</p></div>
+        <div class="feature"><h3>Twoje zasady</h3><p>Ustawiasz dni przypomnień, godzinę wysyłki, weekendy, kopię każdego maila do siebie i to, czy wezwanie idzie od razu do kontrahenta.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cennik">
+    <div class="wrap">
+      <h2>Cennik</h2>
+      <p class="sub">Ten sam arkusz w każdej wersji. Klucz licencyjny z Gumroad zdejmuje limit faktur.</p>
+      <div class="plans">
+        <div class="plan">
+          <div class="name">Darmowa</div>
+          <div class="price">0 zł</div>
+          <ul><li>3 niezapłacone faktury naraz</li><li>Wszystkie przypomnienia i wezwanie PDF</li><li>Bez limitu czasu</li></ul>
+          <a class="btn ghost" href="https://docs.google.com/spreadsheets/d/1_CR0NoqUiiz55AziofRHmF4lVoLRYPq3fCeVFhMMHEE/copy">Pobierz arkusz</a>
+        </div>
+        <div class="plan">
+          <div class="name">Miesięcznie</div>
+          <div class="price">29 zł <small>/ mies.</small></div>
+          <ul><li>Bez limitu faktur</li><li>Pomoc mailowa przy ustawieniu</li><li>Anulujesz w każdej chwili</li></ul>
+          <a class="btn primary" href="https://projekty8.gumroad.com/l/przypomnienia-o-platnosciach">Kup na Gumroad</a>
+        </div>
+        <div class="plan best">
+          <span class="badge">Najtaniej</span>
+          <div class="name">Rocznie</div>
+          <div class="price">199 zł <small>/ rok</small></div>
+          <ul><li>Wszystko z wersji miesięcznej</li><li>Wychodzi ok. 16,60 zł miesięcznie</li><li>Jedna płatność na 12 miesięcy</li></ul>
+          <a class="btn primary" href="https://projekty8.gumroad.com/l/przypomnienia-o-platnosciach">Kup na Gumroad</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Pytania</h2>
+      <details><summary>Czy muszę coś instalować?</summary><p>Nie. Potrzebujesz tylko konta Google (zwykłego Gmaila albo Google Workspace). Arkusz kopiujesz jednym kliknięciem na swój Dysk.</p></details>
+      <details><summary>Co to za ostrzeżenie Google przy pierwszym uruchomieniu?</summary><p>Przy pierwszym użyciu Google pyta o zgodę na działanie skryptu w Twoim arkuszu: dostęp do tego jednego arkusza i wysyłanie maili z Twojego konta. Komunikat o niezweryfikowanej aplikacji pojawia się przy każdym własnym skrypcie. Instrukcja krok po kroku jest w zakładce Start.</p></details>
+      <details><summary>Ile maili dziennie mogę wysłać?</summary><p>Darmowy Gmail pozwala skryptom wysłać ok. 100 maili dziennie, Google Workspace ok. 1500. Jeśli tego dnia przypomnień jest więcej, reszta pójdzie następnego dnia.</p></details>
+      <details><summary>Czy kontrahent zobaczy, że to automat?</summary><p>Mail wychodzi z Twojego Gmaila jako zwykła wiadomość, z Twoim podpisem i treścią, którą sam ustawisz.</p></details>
+      <details><summary>Jak przejść z wersji darmowej na pełną?</summary><p>Kupujesz abonament na Gumroad, dostajesz mailem klucz licencyjny i wklejasz go w menu Przypomnienia, opcja „Aktywuj licencję”. Faktury i ustawienia zostają bez zmian.</p></details>
+      <details><summary>Co się stanie, gdy zrezygnuję z abonamentu?</summary><p>Arkusz i wszystkie dane zostają u Ciebie. Po końcu opłaconego okresu automat wraca do limitu 3 niezapłaconych faktur.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Marcin – projekty · <a href="./">wszystkie projekty</a></span>
+    <span>Arkusz pomaga pilnować płatności, ale nie jest poradą prawną.</span>
+  </div>
+</footer>
+</body>
+</html>
