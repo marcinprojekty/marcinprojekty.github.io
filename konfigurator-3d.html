@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Konfigurator automatów 3D – demo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  :root { --bg:#eef1f4; --panel:#fff; --ink:#18212b; --muted:#5f6b78; --line:#dde3e9; --accent:#e2681c; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:14px/1.45 "Segoe UI", system-ui, Arial, sans-serif; }
+  .app { display:grid; grid-template-columns: 1fr 340px; height:100vh; }
+  #view { position:relative; min-height:320px; }
+  #view canvas { display:block; width:100%; height:100%; cursor:grab; }
+  .badge { position:absolute; left:14px; top:12px; background:#fff3d6; color:#8a5a00; font-size:12px; font-weight:600; padding:4px 8px; border-radius:6px; }
+  .hint { position:absolute; left:14px; bottom:12px; color:var(--muted); font-size:12px; background:rgba(255,255,255,.8); padding:4px 8px; border-radius:6px; }
+  aside { background:var(--panel); border-left:1px solid var(--line); overflow:auto; padding:16px; display:grid; gap:16px; align-content:start; }
+  h1 { font-size:17px; margin:0; }
+  h2 { font-size:12px; margin:0 0 8px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+  .add { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  button { font:inherit; font-weight:600; border:1px solid var(--line); background:#fff; border-radius:8px; padding:8px 10px; cursor:pointer; color:var(--ink); }
+  button:hover { border-color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .mods { display:grid; gap:6px; }
+  .mod { display:flex; align-items:center; gap:6px; padding:8px; border:1px solid var(--line); border-radius:8px; cursor:pointer; }
+  .mod.sel { border-color:var(--accent); background:#fff6ef; }
+  .mod span { flex:1; font-weight:600; }
+  .mod button { padding:2px 7px; font-size:13px; }
+  .opts { display:grid; gap:8px; }
+  label { display:grid; gap:4px; font-size:12px; font-weight:600; color:var(--muted); }
+  select, input[type=range] { width:100%; font:inherit; }
+  select { padding:7px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+  .swatches { display:flex; gap:6px; flex-wrap:wrap; }
+  .sw { width:30px; height:30px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px var(--line); cursor:pointer; padding:0; }
+  .sw.on { box-shadow:0 0 0 2px var(--accent); }
+  .sum { background:var(--bg); border-radius:8px; padding:10px; display:grid; gap:4px; font-variant-numeric:tabular-nums; }
+  .sum div { display:flex; justify-content:space-between; }
+  .row { display:flex; gap:6px; flex-wrap:wrap; }
+  @media (max-width:820px){ .app{ grid-template-columns:1fr; grid-template-rows: 55vh auto; height:auto; } aside{ border-left:0; border-top:1px solid var(--line);} }
+</style>
+<style id="pf-bar">.pf-bar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;height:30px;padding:0 12px;background:#1f3a5f;color:#fff;font:600 13px/30px "Segoe UI",system-ui,Arial,sans-serif}.pf-bar a{color:#fff;text-decoration:none}.pf-bar a:hover{text-decoration:underline}.pf-bar span{opacity:.75;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style><style>.app{height:calc(100vh - 30px)}@media (max-width:820px){.app{height:auto}}</style>
+</head>
+<body>
+<div class="pf-bar"><a href="./">← Marcin – wszystkie projekty</a><span>projekt demonstracyjny</span></div>
+<div class="app">
+  <div id="view"><span class="badge">DEMO – projekt przykładowy</span><span class="hint">Przeciągnij, aby obrócić · kółko / dwa palce, aby przybliżyć · kliknij moduł, aby go wybrać</span></div>
+  <aside>
+    <h1>Konfigurator automatów</h1>
+    <section>
+      <h2>Dodaj moduł</h2>
+      <div class="add">
+        <button data-add="terminal">Terminal z ekranem</button>
+        <button data-add="lockers">Skrytki</button>
+        <button data-add="drawers">Szuflady</button>
+        <button data-add="shutter">Roleta (3 kolumny)</button>
+      </div>
+    </section>
+    <section>
+      <h2>Moduły w zestawie</h2>
+      <div class="mods" id="mods"></div>
+    </section>
+    <section>
+      <h2>Ustawienia wybranego modułu</h2>
+      <div class="opts" id="opts"></div>
+    </section>
+    <section>
+      <h2>Kolor obudowy</h2>
+      <div class="swatches" id="bodySw"></div>
+      <h2 style="margin-top:12px">Kolor frontów</h2>
+      <div class="swatches" id="frontSw"></div>
+    </section>
+    <section>
+      <h2>Podsumowanie</h2>
+      <div class="sum" id="sum"></div>
+    </section>
+    <div class="row">
+      <button id="shot">Zapisz obraz PNG</button>
+      <button class="primary" id="json">Zapisz konfigurację</button>
+    </div>
+  </aside>
+</div>
+
+<script>
+// ===== Dane =====
+const TYPES = {
+  terminal: { name:'Terminal z ekranem', w:0.8 },
+  lockers:  { name:'Skrytki', w:1.0 },
+  drawers:  { name:'Szuflady', w:1.0 },
+  shutter:  { name:'Roleta (3 kolumny)', w:1.2 },
+};
+const BODY_COLORS = { 'Grafit':'#3b4249', 'Biały':'#e9ecef', 'Niebieski':'#1f4f8f', 'Czerwony':'#a8322b' };
+const FRONT_COLORS = { 'Pomarańczowy':'#e2681c', 'Szary':'#9aa3ad', 'Zielony':'#2f8f5b', 'Żółty':'#e8b923' };
+const H = 2.0, D = 0.8, GAP = 0.02;
+let state = { body:'#3b4249', front:'#e2681c', modules:[
+  { id:1, type:'terminal' }, { id:2, type:'lockers', rows:6, cols:2 }, { id:3, type:'drawers', count:6 }, { id:4, type:'shutter' } ] };
+let selected = 2, nextId = 5;
+
+// ===== Scena =====
+const view = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({ antialias:true, preserveDrawingBuffer:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+view.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#e6eaee');
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8a939c, 0.85));
+const sun = new THREE.DirectionalLight(0xffffff, 0.75);
+sun.position.set(4, 7, 6); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left:-6, right:6, top:6, bottom:-6 });
+scene.add(sun);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshStandardMaterial({ color:'#d5dbe1', roughness:1 }));
+floor.rotation.x = -Math.PI/2; floor.receiveShadow = true; scene.add(floor);
+const rig = new THREE.Group(); scene.add(rig);
+
+function mat(color, rough=0.55, metal=0.25) { return new THREE.MeshStandardMaterial({ color, roughness:rough, metalness:metal }); }
+function box(w, h, d, m, x, y, z, parent) {
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+  b.position.set(x, y, z); b.castShadow = true; b.receiveShadow = true; parent.add(b); return b;
+}
+
+function buildModule(m) {
+  const t = TYPES[m.type], w = t.w, g = new THREE.Group();
+  const body = mat(state.body), front = mat(state.front, 0.45, 0.3), dark = mat('#14181c', 0.3, 0.1), steel = mat('#c9ced3', 0.3, 0.8);
+  box(w, H, D, body, 0, H/2 + 0.08, 0, g);                         // korpus
+  box(w*0.96, 0.08, D*0.9, dark, 0, 0.04, 0, g);                   // cokół
+  const fz = D/2 + 0.012;
+  if (m.type === 'terminal') {
+    box(w*0.7, 0.55, 0.03, dark, 0, 1.45, fz, g);                  // ekran
+    box(w*0.6, 0.45, 0.01, mat('#2b8fd6', 0.2, 0), 0, 1.45, fz + 0.02, g);
+    box(0.18, 0.1, 0.04, steel, 0, 1.0, fz, g);                    // czytnik kart
+    box(w*0.7, 0.12, 0.05, dark, 0, 0.6, fz, g);                   // okno wydawania
+  }
+  if (m.type === 'lockers') {
+    const rows = m.rows, cols = m.cols, top = 1.95, bot = 0.2, ch = (top-bot)/rows, cw = (w-0.08)/cols;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const x = -w/2 + 0.04 + cw*c + cw/2, y = bot + ch*r + ch/2;
+      box(cw-GAP, ch-GAP, 0.03, front, x, y + 0.08, fz, g);
+      box(0.03, 0.06, 0.03, steel, x + cw/2 - 0.06, y + 0.08, fz + 0.025, g);
+    }
+  }
+  if (m.type === 'drawers') {
+    const n = m.count, top = 1.95, bot = 0.2, dh = (top-bot)/n;
+    for (let i = 0; i < n; i++) {
+      const y = bot + dh*i + dh/2 + 0.08;
+      box(w-0.08, dh-GAP, 0.03, front, 0, y, fz, g);
+      box(w*0.4, 0.025, 0.03, steel, 0, y + dh*0.25, fz + 0.025, g);
+    }
+  }
+  if (m.type === 'shutter') {
+    const cols = 3, cw = (w-0.08)/cols;
+    for (let c = 0; c < cols; c++) {
+      const x = -w/2 + 0.04 + cw*c + cw/2;
+      box(cw-GAP*2, 1.6, 0.02, front, x, 1.15, fz, g);
+      for (let s = 0; s < 22; s++) box(cw-GAP*2, 0.008, 0.026, dark, x, 0.37 + s*0.072, fz, g);
+      box(0.1, 0.03, 0.03, steel, x, 0.42, fz + 0.02, g);
+    }
+  }
+  g.userData.id = m.id;
+  return g;
+}
+
+let frames = [];
+function rebuild() {
+  while (rig.children.length) rig.remove(rig.children[0]);
+  frames = [];
+  const total = state.modules.reduce((s, m) => s + TYPES[m.type].w, 0);
+  let x = -total/2;
+  state.modules.forEach(m => {
+    const g = buildModule(m), w = TYPES[m.type].w;
+    g.position.x = x + w/2; x += w; rig.add(g);
+    if (m.id === selected) {
+      const outline = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(w + 0.02, H + 0.12, D + 0.06)), new THREE.LineBasicMaterial({ color: state.front }));
+      outline.position.set(g.position.x, H/2 + 0.06, 0); rig.add(outline);
+    }
+  });
+  renderPanel();
+}
+
+// ===== Kamera (własne obracanie bez dodatkowych bibliotek) =====
+let yaw = -0.45, pitch = 0.22, dist = 6.2;
+function placeCamera() {
+  const t = new THREE.Vector3(0, 1.0, 0);
+  camera.position.set(t.x + dist*Math.sin(yaw)*Math.cos(pitch), t.y + dist*Math.sin(pitch), t.z + dist*Math.cos(yaw)*Math.cos(pitch));
+  camera.lookAt(t);
+}
+let drag = null, moved = false;
+const pointers = new Map();
+renderer.domElement.addEventListener('pointerdown', e => { renderer.domElement.setPointerCapture(e.pointerId); pointers.set(e.pointerId, { x:e.clientX, y:e.clientY }); drag = { x:e.clientX, y:e.clientY }; moved = false; });
+renderer.domElement.addEventListener('pointermove', e => {
+  if (!pointers.has(e.pointerId)) return;
+  const prev = pointers.get(e.pointerId);
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    const before = Math.hypot(a.x - b.x, a.y - b.y);
+    pointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+    const [c, d] = [...pointers.values()];
+    const after = Math.hypot(c.x - d.x, c.y - d.y);
+    dist = Math.min(12, Math.max(2.5, dist * before / after)); moved = true; return;
+  }
+  const dx = e.clientX - prev.x, dy = e.clientY - prev.y;
+  if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+  yaw -= dx * 0.008; pitch = Math.min(1.2, Math.max(0.02, pitch + dy * 0.006));
+  pointers.set(e.pointerId, { x:e.clientX, y:e.clientY });
+});
+renderer.domElement.addEventListener('pointerup', e => {
+  pointers.delete(e.pointerId);
+  if (!moved && drag) pick(e);
+  drag = null;
+});
+renderer.domElement.addEventListener('wheel', e => { e.preventDefault(); dist = Math.min(12, Math.max(2.5, dist * (1 + Math.sign(e.deltaY) * 0.08))); }, { passive:false });
+
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pick(e) {
+  const r = renderer.domElement.getBoundingClientRect();
+  ndc.set(((e.clientX - r.left)/r.width)*2 - 1, -((e.clientY - r.top)/r.height)*2 + 1);
+  ray.setFromCamera(ndc, camera);
+  const hit = ray.intersectObjects(rig.children, true)[0];
+  if (!hit) return;
+  let o = hit.object; while (o && o.parent !== rig) o = o.parent;
+  if (o && o.userData.id) { selected = o.userData.id; rebuild(); }
+}
+
+function resize() {
+  const w = view.clientWidth, h = view.clientHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+(function loop() { placeCamera(); renderer.render(scene, camera); requestAnimationFrame(loop); })();
+
+// ===== Panel =====
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function compartments(m) { return m.type === 'lockers' ? m.rows*m.cols : m.type === 'drawers' ? m.count : m.type === 'shutter' ? 3 : 0; }
+function renderPanel() {
+  const mods = document.getElementById('mods');
+  mods.innerHTML = state.modules.map((m, i) => `<div class="mod ${m.id===selected?'sel':''}" data-id="${m.id}">
+      <span>${i+1}. ${esc(TYPES[m.type].name)}</span>
+      <button data-act="left" title="Przesuń w lewo">◀</button><button data-act="right" title="Przesuń w prawo">▶</button><button data-act="del" title="Usuń">✕</button></div>`).join('')
+    || '<p style="color:var(--muted);margin:0">Brak modułów. Dodaj pierwszy powyżej.</p>';
+  const m = state.modules.find(x => x.id === selected), opts = document.getElementById('opts');
+  if (!m) opts.innerHTML = '<p style="color:var(--muted);margin:0">Wybierz moduł z listy lub kliknij go na podglądzie.</p>';
+  else if (m.type === 'lockers') opts.innerHTML = `<label>Liczba rzędów: <b>${m.rows}</b><input type="range" min="2" max="10" value="${m.rows}" data-opt="rows"></label><label>Liczba kolumn: <b>${m.cols}</b><input type="range" min="1" max="3" value="${m.cols}" data-opt="cols"></label>`;
+  else if (m.type === 'drawers') opts.innerHTML = `<label>Liczba szuflad: <b>${m.count}</b><input type="range" min="3" max="10" value="${m.count}" data-opt="count"></label>`;
+  else opts.innerHTML = `<p style="color:var(--muted);margin:0">${esc(TYPES[m.type].name)} nie ma dodatkowych ustawień w wersji demo.</p>`;
+  const width = state.modules.reduce((s, x) => s + TYPES[x.type].w, 0);
+  const comp = state.modules.reduce((s, x) => s + compartments(x), 0);
+  document.getElementById('sum').innerHTML = `<div><span>Liczba modułów</span><b>${state.modules.length}</b></div><div><span>Szerokość zestawu</span><b>${(width*100).toFixed(0)} cm</b></div><div><span>Wysokość</span><b>${((H+0.08)*100).toFixed(0)} cm</b></div><div><span>Liczba skrytek / szuflad</span><b>${comp}</b></div>`;
+  swatches('bodySw', BODY_COLORS, 'body'); swatches('frontSw', FRONT_COLORS, 'front');
+}
+function swatches(id, list, key) {
+  document.getElementById(id).innerHTML = Object.entries(list).map(([n, c]) => `<button class="sw ${state[key]===c?'on':''}" style="background:${c}" title="${n}" aria-label="${n}" data-key="${key}" data-color="${c}"></button>`).join('');
+}
+document.querySelector('aside').addEventListener('click', e => {
+  const add = e.target.closest('[data-add]');
+  if (add) { const t = add.dataset.add, m = { id:nextId++, type:t }; if (t==='lockers') Object.assign(m, { rows:6, cols:2 }); if (t==='drawers') m.count = 6; state.modules.push(m); selected = m.id; rebuild(); return; }
+  const sw = e.target.closest('.sw');
+  if (sw) { state[sw.dataset.key] = sw.dataset.color; rebuild(); return; }
+  const row = e.target.closest('.mod');
+  if (row) {
+    const id = +row.dataset.id, i = state.modules.findIndex(m => m.id === id), act = e.target.dataset.act;
+    if (act === 'del') { state.modules.splice(i, 1); if (selected === id) selected = state.modules[0]?.id; }
+    else if (act === 'left' && i > 0) [state.modules[i-1], state.modules[i]] = [state.modules[i], state.modules[i-1]];
+    else if (act === 'right' && i < state.modules.length-1) [state.modules[i+1], state.modules[i]] = [state.modules[i], state.modules[i+1]];
+    else selected = id;
+    rebuild();
+  }
+});
+document.getElementById('opts').addEventListener('input', e => {
+  const m = state.modules.find(x => x.id === selected); if (!m || !e.target.dataset.opt) return;
+  m[e.target.dataset.opt] = +e.target.value; rebuild();
+});
+function download(name, url) { const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+document.getElementById('shot').addEventListener('click', () => download('konfiguracja.png', renderer.domElement.toDataURL('image/png')));
+document.getElementById('json').addEventListener('click', () => {
+  const data = { kolorObudowy: state.body, kolorFrontow: state.front, moduly: state.modules.map(m => ({ typ: TYPES[m.type].name, ...(m.rows ? { rzedy:m.rows, kolumny:m.cols } : {}), ...(m.count ? { szuflady:m.count } : {}) })) };
+  download('konfiguracja.json', URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type:'application/json' })));
+});
+
+resize(); rebuild();
+</script>
+</body>
+</html>

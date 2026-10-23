@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marcin – projekty: strony, aplikacje webowe, Excel</title>
+<meta name="description" content="Działające dema projektów: konfigurator 3D, generator ofert PDF, strony firmowe, raporty w Excelu i gra przeglądarkowa. Strony, aplikacje webowe i automatyzacje dla małych firm.">
+<meta property="og:title" content="Marcin – projekty">
+<meta property="og:description" content="Działające dema: konfigurator 3D, generator ofert PDF, strony firmowe, raporty w Excelu.">
+<meta property="og:image" content="img-konfigurator-3d.jpg">
+<style>
+  :root {
+    --bg: #f5f6f8; --surface: #ffffff; --ink: #18212b; --muted: #5d6875;
+    --line: #e1e5ea; --accent: #e2681c; --accent-ink: #ffffff; --navy: #1f3a5f; --chip: #eef1f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12161b; --surface: #1a2028; --ink: #e9edf2; --muted: #a2adb9;
+      --line: #2b333d; --accent: #f08a45; --accent-ink: #15110d; --navy: #9cc0ea; --chip: #232a33;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+  header.top { padding: 22px 0 8px; }
+  @media (max-width: 520px) { header.top .btn { padding: 8px 14px; font-size: 14px; } }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; text-decoration: none; }
+  .mono { width: 38px; height: 38px; border-radius: 10px; background: var(--navy); color: var(--bg); display: grid; place-items: center; font-weight: 800; font-size: 19px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-weight: 700; text-decoration: none; border-radius: 999px; padding: 11px 18px; border: 2px solid transparent; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn.ghost { border-color: var(--line); background: var(--surface); }
+
+  .hero { padding: 36px 0 28px; }
+  .hero h1 { font-size: clamp(30px, 5.2vw, 50px); line-height: 1.08; margin: 0 0 14px; letter-spacing: -0.01em; max-width: 19ch; text-wrap: balance; }
+  .hero p { font-size: 18px; color: var(--muted); margin: 0 0 22px; max-width: 60ch; }
+  .hero .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .note { margin-top: 18px; font-size: 14px; color: var(--muted); }
+
+  .skills { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
+  .skills li { background: var(--chip); border-radius: 999px; padding: 5px 12px; font-size: 14px; }
+
+  section { padding: 26px 0; }
+  h2 { font-size: 26px; margin: 0 0 6px; }
+  .lead { color: var(--muted); margin: 0 0 18px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 18px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+  .card .shot { display: block; aspect-ratio: 16 / 10; background: var(--chip); border-bottom: 1px solid var(--line); overflow: hidden; }
+  .card .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; transition: transform .25s ease; }
+  .card:hover .shot img { transform: scale(1.02); }
+  .card .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .card h3 { margin: 0; font-size: 19px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  .card ul.tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .card ul.tags li { font-size: 12px; font-weight: 600; background: var(--chip); border-radius: 6px; padding: 3px 8px; color: var(--muted); }
+  .card .links { margin-top: auto; display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px; }
+  .card .links a { font-size: 14px; padding: 8px 14px; }
+
+  .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 14px; }
+  .how div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .how b { display: block; margin-bottom: 4px; }
+  .how span { color: var(--muted); font-size: 15px; }
+  .how .n { color: var(--accent); font-weight: 800; font-size: 13px; letter-spacing: .06em; }
+
+  .cta { background: var(--navy); color: var(--bg); border-radius: 18px; padding: 26px; display: flex; gap: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .cta h2 { color: inherit; }
+  .cta p { margin: 0; opacity: .85; max-width: 56ch; }
+
+  footer { padding: 30px 0 40px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><span class="mono">M</span>Marcin – projekty</a>
+    <a class="btn ghost" href="https://useme.com/pl/roles/contractor/marcin,594444/">Profil na Useme</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Strony, aplikacje webowe i&nbsp;arkusze, które oszczędzają czas</h1>
+    <p>Tworzę narzędzia dla małych firm: konfiguratory produktów, generatory ofert, strony firmowe, raporty w Excelu i automatyzacje. Poniżej są działające dema – można je klikać, zmieniać dane i sprawdzić, jak działają na telefonie.</p>
+    <div class="actions">
+      <a class="btn primary" href="#projekty">Zobacz projekty</a>
+      <a class="btn ghost" href="https://useme.com/pl/roles/contractor/marcin,594444/">Zamów przez Useme</a>
+    </div>
+    <ul class="skills" aria-label="Technologie">
+      <li>JavaScript</li><li>HTML / CSS</li><li>three.js (3D)</li><li>WordPress</li><li>WooCommerce</li><li>Excel i Arkusze Google</li><li>PDF</li><li>SEO</li>
+    </ul>
+    <p class="note">Wszystkie projekty poniżej to dema z fikcyjnymi danymi i nazwami firm – pokazują, jak działa gotowe rozwiązanie.</p>
+  </section>
+
+  <section id="projekty" aria-labelledby="proj-h">
+    <h2 id="proj-h">Projekty</h2>
+    <p class="lead">Kliknij „Otwórz demo”, żeby przetestować w przeglądarce.</p>
+    <div class="grid">
+
+      <article class="card">
+        <a class="shot" href="konfigurator-3d.html"><img src="img-konfigurator-3d.jpg" alt="Konfigurator 3D zestawu automatów z modułami" loading="lazy" width="960" height="600"></a>
+        <div class="body">
+          <h3>Konfigurator 3D produktu</h3>
+          <p>Klient składa zestaw z modułów (terminal, skrytki, szuflady, roleta), zmienia ich liczbę i kolory, obraca model myszą lub palcem. Wymiary liczą się na bieżąco, a konfigurację można zapisać jako obraz PNG i plik JSON.</p>
+          <ul class="tags"><li>three.js</li><li>WebGL</li><li>JavaScript</li></ul>
+          <div class="links"><a class="btn primary" href="konfigurator-3d.html">Otwórz demo</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="generator-ofert.html"><img src="img-generator-ofert.jpg" alt="Generator ofert PDF z wyborem spółki i tabelą pozycji" loading="lazy" width="960" height="600"></a>
+        <div class="body">
+          <h3>Generator ofert PDF</h3>
+          <p>Wybór spółki wystawiającej (logo i dane zmieniają się automatycznie), pozycje z różnymi stawkami VAT, sumy netto/brutto i kwota słownie. Gotowa oferta w PDF jednym kliknięciem.</p>
+          <ul class="tags"><li>JavaScript</li><li>PDF</li><li>formularze</li></ul>
+          <div class="links"><a class="btn primary" href="generator-ofert.html">Otwórz demo</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="pizzeria.html"><img src="img-pizzeria.jpg" alt="Strona wizytówka pizzerii z menu i godzinami otwarcia" loading="lazy" width="960" height="600"></a>
+        <div class="body">
+          <h3>Strona firmowa – pizzeria</h3>
+          <p>Wizytówka lokalnej firmy: menu w zakładkach, strefy dowozu, godziny otwarcia z informacją „otwarte teraz” i przycisk „Zadzwoń” przyklejony na dole ekranu w telefonie. Tryb ciemny.</p>
+          <ul class="tags"><li>strona firmowa</li><li>mobile first</li><li>HTML / CSS</li></ul>
+          <div class="links"><a class="btn primary" href="pizzeria.html">Otwórz demo</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="piosenki.html"><img src="img-piosenki.jpg" alt="Landing page sklepu z piosenkami na zamówienie" loading="lazy" width="960" height="600"></a>
+        <div class="body">
+          <h3>Landing page z zamówieniem</h3>
+          <p>Strona usługi „piosenka na zamówienie”: odsłuch próbek, wybór stylu muzycznego, cena liczona na żywo (w tym tryb ekspres) i formularz zamówienia z walidacją.</p>
+          <ul class="tags"><li>landing page</li><li>formularz</li><li>Web Audio</li></ul>
+          <div class="links"><a class="btn primary" href="piosenki.html">Otwórz demo</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="raport-dzienny-sklepow.xlsx"><img src="img-raport.jpg" alt="Raport dzienny sklepów w Excelu – podsumowanie miesiąca" loading="lazy" width="960" height="600"></a>
+        <div class="body">
+          <h3>Raport dzienny sklepów (Excel)</h3>
+          <p>Arkusz dla właściciela kilku sklepów: dzienne wydatki na Meta Ads i sprzedaż z WooCommerce, automatyczne ROAS, CPA i udział reklam w sprzedaży oraz podsumowanie miesiąca i koszty z wyciągu.</p>
+          <ul class="tags"><li>Excel</li><li>formuły</li><li>raporty</li></ul>
+          <div class="links"><a class="btn primary" href="raport-dzienny-sklepow.xlsx" download>Pobierz plik .xlsx</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="wirtualny-kot.html"><img src="img-wirtualny-kot.jpg" alt="Gra przeglądarkowa – wirtualny kot" loading="lazy" width="960" height="600"></a>
+        <div class="body">
+          <h3>Gra przeglądarkowa „Wirtualny kot”</h3>
+          <p>Mała gra w czystym JavaScripcie: kot rysowany na canvasie, potrzeby, które spadają z czasem (też gdy strona jest zamknięta), głaskanie kursorem i rzucanie piłką. Stan gry zapisuje się w przeglądarce.</p>
+          <ul class="tags"><li>HTML5 canvas</li><li>JavaScript</li><li>gra</li></ul>
+          <div class="links"><a class="btn primary" href="wirtualny-kot.html">Otwórz demo</a></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section aria-labelledby="how-h">
+    <h2 id="how-h">Jak pracuję</h2>
+    <p class="lead">Rozliczenie i umowa przez Useme – z fakturą i przeniesieniem praw autorskich.</p>
+    <div class="how">
+      <div><span class="n">KROK 1</span><b>Konkretny zakres</b><span>Przed startem ustalamy, co dokładnie powstanie, cenę i termin.</span></div>
+      <div><span class="n">KROK 2</span><b>Pierwsza wersja do sprawdzenia</b><span>Szybko pokazuję działającą wersję – widzisz postęp, zanim całość jest gotowa.</span></div>
+      <div><span class="n">KROK 3</span><b>Testy i poprawki</b><span>Każdą zmianę sprawdzam na komputerze i telefonie. Poprawki w ramach zakresu – do skutku.</span></div>
+      <div><span class="n">KROK 4</span><b>Pliki i instrukcja</b><span>Dostajesz komplet plików i pisemną instrukcję ze zrzutami ekranu.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="cta">
+      <div>
+        <h2>Masz podobny projekt?</h2>
+        <p>Napisz na Useme – opisz, czego potrzebujesz, a odpowiem z wyceną i terminem. Chętnie przygotuję też krótką próbkę pod Twoje zlecenie.</p>
+      </div>
+      <a class="btn primary" href="https://useme.com/pl/roles/contractor/marcin,594444/">Napisz przez Useme</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Marcin · Projekty demonstracyjne – nazwy firm, dane i ceny są fikcyjne. · Szablony Excel po polsku: <a href="https://projekty8.gumroad.com">projekty8.gumroad.com</a></div>
+</footer>
+</body>
+</html>

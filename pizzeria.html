@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pizzeria Ceglany Piec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one narrow column like a printed menu card; brick-red header band, basil-green accents, sticky call bar on phones */
+:root {
+  --bg: #fbfaf7;
+  --surface: #ffffff;
+  --ink: #1d221f;
+  --muted: #5d665f;
+  --line: #e3e5df;
+  --brick: #b5361f;
+  --brick-ink: #ffffff;
+  --basil: #23603e;
+  --basil-soft: #e6f0e8;
+  --flour: #f1f1ec;
+  --font-display: "Lilita One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141815; --surface: #1c211d; --ink: #eef0ec;
+    --muted: #a3aba5; --line: #2e3530; --brick: #d4573d; --brick-ink: #ffffff;
+    --basil: #7cc39a; --basil-soft: #1f3327; --flour: #222823; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141815; --surface: #1c211d; --ink: #eef0ec; --muted: #a3aba5;
+  --line: #2e3530; --brick: #d4573d; --brick-ink: #ffffff;
+  --basil: #7cc39a; --basil-soft: #1f3327; --flour: #222823; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.05; text-wrap: balance; margin: 0; letter-spacing: 0.01em; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--basil); outline-offset: 2px; border-radius: 6px; }
+
+.demo-note { background: var(--basil-soft); color: var(--basil); font-size: 13px; font-weight: 600; text-align: center; padding-block: 8px; }
+
+/* Hero */
+.hero { background: var(--brick); color: var(--brick-ink); position: relative; overflow: hidden; }
+.hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 14px;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.22) 0 28px, transparent 28px 34px); }
+.hero .wrap { padding-block: 40px 52px; display: grid; gap: 18px; }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+.hero h1 { font-size: clamp(44px, 11vw, 78px); }
+.hero p.lead { font-size: 18px; max-width: 32ch; margin: 0; opacity: .95; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 700 16px/1 var(--font-body); padding: 14px 18px; border-radius: 999px; text-decoration: none; border: 2px solid transparent; cursor: pointer; }
+.btn-light { background: #fff; color: #8f2715; }
+.btn-ghost { border-color: rgba(255,255,255,.7); color: #fff; background: transparent; }
+.status-pill { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; background: rgba(0,0,0,.18); padding: 6px 12px; border-radius: 999px; width: fit-content; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #7ee2a2; }
+.dot.closed { background: #ffb4a6; }
+
+/* Facts strip */
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-top: -26px; position: relative; z-index: 1; }
+.fact { background: var(--surface); padding: 14px 12px; min-width: 0; }
+.fact b { display: block; font-family: var(--font-display); font-weight: 400; font-size: 24px; color: var(--brick); }
+.fact span { font-size: 13px; color: var(--muted); }
+
+section { padding-block: 44px 8px; }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.section-head h2 { font-size: 34px; }
+.section-head p { margin: 0; color: var(--muted); font-size: 14px; }
+
+/* Menu */
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.tab { font: 600 14px var(--font-body); padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--basil); border-color: var(--basil); color: var(--bg); }
+.menu { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+.menu-cols { display: grid; grid-template-columns: 1fr auto auto; gap: 0 18px; align-items: baseline; padding: 10px 16px 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.item { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 2px 18px; padding: 14px 16px; border-top: 1px solid var(--line); align-items: baseline; }
+.item:first-of-type { border-top: 0; }
+.item h3 { font-family: var(--font-body); font-weight: 700; font-size: 17px; letter-spacing: 0; }
+.item .desc { grid-column: 1 / 2; color: var(--muted); font-size: 14px; }
+.price { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; text-align: right; min-width: 3.2em; }
+.price.single { grid-column: 3; }
+.tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--brick); margin-left: 6px; vertical-align: 2px; }
+.lunch { margin-top: 14px; display: flex; gap: 14px; align-items: center; background: var(--basil-soft); color: var(--ink); border-radius: 14px; padding: 14px 16px; }
+.lunch b { color: var(--basil); }
+
+/* Why */
+.why { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.why div { padding: 16px; border-radius: 14px; background: var(--flour); }
+.why b { display: block; font-size: 17px; margin-bottom: 4px; }
+.why p { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* Delivery + hours */
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; min-width: 0; }
+.card h3 { font-size: 24px; margin-bottom: 10px; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+td { padding: 8px 0; border-top: 1px solid var(--line); vertical-align: top; }
+tr:first-child td { border-top: 0; }
+td:last-child { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 12px; }
+tr.today td { font-weight: 700; color: var(--basil); }
+.small { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+
+/* Contact */
+.contact { display: grid; gap: 10px; }
+.phone-big { font-family: var(--font-display); font-size: clamp(34px, 9vw, 52px); color: var(--brick); letter-spacing: .02em; user-select: all; }
+.copy { font: 600 14px var(--font-body); background: none; border: 1px solid var(--line); color: var(--ink); padding: 8px 12px; border-radius: 999px; cursor: pointer; width: fit-content; }
+
+footer { margin-top: 48px; border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 22px 96px; font-size: 13px; color: var(--muted); display: grid; gap: 4px; }
+
+/* Sticky call bar (phones) */
+.callbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+.callbar span { font-size: 14px; color: var(--muted); }
+.callbar .btn { background: var(--brick); color: var(--brick-ink); }
+@media (min-width: 900px) { .callbar { display: none; } footer .wrap { padding-block: 22px 32px; } }
+@media (max-width: 420px) { .facts { grid-template-columns: 1fr 1fr 1fr; } .fact b { font-size: 20px; } .menu-cols, .item { gap: 2px 12px; } }
+@media (prefers-reduced-motion: no-preference) { .btn { transition: transform .15s ease; } .btn:active { transform: scale(.97); } }
+</style>
+<style id="pf-bar">.pf-bar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;height:30px;padding:0 12px;background:#1f3a5f;color:#fff;font:600 13px/30px "Segoe UI",system-ui,Arial,sans-serif}.pf-bar a{color:#fff;text-decoration:none}.pf-bar a:hover{text-decoration:underline}.pf-bar span{opacity:.75;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style>
+</head>
+<body>
+<div class="pf-bar"><a href="./">← Marcin – wszystkie projekty</a><span>projekt demonstracyjny</span></div>
+<div class="demo-note">Projekt przykładowy · Pizzeria Ceglany Piec to firma fikcyjna</div>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Włoszczowa · pizza z pieca opalanego drewnem</span>
+    <h1>Ceglany Piec</h1>
+    <p class="lead">Ciasto dojrzewa 48 godzin, piec ma 400°C, a pizza jest u Ciebie w około 40 minut.</p>
+    <span class="status-pill" id="status"><span class="dot" id="statusDot"></span><span id="statusText">Sprawdzam godziny…</span></span>
+    <div class="hero-actions">
+      <a class="btn btn-light" href="tel:123456789">Zadzwoń i zamów</a>
+      <a class="btn btn-ghost" href="#menu">Zobacz menu</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="facts" aria-label="Najważniejsze informacje">
+    <div class="fact"><b>40 min</b><span>średni czas dowozu</span></div>
+    <div class="fact"><b>0 zł</b><span>dowóz po mieście od 50 zł</span></div>
+    <div class="fact"><b>−10%</b><span>na wynos przy odbiorze</span></div>
+  </div>
+
+  <section id="menu" aria-labelledby="menu-h">
+    <div class="section-head">
+      <h2 id="menu-h">Menu</h2>
+      <p>Ceny w złotych, aktualne na październik 2026</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Kategorie menu">
+      <button class="tab" role="tab" id="tab-pizza" aria-selected="true" aria-controls="panel-pizza">Pizza</button>
+      <button class="tab" role="tab" id="tab-pasta" aria-selected="false" aria-controls="panel-pasta">Makarony</button>
+      <button class="tab" role="tab" id="tab-extra" aria-selected="false" aria-controls="panel-extra">Dodatki i napoje</button>
+    </div>
+
+    <div class="menu" role="tabpanel" id="panel-pizza" aria-labelledby="tab-pizza">
+      <div class="menu-cols"><span></span><span>32 cm</span><span>42 cm</span></div>
+      <div class="item"><h3>Margherita</h3><span class="price">29</span><span class="price">42</span><span class="desc">sos z pomidorów San Marzano, mozzarella fior di latte, świeża bazylia</span></div>
+      <div class="item"><h3>Capricciosa</h3><span class="price">34</span><span class="price">48</span><span class="desc">szynka gotowana, pieczarki, mozzarella, oregano</span></div>
+      <div class="item"><h3>Włoszczowska <span class="tag">nasza</span></h3><span class="price">37</span><span class="price">52</span><span class="desc">kiełbasa swojska, cebula prażona, ser wędzony, ogórek kiszony</span></div>
+      <div class="item"><h3>Diavola</h3><span class="price">36</span><span class="price">50</span><span class="desc">salami pikantne, papryczki jalapeño, oliwa z chili</span></div>
+      <div class="item"><h3>Quattro formaggi</h3><span class="price">38</span><span class="price">54</span><span class="desc">mozzarella, gorgonzola, parmezan, ser wędzony</span></div>
+      <div class="item"><h3>Ogrodowa</h3><span class="price">33</span><span class="price">47</span><span class="desc">papryka, cukinia, oliwki, pomidorki koktajlowe, rukola</span></div>
+    </div>
+
+    <div class="menu" role="tabpanel" id="panel-pasta" aria-labelledby="tab-pasta" hidden>
+      <div class="item"><h3>Spaghetti carbonara</h3><span class="price single">32</span><span class="desc">guanciale, żółtko, pecorino, czarny pieprz</span></div>
+      <div class="item"><h3>Penne arrabbiata</h3><span class="price single">28</span><span class="desc">pomidory, czosnek, chili, natka pietruszki</span></div>
+      <div class="item"><h3>Tagliatelle z kurczakiem</h3><span class="price single">34</span><span class="desc">sos śmietanowy, szpinak, suszone pomidory</span></div>
+    </div>
+
+    <div class="menu" role="tabpanel" id="panel-extra" aria-labelledby="tab-extra" hidden>
+      <div class="item"><h3>Sos czosnkowy lub pomidorowy</h3><span class="price single">4</span><span class="desc">robiony na miejscu</span></div>
+      <div class="item"><h3>Dodatkowy ser</h3><span class="price single">5</span><span class="desc">do każdej pizzy</span></div>
+      <div class="item"><h3>Lemoniada domowa 0,5 l</h3><span class="price single">12</span><span class="desc">cytryna z miętą albo malina</span></div>
+      <div class="item"><h3>Napoje gazowane 0,5 l</h3><span class="price single">8</span><span class="desc">cola, cola zero, woda</span></div>
+    </div>
+
+    <div class="lunch"><div><b>Lunch dnia, pon.–pt. 12:00–15:00</b><br>Pizza 32 cm z karty i lemoniada za 32 zł.</div></div>
+  </section>
+
+  <section aria-labelledby="why-h">
+    <div class="section-head"><h2 id="why-h">Skąd ten smak</h2></div>
+    <div class="why">
+      <div><b>Piec z cegły szamotowej</b><p>Pizza piecze się 90 sekund w 400°C, więc brzegi są puszyste, a środek się nie rozmięka.</p></div>
+      <div><b>Ciasto 48 godzin</b><p>Mąka typu 00, długie dojrzewanie w chłodni. Jest lżejsze i łatwiej się trawi.</p></div>
+      <div><b>Lokalne dodatki</b><p>Kiełbasę i ogórki kupujemy od gospodarzy z okolic Włoszczowy.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="info-h">
+    <div class="section-head"><h2 id="info-h">Dowóz i godziny</h2></div>
+    <div class="two">
+      <div class="card">
+        <h3>Strefy dowozu</h3>
+        <table>
+          <tr><td>Włoszczowa</td><td>gratis od 50 zł</td></tr>
+          <tr><td>Kurzelów, Czarnca, Konieczno</td><td>8 zł, min. 60 zł</td></tr>
+          <tr><td>Do 15 km od lokalu</td><td>15 zł, min. 80 zł</td></tr>
+        </table>
+        <p class="small">Płatność gotówką, kartą lub BLIK-iem u kierowcy.</p>
+      </div>
+      <div class="card">
+        <h3>Godziny otwarcia</h3>
+        <table id="hours">
+          <tr data-days="1,2,3,4"><td>Poniedziałek – czwartek</td><td>12:00 – 21:00</td></tr>
+          <tr data-days="5,6"><td>Piątek – sobota</td><td>12:00 – 23:00</td></tr>
+          <tr data-days="0"><td>Niedziela</td><td>13:00 – 21:00</td></tr>
+        </table>
+        <p class="small">Ostatnie zamówienia na dowóz przyjmujemy 30 minut przed zamknięciem.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="contact-h">
+    <div class="section-head"><h2 id="contact-h">Zamów telefonicznie</h2></div>
+    <div class="card contact">
+      <div class="phone-big" id="phone">123 456 789</div>
+      <button class="copy" id="copyBtn" type="button">Kopiuj numer</button>
+      <p class="small">ul. Przykładowa 1, 29-100 Włoszczowa · parking przed lokalem</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Pizzeria Ceglany Piec to firma fikcyjna. Numer, adres i menu są przykładowe.</span>
+    <span>Projekt strony: Marcin · strony internetowe dla firm z Włoszczowy i okolic</span>
+  </div>
+</footer>
+
+<div class="callbar">
+  <span id="callbarText">Dowóz w ok. 40 min</span>
+  <a class="btn" href="tel:123456789">Zadzwoń</a>
+</div>
+
+<script>
+(function () {
+  // Opening hours: day 0 = Sunday
+  var hours = { 0: [13, 21], 1: [12, 21], 2: [12, 21], 3: [12, 21], 4: [12, 21], 5: [12, 23], 6: [12, 23] };
+  var now = new Date();
+  var d = now.getDay();
+  var h = now.getHours() + now.getMinutes() / 60;
+  var today = hours[d];
+  var open = h >= today[0] && h < today[1];
+  var dot = document.getElementById('statusDot');
+  var text = document.getElementById('statusText');
+  var cb = document.getElementById('callbarText');
+  if (open) {
+    text.textContent = 'Otwarte teraz · do ' + today[1] + ':00';
+    cb.textContent = 'Otwarte do ' + today[1] + ':00';
+  } else {
+    dot.classList.add('closed');
+    var next = h < today[0] ? 'dziś od ' + today[0] + ':00' : 'jutro od ' + hours[(d + 1) % 7][0] + ':00';
+    text.textContent = 'Teraz zamknięte · otwieramy ' + next;
+    cb.textContent = 'Zamówienia ' + next;
+  }
+  document.querySelectorAll('#hours tr').forEach(function (tr) {
+    if (tr.getAttribute('data-days').split(',').indexOf(String(d)) !== -1) tr.classList.add('today');
+  });
+
+  // Menu tabs
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      tabs.forEach(function (o) {
+        var sel = o === t;
+        o.setAttribute('aria-selected', sel ? 'true' : 'false');
+        document.getElementById(o.getAttribute('aria-controls')).hidden = !sel;
+      });
+    });
+  });
+
+  // Copy phone number
+  var btn = document.getElementById('copyBtn');
+  btn.addEventListener('click', function () {
+    var num = document.getElementById('phone').textContent.replace(/\s/g, '');
+    var done = function () { btn.textContent = 'Skopiowano'; setTimeout(function () { btn.textContent = 'Kopiuj numer'; }, 1800); };
+    try {
+      navigator.clipboard.writeText(num).then(done, function () { selectPhone(); });
+    } catch (e) { selectPhone(); }
+  });
+  function selectPhone() {
+    var r = document.createRange(); r.selectNodeContents(document.getElementById('phone'));
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    btn.textContent = 'Zaznaczono, skopiuj';
+  }
+})();
+</script>
+</body>
+</html>

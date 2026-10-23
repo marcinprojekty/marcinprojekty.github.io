@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twoja Nuta – piosenki na zamówienie (demo)</title>
+<style>
+  :root { --bg:#fbf7f2; --ink:#231c2b; --muted:#6c6276; --line:#eadfd3; --accent:#c2416b; --accent2:#3b2a5c; --card:#ffffff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 "Segoe UI", system-ui, Arial, sans-serif; }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 20px; }
+  .demo { background:#fff3d6; color:#8a5a00; text-align:center; font-size:13px; font-weight:600; padding:6px; }
+  header { padding:18px 0; } header .wrap { display:flex; justify-content:space-between; align-items:center; }
+  .logo { font-weight:800; font-size:20px; color:var(--accent2); } .logo span { color:var(--accent); }
+  nav a { margin-left:18px; color:var(--ink); text-decoration:none; font-weight:600; font-size:15px; }
+  .hero { padding:40px 0 56px; display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center; }
+  .hero h1 { font-size:clamp(32px,5vw,50px); line-height:1.1; margin:0 0 16px; color:var(--accent2); }
+  .hero p { font-size:18px; color:var(--muted); margin:0 0 24px; }
+  .btn { display:inline-block; background:var(--accent); color:#fff; border:0; border-radius:999px; padding:14px 26px; font:inherit; font-weight:700; cursor:pointer; text-decoration:none; }
+  .btn.ghost { background:transparent; color:var(--accent2); border:2px solid var(--accent2); margin-left:8px; }
+  .vinyl { aspect-ratio:1; border-radius:50%; background: radial-gradient(circle, var(--accent) 0 14%, #1d1626 14.5% 16%, #2a2136 16% 100%); position:relative; box-shadow:0 20px 50px rgba(59,42,92,.3); max-width:360px; margin:0 auto; }
+  .vinyl::after { content:""; position:absolute; inset:6%; border-radius:50%; background: repeating-radial-gradient(circle, transparent 0 6px, rgba(255,255,255,.05) 6px 7px); }
+  .vinyl.spin { animation: spin 3s linear infinite; } @keyframes spin { to { transform:rotate(360deg); } }
+  section { padding:48px 0; } h2 { font-size:30px; margin:0 0 20px; color:var(--accent2); }
+  .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px; }
+  .step b { display:block; font-size:18px; margin-bottom:6px; }
+  .step .n { color:var(--accent); font-weight:800; font-size:14px; }
+  .samples { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .sample { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; display:flex; align-items:center; gap:14px; }
+  .play { width:48px; height:48px; border-radius:50%; border:0; background:var(--accent2); color:#fff; font-size:18px; cursor:pointer; flex:none; }
+  .sample small { color:var(--muted); display:block; }
+  form { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:24px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  label { display:grid; gap:6px; font-size:14px; font-weight:600; }
+  input, select, textarea { font:inherit; padding:11px 12px; border:1px solid var(--line); border-radius:10px; background:#fffdfb; }
+  textarea { min-height:120px; resize:vertical; }
+  .full { grid-column:1/-1; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; }
+  .chip { border:1px solid var(--line); background:#fff; border-radius:999px; padding:8px 14px; cursor:pointer; font:inherit; font-size:14px; }
+  .chip[aria-pressed="true"] { background:var(--accent2); color:#fff; border-color:var(--accent2); }
+  .summary { grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:16px; }
+  .price { font-size:28px; font-weight:800; color:var(--accent); }
+  .err { color:#b0352b; font-size:14px; }
+  .modal { position:fixed; inset:0; background:rgba(20,14,30,.55); display:grid; place-items:center; padding:20px; }
+  .modal[hidden] { display:none; }
+  .modal .box { background:#fff; border-radius:20px; padding:28px; max-width:460px; }
+  footer { padding:30px 0; color:var(--muted); font-size:14px; text-align:center; }
+  @media (max-width:800px){ .hero, .steps, .samples, form { grid-template-columns:1fr; } nav { display:none; } }
+</style>
+<style id="pf-bar">.pf-bar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;height:30px;padding:0 12px;background:#1f3a5f;color:#fff;font:600 13px/30px "Segoe UI",system-ui,Arial,sans-serif}.pf-bar a{color:#fff;text-decoration:none}.pf-bar a:hover{text-decoration:underline}.pf-bar span{opacity:.75;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style>
+</head>
+<body>
+<div class="pf-bar"><a href="./">← Marcin – wszystkie projekty</a><span>projekt demonstracyjny</span></div>
+<div class="demo">Projekt przykładowy · marka „Twoja Nuta” jest fikcyjna</div>
+<header><div class="wrap"><div class="logo">Twoja<span>Nuta</span></div><nav><a href="#jak">Jak to działa</a><a href="#probki">Próbki</a><a href="#zamow">Zamów</a></nav></div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Piosenka o Was. Napisana na zamówienie.</h1>
+      <p>Opowiedz nam swoją historię, a my zamienimy ją w piosenkę na urodziny, ślub, rocznicę albo po prostu bez okazji. Gotowe nagranie w 5 dni.</p>
+      <a class="btn" href="#zamow">Zamów piosenkę</a><a class="btn ghost" href="#probki">Posłuchaj próbek</a>
+    </div>
+    <div class="vinyl" id="vinyl" aria-hidden="true"></div>
+  </section>
+
+  <section id="jak">
+    <h2>Jak to działa</h2>
+    <div class="steps">
+      <div class="step"><span class="n">KROK 1</span><b>Opowiadasz historię</b>Imiona, wspomnienia, wspólne żarty. Im więcej szczegółów, tym bardziej osobista piosenka.</div>
+      <div class="step"><span class="n">KROK 2</span><b>Wybierasz styl</b>Pop, ballada, rock, disco polo czy akustycznie. Do każdego stylu masz próbki.</div>
+      <div class="step"><span class="n">KROK 3</span><b>Dostajesz nagranie</b>Gotowy plik MP3 i tekst piosenki przychodzą na Twój e-mail.</div>
+    </div>
+  </section>
+
+  <section id="probki">
+    <h2>Posłuchaj próbek</h2>
+    <div class="samples" id="samples"></div>
+    <p style="color:var(--muted);font-size:14px">W wersji demo próbki są generowanymi melodiami. Docelowo w tym miejscu będą prawdziwe nagrania.</p>
+  </section>
+
+  <section id="zamow">
+    <h2>Zamów piosenkę</h2>
+    <form id="order" novalidate>
+      <label>Okazja<select id="occasion"><option>Urodziny</option><option>Ślub</option><option>Rocznica</option><option>Imieniny</option><option>Dzień Matki / Ojca</option><option>Bez okazji</option></select></label>
+      <label>Dla kogo (imię)<input id="forWho" placeholder="np. Kasia"></label>
+      <div class="full"><label style="margin-bottom:6px">Styl muzyczny</label><div class="chips" id="styles"></div></div>
+      <label class="full">Twoja historia<textarea id="story" placeholder="Jak się poznaliście? Co was łączy? Jakie słowa albo wspomnienia powinny pojawić się w piosence?"></textarea></label>
+      <label>Czas realizacji<select id="speed"><option value="0">Standard – 5 dni</option><option value="80">Ekspres – 48 h (+80 zł)</option></select></label>
+      <label>Twój e-mail<input id="email" type="email" placeholder="adres@przyklad.pl"></label>
+      <div class="summary"><div><div style="color:var(--muted);font-size:14px">Do zapłaty</div><div class="price" id="price">249 zł</div></div><span class="err" id="err"></span><button class="btn" type="submit">Przejdź do płatności</button></div>
+    </form>
+  </section>
+</main>
+<footer>Twoja Nuta · projekt przykładowy strony do zamawiania piosenek</footer>
+<div class="modal" id="modal" hidden><div class="box"><h2 style="font-size:24px">Dziękujemy za zamówienie!</h2><p id="modalText"></p><p style="color:var(--muted);font-size:14px">W wersji produkcyjnej w tym miejscu klient przechodzi do płatności (BLIK, przelew, karta), a po opłaceniu dostaje automatyczne potwierdzenie e-mailem.</p><button class="btn" id="close">Zamknij</button></div></div>
+
+<script>
+const STYLES = [
+  { id:'pop', name:'Pop', price:249, notes:[60,64,67,72,67,64,62,65,69,72], wave:'triangle', tempo:.22 },
+  { id:'ballada', name:'Ballada', price:249, notes:[57,60,64,62,60,57,55,59,62,64], wave:'sine', tempo:.38 },
+  { id:'rock', name:'Rock', price:279, notes:[52,52,55,57,52,52,59,57,55,52], wave:'sawtooth', tempo:.18 },
+  { id:'disco', name:'Disco polo', price:229, notes:[64,66,68,69,68,66,64,61,64,66], wave:'square', tempo:.17 },
+  { id:'akustyk', name:'Akustycznie', price:269, notes:[55,59,62,67,62,59,57,60,64,67], wave:'triangle', tempo:.3 },
+];
+let style = 'pop', ac = null, playing = null;
+
+// Próbki (generowane melodie przez Web Audio)
+document.getElementById('samples').innerHTML = STYLES.slice(0,3).map(s => `<div class="sample"><button class="play" data-s="${s.id}" aria-label="Odtwórz próbkę ${s.name}">▶</button><div><b>${s.name}</b><small>${s.id==='pop'?'„Nasze lato” – urodziny':s.id==='ballada'?'„Dziesięć lat” – rocznica':'„Szef na medal” – dla szefa'}</small></div></div>`).join('');
+document.getElementById('samples').addEventListener('click', e => {
+  const b = e.target.closest('.play'); if (!b) return;
+  if (playing === b.dataset.s) { stop(); return; }
+  play(STYLES.find(s => s.id === b.dataset.s), b);
+});
+function stop() { if (ac) { ac.close(); ac = null; } playing = null; document.querySelectorAll('.play').forEach(p => p.textContent = '▶'); document.getElementById('vinyl').classList.remove('spin'); }
+function play(s, btn) {
+  stop(); ac = new (window.AudioContext || window.webkitAudioContext)(); playing = s.id; btn.textContent = '■';
+  document.getElementById('vinyl').classList.add('spin');
+  const t0 = ac.currentTime + 0.05;
+  for (let r = 0; r < 2; r++) s.notes.forEach((n, i) => {
+    const t = t0 + (r * s.notes.length + i) * s.tempo, o = ac.createOscillator(), g = ac.createGain();
+    o.type = s.wave; o.frequency.value = 440 * Math.pow(2, (n - 69) / 12);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.18, t + 0.02); g.gain.exponentialRampToValueAtTime(0.001, t + s.tempo * 0.95);
+    o.connect(g).connect(ac.destination); o.start(t); o.stop(t + s.tempo);
+  });
+  const myCtx = ac; setTimeout(() => { if (ac === myCtx) stop(); }, s.notes.length * 2 * s.tempo * 1000 + 300);
+}
+
+// Formularz zamówienia
+const stylesEl = document.getElementById('styles');
+function renderStyles() { stylesEl.innerHTML = STYLES.map(s => `<button type="button" class="chip" data-s="${s.id}" aria-pressed="${s.id===style}">${s.name} · ${s.price} zł</button>`).join(''); }
+stylesEl.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; style = c.dataset.s; renderStyles(); price(); });
+function price() { const p = STYLES.find(s => s.id === style).price + Number(document.getElementById('speed').value); document.getElementById('price').textContent = p + ' zł'; return p; }
+document.getElementById('speed').addEventListener('change', price);
+document.getElementById('order').addEventListener('submit', e => {
+  e.preventDefault();
+  const err = document.getElementById('err'), story = document.getElementById('story').value.trim(), email = document.getElementById('email').value.trim(), who = document.getElementById('forWho').value.trim();
+  if (!who) return err.textContent = 'Podaj imię osoby, dla której jest piosenka.';
+  if (story.length < 30) return err.textContent = 'Opisz historię trochę dokładniej (min. 30 znaków).';
+  if (!/^\S+@\S+\.\S+$/.test(email)) return err.textContent = 'Podaj poprawny adres e-mail.';
+  err.textContent = '';
+  const s = STYLES.find(x => x.id === style);
+  document.getElementById('modalText').textContent = `Piosenka „${document.getElementById('occasion').value}” dla: ${who}, styl: ${s.name}. Kwota: ${price()} zł. Potwierdzenie wyślemy na ${email}.`;
+  document.getElementById('modal').hidden = false;
+});
+document.getElementById('close').onclick = () => document.getElementById('modal').hidden = true;
+renderStyles(); price();
+</script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wirtualny kot – demo</title>
+<style>
+  :root { --bg:#f4efe8; --panel:#fffdf9; --ink:#2b2420; --muted:#7a6d64; --line:#e7ddd2; --accent:#d9792b; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--ink); font:15px/1.4 "Segoe UI", system-ui, Arial, sans-serif; }
+  .app { max-width:1000px; margin:0 auto; padding:16px; display:grid; grid-template-columns: 1fr 300px; gap:16px; }
+  .stage { position:relative; background:var(--panel); border:1px solid var(--line); border-radius:16px; overflow:hidden; aspect-ratio: 4/3; }
+  canvas { width:100%; height:100%; display:block; touch-action:none; }
+  .badge { position:absolute; left:12px; top:10px; background:#fff3d6; color:#8a5a00; font-size:12px; font-weight:600; padding:3px 8px; border-radius:6px; }
+  .mood { position:absolute; right:12px; top:10px; background:rgba(255,255,255,.9); border:1px solid var(--line); font-size:13px; font-weight:600; padding:4px 10px; border-radius:99px; }
+  aside { display:grid; gap:12px; align-content:start; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; }
+  h1 { font-size:18px; margin:0 0 2px; } .sub { color:var(--muted); font-size:13px; margin:0; }
+  h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 10px; }
+  .need { display:grid; grid-template-columns: 70px 1fr 38px; align-items:center; gap:8px; margin-bottom:8px; font-size:13px; font-weight:600; }
+  .bar { height:10px; background:#efe6dc; border-radius:99px; overflow:hidden; }
+  .bar i { display:block; height:100%; border-radius:99px; transition:width .3s; }
+  .val { text-align:right; font-variant-numeric:tabular-nums; color:var(--muted); }
+  .actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  button { font:inherit; font-weight:600; padding:10px; border-radius:10px; border:1px solid var(--line); background:#fff; color:var(--ink); cursor:pointer; }
+  button:hover { border-color:var(--accent); }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  .log { font-size:13px; color:var(--muted); min-height:20px; }
+  .tip { font-size:12px; color:var(--muted); margin:0; }
+  @media (max-width:760px){ .app{ grid-template-columns:1fr; } }
+</style>
+<style id="pf-bar">.pf-bar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;height:30px;padding:0 12px;background:#1f3a5f;color:#fff;font:600 13px/30px "Segoe UI",system-ui,Arial,sans-serif}.pf-bar a{color:#fff;text-decoration:none}.pf-bar a:hover{text-decoration:underline}.pf-bar span{opacity:.75;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style>
+</head>
+<body>
+<div class="pf-bar"><a href="./">← Marcin – wszystkie projekty</a><span>projekt demonstracyjny</span></div>
+<div class="app">
+  <div class="stage"><canvas id="c" width="800" height="600"></canvas><span class="badge">DEMO</span><span class="mood" id="mood">Zadowolony</span></div>
+  <aside>
+    <div class="card"><h1 id="name">Kot Mruczek</h1><p class="sub" id="age">Wiek: 0 dni</p></div>
+    <div class="card"><h2>Potrzeby</h2><div id="needs"></div></div>
+    <div class="card"><h2>Opieka</h2>
+      <div class="actions">
+        <button id="feed">Nakarm</button>
+        <button id="sleep">Połóż spać</button>
+        <button id="play">Rzuć kłębek</button>
+        <button id="heal">Do weterynarza</button>
+      </div>
+      <p class="log" id="log"></p>
+      <p class="tip">Pogłaszcz kota, przesuwając po nim kursorem lub palcem. Kłębek możesz przeciągać.</p>
+    </div>
+    <div class="card"><button id="reset" style="width:100%">Zacznij od nowa</button></div>
+  </aside>
+</div>
+
+<script>
+// ===== Stan gry =====
+const NEEDS = [
+  { key:'food',   label:'Sytość',    color:'#d9792b', decay:1.6 },
+  { key:'energy', label:'Energia', color:'#5b8bd6', decay:1.0 },
+  { key:'fun',    label:'Zabawa',  color:'#3fae6a', decay:1.3 },
+  { key:'health', label:'Zdrowie', color:'#d64b6a', decay:0.25 },
+];
+const SAVE_KEY = 'wirtualny-kot-demo';
+const fresh = () => ({ food:80, energy:80, fun:70, health:100, mode:'idle', born:Date.now(), last:Date.now() });
+let S = load() || fresh();
+
+function load() { try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); return s && typeof s.food === 'number' ? s : null; } catch (e) { return null; } }
+function save() { try { S.last = Date.now(); localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) {} }
+const clamp = v => Math.max(0, Math.min(100, v));
+
+// dt w sekundach; potrzeby spadają o "decay" punktów na minutę
+function tick(dt, quiet) {
+  const m = dt / 60;
+  if (S.mode === 'sleep') { S.energy = clamp(S.energy + 6*m); S.food = clamp(S.food - 0.8*m); S.fun = clamp(S.fun - 0.4*m); if (S.energy >= 100 && !quiet) { S.mode = 'idle'; say('Mruczek się wyspał.'); } }
+  else { S.food = clamp(S.food - 1.6*m); S.energy = clamp(S.energy - (S.mode === 'play' ? 3 : 1)*m); S.fun = clamp(S.fun - (S.mode === 'play' ? -8 : 1.3)*m); }
+  const low = [S.food, S.energy, S.fun].filter(v => v < 20).length;
+  S.health = clamp(S.health + (low ? -0.8*low : 0.3) * m);
+}
+
+// ===== UI =====
+const $ = id => document.getElementById(id);
+$('needs').innerHTML = NEEDS.map(n => `<div class="need"><span>${n.label}</span><span class="bar"><i id="b-${n.key}" style="background:${n.color}"></i></span><span class="val" id="v-${n.key}"></span></div>`).join('');
+let logTimer;
+function say(t) { $('log').textContent = t; clearTimeout(logTimer); logTimer = setTimeout(() => $('log').textContent = '', 4000); }
+function mood() {
+  if (S.mode === 'sleep') return 'Śpi';
+  if (S.health < 35) return 'Chory';
+  if (S.food < 25) return 'Głodny';
+  if (S.energy < 25) return 'Zmęczony';
+  if (S.fun < 25) return 'Znudzony';
+  if (purr > 0) return 'Mruczy';
+  return S.food > 70 && S.fun > 60 ? 'Szczęśliwy' : 'Zadowolony';
+}
+function updateUI() {
+  NEEDS.forEach(n => { $('b-' + n.key).style.width = S[n.key] + '%'; $('v-' + n.key).textContent = Math.round(S[n.key]); });
+  $('mood').textContent = mood();
+  $('age').textContent = 'Wiek: ' + Math.floor((Date.now() - S.born) / 86400000) + ' dni';
+  $('sleep').textContent = S.mode === 'sleep' ? 'Obudź' : 'Połóż spać';
+  $('feed').disabled = $('play').disabled = S.mode === 'sleep';
+}
+
+// ===== Akcje =====
+let bowl = 0, ball = null, purr = 0, hearts = [], zzz = 0;
+$('feed').onclick = () => { if (S.food > 95) return say('Mruczek nie jest głodny.'); S.mode = 'eat'; bowl = 1; target.x = 560; say('Mruczek je...'); };
+$('sleep').onclick = () => { if (S.mode === 'sleep') { S.mode = 'idle'; say('Mruczek się przeciąga.'); } else { S.mode = 'sleep'; ball = null; say('Dobranoc, Mruczku.'); } save(); };
+$('play').onclick = () => { if (S.energy < 10) return say('Mruczek jest za bardzo zmęczony.'); S.mode = 'play'; ball = { x: 150 + Math.random()*500, y: 470, vx: (Math.random() - .5) * 400, vy: -300 }; say('Łap kłębek!'); };
+$('heal').onclick = () => { if (S.health > 90) return say('Mruczek jest zdrowy.'); S.health = clamp(S.health + 40); say('Weterynarz pomógł. Zdrowie +40.'); save(); };
+$('reset').onclick = () => { S = fresh(); bowl = 0; ball = null; save(); say('Nowy kot!'); };
+
+// ===== Rysowanie kota (proceduralnie, bez grafik) =====
+const cv = $('c'), ctx = cv.getContext('2d');
+const cat = { x: 400, dir: 1, walk: 0, blink: 0, tail: 0 };
+const target = { x: 400 };
+let pointer = null, lastPointer = null;
+
+function toCanvas(e) { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height }; }
+cv.addEventListener('pointermove', e => {
+  const p = toCanvas(e); lastPointer = pointer; pointer = p;
+  if (dragBall && ball) { ball.x = p.x; ball.y = p.y; ball.vx = 0; ball.vy = 0; }
+  // Głaskanie: ruch kursora nad kotem
+  if (lastPointer && S.mode !== 'eat' && Math.abs(p.x - cat.x) < 110 && p.y > 300 && p.y < 470 && Math.hypot(p.x - lastPointer.x, p.y - lastPointer.y) > 4) {
+    purr = 1.5; if (Math.random() < 0.08) hearts.push({ x: cat.x + (Math.random()-.5)*60, y: 300, t: 0 });
+    S.fun = clamp(S.fun + 0.05);
+  }
+});
+let dragBall = false;
+cv.addEventListener('pointerdown', e => { const p = toCanvas(e); if (ball && Math.hypot(p.x - ball.x, p.y - ball.y) < 40) { dragBall = true; cv.setPointerCapture(e.pointerId); } });
+cv.addEventListener('pointerup', e => { if (dragBall && ball && lastPointer && pointer) { ball.vx = (pointer.x - lastPointer.x) * 25; ball.vy = (pointer.y - lastPointer.y) * 25; } dragBall = false; });
+cv.addEventListener('pointerleave', () => { pointer = null; });
+
+function room() {
+  ctx.fillStyle = '#f7efe4'; ctx.fillRect(0, 0, 800, 600);                          // ściana
+  ctx.fillStyle = '#e9dccb'; ctx.fillRect(0, 380, 800, 220);                        // podłoga
+  ctx.fillStyle = '#d9c6ae'; for (let i = 0; i < 9; i++) ctx.fillRect(i*100, 380, 2, 220);
+  ctx.fillStyle = '#cdb79c'; ctx.fillRect(0, 376, 800, 6);                          // listwa
+  ctx.fillStyle = '#bfe0f2'; ctx.fillRect(560, 70, 170, 140); ctx.strokeStyle = '#fff'; ctx.lineWidth = 8; ctx.strokeRect(560, 70, 170, 140); ctx.fillStyle = '#fff'; ctx.fillRect(642, 70, 6, 140); // okno
+  ctx.fillStyle = '#9fc7a1'; ctx.beginPath(); ctx.ellipse(150, 515, 120, 34, 0, 0, Math.PI*2); ctx.fill();  // legowisko
+  ctx.fillStyle = '#b6d8b8'; ctx.beginPath(); ctx.ellipse(150, 505, 100, 24, 0, 0, Math.PI*2); ctx.fill();
+  // miska
+  ctx.fillStyle = '#4b6fa8'; ctx.beginPath(); ctx.ellipse(620, 520, 46, 14, 0, 0, Math.PI*2); ctx.fill(); ctx.fillRect(574, 506, 92, 14);
+  if (bowl > 0) { ctx.fillStyle = '#8a5a2b'; ctx.beginPath(); ctx.ellipse(620, 506, 38 * bowl, 9 * bowl, 0, 0, Math.PI*2); ctx.fill(); }
+}
+
+function drawCat(t) {
+  const sleeping = S.mode === 'sleep';
+  const sx = sleeping ? 150 : cat.x, groundY = sleeping ? 495 : 500;
+  const thin = S.food < 25 ? 0.92 : 1, droop = S.health < 35 ? 8 : 0;
+  ctx.save(); ctx.translate(sx, groundY); ctx.scale(cat.dir, 1);
+  const fur = '#c98a4b', furDark = '#a96c34', light = '#f1d2a8';
+  // cień
+  ctx.fillStyle = 'rgba(0,0,0,.12)'; ctx.beginPath(); ctx.ellipse(0, 8, 95, 14, 0, 0, Math.PI*2); ctx.fill();
+  if (sleeping) {
+    // zwinięty w kłębek, oddycha
+    const br = 1 + Math.sin(t*2) * 0.03;
+    ctx.fillStyle = fur; ctx.beginPath(); ctx.ellipse(0, -35, 85*br, 45*br, 0, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = furDark; ctx.lineWidth = 14; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(70, -20); ctx.quadraticCurveTo(40, 10, -40, 0); ctx.stroke();
+    ctx.fillStyle = fur; ctx.beginPath(); ctx.ellipse(-55, -45, 38, 32, 0, 0, Math.PI*2); ctx.fill();
+    ear(-80, -72, -1); ear(-38, -76, 1);
+    ctx.strokeStyle = '#3a2a20'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(-68, -48, 7, 0.2, Math.PI-0.2); ctx.stroke(); ctx.beginPath(); ctx.arc(-44, -48, 7, 0.2, Math.PI-0.2); ctx.stroke();
+    ctx.restore(); return;
+  }
+  const walking = Math.abs(target.x - cat.x) > 4;
+  const step = walking ? Math.sin(cat.walk) * 10 : 0;
+  // ogon
+  ctx.strokeStyle = furDark; ctx.lineWidth = 16; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(-75, -70);
+  const tw = Math.sin(t * (S.mode === 'play' ? 6 : 1.6)) * 30;
+  ctx.bezierCurveTo(-120, -90, -110 + tw*0.5, -170, -90 + tw, -190 + droop*2); ctx.stroke();
+  // nogi
+  ctx.fillStyle = furDark;
+  [[-55, step], [-25, -step], [40, -step], [65, step]].forEach(([x, s]) => { ctx.beginPath(); ctx.roundRect(x - 10, -50, 20, 50 + Math.min(0, s), 9); ctx.fill(); });
+  // tułów
+  ctx.fillStyle = fur; ctx.beginPath(); ctx.ellipse(0, -75 + droop/2, 90 * thin, 45, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = light; ctx.beginPath(); ctx.ellipse(15, -58 + droop/2, 55 * thin, 20, 0, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = furDark; ctx.lineWidth = 6; [-30, -5, 20].forEach(x => { ctx.beginPath(); ctx.moveTo(x, -116); ctx.quadraticCurveTo(x + 8, -100, x, -88); ctx.stroke(); });
+  // głowa (patrzy na kursor)
+  const eatDip = S.mode === 'eat' ? 40 + Math.sin(t*10)*4 : 0;
+  const hx = 85, hy = -120 + droop + eatDip;
+  ctx.fillStyle = fur; ctx.beginPath(); ctx.ellipse(hx, hy, 48, 42, 0, 0, Math.PI*2); ctx.fill();
+  ear(hx - 30, hy - 32, -1); ear(hx + 22, hy - 36, 1);
+  ctx.fillStyle = light; ctx.beginPath(); ctx.ellipse(hx + 10, hy + 15, 26, 18, 0, 0, Math.PI*2); ctx.fill();
+  // oczy
+  let lx = 0, ly = 0;
+  if (pointer) { const dx = (pointer.x - sx) * cat.dir - hx, dy = pointer.y - (groundY + hy); const d = Math.hypot(dx, dy) || 1; lx = dx / d * 4; ly = dy / d * 4; }
+  const closed = cat.blink > 0 || purr > 0 || S.mode === 'eat';
+  [[hx - 12, hy - 6], [hx + 20, hy - 6]].forEach(([ex, ey]) => {
+    if (closed) { ctx.strokeStyle = '#3a2a20'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(ex, ey, 7, 0.2, Math.PI - 0.2); ctx.stroke(); }
+    else { ctx.fillStyle = '#c9d94a'; ctx.beginPath(); ctx.ellipse(ex, ey, 9, 10, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = '#1d1a16'; ctx.beginPath(); ctx.ellipse(ex + lx, ey + ly, 3.5, S.mode === 'play' ? 8 : 6, 0, 0, Math.PI*2); ctx.fill(); }
+  });
+  // nos, pyszczek, wąsy
+  ctx.fillStyle = '#d97a7a'; ctx.beginPath(); ctx.moveTo(hx + 4, hy + 8); ctx.lineTo(hx + 12, hy + 8); ctx.lineTo(hx + 8, hy + 13); ctx.fill();
+  ctx.strokeStyle = '#3a2a20'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(hx + 8, hy + 13); ctx.quadraticCurveTo(hx + 2, hy + 20, hx - 3, hy + 16); ctx.moveTo(hx + 8, hy + 13); ctx.quadraticCurveTo(hx + 14, hy + 20, hx + 19, hy + 16); ctx.stroke();
+  ctx.strokeStyle = 'rgba(60,40,30,.6)'; ctx.lineWidth = 1.5; [-4, 2, 8].forEach(o => { ctx.beginPath(); ctx.moveTo(hx + 22, hy + 12 + o/2); ctx.lineTo(hx + 55, hy + 6 + o); ctx.moveTo(hx - 6, hy + 12 + o/2); ctx.lineTo(hx - 38, hy + 6 + o); ctx.stroke(); });
+  ctx.restore();
+
+  function ear(x, y, s) { ctx.fillStyle = fur; ctx.beginPath(); ctx.moveTo(x - 16, y + 14); ctx.lineTo(x + s*4, y - 26 + droop); ctx.lineTo(x + 18, y + 10); ctx.fill(); ctx.fillStyle = '#e8a59a'; ctx.beginPath(); ctx.moveTo(x - 8, y + 10); ctx.lineTo(x + s*3, y - 14 + droop); ctx.lineTo(x + 10, y + 8); ctx.fill(); }
+}
+
+function drawBall(dt) {
+  if (!ball) return;
+  if (!dragBall) {
+    ball.vy += 900 * dt; ball.x += ball.vx * dt; ball.y += ball.vy * dt;
+    if (ball.y > 520) { ball.y = 520; ball.vy *= -0.5; ball.vx *= 0.92; }
+    if (ball.x < 30 || ball.x > 770) { ball.vx *= -0.8; ball.x = Math.max(30, Math.min(770, ball.x)); }
+  }
+  ctx.fillStyle = '#d64b6a'; ctx.beginPath(); ctx.arc(ball.x, ball.y, 18, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#a8324f'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(ball.x, ball.y, 12, 0.5, 2.6); ctx.stroke(); ctx.beginPath(); ctx.arc(ball.x, ball.y, 8, 3.5, 5.6); ctx.stroke();
+}
+
+function effects(dt) {
+  hearts = hearts.filter(h => (h.t += dt) < 1.5);
+  hearts.forEach(h => { ctx.globalAlpha = 1 - h.t / 1.5; ctx.fillStyle = '#e0506e'; const y = h.y - h.t * 60; ctx.beginPath(); ctx.arc(h.x - 6, y, 7, 0, Math.PI*2); ctx.arc(h.x + 6, y, 7, 0, Math.PI*2); ctx.moveTo(h.x - 13, y + 2); ctx.lineTo(h.x, y + 16); ctx.lineTo(h.x + 13, y + 2); ctx.fill(); ctx.globalAlpha = 1; });
+  if (S.mode === 'sleep') { zzz += dt; ctx.fillStyle = '#7a6d64'; ctx.font = 'bold 24px Segoe UI, Arial'; for (let i = 0; i < 3; i++) { const p = (zzz * 0.5 + i / 3) % 1; ctx.globalAlpha = 1 - p; ctx.fillText('z', 110 + p * 40 + i * 6, 430 - p * 80); } ctx.globalAlpha = 1; }
+}
+
+// ===== Pętla =====
+let prev = performance.now(), saveAcc = 0, uiAcc = 0, wander = 3;
+function frame(now) {
+  const dt = Math.min(0.05, (now - prev) / 1000); prev = now; const t = now / 1000;
+  tick(dt);
+  // zachowanie
+  if (S.mode === 'eat') { if (Math.abs(cat.x - 560) < 6) { bowl = Math.max(0, bowl - dt * 0.25); S.food = clamp(S.food + 18 * dt); if (bowl <= 0) { S.mode = 'idle'; say('Mruczek najedzony!'); save(); } } }
+  else if (S.mode === 'play') { if (ball) target.x = Math.max(120, Math.min(680, ball.x - 90 * Math.sign(ball.x - cat.x || 1))); if (S.energy < 8) { S.mode = 'idle'; ball = null; say('Mruczek się zmęczył.'); } }
+  else if (S.mode === 'idle') { wander -= dt; if (wander < 0) { target.x = 160 + Math.random() * 460; wander = 4 + Math.random() * 6; } }
+  if (S.mode !== 'sleep') {
+    const speed = S.mode === 'play' ? 260 : 90, dx = target.x - cat.x;
+    if (Math.abs(dx) > 4) { cat.x += Math.sign(dx) * Math.min(Math.abs(dx), speed * dt); cat.dir = Math.sign(dx); cat.walk += dt * (S.mode === 'play' ? 16 : 8); }
+  }
+  cat.blink = cat.blink > 0 ? cat.blink - dt : (Math.random() < dt * 0.4 ? 0.15 : 0);
+  purr = Math.max(0, purr - dt);
+  room(); drawBall(dt); drawCat(t); effects(dt);
+  if ((uiAcc += dt) > 0.25) { uiAcc = 0; updateUI(); }
+  if ((saveAcc += dt) > 5) { saveAcc = 0; save(); }
+  requestAnimationFrame(frame);
+}
+// Postęp, gdy aplikacja była zamknięta (maks. 12 h, wolniej niż w trakcie gry)
+(function offline() {
+  const mins = Math.min(720, (Date.now() - (S.last || Date.now())) / 60000);
+  if (mins > 1) { tick(mins * 60 * 0.15, true); if (mins > 5) say(`Nie było Cię ${Math.round(mins)} min. Mruczek tęsknił!`); }
+})();
+updateUI(); requestAnimationFrame(frame);
+window.addEventListener('beforeunload', save);
+</script>
+</body>
+</html>

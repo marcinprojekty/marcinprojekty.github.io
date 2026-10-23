@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generator ofert PDF – demo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js"></script>
+<style>
+  :root { --bg:#f3f5f8; --card:#fff; --ink:#18212b; --muted:#5f6b78; --line:#dfe4ea; --accent:#1f5fbf; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 "Segoe UI", system-ui, Arial, sans-serif; }
+  header { background:var(--card); border-bottom:1px solid var(--line); }
+  header .in { max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; }
+  .demo { font-size:12px; font-weight:600; color:#8a5a00; background:#fff3d6; padding:3px 8px; border-radius:6px; }
+  main { max-width:1100px; margin:0 auto; padding:20px; display:grid; gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; }
+  .card h2 { font-size:15px; margin:0 0 12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+  label { display:grid; gap:4px; font-size:13px; font-weight:600; color:var(--muted); }
+  input, select, textarea { font:inherit; color:var(--ink); padding:9px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; width:100%; }
+  textarea { min-height:70px; resize:vertical; }
+  input:focus, select:focus, textarea:focus { outline:2px solid var(--accent); outline-offset:0; }
+  .company { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .company select { max-width:320px; font-weight:600; }
+  .company-info { display:flex; gap:12px; align-items:center; font-size:13px; color:var(--muted); }
+  .company-info svg { width:46px; height:46px; flex:none; }
+  .items { width:100%; border-collapse:collapse; }
+  .items th { font-size:12px; text-align:left; color:var(--muted); font-weight:600; padding:6px 6px; border-bottom:1px solid var(--line); }
+  .items td { padding:6px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  .items td.num, .items th.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .items input, .items select { padding:7px 8px; }
+  .del { border:0; background:none; color:#b0352b; font-size:18px; cursor:pointer; }
+  .wrap-table { overflow-x:auto; }
+  .btn { font:inherit; font-weight:600; border:1px solid var(--line); background:#fff; border-radius:8px; padding:9px 14px; cursor:pointer; }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; padding:12px 20px; font-size:16px; }
+  .totals { display:grid; justify-content:end; gap:4px; margin-top:12px; font-variant-numeric:tabular-nums; }
+  .totals div { display:flex; gap:24px; justify-content:space-between; min-width:280px; }
+  .totals .gross { font-size:18px; font-weight:700; color:var(--accent); border-top:1px solid var(--line); padding-top:6px; }
+  .words { font-size:13px; color:var(--muted); text-align:right; margin-top:4px; }
+  .actions { display:flex; gap:12px; justify-content:flex-end; flex-wrap:wrap; }
+  .err { color:#b0352b; font-size:13px; }
+  @media (max-width:640px){ .totals div{min-width:0;} }
+</style>
+<style id="pf-bar">.pf-bar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;height:30px;padding:0 12px;background:#1f3a5f;color:#fff;font:600 13px/30px "Segoe UI",system-ui,Arial,sans-serif}.pf-bar a{color:#fff;text-decoration:none}.pf-bar a:hover{text-decoration:underline}.pf-bar span{opacity:.75;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style>
+</head>
+<body>
+<div class="pf-bar"><a href="./">← Marcin – wszystkie projekty</a><span>projekt demonstracyjny</span></div>
+<header><div class="in"><h1>Generator ofert PDF</h1><span class="demo">DEMO – spółki i dane są fikcyjne</span></div></header>
+<main>
+  <section class="card">
+    <h2>Spółka wystawiająca</h2>
+    <div class="company">
+      <select id="company" aria-label="Spółka"></select>
+      <div class="company-info" id="companyInfo"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Dane oferty i klienta</h2>
+    <div class="grid">
+      <label>Numer oferty<input id="offerNo"></label>
+      <label>Data wystawienia<input id="issueDate" type="date"></label>
+      <label>Ważna do<input id="validDate" type="date"></label>
+      <label>Firma klienta<input id="clientName" placeholder="np. Przykładowa Firma Sp. z o.o."></label>
+      <label>NIP klienta<input id="clientNip" placeholder="np. 123-456-78-90"></label>
+      <label>Osoba kontaktowa<input id="clientPerson" placeholder="np. Anna Kowalska"></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Pozycje</h2>
+    <div class="wrap-table">
+      <table class="items">
+        <thead><tr><th style="width:38%">Produkt / usługa</th><th class="num">Ilość</th><th>J.m.</th><th class="num">Cena netto</th><th>VAT</th><th class="num">Wartość netto</th><th class="num">Wartość brutto</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p><button class="btn" id="addRow" type="button">+ Dodaj pozycję</button></p>
+    <div class="totals" id="totals"></div>
+    <div class="words" id="words"></div>
+  </section>
+
+  <section class="card">
+    <h2>Uwagi i warunki</h2>
+    <textarea id="notes">Termin realizacji: do 14 dni od akceptacji oferty.
+Płatność: przelew 14 dni od daty wystawienia faktury.</textarea>
+  </section>
+
+  <div class="actions">
+    <span class="err" id="err"></span>
+    <button class="btn primary" id="pdfBtn" type="button">Pobierz ofertę PDF</button>
+  </div>
+</main>
+
+<script>
+// ===== Konfiguracja spółek (w wersji produkcyjnej: prawdziwe logo i dane od klienta) =====
+const COMPANIES = [
+  { id:'alfa', short:'Alfa Demo', name:'Alfa Demo Budownictwo Sp. z o.o.', color:'#1f5fbf', initials:'AB',
+    address:'ul. Przykładowa 1, 00-001 Warszawa', nip:'111-111-11-11', krs:'0000000001', regon:'000000001',
+    phone:'+48 22 000 00 01', email:'oferty@alfa-demo.pl', bank:'PKO BP 00 1020 0000 0000 0000 0000 0001' },
+  { id:'beta', short:'Beta Demo', name:'Beta Demo Logistyka Sp. z o.o.', color:'#0d7a5f', initials:'BL',
+    address:'ul. Testowa 2, 30-001 Kraków', nip:'222-222-22-22', krs:'0000000002', regon:'000000002',
+    phone:'+48 12 000 00 02', email:'biuro@beta-demo.pl', bank:'mBank 00 1140 0000 0000 0000 0000 0002' },
+  { id:'gamma', short:'Gamma Demo', name:'Gamma Demo Energia S.A.', color:'#c2571a', initials:'GE',
+    address:'ul. Wzorcowa 3, 50-001 Wrocław', nip:'333-333-33-33', krs:'0000000003', regon:'000000003',
+    phone:'+48 71 000 00 03', email:'handel@gamma-demo.pl', bank:'Santander 00 1090 0000 0000 0000 0000 0003' },
+  { id:'delta', short:'Delta Demo', name:'Delta Demo Serwis Sp. z o.o.', color:'#6a3fc0', initials:'DS',
+    address:'ul. Pokazowa 4, 80-001 Gdańsk', nip:'444-444-44-44', krs:'0000000004', regon:'000000004',
+    phone:'+48 58 000 00 04', email:'kontakt@delta-demo.pl', bank:'ING 00 1050 0000 0000 0000 0000 0004' },
+];
+const VAT_RATES = [ {v:0.23,l:'23%'}, {v:0.08,l:'8%'}, {v:0.05,l:'5%'}, {v:0,l:'0%'}, {v:'zw',l:'zw.'} ];
+
+const $ = id => document.getElementById(id);
+const money = n => (Math.round(n*100)/100).toLocaleString('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' zł';
+const r2 = n => Math.round(n*100)/100;
+const fmtDate = s => s ? s.split('-').reverse().join('.') : '';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function logoSvg(c, size=46, withText=true) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 46" width="${size}" height="${size}"><rect x="1" y="1" width="44" height="44" rx="10" fill="${c.color}"/><path d="M9 33 L19 13 L27 27 L31 21 L37 33 Z" fill="#ffffff" opacity=".9"/>${withText ? `<text x="23" y="42" font-family="Arial" font-size="7" font-weight="700" fill="#ffffff" text-anchor="middle">${c.initials}</text>` : ''}</svg>`;
+}
+
+// ===== Wybór spółki =====
+const sel = $('company');
+COMPANIES.forEach(c => sel.insertAdjacentHTML('beforeend', `<option value="${c.id}">${esc(c.name)}</option>`));
+function company() { return COMPANIES.find(c => c.id === sel.value); }
+function renderCompany() {
+  const c = company();
+  document.documentElement.style.setProperty('--accent', c.color);
+  $('companyInfo').innerHTML = logoSvg(c) + `<div>${esc(c.address)}<br>NIP ${c.nip} · KRS ${c.krs}<br>${c.phone} · ${c.email}</div>`;
+  $('offerNo').value = $('offerNo').value.replace(/^[A-Z]+/, c.initials) || '';
+}
+sel.addEventListener('change', renderCompany);
+
+// ===== Daty i numer =====
+const today = new Date();
+const iso = d => d.toISOString().slice(0,10);
+$('issueDate').value = iso(today);
+$('validDate').value = iso(new Date(today.getTime() + 30*864e5));
+$('offerNo').value = `AB/OF/${today.getFullYear()}/${String(today.getMonth()+1).padStart(2,'0')}/001`;
+
+// ===== Pozycje =====
+const rows = $('rows');
+function addRow(d = {}) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input class="name" placeholder="Nazwa produktu lub usługi" value="${esc(d.name||'')}"></td>
+    <td class="num"><input class="qty" type="number" min="0" step="any" value="${d.qty ?? 1}" style="width:80px"></td>
+    <td><input class="unit" value="${esc(d.unit||'szt.')}" style="width:70px"></td>
+    <td class="num"><input class="price" type="number" min="0" step="0.01" value="${d.price ?? ''}" style="width:120px"></td>
+    <td><select class="vat">${VAT_RATES.map(r => `<option value="${r.v}" ${String(r.v)===String(d.vat??0.23)?'selected':''}>${r.l}</option>`).join('')}</select></td>
+    <td class="num net"></td><td class="num gross"></td>
+    <td><button class="del" type="button" aria-label="Usuń pozycję">×</button></td>`;
+  rows.appendChild(tr); calc();
+}
+rows.addEventListener('input', calc);
+rows.addEventListener('change', calc);
+rows.addEventListener('click', e => { if (e.target.classList.contains('del')) { e.target.closest('tr').remove(); calc(); } });
+$('addRow').addEventListener('click', () => addRow());
+
+function items() {
+  return [...rows.querySelectorAll('tr')].map(tr => {
+    const qty = parseFloat(tr.querySelector('.qty').value) || 0;
+    const price = parseFloat(tr.querySelector('.price').value) || 0;
+    const vatRaw = tr.querySelector('.vat').value;
+    const vat = vatRaw === 'zw' ? 'zw' : parseFloat(vatRaw);
+    const net = r2(qty * price);
+    const vatAmt = vat === 'zw' ? 0 : r2(net * vat);
+    return { tr, name: tr.querySelector('.name').value.trim(), qty, unit: tr.querySelector('.unit').value.trim(), price, vat, net, vatAmt, gross: r2(net + vatAmt) };
+  });
+}
+function summary(list) {
+  const by = {};
+  list.forEach(i => { const k = i.vat === 'zw' ? 'zw.' : Math.round(i.vat*100)+'%'; by[k] = by[k] || {net:0,vat:0,gross:0}; by[k].net += i.net; by[k].vat += i.vatAmt; by[k].gross += i.gross; });
+  const net = list.reduce((s,i)=>s+i.net,0), vat = list.reduce((s,i)=>s+i.vatAmt,0);
+  return { by, net:r2(net), vat:r2(vat), gross:r2(net+vat) };
+}
+function calc() {
+  const list = items();
+  list.forEach(i => { i.tr.querySelector('.net').textContent = money(i.net); i.tr.querySelector('.gross').textContent = money(i.gross); });
+  const s = summary(list);
+  $('totals').innerHTML = `<div><span>Razem netto</span><span>${money(s.net)}</span></div><div><span>VAT</span><span>${money(s.vat)}</span></div><div class="gross"><span>Razem brutto</span><span>${money(s.gross)}</span></div>`;
+  $('words').textContent = 'Słownie: ' + inWords(s.gross);
+}
+
+// ===== Kwota słownie (PL) =====
+function inWords(amount) {
+  const zl = Math.floor(amount + 1e-9), gr = Math.round((amount - zl) * 100);
+  const j = ['','jeden','dwa','trzy','cztery','pięć','sześć','siedem','osiem','dziewięć','dziesięć','jedenaście','dwanaście','trzynaście','czternaście','piętnaście','szesnaście','siedemnaście','osiemnaście','dziewiętnaście'];
+  const d = ['','','dwadzieścia','trzydzieści','czterdzieści','pięćdziesiąt','sześćdziesiąt','siedemdziesiąt','osiemdziesiąt','dziewięćdziesiąt'];
+  const s = ['','sto','dwieście','trzysta','czterysta','pięćset','sześćset','siedemset','osiemset','dziewięćset'];
+  const groups = [['','',''],['tysiąc','tysiące','tysięcy'],['milion','miliony','milionów']];
+  const form = (n, f) => n === 1 ? f[0] : (n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20)) ? f[1] : f[2];
+  const three = n => { const out=[]; if (s[Math.floor(n/100)]) out.push(s[Math.floor(n/100)]); const r=n%100; if (r<20) { if (j[r]) out.push(j[r]); } else { out.push(d[Math.floor(r/10)]); if (j[r%10]) out.push(j[r%10]); } return out.join(' '); };
+  if (zl === 0) return `zero złotych ${String(gr).padStart(2,'0')}/100`;
+  const parts = []; let n = zl, g = 0;
+  while (n > 0 && g < 3) { const c = n % 1000; if (c) { let w = (g===1 && c===1) ? '' : three(c); if (g>0) w = (w ? w+' ' : '') + form(c, groups[g]); parts.unshift(w.trim()); } n = Math.floor(n/1000); g++; }
+  return `${parts.join(' ')} ${form(zl,['złoty','złote','złotych'])} ${String(gr).padStart(2,'0')}/100`;
+}
+
+// ===== PDF =====
+function buildDoc() {
+  const c = company(), list = items().filter(i => i.name || i.price), s = summary(list);
+  const head = ['Lp.','Produkt / usługa','Ilość','J.m.','Cena netto','VAT','Wartość netto','Wartość brutto'].map(t => ({text:t, style:'th'}));
+  const body = [head].concat(list.map((i,k) => [
+    {text:String(k+1)}, {text:i.name || '—'}, {text:String(i.qty).replace('.',','), alignment:'right'}, {text:i.unit},
+    {text:money(i.price), alignment:'right'}, {text:i.vat==='zw'?'zw.':Math.round(i.vat*100)+'%', alignment:'center'},
+    {text:money(i.net), alignment:'right'}, {text:money(i.gross), alignment:'right'} ]));
+  const vatRows = Object.entries(s.by).map(([k,v]) => [{text:`VAT ${k}`}, {text:money(v.net),alignment:'right'}, {text:money(v.vat),alignment:'right'}, {text:money(v.gross),alignment:'right'}]);
+  return {
+    pageSize:'A4', pageMargins:[40,40,40,70],
+    defaultStyle:{ font:'Roboto', fontSize:9, color:'#18212b' },
+    styles:{ th:{ bold:true, color:'#ffffff', fillColor:c.color, fontSize:8.5 }, h:{ fontSize:8, bold:true, color:'#5f6b78', characterSpacing:.5 }, title:{ fontSize:20, bold:true, color:c.color } },
+    footer: () => ({ margin:[40,10,40,0], stack:[
+      { canvas:[{type:'line', x1:0, y1:0, x2:515, y2:0, lineWidth:.5, lineColor:'#dfe4ea'}] },
+      { margin:[0,6,0,0], fontSize:7, color:'#5f6b78', columns:[
+        { text:`${c.name}\n${c.address}`, width:'*' },
+        { text:`NIP ${c.nip} · KRS ${c.krs} · REGON ${c.regon}\nKonto: ${c.bank}`, width:'auto', alignment:'right' } ] } ] }),
+    content: [
+      { columns:[
+        { svg: logoSvg(c, 56, false), width:56 },
+        { width:'*', margin:[12,4,0,0], stack:[ {text:c.name, bold:true, fontSize:11}, {text:c.address, color:'#5f6b78'}, {text:`${c.phone} · ${c.email}`, color:'#5f6b78'} ] },
+        { width:'auto', alignment:'right', stack:[ {text:'OFERTA', style:'title'}, {text:$('offerNo').value, bold:true}, {text:`Data: ${fmtDate($('issueDate').value)}`, color:'#5f6b78'}, {text:`Ważna do: ${fmtDate($('validDate').value)}`, color:'#5f6b78'} ] } ] },
+      { margin:[0,22,0,0], columns:[
+        { width:'*', stack:[ {text:'DLA', style:'h'}, {text:$('clientName').value || '—', bold:true, fontSize:11, margin:[0,3,0,0]}, {text:$('clientNip').value ? 'NIP ' + $('clientNip').value : ''}, {text:$('clientPerson').value ? 'Osoba kontaktowa: ' + $('clientPerson').value : ''} ] },
+        { width:'*', stack:[ {text:'OD', style:'h'}, {text:c.name, bold:true, fontSize:11, margin:[0,3,0,0]}, {text:`NIP ${c.nip}`}, {text:c.email} ] } ] },
+      { margin:[0,20,0,0], table:{ headerRows:1, widths:[18,'*',34,30,62,30,66,70], body },
+        layout:{ hLineColor:'#dfe4ea', vLineWidth:()=>0, hLineWidth:(i)=> i===0?0:.5, paddingTop:()=>5, paddingBottom:()=>5,
+                 fillColor:(r)=> r>0 && r%2===0 ? '#f6f8fa' : null } },
+      { margin:[0,12,0,0], columns:[ { width:'*', text:'' }, { width:250, table:{ widths:['*',62,52,66], body:
+          [[{text:'Stawka',style:'h'},{text:'Netto',style:'h',alignment:'right'},{text:'VAT',style:'h',alignment:'right'},{text:'Brutto',style:'h',alignment:'right'}]]
+          .concat(vatRows)
+          .concat([[{text:'RAZEM',bold:true},{text:money(s.net),bold:true,alignment:'right'},{text:money(s.vat),bold:true,alignment:'right'},{text:money(s.gross),bold:true,alignment:'right',color:c.color}]]) },
+        layout:{ hLineColor:'#dfe4ea', vLineWidth:()=>0, hLineWidth:(i,n)=> i===n.table.body.length-1 ? 1 : .5 } } ] },
+      { margin:[0,6,0,0], alignment:'right', color:'#5f6b78', text:'Słownie: ' + inWords(s.gross) },
+      $('notes').value.trim() ? { margin:[0,22,0,0], stack:[ {text:'UWAGI I WARUNKI', style:'h'}, {text:$('notes').value, margin:[0,4,0,0]} ] } : {},
+      { margin:[0,40,0,0], columns:[ {width:'*', text:''}, { width:200, stack:[ {canvas:[{type:'line',x1:0,y1:0,x2:200,y2:0,lineWidth:.5}]}, {text:'Podpis osoby wystawiającej', alignment:'center', color:'#5f6b78', fontSize:8, margin:[0,3,0,0]} ] } ] }
+    ]
+  };
+}
+$('pdfBtn').addEventListener('click', () => {
+  $('err').textContent = '';
+  if (!items().some(i => i.name && i.price)) { $('err').textContent = 'Dodaj co najmniej jedną pozycję z nazwą i ceną.'; return; }
+  if (!window.pdfMake) { $('err').textContent = 'Nie udało się wczytać biblioteki PDF. Sprawdź połączenie z internetem.'; return; }
+  const name = `Oferta_${$('offerNo').value.replace(/[^\w-]+/g,'_')}.pdf`;
+  pdfMake.createPdf(buildDoc()).download(name);
+});
+
+// ===== Przykładowe dane demo =====
+renderCompany();
+addRow({ name:'Audyt instalacji elektrycznej', qty:1, unit:'usł.', price:2400, vat:0.23 });
+addRow({ name:'Montaż oświetlenia LED (hala)', qty:40, unit:'szt.', price:185, vat:0.23 });
+addRow({ name:'Dokumentacja powykonawcza', qty:1, unit:'kpl.', price:650, vat:0.08 });
+$('clientName').value = 'Przykładowy Klient Sp. z o.o.';
+$('clientNip').value = '123-456-78-90';
+$('clientPerson').value = 'Anna Kowalska';
+calc();
+</script>
+</body>
+</html>
