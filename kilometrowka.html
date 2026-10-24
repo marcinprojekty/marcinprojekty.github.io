@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kilometrówka w Arkuszu Google – ewidencja przebiegu pojazdu</title>
+<meta name="description" content="Kilometrówka w Arkuszu Google: ewidencja przebiegu pojazdu do VAT (art. 86a) i zwrot za km dla pracownika. Sama liczy stan licznika, sprawdza wymagane pola i robi PDF za miesiąc. Za darmo do 30 przejazdów.">
+<meta property="og:title" content="Kilometrówka w Arkuszu Google">
+<meta property="og:description" content="Ewidencja przebiegu pojazdu do VAT i zwrot za km. Licznik, kontrola wymaganych pól i PDF za miesiąc. Za darmo do 30 przejazdów.">
+<meta property="og:image" content="kilometrowka-okladka.jpg">
+<style>
+  :root {
+    --bg: #f5f6f8; --surface: #ffffff; --ink: #18212b; --muted: #5d6875;
+    --line: #e1e5ea; --accent: #e2681c; --accent-ink: #ffffff; --navy: #1f3a5f; --chip: #eef1f5;
+    --ok-bg: #e6f4ea; --ok: #137333; --warn-bg: #fff8c5; --warn: #6b5300;
+    --today-bg: #ffe9c7; --today: #8a4b00; --late-bg: #fbe3e3; --late: #a50e0e;
+    --sheet-head: #1f3a5f; --sheet-auto: #5f6b7a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12161b; --surface: #1a2028; --ink: #e9edf2; --muted: #a2adb9;
+      --line: #2b333d; --accent: #f08a45; --accent-ink: #15110d; --navy: #9cc0ea; --chip: #232a33;
+      --ok-bg: #173323; --ok: #8fd6a5; --warn-bg: #3a3313; --warn: #f1dd85;
+      --today-bg: #44301a; --today: #ffc58a; --late-bg: #47201f; --late: #ff9d95;
+      --sheet-head: #2a4a75; --sheet-auto: #46525f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12161b; --surface: #1a2028; --ink: #e9edf2; --muted: #a2adb9;
+    --line: #2b333d; --accent: #f08a45; --accent-ink: #15110d; --navy: #9cc0ea; --chip: #232a33;
+    --ok-bg: #173323; --ok: #8fd6a5; --warn-bg: #3a3313; --warn: #f1dd85;
+    --today-bg: #44301a; --today: #ffc58a; --late-bg: #47201f; --late: #ff9d95;
+    --sheet-head: #2a4a75; --sheet-auto: #46525f;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+  header.top { padding: 22px 0 8px; }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; text-decoration: none; }
+  .mono { width: 38px; height: 38px; border-radius: 10px; background: var(--navy); color: var(--bg); display: grid; place-items: center; font-weight: 800; font-size: 19px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: inherit; font-weight: 700; text-decoration: none; border-radius: 999px; padding: 12px 20px; border: 2px solid transparent; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); }
+  .btn.ghost { border-color: var(--line); background: var(--surface); }
+  @media (max-width: 520px) { header.top .btn { padding: 8px 14px; font-size: 14px; } }
+
+  .hero { padding-top: 34px; padding-bottom: 26px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 36px; align-items: center; }
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .hero h1 { font-size: clamp(30px, 4.8vw, 48px); line-height: 1.08; margin: 0 0 14px; letter-spacing: -0.01em; text-wrap: balance; }
+  .hero p.lead { font-size: 18px; color: var(--muted); margin: 0 0 22px; max-width: 54ch; }
+  .cta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .note { font-size: 14px; color: var(--muted); margin-top: 12px; }
+  @media (max-width: 900px) { .hero { grid-template-columns: 1fr; gap: 26px; } }
+
+  /* Arkusz */
+  .sheet { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 12px 32px rgba(16, 24, 40, .10); }
+  .sheet-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .sheet-bar b { color: var(--ink); }
+  .sheet-bar .menu { margin-left: auto; font-weight: 700; color: var(--ink); background: var(--chip); padding: 3px 9px; border-radius: 6px; }
+  .sheet-scroll { overflow-x: auto; }
+  @media (max-width: 520px) { .sheet-bar .tab { display: none; } }
+  table.grid { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 12.5px; }
+  table.grid th { background: var(--sheet-head); color: #fff; text-align: left; font-weight: 700; padding: 8px 7px; white-space: nowrap; }
+  table.grid th.auto { background: var(--sheet-auto); }
+  table.grid td { padding: 7px 7px; border-top: 1px solid var(--line); white-space: nowrap; }
+  table.grid td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  table.grid tr.paid td { color: var(--muted); }
+  .st { display: inline-block; font-weight: 700; padding: 2px 8px; border-radius: 6px; font-size: 12px; }
+  .st.ok { background: var(--ok-bg); color: var(--ok); font-weight: 600; }
+  .st.warn { background: var(--warn-bg); color: var(--warn); font-weight: 600; }
+  .st.today { background: var(--today-bg); color: var(--today); }
+  .st.late { background: var(--late-bg); color: var(--late); }
+  .sent { color: var(--muted); font-size: 12px; }
+  .box { display: inline-block; width: 13px; height: 13px; border: 1.5px solid var(--muted); border-radius: 3px; vertical-align: -2px; }
+  .box.on { background: var(--muted); }
+
+  section { padding: 34px 0; }
+  h2 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.15; margin: 0 0 8px; text-wrap: balance; }
+  .sub { color: var(--muted); margin: 0 0 24px; max-width: 64ch; }
+
+  /* Oś czasu */
+  .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .step { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; position: relative; }
+  .step .when { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  .step:nth-child(1) .when { color: var(--warn); }
+  .step:nth-child(2) .when { color: var(--today); }
+  .step:nth-child(3) .when, .step:nth-child(4) .when { color: var(--late); }
+  .step h3 { margin: 0 0 6px; font-size: 18px; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .timeline { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .timeline { grid-template-columns: 1fr; } }
+
+  /* Mail i PDF */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 860px) { .duo { grid-template-columns: 1fr; } }
+  .mail { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .mail-head { padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .mail-head .subj { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .mail-head .meta { color: var(--muted); }
+  .mail-body { padding: 16px; font-size: 15px; white-space: pre-line; }
+  .doc { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px; box-shadow: 0 12px 32px rgba(16, 24, 40, .10); }
+  .doc img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  .caption { font-size: 14px; color: var(--muted); margin-top: 10px; }
+
+  /* Funkcje */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .feature { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .feature h3 { margin: 0 0 6px; font-size: 17px; }
+  .feature p { margin: 0; color: var(--muted); font-size: 15px; }
+  @media (max-width: 860px) { .features { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .features { grid-template-columns: 1fr; } }
+
+  /* Cennik */
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .plan { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+  .plan.best { border: 2px solid var(--accent); }
+  .plan .name { font-weight: 800; font-size: 18px; }
+  .plan .price { font-size: 34px; font-weight: 800; line-height: 1; }
+  .plan .price small { font-size: 15px; font-weight: 600; color: var(--muted); }
+  .plan ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; }
+  .plan .btn { margin-top: auto; }
+  .badge { align-self: flex-start; background: var(--accent); color: var(--accent-ink); font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 999px; }
+  @media (max-width: 860px) { .plans { grid-template-columns: 1fr; } }
+
+  /* FAQ */
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+  summary { font-weight: 700; cursor: pointer; }
+  details p { margin: 10px 0 0; color: var(--muted); }
+
+  footer { padding: 30px 0 44px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 20px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  /* Kilometrówka */
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .mode { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .mode .tag { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .mode h3 { margin: 0 0 8px; font-size: 19px; }
+  .mode p { margin: 0 0 10px; color: var(--muted); font-size: 15px; }
+  .mode ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; }
+  @media (max-width: 760px) { .modes { grid-template-columns: 1fr; } }
+  .checks { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  .checks h3 { margin: 0 0 10px; font-size: 18px; }
+  .checks li { margin: 6px 0; color: var(--muted); }
+  .checks .bad { color: var(--late); font-weight: 700; }
+  .checks .good { color: var(--ok); font-weight: 700; }
+  table.grid td.auto { color: var(--muted); background: var(--chip); }
+  .sheet table.grid { min-width: 0; }
+  .sheet table.grid td { white-space: normal; }
+  .sheet table.grid td.num { white-space: nowrap; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./"><span class="mono">M</span><span>Marcin – projekty</span></a>
+    <a class="btn ghost" href="#cennik">Cennik</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">Arkusz Google · VAT i zwrot za km</span>
+      <h1>Kilometrówka, która sama liczy licznik i pilnuje wymaganych pól</h1>
+      <p class="lead">Wpisujesz przejazd: datę, cel, trasę i kilometry. Arkusz numeruje wpisy, liczy stan licznika, sprawdza, czy niczego nie brakuje, i robi PDF za miesiąc albo kwartał, gotowy dla księgowej.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://docs.google.com/spreadsheets/d/1GwMN80xy43NAEQ3UtSZXeSk42oq3w5EK2c8bXnkQJEc/copy">Pobierz wersję darmową</a>
+        <a class="btn ghost" href="#cennik">Pełna wersja: 49 zł</a>
+      </div>
+      <p class="note">Wersja darmowa obsługuje 30 przejazdów. Bez instalowania programów i bez zakładania kont.</p>
+    </div>
+
+    <div class="sheet" role="img" aria-label="Podgląd arkusza z przejazdami, kilometrami i stanem licznika">
+      <div class="sheet-bar"><b>Kilometrówka</b><span class="tab">· Przejazdy</span><span class="menu">Kilometrówka ▾</span></div>
+      <div class="sheet-scroll">
+        <table class="grid">
+          <thead>
+            <tr><th>Data</th><th>Cel wyjazdu</th><th>Km</th><th class="auto">Licznik</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>03.11.2026</td><td>materiały z hurtowni</td><td class="num">24,6</td><td class="num auto">87 647,9</td></tr>
+            <tr><td>05.11.2026</td><td>remont u klienta</td><td class="num">12,4</td><td class="num auto">87 660,3</td></tr>
+            <tr><td>12.11.2026</td><td>płytki od dostawcy</td><td class="num">108,0</td><td class="num auto">87 768,3</td></tr>
+            <tr><td>19.11.2026</td><td>wycena prac u klienta</td><td class="num">31,6</td><td class="num auto">87 799,9</td></tr>
+            <tr><td>27.11.2026</td><td>biuro rachunkowe</td><td class="num">7,2</td><td class="num auto">87 807,1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <h2>Dwa rodzaje kilometrówki w jednym arkuszu</h2>
+      <p class="sub">Tryb wybierasz w zakładce Ustawienia. Arkusz dopasowuje wymagane pola, podsumowanie i wygląd PDF.</p>
+      <div class="modes">
+        <div class="mode">
+          <span class="tag">Tryb VAT</span>
+          <h3>Samochód firmowy na 100% VAT</h3>
+          <p>Ewidencja według art. 86a ust. 7 ustawy o VAT dla auta używanego wyłącznie w działalności.</p>
+          <ul><li>numer rejestracyjny, dzień rozpoczęcia i zakończenia ewidencji</li><li>stan licznika na start, na koniec każdego okresu i na zakończenie</li><li>przy każdym przejeździe: kolejny numer, data, cel, trasa, kilometry i kierowca</li><li>okres miesięczny albo kwartalny, tak jak rozliczasz VAT</li></ul>
+        </div>
+        <div class="mode">
+          <span class="tag">Tryb zwrotu za km</span>
+          <h3>Prywatne auto pracownika</h3>
+          <p>Pracownik jeździ swoim autem do celów służbowych, a pracodawca zwraca mu koszty według stawki za 1 km.</p>
+          <ul><li>dane pracownika i pojazdu, pojemność silnika</li><li>stawki maksymalne: 0,89 zł do 900 cm³, 1,15 zł powyżej 900 cm³ (albo niższa stawka pracodawcy)</li><li>kwota zwrotu przy każdym przejeździe i za cały miesiąc</li><li>PDF z miejscem na podpis pracownika i pracodawcy</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap duo">
+      <div>
+        <h2>Sprawdzenie, zanim zrobi to urząd</h2>
+        <p class="sub">Opcja „Sprawdź ewidencję” przegląda wszystkie wpisy i pokazuje, co poprawić. Urzędy skarbowe kwestionują ewidencje z ogólnikowymi opisami, a wtedy zamiast 100% VAT odliczysz tylko 50%.</p>
+        <div class="checks">
+          <h3>Co wyłapuje arkusz</h3>
+          <ul>
+            <li><span class="bad">„K–K”</span> zamiast trasy skąd – dokąd z miejscowościami albo adresami</li>
+            <li><span class="bad">„wyjazd służbowy”</span> zamiast konkretnego celu</li>
+            <li>brak daty, celu, kilometrów albo kierowcy</li>
+            <li>przejazdy przed dniem rozpoczęcia ewidencji albo w złej kolejności</li>
+            <li>powtórzone wpisy i podejrzanie długie trasy</li>
+            <li>różnicę między odczytem z licznika a ewidencją przy zamykaniu okresu</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="doc"><img src="kilometrowka-pdf.jpg" width="794" height="680" alt="Przykładowa ewidencja przebiegu pojazdu w PDF za listopad z przejazdami, kilometrami i stanem licznika" loading="lazy"></div>
+        <p class="caption">PDF za okres: dane podatnika i pojazdu, wszystkie przejazdy z numerami, stan licznika na początek i koniec okresu oraz miejsce na podpisy.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Co dostajesz</h2>
+      <p class="sub">Jeden arkusz Google z gotowym skryptem. Kopiujesz go na swój Dysk, uzupełniasz ustawienia i wpisujesz przejazdy.</p>
+      <div class="features">
+        <div class="feature"><h3>Szybkie dodawanie</h3><p>Okno „Dodaj przejazd” z listą częstych tras. Opcja „tam i z powrotem” sama podwaja kilometry i dopisuje trasę powrotną.</p></div>
+        <div class="feature"><h3>Licznik liczy się sam</h3><p>Numer wpisu, stan licznika po każdym przejeździe i kwota zwrotu wyliczają się automatycznie.</p></div>
+        <div class="feature"><h3>PDF dla księgowej</h3><p>Zamknięcie okresu tworzy PDF, który pobierasz albo wysyłasz jednym kliknięciem do siebie lub do księgowej.</p></div>
+        <div class="feature"><h3>Zatwierdzone okresy</h3><p>Zamknięty okres zapisuje się z datą i kontem Google, które go zatwierdziło, a jego wpisy są chronione przed przypadkową zmianą.</p></div>
+        <div class="feature"><h3>Przypomnienie</h3><p>Pierwszego dnia miesiąca mail z podsumowaniem minionego okresu: liczba przejazdów, kilometry i stan licznika.</p></div>
+        <div class="feature"><h3>Dane zostają u Ciebie</h3><p>Przejazdy są tylko w Twoim arkuszu na Twoim koncie Google. Nikt poza Tobą nie ma do nich dostępu.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cennik">
+    <div class="wrap">
+      <h2>Cennik</h2>
+      <p class="sub">Ten sam arkusz w obu wersjach. Klucz licencyjny z Gumroad zdejmuje limit przejazdów.</p>
+      <div class="plans" style="grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px;">
+        <div class="plan">
+          <div class="name">Darmowa</div>
+          <div class="price">0 zł</div>
+          <ul><li>30 przejazdów</li><li>Wszystkie funkcje: sprawdzanie, PDF, przypomnienie</li><li>Bez limitu czasu</li></ul>
+          <a class="btn ghost" href="https://docs.google.com/spreadsheets/d/1GwMN80xy43NAEQ3UtSZXeSk42oq3w5EK2c8bXnkQJEc/copy">Pobierz arkusz</a>
+        </div>
+        <div class="plan best">
+          <span class="badge">Jednorazowo</span>
+          <div class="name">Pełna</div>
+          <div class="price">49 zł</div>
+          <ul><li>Bez limitu przejazdów</li><li>Jedna płatność, bez abonamentu</li><li>Pomoc mailowa przy ustawieniu</li></ul>
+          <a class="btn primary" href="https://projekty8.gumroad.com/l/kilometrowka">Kup na Gumroad</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Pytania</h2>
+      <details><summary>Czy ewidencję można prowadzić w arkuszu?</summary><p>Tak, ewidencja przebiegu pojazdu może być prowadzona w formie elektronicznej. Musi zawierać elementy z art. 86a ust. 7 ustawy o VAT. Arkusz ma na nie osobne pola i sprawdza, czy są uzupełnione.</p></details>
+      <details><summary>Od kiedy prowadzić ewidencję i co z VAT-26?</summary><p>Ewidencję prowadzi się od dnia poniesienia pierwszego wydatku na pojazd. W ciągu 7 dni od tego wydatku składa się w urzędzie skarbowym informację VAT-26. Arkusz pokazuje ten termin w zakładce Ustawienia.</p></details>
+      <details><summary>Jeżdżę w firmie prywatnym autem. Czy potrzebuję kilometrówki?</summary><p>Od 2019 r. przedsiębiorca, który używa w firmie prywatnego samochodu, nie prowadzi kilometrówki do PIT, tylko zalicza do kosztów 20% wydatków na auto. Tryb zwrotu za km jest dla pracodawców, którzy zwracają pracownikom koszty jazd ich prywatnymi autami.</p></details>
+      <details><summary>Czy muszę coś instalować?</summary><p>Nie. Potrzebujesz tylko konta Google (zwykłego Gmaila albo Google Workspace). Arkusz kopiujesz jednym kliknięciem na swój Dysk. Menu Kilometrówka działa w przeglądarce na komputerze.</p></details>
+      <details><summary>Co to za ostrzeżenie Google przy pierwszym uruchomieniu?</summary><p>Przy pierwszym użyciu Google pyta o zgodę na działanie skryptu w Twoim arkuszu: dostęp do tego jednego arkusza, okna z formularzem i wysyłanie PDF z Twojego konta. Komunikat o niezweryfikowanej aplikacji pojawia się przy każdym własnym skrypcie. Instrukcja krok po kroku jest w zakładce Start.</p></details>
+      <details><summary>Jak przejść z wersji darmowej na pełną?</summary><p>Kupujesz pełną wersję na Gumroad, dostajesz mailem klucz licencyjny i wklejasz go w menu Kilometrówka, opcja „Aktywuj licencję”. Przejazdy i ustawienia zostają bez zmian.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Marcin – projekty · <a href="./">wszystkie projekty</a></span>
+    <span>Arkusz pomaga prowadzić ewidencję, ale nie jest poradą podatkową.</span>
+  </div>
+</footer>
+</body>
+</html>
