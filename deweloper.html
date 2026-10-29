@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zielone Tarasy – mieszkania (projekt przykładowy)</title>
+<meta name="description" content="Demo strony inwestycji deweloperskiej: wyszukiwarka mieszkań, interaktywny budynek, karta lokalu z rzutem, historia cen, kalkulator raty i cennik CSV. Projekt przykładowy.">
+<style>
+:root{
+  --ink:#1f2a2e;--muted:#66737a;--bg:#f5f7f6;--card:#fff;--line:#e1e7e5;
+  --green:#2e6b57;--green-2:#3f8a71;--sand:#e9e2d4;--gold:#c8963e;
+  --free:#3f8a71;--res:#d9a441;--sold:#b9c1c4;--r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.demo-bar{background:#1f2a2e;color:#dfe8e5;font-size:13px;text-align:center;padding:7px 12px}
+.demo-bar a{color:#9fd8c3}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+header .wrap{display:flex;align-items:center;gap:20px;padding:14px 20px}
+.brand{text-decoration:none;color:var(--ink);font-weight:800;font-size:20px;letter-spacing:.3px;display:flex;align-items:center;gap:10px}
+.brand i{display:inline-block;width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--green-2))}
+.brand small{display:block;font-weight:500;font-size:12px;color:var(--muted);letter-spacing:1px}
+nav{margin-left:auto;display:flex;gap:18px}
+nav a{text-decoration:none;color:var(--ink);font-size:15px}
+nav a:hover{color:var(--green)}
+.btn{border:0;border-radius:10px;padding:11px 18px;font-weight:700;font-size:15px;text-decoration:none;display:inline-block}
+.btn-g{background:var(--green);color:#fff}.btn-g:hover{background:var(--green-2)}
+.btn-o{background:#fff;color:var(--green);border:1.5px solid var(--green)}
+.fav-btn{position:relative}
+.fav-btn span{position:absolute;top:-6px;right:-8px;background:var(--gold);color:#fff;border-radius:99px;font-size:11px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 4px}
+.hero{background:linear-gradient(120deg,#e7efe9 0%,#dfe9e4 55%,#e9e2d4 100%);padding:44px 0 50px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:30px;align-items:center}
+.hero h1{font-size:clamp(30px,4.2vw,48px);line-height:1.08;margin:0 0 12px}
+.hero p{font-size:18px;color:#45535a;margin:0 0 20px;max-width:520px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.stat{background:rgba(255,255,255,.7);border:1px solid #fff;border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:20px}
+.stat span{font-size:13px;color:var(--muted)}
+.build{background:#fff;border-radius:20px;padding:16px;box-shadow:0 16px 40px rgba(31,42,46,.1)}
+.build svg{width:100%;height:auto;display:block}
+.build .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.unit{cursor:pointer;transition:opacity .15s}
+.unit:hover{opacity:.75}
+.unit.dim{opacity:.18}
+section{padding:52px 0}
+h2{font-size:clamp(24px,3vw,34px);margin:0 0 6px}
+.lead{color:var(--muted);margin:0 0 22px;max-width:720px}
+.filters{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr 1fr;gap:14px;align-items:end;margin-bottom:14px}
+.fl label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.fl select,.fl input{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-size:15px;background:#fff}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{flex:1;border:0;background:#fff;padding:9px 0;border-right:1px solid var(--line);font-weight:600}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--green);color:#fff}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.bar .muted{color:var(--muted)}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px}
+.chk input{accent-color:var(--green);width:16px;height:16px}
+table.list{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;font-size:15px}
+.list th{background:#eef3f1;text-align:left;padding:11px 12px;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap;user-select:none}
+.list th.sorted::after{content:" ▾"}
+.list th.sorted.asc::after{content:" ▴"}
+.list td{padding:11px 12px;border-top:1px solid var(--line)}
+.list tr.row{cursor:pointer}
+.list tr.row:hover td{background:#f6faf8}
+.st{font-size:12px;font-weight:700;border-radius:99px;padding:3px 9px;white-space:nowrap}
+.st.free{background:#e3f1eb;color:var(--free)}.st.res{background:#fbf0d9;color:#9a6f1f}.st.sold{background:#eef0f1;color:#88959a}
+.heart{border:0;background:none;font-size:18px;color:#c3cbcd;padding:0 4px}
+.heart.on{color:#d1584e}
+.empty{padding:26px;text-align:center;color:var(--muted)}
+/* modal */
+.shade{position:fixed;inset:0;background:rgba(20,30,30,.5);z-index:40;display:none}
+.shade.on{display:block}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:14px;z-index:41}
+.modal.on{display:flex}
+.m-box{background:#fff;border-radius:18px;max-width:980px;width:100%;max-height:94vh;overflow:auto;position:relative}
+.x{position:absolute;top:12px;right:12px;border:0;background:#eef3f1;border-radius:50%;width:36px;height:36px;font-size:20px;z-index:2}
+.u-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:26px;padding:26px}
+.plan{background:#f7f5ef;border-radius:14px;padding:12px}
+.plan svg{width:100%;height:auto;display:block}
+.rooms{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+.rooms td{padding:5px 0;border-bottom:1px solid var(--line)}
+.rooms td:last-child{text-align:right;font-weight:700}
+.u-head h3{margin:0;font-size:26px}
+.u-head .sub{color:var(--muted)}
+.price{font-size:28px;font-weight:800;margin:12px 0 2px}
+.ppm{color:var(--muted);font-size:14px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.facts div{background:#f3f6f5;border-radius:10px;padding:8px 10px;font-size:14px}
+.facts b{display:block;font-size:16px}
+.hist{margin-top:10px}
+.hist h4,.calc h4{margin:14px 0 6px;font-size:15px}
+.hist svg{width:100%;height:auto}
+.hist table{width:100%;font-size:13px;border-collapse:collapse}
+.hist td{padding:3px 0;border-bottom:1px dashed var(--line)}
+.hist td:last-child{text-align:right}
+.calc{background:#f3f6f5;border-radius:12px;padding:12px 14px;margin-top:12px}
+.calc .r{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.calc label{font-size:13px;color:var(--muted);display:block}
+.calc input{width:100%;accent-color:var(--green)}
+.calc .rata{font-size:22px;font-weight:800;color:var(--green);margin-top:6px}
+.u-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.form{display:none;margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.form.on{display:block}
+.form input,.form textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 10px;margin-bottom:8px;font:inherit}
+.ok{display:none;background:#e3f1eb;color:var(--green);border-radius:10px;padding:12px;font-weight:600;margin-top:10px}
+.poi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.poi div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.poi b{display:block;font-size:20px;color:var(--green)}
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;margin-top:10px}
+.tl{position:relative;padding:30px 10px 0;text-align:center;font-size:14px}
+.tl::before{content:"";position:absolute;top:10px;left:0;right:0;height:4px;background:#d7dfdc}
+.tl.done::before{background:var(--green)}
+.tl::after{content:"";position:absolute;top:3px;left:50%;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:#fff;border:4px solid #d7dfdc}
+.tl.done::after{border-color:var(--green);background:var(--green)}
+.tl.now::after{border-color:var(--gold);background:#fff}
+.tl b{display:block}
+.jawnosc{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+footer{background:#1f2a2e;color:#c6d1cd;padding:30px 0;font-size:14px}
+footer a{color:#9fd8c3}
+.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,120px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:99px;font-weight:600;font-size:14px;z-index:60;transition:.3s}
+.toast.on{transform:translate(-50%,0)}
+.cards{display:none}
+@media (max-width:900px){
+  nav{display:none}
+  .hero .wrap,.u-grid{grid-template-columns:minmax(0,1fr)}
+  .stats{grid-template-columns:1fr 1fr}
+  .filters{grid-template-columns:1fr 1fr}
+  .filters .fl:first-child{grid-column:1/3}
+  .poi{grid-template-columns:1fr 1fr}
+  .timeline{grid-template-columns:1fr;gap:6px}
+  .tl{text-align:left;padding:0 0 0 34px}.tl::before{top:0;bottom:-6px;left:9px;right:auto;width:4px;height:auto}.tl::after{top:2px;left:9px}
+  table.list{display:none}
+  .cards{display:grid;gap:10px}
+  .ucard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:2px 10px}
+  .ucard b{font-size:17px}
+  .ucard .m{color:var(--muted);font-size:14px}
+}
+@media print{
+  header,.demo-bar,.hero,section,footer,.x,.u-actions,.calc,.form,.shade{display:none!important}
+  .modal{position:static;display:block!important}.m-box{max-height:none;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="demo-bar">Projekt przykładowy – inwestycja, ceny i mieszkania są fikcyjne · <a href="index.html">portfolio Marcina</a></div>
+<header><div class="wrap">
+  <a class="brand" href="#"><i></i><span>Zielone Tarasy<small>PRZYKŁAD DEVELOPMENT</small></span></a>
+  <nav><a href="#mieszkania">Mieszkania</a><a href="#lokalizacja">Lokalizacja</a><a href="#budowa">Postęp budowy</a><a href="#ceny">Jawność cen</a></nav>
+  <button class="btn btn-o fav-btn" id="favBtn">♥ Ulubione<span id="favCnt">0</span></button>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <h1>Mieszkania z ogrodem lub tarasem, 12 minut od centrum</h1>
+    <p>Dwa kameralne budynki, 60 mieszkań od 32 do 83 m². Najedź na budynek i kliknij piętro albo mieszkanie, żeby zobaczyć rzut, cenę i historię cen.</p>
+    <a class="btn btn-g" href="#mieszkania">Wyszukaj mieszkanie</a>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div class="build">
+    <svg id="facade" viewBox="0 0 620 380" aria-label="Interaktywny widok budynków"></svg>
+    <div class="legend"><span><i class="dot" style="background:var(--free)"></i>dostępne</span><span><i class="dot" style="background:var(--res)"></i>rezerwacja</span><span><i class="dot" style="background:var(--sold)"></i>sprzedane</span><span>Kliknij mieszkanie →</span></div>
+  </div>
+</div></div>
+
+<section id="mieszkania"><div class="wrap">
+  <h2>Wyszukiwarka mieszkań</h2>
+  <p class="lead">Filtry działają na żywo, a budynek u góry podświetla pasujące lokale. Kliknięcie w wiersz otwiera kartę mieszkania.</p>
+  <div class="filters">
+    <div class="fl"><label>Liczba pokoi</label><div class="seg" id="fRooms"><button data-v="0" class="on">Wszystkie</button><button data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4+</button></div></div>
+    <div class="fl"><label for="fArea">Metraż od (m²)</label><input type="number" id="fArea" min="0" placeholder="np. 45"></div>
+    <div class="fl"><label for="fPrice">Cena do (zł)</label><input type="number" id="fPrice" min="0" step="10000" placeholder="np. 700000"></div>
+    <div class="fl"><label for="fFloor">Piętro</label><select id="fFloor"><option value="">Dowolne</option><option value="0">Parter z ogródkiem</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4 – z tarasem</option></select></div>
+    <div class="fl"><label for="fBld">Budynek</label><select id="fBld"><option value="">A i B</option><option value="A">Budynek A</option><option value="B">Budynek B</option></select></div>
+  </div>
+  <div class="bar"><span class="muted" id="found"></span>
+    <span style="display:flex;gap:16px;flex-wrap:wrap"><label class="chk"><input type="checkbox" id="fFree" checked> Tylko dostępne</label><label class="chk"><input type="checkbox" id="fFav"> Tylko ulubione</label><button class="btn btn-o" style="padding:6px 12px;font-size:14px" id="csvBtn">Pobierz cennik CSV</button></span></div>
+  <table class="list" id="list"><thead><tr>
+    <th data-k="id">Lokal</th><th data-k="rooms">Pokoje</th><th data-k="area">Metraż</th><th data-k="floor">Piętro</th><th data-k="extra">Ogród / balkon</th><th data-k="price" class="sorted asc">Cena</th><th data-k="ppm">Cena za m²</th><th data-k="status">Status</th><th></th></tr></thead><tbody></tbody></table>
+  <div class="cards" id="cards"></div>
+</div></section>
+
+<section id="lokalizacja" style="padding-top:0"><div class="wrap">
+  <h2>Lokalizacja</h2>
+  <p class="lead">ul. Przykładowa 8 – spokojna okolica przy parku, z dobrym dojazdem do centrum.</p>
+  <div class="poi">
+    <div><b>3 min</b>pieszo do przystanku tramwajowego</div>
+    <div><b>5 min</b>do przedszkola i szkoły podstawowej</div>
+    <div><b>2 min</b>do parku z placem zabaw</div>
+    <div><b>12 min</b>tramwajem do centrum</div>
+  </div>
+</div></section>
+
+<section id="budowa" style="padding-top:0"><div class="wrap">
+  <h2>Postęp budowy</h2>
+  <p class="lead">Aktualizujemy co miesiąc – ze zdjęciami z placu budowy.</p>
+  <div class="timeline">
+    <div class="tl done"><b>III kw. 2025</b>Pozwolenie i start</div>
+    <div class="tl done"><b>I kw. 2026</b>Stan zero</div>
+    <div class="tl done now"><b>IV kw. 2026</b>Stan surowy – teraz</div>
+    <div class="tl"><b>II kw. 2027</b>Instalacje i elewacja</div>
+    <div class="tl"><b>IV kw. 2027</b>Odbiory i klucze</div>
+  </div>
+</div></section>
+
+<section id="ceny" style="padding-top:0"><div class="wrap">
+  <div class="jawnosc">
+    <div><h2 style="font-size:24px">Jawność cen mieszkań</h2><p class="lead" style="margin:0">Ceny wszystkich lokali i historia ich zmian są publiczne – zgodnie z ustawą o jawności cen. Cennik pobierzesz w CSV, a historię zmian widać w karcie każdego mieszkania.</p></div>
+    <button class="btn btn-g" id="csvBtn2">Pobierz cennik CSV</button>
+  </div>
+</div></section>
+
+<footer><div class="wrap">„Zielone Tarasy” i „Przykład Development” są fikcyjne – to projekt przykładowy strony inwestycji. W prawdziwym wdrożeniu: WordPress z panelem do zmiany cen i statusów (np. z importu z arkusza), automatyczny raport cen dla dane.gov.pl i formularze trafiające do CRM działu sprzedaży. · <a href="index.html">Portfolio Marcina</a> · <a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a></div></footer>
+
+<div class="shade" id="shade"></div>
+<div class="modal" id="modal"><div class="m-box" id="mBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const zl=n=>Math.round(n).toLocaleString('pl-PL')+' zł';
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2200)}
+function rnd(seed){let h=2166136261;for(const c of String(seed)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return ((h>>>0)%10000)/10000}
+
+/* ---------- dane fikcyjne: 2 budynki × 5 kondygnacji × 6 lokali ---------- */
+const TYPES=[{rooms:1,area:32.4},{rooms:2,area:44.8},{rooms:3,area:58.6},{rooms:2,area:49.2},{rooms:3,area:63.1},{rooms:4,area:78.5}];
+const U=[];
+['A','B'].forEach((b,bi)=>{for(let f=0;f<5;f++)for(let n=0;n<6;n++){
+  const t=TYPES[(n+bi)%6]; let area=t.area+(f===4&&n%3===0?19.5:0); area=Math.round(area*10)/10;
+  const base=11600+f*260+(b==='B'?350:0)+(t.rooms===1?700:0);
+  const ppm=Math.round((base+rnd(b+f+n)*700)/10)*10;
+  const r=rnd('s'+b+f+n), status=r<0.36?'sold':r<0.48?'res':'free';
+  const extra=f===0?'ogródek '+Math.round(28+rnd('g'+n)*60)+' m²':f===4?'taras '+Math.round(14+rnd('t'+n)*22)+' m²':'balkon '+(4+Math.round(rnd('b'+n+f)*5))+' m²';
+  const id=b+'.'+f+'.'+String(n+1).padStart(2,'0');
+  // historia cen: start + 1–3 zmiany
+  const hist=[];let p=Math.round(ppm*area*(0.93+rnd('h'+id)*0.03)/1000)*1000;const d0=new Date(2025,8,15);
+  hist.push([d0,p]);const ch=1+Math.floor(rnd('c'+id)*3);
+  for(let i=1;i<=ch;i++){const d=new Date(2025,8+i*3+Math.floor(rnd('m'+id+i)*2),1+Math.floor(rnd('d'+id+i)*25));p=Math.round(p*(1.01+rnd('p'+id+i)*0.025)/1000)*1000;hist.push([d,p])}
+  const price=hist[hist.length-1][1];
+  U.push({id,b,floor:f,n,rooms:t.rooms,area,price,ppm:Math.round(price/area),status,extra,hist,expo:['S','SW','W','E','SE','N'][(n+f)%6]});
+}});
+const ST={free:'dostępne',res:'rezerwacja',sold:'sprzedane'}, COL={free:'#3f8a71',res:'#d9a441',sold:'#b9c1c4'};
+let favs=store.get('zt_favs',[]);
+function saveFav(){store.set('zt_favs',favs);$('favCnt').textContent=favs.length}
+function toggleFav(id,ev){if(ev)ev.stopPropagation();favs=favs.includes(id)?favs.filter(x=>x!==id):[...favs,id];saveFav();render();if($('modal').classList.contains('on'))openU(id,true);toast(favs.includes(id)?'Dodano do ulubionych':'Usunięto z ulubionych')}
+
+/* ---------- statystyki ---------- */
+function stats(){const free=U.filter(u=>u.status==='free');const min=Math.min(...free.map(u=>u.price));
+  $('stats').innerHTML=`<div class="stat"><b>${free.length}</b><span>dostępnych z ${U.length}</span></div><div class="stat"><b>${Math.round(Math.min(...U.map(u=>u.area)))}–${Math.round(Math.max(...U.map(u=>u.area)))} m²</b><span>metraże</span></div><div class="stat"><b>od ${Math.round(min/1000)} tys.</b><span>cena mieszkania</span></div><div class="stat"><b>IV kw. 2027</b><span>oddanie kluczy</span></div>`}
+
+/* ---------- filtry i lista ---------- */
+let f={rooms:0},sortK='price',sortAsc=true;
+function match(u){
+  const a=+$('fArea').value||0, p=+$('fPrice').value||1e12, fl=$('fFloor').value, bl=$('fBld').value;
+  return (!f.rooms||(f.rooms===4?u.rooms>=4:u.rooms===f.rooms))&&u.area>=a&&u.price<=p&&(fl===''||u.floor===+fl)&&(!bl||u.b===bl)
+    &&(!$('fFree').checked||u.status==='free')&&(!$('fFav').checked||favs.includes(u.id));
+}
+function render(){
+  const list=U.filter(match).sort((x,y)=>{const a=x[sortK],b=y[sortK];return (a<b?-1:a>b?1:0)*(sortAsc?1:-1)});
+  const n=list.length;$('found').textContent='Znaleziono: '+n+' '+(n===1?'mieszkanie':n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?'mieszkania':'mieszkań');
+  $('list').querySelector('tbody').innerHTML=n?list.map(u=>`<tr class="row" onclick="openU('${u.id}')"><td><b>${u.id}</b></td><td>${u.rooms}</td><td>${u.area.toFixed(1).replace('.',',')} m²</td><td>${u.floor===0?'parter':u.floor}</td><td>${u.extra}</td><td><b>${u.status==='sold'?'—':zl(u.price)}</b></td><td>${u.status==='sold'?'—':zl(u.ppm)}</td><td><span class="st ${u.status}">${ST[u.status]}</span></td><td><button class="heart ${favs.includes(u.id)?'on':''}" onclick="toggleFav('${u.id}',event)" aria-label="Ulubione">♥</button></td></tr>`).join(''):'<tr><td colspan="9" class="empty">Brak mieszkań dla tych filtrów – spróbuj poluzować kryteria.</td></tr>';
+  $('cards').innerHTML=n?list.map(u=>`<div class="ucard" onclick="openU('${u.id}')"><b>${u.id} · ${u.rooms} pok. · ${u.area.toFixed(1).replace('.',',')} m²</b><button class="heart ${favs.includes(u.id)?'on':''}" onclick="toggleFav('${u.id}',event)" aria-label="Ulubione">♥</button><span class="m">${u.floor===0?'parter':'piętro '+u.floor} · ${u.extra}</span><span class="st ${u.status}">${ST[u.status]}</span><span><b>${u.status==='sold'?'sprzedane':zl(u.price)}</b></span></div>`).join(''):'<div class="empty">Brak mieszkań dla tych filtrów.</div>';
+  facade(new Set(list.map(u=>u.id)));
+}
+document.querySelectorAll('#fRooms button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#fRooms button').forEach(x=>x.classList.remove('on'));b.classList.add('on');f.rooms=+b.dataset.v;render()});
+['fArea','fPrice'].forEach(id=>$(id).addEventListener('input',render));
+['fFloor','fBld','fFree','fFav'].forEach(id=>$(id).addEventListener('change',render));
+document.querySelectorAll('#list th[data-k]').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortK===k)sortAsc=!sortAsc;else{sortK=k;sortAsc=true}
+  document.querySelectorAll('#list th').forEach(x=>x.classList.remove('sorted','asc'));th.classList.add('sorted');if(sortAsc)th.classList.add('asc');render()});
+$('favBtn').onclick=()=>{$('fFav').checked=true;$('fFree').checked=false;render();$('mieszkania').scrollIntoView({behavior:'smooth'})};
+
+/* ---------- budynek (SVG) ---------- */
+function facade(match){
+  const W=260,H=56,x0=[30,330],y0=40;let s=`<rect x="0" y="330" width="620" height="50" fill="#dfe9e4"/>`;
+  ['A','B'].forEach((b,bi)=>{const x=x0[bi];
+    s+=`<rect x="${x-8}" y="${y0-14}" width="${W+16}" height="${H*5+22}" rx="6" fill="#e9e2d4"/><text x="${x+W/2}" y="${y0-20}" text-anchor="middle" font-size="14" font-weight="700" fill="#45535a">Budynek ${b}</text>`;
+    for(let fl=4;fl>=0;fl--){const y=y0+(4-fl)*H;
+      for(let n=0;n<6;n++){const u=U.find(q=>q.b===b&&q.floor===fl&&q.n===n);const ux=x+n*(W/6)+3,uw=W/6-6;
+        s+=`<g class="unit ${match&&!match.has(u.id)?'dim':''}" onclick="openU('${u.id}')"><title>${u.id} · ${u.rooms} pok. · ${u.area} m² · ${ST[u.status]}</title>
+          <rect x="${ux}" y="${y+4}" width="${uw}" height="${H-10}" rx="4" fill="${COL[u.status]}"/>
+          <rect x="${ux+6}" y="${y+10}" width="${uw-12}" height="${H-30}" rx="2" fill="#fff" opacity=".55"/>
+          <text x="${ux+uw/2}" y="${y+H-11}" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">${u.rooms}p</text></g>`;}
+      if(fl===4)s+=`<rect x="${x-8}" y="${y-2}" width="${W+16}" height="4" fill="#45535a" opacity=".5"/>`;
+    }
+    s+=`<g fill="#7fae8f">${[0,1,2,3].map(i=>`<circle cx="${x+20+i*70}" cy="${y0+H*5+22}" r="12"/>`).join('')}</g>`;
+  });
+  s+=`<g fill="#6f9c7e"><circle cx="18" cy="318" r="16"/><circle cx="606" cy="318" r="18"/><circle cx="312" cy="322" r="12"/></g>`;
+  $('facade').innerHTML=s;
+}
+
+/* ---------- karta lokalu ---------- */
+function roomsOf(u){
+  const k=u.area;const R=[['Pokój dzienny z aneksem',k*0.38]];
+  for(let i=1;i<u.rooms;i++)R.push([i===1?'Sypialnia':'Pokój',k*(0.32/(u.rooms-1))]);
+  R.push(['Łazienka',k*0.09],['Przedpokój',k*0.11]);if(u.rooms>=3)R.push(['WC',k*0.03]);
+  const sum=R.reduce((a,r)=>a+r[1],0);return R.map(r=>[r[0],Math.round(r[1]/sum*k*10)/10]);
+}
+function planSvg(u){
+  const R=roomsOf(u);const W=420,H=280;let s=`<svg viewBox="0 0 ${W} ${H}"><rect x="6" y="6" width="${W-12}" height="${H-12}" fill="#fff" stroke="#2c3a3f" stroke-width="6"/>`;
+  // prosty podział: lewa kolumna salon, prawa kolumna reszta
+  const lw=(W-12)*0.52;s+=`<rect x="9" y="9" width="${lw}" height="${H-18}" fill="#f1ede3"/><text x="${9+lw/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="#45535a">${R[0][0]}</text><text x="${9+lw/2}" y="${H/2+18}" text-anchor="middle" font-size="13" font-weight="700" fill="#2c3a3f">${R[0][1].toString().replace('.',',')} m²</text>`;
+  s+=`<rect x="${9+lw}" y="9" width="3" height="${H-18}" fill="#2c3a3f"/>`;
+  const rest=R.slice(1),tot=rest.reduce((a,r)=>a+r[1],0);let y=9;
+  rest.forEach((r,i)=>{const h=(H-18)*r[1]/tot;const c=/Łaz|WC/.test(r[0])?'#e3eef3':/Przedp/.test(r[0])?'#f6f4ef':'#eef3e8';
+    s+=`<rect x="${12+lw}" y="${y}" width="${W-21-lw}" height="${h}" fill="${c}"/>`+(i<rest.length-1?`<rect x="${12+lw}" y="${y+h-1.5}" width="${W-21-lw}" height="3" fill="#2c3a3f"/>`:'');
+    if(h>26)s+=`<text x="${12+lw+(W-21-lw)/2}" y="${y+h/2}" text-anchor="middle" font-size="12" fill="#45535a">${r[0]}</text><text x="${12+lw+(W-21-lw)/2}" y="${y+h/2+15}" text-anchor="middle" font-size="12" font-weight="700" fill="#2c3a3f">${r[1].toString().replace('.',',')} m²</text>`;
+    y+=h;});
+  s+=`<rect x="40" y="${H-9}" width="70" height="6" fill="#9fd0e6"/><rect x="${W-120}" y="0" width="70" height="6" fill="#9fd0e6"/><path d="M${9+lw-40} ${H-9} a34 34 0 0 1 34 -34" fill="none" stroke="#8a969a" stroke-width="1.5"/><text x="${W-14}" y="${H-14}" text-anchor="end" font-size="11" fill="#8a969a">N ↑</text></svg>`;
+  return s+`<table class="rooms">${R.map(r=>`<tr><td>${r[0]}</td><td>${r[1].toFixed(1).replace('.',',')} m²</td></tr>`).join('')}<tr><td><b>Razem</b></td><td>${u.area.toFixed(1).replace('.',',')} m²</td></tr></table>`;
+}
+function histSvg(u){
+  const h=u.hist,W=420,H=110,P=10;const ps=h.map(x=>x[1]),mn=Math.min(...ps)*0.985,mx=Math.max(...ps)*1.01;
+  const X=i=>P+i*(W-2*P)/Math.max(1,h.length-1),Y=v=>H-P-(v-mn)/(mx-mn)*(H-2*P);
+  const pts=h.map((x,i)=>X(i)+','+Y(x[1])).join(' ');
+  return `<svg viewBox="0 0 ${W} ${H}"><polyline points="${pts}" fill="none" stroke="#3f8a71" stroke-width="3"/>${h.map((x,i)=>`<circle cx="${X(i)}" cy="${Y(x[1])}" r="4.5" fill="#fff" stroke="#3f8a71" stroke-width="2.5"/>`).join('')}</svg>`;
+}
+let loan={own:20,years:25,rate:7.2};
+function rata(u){const P=u.price*(1-loan.own/100),r=loan.rate/100/12,n=loan.years*12;return P*r/(1-Math.pow(1+r,-n))}
+function openU(id,keep){
+  const u=U.find(x=>x.id===id);const fd=d=>d.toLocaleDateString('pl-PL');
+  $('mBox').innerHTML=`<button class="x" onclick="closeU()" aria-label="Zamknij">×</button><div class="u-grid">
+   <div><div class="plan">${planSvg(u)}</div></div>
+   <div>
+    <div class="u-head"><span class="st ${u.status}">${ST[u.status]}</span><h3>Mieszkanie ${u.id}</h3><div class="sub">Budynek ${u.b} · ${u.floor===0?'parter':'piętro '+u.floor} · ${u.rooms} ${u.rooms===1?'pokój':u.rooms<5?'pokoje':'pokoi'}</div></div>
+    ${u.status==='sold'?'<div class="price">Sprzedane</div>':`<div class="price">${zl(u.price)}</div><div class="ppm">${zl(u.ppm)} za m² · cena brutto</div>`}
+    <div class="facts"><div>Metraż<b>${u.area.toFixed(1).replace('.',',')} m²</b></div><div>Ogród / balkon<b>${u.extra}</b></div><div>Ekspozycja<b>${u.expo}</b></div><div>Miejsce postojowe<b>+ 45 000 zł</b></div></div>
+    <div class="hist"><h4>Historia ceny (jawność cen)</h4>${histSvg(u)}<table>${u.hist.map((x,i)=>`<tr><td>${fd(x[0])}</td><td>${zl(x[1])}${i?` <span style="color:var(--muted)">(+${((x[1]/u.hist[i-1][1]-1)*100).toFixed(1).replace('.',',')}%)</span>`:' <span style="color:var(--muted)">(cena początkowa)</span>'}</td></tr>`).join('')}</table></div>
+    ${u.status==='sold'?'':`<div class="calc"><h4 style="margin-top:0">Szacunkowa rata kredytu</h4><div class="r">
+      <div><label>Wkład własny: <b id="lOwn">${loan.own}%</b></label><input type="range" min="10" max="50" step="5" value="${loan.own}" oninput="loan.own=+this.value;upd('${u.id}')"></div>
+      <div><label>Okres: <b id="lYears">${loan.years} lat</b></label><input type="range" min="10" max="35" step="5" value="${loan.years}" oninput="loan.years=+this.value;upd('${u.id}')"></div></div>
+      <div class="rata" id="lRata">${zl(rata(u))} / mies.</div><div style="font-size:12px;color:var(--muted)">Oprocentowanie ${loan.rate.toString().replace('.',',')}% – wyliczenie orientacyjne, nie jest ofertą banku.</div></div>`}
+    <div class="u-actions">
+      ${u.status==='free'?`<button class="btn btn-g" onclick="$('form').classList.add('on')">Zapytaj o mieszkanie</button>`:''}
+      <button class="btn btn-o" onclick="toggleFav('${u.id}')">${favs.includes(u.id)?'♥ W ulubionych':'♡ Do ulubionych'}</button>
+      <button class="btn btn-o" onclick="window.print()">Karta PDF</button>
+    </div>
+    <div class="form" id="form"><input placeholder="Imię i nazwisko" id="qN"><input placeholder="Telefon lub e-mail" id="qC"><textarea rows="2" placeholder="Wiadomość, np. termin prezentacji"></textarea><button class="btn btn-g" onclick="sendQ()">Wyślij zapytanie</button></div>
+    <div class="ok" id="qOk">Dziękujemy! W prawdziwym wdrożeniu zapytanie o lokal ${u.id} trafiłoby do działu sprzedaży.</div>
+   </div></div>`;
+  $('modal').classList.add('on');$('shade').classList.add('on');
+  try{history.replaceState(null,'','#lokal='+u.id)}catch(e){}
+}
+function upd(id){const u=U.find(x=>x.id===id);$('lOwn').textContent=loan.own+'%';$('lYears').textContent=loan.years+' lat';$('lRata').textContent=zl(rata(u))+' / mies.'}
+function sendQ(){if($('qN').value.trim().length<3||$('qC').value.trim().length<5){toast('Uzupełnij imię i kontakt');return}$('form').classList.remove('on');$('qOk').style.display='block'}
+function closeU(){try{history.replaceState(null,'',location.pathname)}catch(e){}$('modal').classList.remove('on');$('shade').classList.remove('on')}
+$('shade').onclick=closeU;$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeU()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeU()});
+
+/* ---------- cennik CSV ---------- */
+function csv(){
+  const rows=[['Lokal','Budynek','Piętro','Pokoje','Metraż m2','Cena brutto zł','Cena za m2 zł','Status','Data ostatniej zmiany ceny']].concat(U.map(u=>[u.id,u.b,u.floor,u.rooms,u.area.toString().replace('.',','),u.status==='sold'?'':u.price,u.status==='sold'?'':u.ppm,ST[u.status],u.hist[u.hist.length-1][0].toLocaleDateString('pl-PL')]));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.map(r=>r.join(';')).join('\r\n')],{type:'text/csv'}));a.download='cennik-zielone-tarasy.csv';a.click();toast('Pobrano cennik CSV');
+}
+$('csvBtn').onclick=csv;$('csvBtn2').onclick=csv;
+
+stats();saveFav();render();
+const m=location.hash.match(/^#lokal=([AB]\.\d\.\d\d)$/);if(m&&U.find(u=>u.id===m[1]))openU(m[1]);
+</script>
+</body>
+</html>
