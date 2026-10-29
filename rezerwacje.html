@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio Aura – rezerwacje online (projekt przykładowy)</title>
+<meta name="description" content="Demo strony salonu z rezerwacją online: cennik, wybór specjalistki, kalendarz wolnych terminów, zadatek BLIK, plik do kalendarza i podgląd grafiku salonu. Projekt przykładowy.">
+<style>
+:root{
+  --plum:#4f3047;--plum-2:#6d4462;--rose:#b0607a;--rose-d:#8f4660;--blush:#f4e4e1;--bg:#fbf7f5;
+  --ink:#2b2229;--muted:#7d6f78;--line:#eadcd9;--card:#fff;--ok:#5f8a6a;--r:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.demo-bar{background:var(--plum);color:#f3e5ee;font-size:13px;text-align:center;padding:7px 12px}
+.demo-bar a{color:#f5c6d6}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+header .wrap{display:flex;align-items:center;gap:20px;padding:14px 20px}
+.brand{font-family:Georgia,serif;font-size:26px;color:var(--plum);text-decoration:none;font-weight:700;letter-spacing:.5px}
+.brand small{display:block;font:500 11px system-ui;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;margin-top:-3px}
+nav{margin-left:auto;display:flex;gap:18px}
+nav a{text-decoration:none;color:var(--ink);font-size:15px}
+nav a:hover{color:var(--rose)}
+.btn{border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;text-decoration:none;display:inline-block}
+.btn-rose{background:var(--rose);color:#fff}.btn-rose:hover{background:var(--rose-d)}
+.btn-out{background:#fff;color:var(--plum);border:1.5px solid var(--plum)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.hero{background:linear-gradient(135deg,#f7e8e4 0%,#efd9de 100%);padding:54px 0}
+.hero .wrap{display:grid;grid-template-columns:1.15fr 1fr;gap:30px;align-items:center}
+.hero h1{font-family:Georgia,serif;font-size:clamp(32px,4.5vw,50px);line-height:1.08;margin:0 0 14px;color:var(--plum)}
+.hero p{font-size:18px;color:#5e4f59;margin:0 0 22px;max-width:520px}
+.hero .meta{display:flex;flex-wrap:wrap;gap:16px;margin-top:22px;font-size:14px;color:#5e4f59}
+.hero .meta b{color:var(--plum)}
+.hero-art{background:#fff;border-radius:28px;height:320px;display:grid;place-items:center;box-shadow:0 20px 50px rgba(79,48,71,.12)}
+section{padding:56px 0}
+h2{font-family:Georgia,serif;font-size:clamp(26px,3.2vw,36px);margin:0 0 8px;color:var(--plum)}
+.lead{color:var(--muted);margin:0 0 26px;max-width:680px}
+.svc-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.svc-tabs button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-weight:600}
+.svc-tabs button.on{background:var(--plum);border-color:var(--plum);color:#fff}
+.svc{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.svc-i{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center}
+.svc-i .n{font-weight:700}
+.svc-i .d{font-size:14px;color:var(--muted)}
+.svc-i .p{font-weight:800;font-size:18px;color:var(--plum);text-align:right}
+.svc-i .t{font-size:13px;color:var(--muted);text-align:right}
+.svc-i button{grid-column:1/3;justify-self:start;margin-top:6px;border:0;background:none;color:var(--rose);font-weight:700;padding:0}
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.person{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px;text-align:center}
+.avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font:700 30px Georgia,serif;color:#fff}
+.person h3{margin:0;font-family:Georgia,serif}
+.person p{margin:4px 0 0;color:var(--muted);font-size:14px}
+/* rezerwacja */
+#rezerwacja{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.bk{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:26px;align-items:start}
+.steps{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.steps span{flex:1;min-width:92px;text-align:center;font-size:13px;font-weight:700;padding:8px 6px;border-radius:999px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.steps span.on{background:var(--plum);color:#fff;border-color:var(--plum)}
+.steps span.done{background:var(--blush);color:var(--plum)}
+.panel{border:1px solid var(--line);border-radius:var(--r);padding:22px;background:var(--bg)}
+.panel h3{margin:0 0 14px;font-family:Georgia,serif;font-size:22px;color:var(--plum)}
+.pick{display:grid;gap:8px}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;width:100%}
+.opt.on{border-color:var(--rose);box-shadow:0 0 0 3px rgba(176,96,122,.12)}
+.opt small{display:block;color:var(--muted);font-size:13px}
+.opt .pr{font-weight:800;color:var(--plum);white-space:nowrap}
+.people{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.people .opt{flex-direction:column;text-align:center;justify-content:flex-start}
+.people .avatar{width:56px;height:56px;font-size:20px;margin:0 0 6px}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cal-head b{font-family:Georgia,serif;font-size:18px;color:var(--plum)}
+.cal-head button{border:1px solid var(--line);background:#fff;border-radius:50%;width:34px;height:34px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .dn{font-size:12px;text-align:center;color:var(--muted);font-weight:700}
+.day{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 0;text-align:center}
+.day b{display:block;font-size:17px}
+.day small{font-size:11px;color:var(--ok);font-weight:700}
+.day.full small{color:var(--muted)}
+.day:disabled{background:transparent;border-style:dashed;color:#c4b6be;cursor:not-allowed}
+.day.on{border-color:var(--rose);background:var(--blush)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:16px}
+.slot{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 0;font-weight:700}
+.slot.on{background:var(--rose);border-color:var(--rose);color:#fff}
+.slot:disabled{text-decoration:line-through;color:#c9bcc3;background:transparent;cursor:not-allowed}
+.hint{font-size:13px;color:var(--muted);margin:10px 0 0}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-weight:600;font-size:14px;margin-bottom:5px}
+.fld input,.fld textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;background:#fff}
+.fld input.bad{border-color:var(--rose);background:#fff5f7}
+.err{font-size:12px;color:var(--rose-d);min-height:14px}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-bottom:8px}
+.chk input{accent-color:var(--rose);margin-top:3px}
+.blik{display:flex;gap:16px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;margin:6px 0 12px}
+.blik input{letter-spacing:10px;font-size:22px;font-weight:800;text-align:center;width:200px;border:1.5px solid var(--line);border-radius:10px;padding:8px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+.sum{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:#fff;position:sticky;top:90px}
+.sum h4{margin:0 0 12px;font-family:Georgia,serif;font-size:20px;color:var(--plum)}
+.row{display:flex;justify-content:space-between;gap:10px;font-size:15px;margin:6px 0}
+.row span:first-child{color:var(--muted)}
+.row.tot{font-weight:800;font-size:17px;border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.note{font-size:13px;color:var(--muted)}
+.done{text-align:center;padding:16px 6px}
+.done .ok{width:68px;height:68px;border-radius:50%;background:#e5efe7;color:var(--ok);display:grid;place-items:center;font-size:34px;margin:0 auto 12px}
+/* grafik */
+.admin{background:var(--plum);color:#fff;border-radius:var(--r);padding:24px}
+.admin h2{color:#fff}
+.admin .lead{color:#e8d6e1}
+.sched{display:grid;grid-template-columns:70px repeat(3,1fr);gap:0;background:#fff;color:var(--ink);border-radius:12px;overflow:hidden;font-size:13px}
+.sched .h{background:#f3e9ee;font-weight:700;padding:10px;border-bottom:1px solid var(--line);text-align:center}
+.sched .tm{padding:0 8px;color:var(--muted);border-bottom:1px solid #f1e7eb;height:38px;display:flex;align-items:center}
+.sched .cell{border-left:1px solid #f1e7eb;border-bottom:1px solid #f1e7eb;height:38px;position:relative}
+.ev{position:absolute;left:4px;right:4px;top:3px;border-radius:8px;padding:4px 8px;font-size:12px;line-height:1.25;color:#fff;overflow:hidden;z-index:1}
+.ev.new{outline:3px solid #f2c14e}
+.admin-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.admin-top select{border:0;border-radius:9px;padding:8px 10px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.kpi{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 14px}
+.kpi b{display:block;font-size:22px}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.rev{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.stars{color:#d9a43c;letter-spacing:2px}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.box{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.box table{width:100%;border-collapse:collapse;font-size:15px}
+.box td{padding:6px 0;border-bottom:1px solid #f3eaea}
+.box td:last-child{text-align:right;font-weight:600}
+.today td{color:var(--rose-d);font-weight:800!important}
+details{border-bottom:1px solid var(--line);padding:10px 0}
+summary{font-weight:700;cursor:pointer}
+footer{background:var(--plum);color:#e8d6e1;padding:30px 0;font-size:14px}
+footer a{color:#f5c6d6}
+.sticky{display:none}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,120px);background:var(--plum);color:#fff;padding:12px 18px;border-radius:999px;font-weight:600;font-size:14px;z-index:60;transition:.3s}
+.toast.on{transform:translate(-50%,0)}
+@media (max-width:900px){
+  nav{display:none}
+  .hero .wrap,.bk,.info{grid-template-columns:minmax(0,1fr)}
+  .cal{gap:4px}.day{min-width:0;padding:6px 0}.day b{font-size:15px}.day small{font-size:9px}
+  .steps span{min-width:0;flex:1 1 30%}
+  .blik{flex-wrap:wrap}
+  header .btn{display:none}
+  .hero-art{height:200px}
+  .svc,.team,.reviews,.kpis{grid-template-columns:1fr}
+  .people{grid-template-columns:1fr 1fr}
+  .f2{grid-template-columns:1fr}
+  .sum{position:static}
+  .sched{font-size:11px;grid-template-columns:48px repeat(3,1fr)}
+  .sticky{display:block;position:fixed;left:12px;right:12px;bottom:12px;z-index:30;text-align:center;box-shadow:0 8px 24px rgba(79,48,71,.3)}
+  body{padding-bottom:70px}
+}
+</style>
+</head>
+<body>
+<div class="demo-bar">Projekt przykładowy – salon i rezerwacje są fikcyjne, nic nie zostanie zarezerwowane · <a href="index.html">portfolio Marcina</a></div>
+<header><div class="wrap">
+  <a class="brand" href="#">Studio Aura<small>kosmetologia · Kraków</small></a>
+  <nav><a href="#cennik">Cennik</a><a href="#zespol">Zespół</a><a href="#grafik">Grafik salonu</a><a href="#kontakt">Kontakt</a></nav>
+  <a class="btn btn-rose" href="#rezerwacja">Umów wizytę</a>
+</div></header>
+
+<div class="hero"><div class="wrap">
+  <div>
+    <h1>Zarezerwuj wizytę w 60 sekund – o każdej porze</h1>
+    <p>Wybierz zabieg, specjalistkę i wolny termin. Potwierdzenie przyjdzie SMS-em, a dzień przed wizytą przypomnimy o niej automatycznie.</p>
+    <a class="btn btn-rose" href="#rezerwacja">Sprawdź wolne terminy</a>
+    <div class="meta"><span>⭐ <b>4,9</b> · 312 opinii</span><span>🕘 pn–pt 9–20, sob 9–15</span><span>📍 ul. Przykładowa 12, Kraków</span></div>
+  </div>
+  <div class="hero-art"><svg viewBox="0 0 300 220" width="80%" aria-hidden="true">
+    <circle cx="150" cy="110" r="88" fill="#f4e4e1"/><path d="M150 40 C120 80 120 120 150 160 C180 120 180 80 150 40Z" fill="#b0607a" opacity=".85"/>
+    <path d="M150 160 C110 150 86 120 84 92 C112 96 136 118 150 160Z" fill="#6d4462" opacity=".8"/><path d="M150 160 C190 150 214 120 216 92 C188 96 164 118 150 160Z" fill="#6d4462" opacity=".8"/>
+    <rect x="95" y="178" width="110" height="10" rx="5" fill="#4f3047" opacity=".25"/></svg></div>
+</div></div>
+
+<section id="cennik"><div class="wrap">
+  <h2>Cennik zabiegów</h2>
+  <p class="lead">Ceny i czas trwania widać od razu – przy każdym zabiegu można od razu przejść do rezerwacji.</p>
+  <div class="svc-tabs" id="svcTabs"></div>
+  <div class="svc" id="svcList"></div>
+</div></section>
+
+<section id="zespol" style="padding-top:0"><div class="wrap">
+  <h2>Nasz zespół</h2>
+  <p class="lead">Każda specjalistka ma własny grafik – system pokazuje tylko jej wolne godziny.</p>
+  <div class="team" id="team"></div>
+</div></section>
+
+<section id="rezerwacja"><div class="wrap">
+  <h2>Rezerwacja online</h2>
+  <p class="lead">Zadatek 30% zabezpiecza termin. Wizytę można bezpłatnie przełożyć lub odwołać do 24 h przed – wtedy zadatek wraca na konto.</p>
+  <div class="bk">
+    <div>
+      <div class="steps" id="steps"><span>1. Zabieg</span><span>2. Specjalistka</span><span>3. Termin</span><span>4. Dane i zadatek</span><span>5. Gotowe</span></div>
+      <div class="panel" id="bkPanel"></div>
+    </div>
+    <aside class="sum" id="bkSum"></aside>
+  </div>
+</div></section>
+
+<section id="grafik"><div class="wrap">
+  <div class="admin">
+    <div class="admin-top">
+      <div><h2>Podgląd: grafik salonu</h2><p class="lead" style="margin:0">Tak właścicielka widzi rezerwacje w panelu – także na telefonie. Twoja rezerwacja z formularza pojawi się tu z żółtą ramką.</p></div>
+      <select id="admDay" aria-label="Dzień grafiku"></select>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="sched" id="sched"></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <h2>Opinie klientek</h2>
+  <div class="reviews">
+    <div class="rev"><div class="stars">★★★★★</div><p>Rezerwacja przez telefon o 23:00, termin na jutro rano i SMS z przypomnieniem. Wygoda!</p><b>Karolina</b></div>
+    <div class="rev"><div class="stars">★★★★★</div><p>Pani Ola zrobiła najlepszą laminację brwi, jaką miałam. Wracam za 6 tygodni.</p><b>Monika</b></div>
+    <div class="rev"><div class="stars">★★★★★</div><p>Widać ceny i czas zabiegu przed rezerwacją – bez dzwonienia i pytania.</p><b>Ewa</b></div>
+  </div>
+</div></section>
+
+<section id="kontakt" style="padding-top:0"><div class="wrap">
+  <div class="info">
+    <div class="box"><h3 style="margin-top:0;font-family:Georgia,serif;color:var(--plum)">Godziny otwarcia</h3><table id="hours"></table></div>
+    <div class="box"><h3 style="margin-top:0;font-family:Georgia,serif;color:var(--plum)">Najczęstsze pytania</h3>
+      <details><summary>Jak odwołać wizytę?</summary><p>Link do zmiany terminu jest w SMS-ie i mailu z potwierdzeniem. Do 24 h przed wizytą odwołanie jest bezpłatne, a zadatek wraca na konto.</p></details>
+      <details><summary>Czy mogę zapłacić na miejscu?</summary><p>Tak – zadatek 30% płacisz przy rezerwacji (BLIK), resztę na miejscu kartą lub gotówką.</p></details>
+      <details><summary>Czy jest parking?</summary><p>Tak, 3 miejsca dla klientek przed wejściem.</p></details>
+      <details><summary>Czy można kupić voucher?</summary><p>Tak – voucher na dowolną kwotę wyślemy mailem w PDF.</p></details>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">Studio Aura to fikcyjny salon – projekt przykładowy strony z rezerwacjami online. W prawdziwym wdrożeniu: WordPress lub własny moduł, płatność zadatku przez Przelewy24 / Tpay, SMS-y przez SMSAPI, grafik w panelu na telefonie. · <a href="index.html">Portfolio Marcina</a> · <a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a></div></footer>
+<a class="btn btn-rose sticky" href="#rezerwacja">Umów wizytę</a>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const zl=n=>n.toFixed(2).replace('.',',')+' zł';
+const CATS={twarz:'Twarz',brwi:'Brwi i rzęsy',dlonie:'Dłonie i stopy',masaz:'Masaż'};
+const S=[
+  {id:1,cat:'twarz',n:'Oczyszczanie wodorowe',d:'Głębokie oczyszczanie + maska dobrana do cery',min:60,p:220,staff:[1,2]},
+  {id:2,cat:'twarz',n:'Peeling kawitacyjny z ampułką',d:'Delikatne złuszczanie, idealne przed jesienią',min:45,p:160,staff:[1,2]},
+  {id:3,cat:'twarz',n:'Mezoterapia mikroigłowa',d:'Dermapen + koktajl rewitalizujący',min:75,p:390,staff:[1]},
+  {id:4,cat:'brwi',n:'Laminacja brwi z koloryzacją',d:'Efekt na 6–8 tygodni',min:60,p:160,staff:[2]},
+  {id:5,cat:'brwi',n:'Lifting rzęs',d:'Podkręcenie i odżywienie rzęs',min:60,p:170,staff:[2]},
+  {id:6,cat:'brwi',n:'Henna i regulacja brwi',d:'Szybka metamorfoza',min:30,p:70,staff:[2,3]},
+  {id:7,cat:'dlonie',n:'Manicure hybrydowy',d:'Z opracowaniem skórek, ponad 200 kolorów',min:75,p:130,staff:[3]},
+  {id:8,cat:'dlonie',n:'Pedicure hybrydowy',d:'Z peelingiem i masażem stóp',min:90,p:170,staff:[3]},
+  {id:9,cat:'masaz',n:'Masaż relaksacyjny pleców',d:'Ciepłe olejki, aromaterapia',min:45,p:150,staff:[1,3]},
+  {id:10,cat:'masaz',n:'Masaż twarzy Kobido',d:'Naturalny lifting bez igieł',min:60,p:200,staff:[1]}
+];
+const STAFF=[
+  {id:1,n:'Natalia',r:'kosmetolog, zabiegi na twarz',c:'#6d4462'},
+  {id:2,n:'Ola',r:'stylistka brwi i rzęs',c:'#b0607a'},
+  {id:3,n:'Kasia',r:'stylizacja paznokci, masaż',c:'#8a7d4f'}
+];
+const HOURS=[null,[9,20],[9,20],[9,20],[9,20],[9,20],[9,15]]; // 0 = niedziela
+const DN=['nd','pn','wt','śr','cz','pt','sob'], MN=['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let mine=store.get('aura_booking',null);
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2400)}
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const hm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const pd=s=>new Date(s+"T00:00:00");
+function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}
+
+/* pseudo-losowo zajęte terminy (stałe dla danego dnia) */
+function rnd(seed){let h=2166136261;for(const c of seed){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return ((h>>>0)%1000)/1000}
+function busyBlocks(date,staffId){
+  const key=ymd(date), hrs=HOURS[date.getDay()]; if(!hrs)return [];
+  const out=[];let t=hrs[0]*60;
+  while(t<hrs[1]*60){const r=rnd(key+'|'+staffId+'|'+t);if(r<0.42){const len=[30,45,60,75,90][Math.floor(r*100)%5];
+    const svc=S.filter(s=>s.staff.includes(staffId));const s=svc[Math.floor(rnd(key+t+staffId)*svc.length)];
+    out.push({from:t,to:Math.min(t+len,hrs[1]*60),label:s?s.n:'Wizyta',client:['Anna K.','Marta W.','Julia P.','Ewa S.','Ola M.','Iza N.'][Math.floor(r*60)%6]});t+=len+15}else t+=30}
+  if(mine&&mine.date===key&&mine.staff===staffId)out.push({from:mine.start,to:mine.start+mine.min,label:mine.svc,client:mine.name+' (Ty)',isNew:true});
+  return out;
+}
+function freeSlots(date,staffId,min){
+  const hrs=HOURS[date.getDay()]; if(!hrs)return [];
+  const busy=busyBlocks(date,staffId), now=new Date(), res=[];
+  for(let t=hrs[0]*60;t+min<=hrs[1]*60;t+=15){
+    if(t%30!==0)continue;
+    const clash=busy.some(b=>t<b.to&&t+min>b.from);
+    const past=ymd(date)===ymd(now)&&t<=now.getHours()*60+now.getMinutes()+60;
+    res.push({t,free:!clash&&!past});
+  }
+  return res;
+}
+
+/* ---------- cennik i zespół ---------- */
+let svcCat='twarz';
+function renderSvc(){
+  $('svcTabs').innerHTML=Object.entries(CATS).map(([k,v])=>`<button class="${k===svcCat?'on':''}" onclick="svcCat='${k}';renderSvc()">${v}</button>`).join('');
+  $('svcList').innerHTML=S.filter(s=>s.cat===svcCat).map(s=>`<div class="svc-i"><div><div class="n">${s.n}</div><div class="d">${s.d}</div></div><div><div class="p">${s.p} zł</div><div class="t">${s.min} min</div></div><button onclick="bookSvc(${s.id})">Zarezerwuj →</button></div>`).join('');
+}
+$('team').innerHTML=STAFF.map(p=>`<div class="person"><div class="avatar" style="background:${p.c}">${p.n[0]}</div><h3>${p.n}</h3><p>${p.r}</p><p style="margin-top:8px">${S.filter(s=>s.staff.includes(p.id)).length} zabiegów w grafiku</p></div>`).join('');
+
+/* ---------- rezerwacja ---------- */
+let b={step:1,svc:null,staff:null,date:null,start:null,week:0,data:{},blik:''};
+function bookSvc(id){b={...b,step:2,svc:id,staff:null,date:null,start:null};renderBk();document.getElementById('rezerwacja').scrollIntoView({behavior:'smooth'})}
+function svcObj(){return S.find(s=>s.id===b.svc)}
+function renderSteps(){[...$('steps').children].forEach((s,i)=>s.className=i+1===b.step?'on':i+1<b.step?'done':'')}
+function renderSum(){
+  const s=svcObj(), st=b.staff==='any'?null:STAFF.find(x=>x.id===b.staff);
+  const dep=s?Math.round(s.p*0.3):0;
+  $('bkSum').innerHTML=`<h4>Twoja wizyta</h4>
+  <div class="row"><span>Zabieg</span><span>${s?s.n:'—'}</span></div>
+  <div class="row"><span>Czas</span><span>${s?s.min+' min':'—'}</span></div>
+  <div class="row"><span>Specjalistka</span><span>${b.staff==='any'?'dowolna':st?st.n:'—'}</span></div>
+  <div class="row"><span>Termin</span><span>${b.date&&b.start!=null?fmtDate(pd(b.date))+', '+hm(b.start):'—'}</span></div>
+  <div class="row"><span>Cena</span><span>${s?zl(s.p):'—'}</span></div>
+  <div class="row tot"><span style="color:var(--ink)">Zadatek teraz (30%)</span><span>${s?zl(dep):'—'}</span></div>
+  <p class="note">Resztę (${s?zl(s.p-dep):'—'}) płacisz w salonie. Bezpłatna zmiana terminu do 24 h przed wizytą.</p>`;
+}
+function fmtDate(d){return DN[d.getDay()]+', '+d.getDate()+' '+MN[d.getMonth()]}
+function renderBk(){
+  renderSteps();renderSum();let h='';const s=svcObj();
+  if(b.step===1){
+    h=`<h3>Wybierz zabieg</h3><div class="pick">`+S.map(x=>`<button class="opt ${b.svc===x.id?'on':''}" onclick="b.svc=${x.id};b.step=2;b.staff=null;renderBk()"><span><b>${x.n}</b><small>${CATS[x.cat]} · ${x.min} min</small></span><span class="pr">${x.p} zł</span></button>`).join('')+`</div>`;
+  }
+  if(b.step===2){
+    const who=STAFF.filter(p=>s.staff.includes(p.id));
+    h=`<h3>Kto ma wykonać zabieg?</h3><div class="people">`+(who.length>1?`<button class="opt ${b.staff==='any'?'on':''}" onclick="b.staff='any';b.step=3;renderBk()"><div class="avatar" style="background:#c9b2bf">✦</div><b>Dowolna</b><small>najwięcej terminów</small></button>`:'')+
+      who.map(p=>`<button class="opt ${b.staff===p.id?'on':''}" onclick="b.staff=${p.id};b.step=3;renderBk()"><div class="avatar" style="background:${p.c}">${p.n[0]}</div><b>${p.n}</b><small>${p.r}</small></button>`).join('')+`</div>
+      <div class="nav"><button class="btn btn-out" onclick="b.step=1;renderBk()">← Zmień zabieg</button><span></span></div>`;
+  }
+  if(b.step===3){
+    const today=startOfDay(new Date()), first=new Date(today);first.setDate(today.getDate()+b.week*14);
+    const staffList=b.staff==='any'?s.staff:[b.staff];
+    let days='';for(let i=0;i<14;i++){const d=new Date(first);d.setDate(first.getDate()+i);
+      const n=staffList.reduce((a,id)=>a+freeSlots(d,id,s.min).filter(x=>x.free).length,0), closed=!HOURS[d.getDay()];
+      days+=`<button class="day ${b.date===ymd(d)?'on':''} ${n===0&&!closed?'full':''}" ${closed||n===0?'disabled':''} onclick="b.date='${ymd(d)}';b.start=null;renderBk()"><span class="note">${DN[d.getDay()]}</span><b>${d.getDate()}</b><small>${closed?'zamknięte':n===0?'brak':n+' wolnych'}</small></button>`;}
+    let slots='';
+    if(b.date){const d=pd(b.date);
+      const map={};staffList.forEach(id=>freeSlots(d,id,s.min).forEach(x=>{if(x.free&&map[x.t]==null)map[x.t]=id;else if(!(x.t in map))map[x.t]=null}));
+      const ts=Object.keys(map).map(Number).sort((a,c)=>a-c);
+      slots=`<div class="slots">`+ts.map(t=>`<button class="slot ${b.start===t?'on':''}" ${map[t]==null?'disabled':''} onclick="b.start=${t};b.assigned=${map[t]};renderBk()">${hm(t)}</button>`).join('')+`</div><p class="hint">Przekreślone godziny są już zajęte. Godziny uwzględniają czas zabiegu (${s.min} min).</p>`;}
+    const m0=first, m1=new Date(first);m1.setDate(first.getDate()+13);
+    h=`<h3>Wybierz termin</h3><div class="cal-head"><button onclick="b.week=Math.max(0,b.week-1);renderBk()" ${b.week===0?'disabled':''} aria-label="Wcześniej">‹</button><b>${m0.getDate()} ${MN[m0.getMonth()]} – ${m1.getDate()} ${MN[m1.getMonth()]}</b><button onclick="b.week=Math.min(3,b.week+1);renderBk()" aria-label="Później">›</button></div>
+      <div class="cal">${days}</div>${slots}
+      <div class="nav"><button class="btn btn-out" onclick="b.step=2;renderBk()">← Wstecz</button><button class="btn btn-rose" ${b.start==null?'disabled':''} onclick="b.step=4;renderBk()">Dalej →</button></div>`;
+  }
+  if(b.step===4){
+    const d=b.data;
+    h=`<h3>Twoje dane</h3><div class="f2">
+      <div class="fld"><label for="bName">Imię i nazwisko</label><input id="bName" value="${d.name||''}" placeholder="Anna Kowalska"><div class="err" id="bNameE"></div></div>
+      <div class="fld"><label for="bPhone">Telefon (SMS z potwierdzeniem)</label><input id="bPhone" value="${d.phone||''}" placeholder="500 600 700" inputmode="tel"><div class="err" id="bPhoneE"></div></div></div>
+      <div class="fld"><label for="bMail">E-mail</label><input id="bMail" type="email" value="${d.mail||''}" placeholder="anna@example.com"><div class="err" id="bMailE"></div></div>
+      <div class="fld"><label for="bNote">Uwagi dla specjalistki (opcjonalnie)</label><textarea id="bNote" rows="2" placeholder="np. alergia, pierwsza wizyta">${d.note||''}</textarea></div>
+      <b>Zadatek ${zl(Math.round(s.p*0.3))} – BLIK</b>
+      <div class="blik"><input id="bBlik" inputmode="numeric" maxlength="6" placeholder="••••••" value="${b.blik}" oninput="this.value=this.value.replace(/\\D/g,'');b.blik=this.value"><span class="note">Wpisz kod z aplikacji banku.<br>W demo zadziała dowolne 6 cyfr.</span></div><div class="err" id="bBlikE"></div>
+      <label class="chk"><input type="checkbox" id="bSms" checked> Przypomnij mi SMS-em dzień przed wizytą</label>
+      <label class="chk"><input type="checkbox" id="bTerms"> Akceptuję regulamin rezerwacji i zasady odwoływania wizyt</label><div class="err" id="bTermsE"></div>
+      <div class="nav"><button class="btn btn-out" onclick="b.step=3;renderBk()">← Wstecz</button><button class="btn btn-rose" onclick="confirmBk()">Rezerwuję i płacę ${zl(Math.round(s.p*0.3))}</button></div>`;
+  }
+  if(b.step===5){
+    const st=STAFF.find(x=>x.id===mine.staff);
+    h=`<div class="done"><div class="ok">✓</div><h3>Do zobaczenia, ${mine.name.split(' ')[0]}!</h3>
+      <p><b>${mine.svc}</b><br>${fmtDate(pd(mine.date))}, godz. ${hm(mine.start)} · ${st.n}</p>
+      <p class="note">Potwierdzenie wysłaliśmy SMS-em i na ${mine.mail}.${mine.sms?' Dzień wcześniej przypomnimy o wizycie.':''}<br>To demo – rezerwacja nie trafiła do prawdziwego salonu.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn btn-rose" onclick="ics()">Dodaj do kalendarza</button><a class="btn btn-out" href="#grafik" onclick="showMineInAdmin()">Zobacz w grafiku salonu</a></div>
+      <p style="margin-top:16px"><button class="btn btn-out" onclick="cancelMine()">Odwołaj wizytę (demo)</button></p></div>`;
+  }
+  $('bkPanel').innerHTML=h;
+}
+function confirmBk(){
+  const v={name:$('bName').value.trim(),phone:$('bPhone').value.trim(),mail:$('bMail').value.trim(),note:$('bNote').value.trim()};b.data=v;
+  const rules=[['bName',v.name.split(/\s+/).length>=2,'Podaj imię i nazwisko'],['bPhone',v.phone.replace(/\D/g,'').length>=9,'Podaj 9-cyfrowy numer'],['bMail',/^\S+@\S+\.\S+$/.test(v.mail),'Sprawdź adres e-mail'],['bBlik',/^\d{6}$/.test(b.blik),'Kod BLIK ma 6 cyfr']];
+  let ok=true;rules.forEach(([id,good,msg])=>{$(id).classList.toggle('bad',!good);$(id+'E').textContent=good?'':msg;if(!good)ok=false});
+  if(!$('bTerms').checked){$('bTermsE').textContent='Zaznacz akceptację regulaminu';ok=false}else $('bTermsE').textContent='';
+  if(!ok)return;
+  const s=svcObj();
+  mine={svc:s.n,min:s.min,date:b.date,start:b.start,staff:b.staff==='any'?b.assigned:b.staff,name:v.name,mail:v.mail,sms:$('bSms').checked};
+  store.set('aura_booking',mine);b.step=5;renderBk();renderAdmin();toast('Zarezerwowano! Zadatek opłacony.');
+}
+function cancelMine(){mine=null;store.set('aura_booking',null);b={step:1,svc:null,staff:null,date:null,start:null,week:0,data:{},blik:''};renderBk();renderAdmin();toast('Wizyta odwołana – zadatek wraca na konto.')}
+function ics(){
+  const d=pd(mine.date);const p=n=>String(n).padStart(2,'0');
+  const f=(m)=>`${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}T${p(Math.floor(m/60))}${p(m%60)}00`;
+  const txt=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Studio Aura demo//PL','BEGIN:VEVENT','UID:'+Date.now()+'@aura-demo','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z','DTSTART:'+f(mine.start),'DTEND:'+f(mine.start+mine.min),'SUMMARY:'+mine.svc+' – Studio Aura','LOCATION:ul. Przykładowa 12, Kraków','DESCRIPTION:Projekt przykładowy – wizyta demonstracyjna','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/calendar'}));a.download='wizyta-studio-aura.ics';a.click();
+}
+
+/* ---------- grafik salonu ---------- */
+function admDays(){const t=startOfDay(new Date()),out=[];for(let i=0;out.length<10&&i<20;i++){const d=new Date(t);d.setDate(t.getDate()+i);if(HOURS[d.getDay()])out.push(d)}return out}
+function renderAdmDays(sel){$('admDay').innerHTML=admDays().map(d=>`<option value="${ymd(d)}" ${sel===ymd(d)?'selected':''}>${fmtDate(d)}</option>`).join('')}
+function renderAdmin(){
+  const d=pd($('admDay').value), hrs=HOURS[d.getDay()];
+  let total=0,cnt=0;const col={};
+  STAFF.forEach(p=>{col[p.id]=busyBlocks(d,p.id);col[p.id].forEach(e=>{cnt++;const s=S.find(x=>x.n===e.label);total+=s?s.p:150})});
+  const occ=Math.round(STAFF.reduce((a,p)=>a+col[p.id].reduce((x,e)=>x+e.to-e.from,0),0)/((hrs[1]-hrs[0])*60*STAFF.length)*100);
+  $('kpis').innerHTML=`<div class="kpi">Wizyty<b>${cnt}</b></div><div class="kpi">Obłożenie<b>${occ}%</b></div><div class="kpi">Przychód (plan)<b>${zl(total).replace(',00','')}</b></div>`;
+  let g='<div class="h"></div>'+STAFF.map(p=>`<div class="h">${p.n}</div>`).join('');
+  for(let t=hrs[0]*60;t<hrs[1]*60;t+=30){
+    g+=`<div class="tm">${hm(t)}</div>`;
+    STAFF.forEach(p=>{const evs=col[p.id].filter(e=>e.from>=t&&e.from<t+30);
+      g+=`<div class="cell">`+evs.map(e=>`<div class="ev ${e.isNew?'new':''}" style="background:${p.c};top:${3+(e.from-t)/30*38}px;height:${(e.to-e.from)/30*38-6}px"><b>${hm(e.from)}</b> ${e.client}<br>${e.label}</div>`).join('')+`</div>`});
+  }
+  $('sched').innerHTML=g;
+}
+function showMineInAdmin(){if(mine){renderAdmDays(mine.date);renderAdmin()}}
+$('admDay').addEventListener('change',renderAdmin);
+
+/* ---------- godziny ---------- */
+const order=[1,2,3,4,5,6,0], full=['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
+$('hours').innerHTML=order.map(i=>`<tr class="${new Date().getDay()===i?'today':''}"><td>${full[i]}</td><td>${HOURS[i]?HOURS[i][0]+':00–'+HOURS[i][1]+':00':'zamknięte'}</td></tr>`).join('');
+
+/* start */
+if(mine&&pd(mine.date)<startOfDay(new Date())){mine=null;store.set('aura_booking',null)}
+renderSvc();
+if(mine){b.step=5}
+renderBk();renderAdmDays(mine?mine.date:null);renderAdmin();
+</script>
+</body>
+</html>
