@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumi – świece i dekoracje (sklep demonstracyjny)</title>
+<meta name="description" content="Demo sklepu internetowego: filtry, karta produktu z wariantami, koszyk, kod rabatowy, Paczkomaty InPost i płatność BLIK. Projekt przykładowy.">
+<style>
+:root{
+  --ink:#2a2420;--muted:#7a6f66;--bg:#faf7f2;--card:#fff;--line:#ece4da;
+  --accent:#b5562f;--accent-d:#923f1f;--sage:#6f8467;--cream:#f3ece2;--gold:#c9973e;
+  --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+button{font:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.demo-bar{background:#2a2420;color:#f3ece2;font-size:13px;text-align:center;padding:7px 12px}
+.demo-bar a{color:#f2c58f}
+.ship-bar{background:var(--cream);font-size:14px;text-align:center;padding:8px 12px;border-bottom:1px solid var(--line)}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+header .wrap{display:flex;align-items:center;gap:18px;padding:14px 20px}
+.brand{font-family:Georgia,"Times New Roman",serif;font-size:28px;letter-spacing:1px;font-weight:700;color:var(--accent-d);text-decoration:none}
+.brand small{display:block;font:500 11px system-ui;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:-4px}
+.search{flex:1;display:flex;max-width:460px;margin-left:auto}
+.search input{flex:1;border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-size:15px;background:var(--bg)}
+.icon-btn{position:relative;border:0;background:transparent;padding:8px;border-radius:10px;display:flex;align-items:center;gap:6px;color:var(--ink)}
+.icon-btn:hover{background:var(--cream)}
+.cnt{position:absolute;top:0;right:-2px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;border-radius:999px;min-width:19px;height:19px;display:grid;place-items:center;padding:0 5px}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:center;padding:34px 0}
+.hero h1{font-family:Georgia,serif;font-size:clamp(30px,4.2vw,48px);line-height:1.1;margin:0 0 12px}
+.hero p{color:var(--muted);font-size:17px;margin:0 0 20px;max-width:480px}
+.hero-art{background:linear-gradient(160deg,#f1e2d0,#e9d3bb);border-radius:24px;height:300px;display:grid;place-items:center;overflow:hidden}
+.btn{border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px}
+.btn-acc{background:var(--accent);color:#fff}.btn-acc:hover{background:var(--accent-d)}
+.btn-out{background:#fff;border:1.5px solid var(--ink);color:var(--ink)}
+.btn-block{width:100%}
+.perks{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:30px}
+.perk{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;display:flex;gap:10px;align-items:center}
+.perk b{display:block}
+.shop{display:grid;grid-template-columns:230px 1fr;gap:26px;padding-bottom:50px}
+aside h3{font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:0 0 10px}
+.cats{display:flex;flex-direction:column;gap:4px;margin-bottom:24px}
+.cats button{text-align:left;border:0;background:transparent;padding:8px 10px;border-radius:9px;display:flex;justify-content:space-between}
+.cats button.on,.cats button:hover{background:var(--cream);font-weight:700}
+.cats span{color:var(--muted);font-weight:400}
+.price-f{display:flex;gap:8px;align-items:center;margin-bottom:24px}
+.price-f input{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px}
+.chk{display:flex;gap:8px;align-items:center;font-size:15px;margin-bottom:8px}
+.chk input{accent-color:var(--accent);width:17px;height:17px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.toolbar select{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff}
+.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:18px}
+.p{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s,transform .15s}
+.p:hover{box-shadow:0 10px 26px rgba(60,40,20,.09);transform:translateY(-2px)}
+.p .img{position:relative;aspect-ratio:1/1;background:var(--cream);display:grid;place-items:center;cursor:pointer}
+.p .img svg{width:78%;height:78%}
+.badge{position:absolute;top:10px;left:10px;font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px;background:#fff}
+.badge.sale{background:var(--accent);color:#fff}
+.badge.new{background:var(--sage);color:#fff}
+.p .in{padding:12px 14px 14px;display:flex;flex-direction:column;flex:1}
+.p .nm{font-weight:700;cursor:pointer;margin-bottom:2px}
+.stars{color:var(--gold);font-size:13px;letter-spacing:1px}
+.stars span{color:var(--muted);letter-spacing:0;margin-left:4px}
+.pr{margin:8px 0 12px;font-weight:800;font-size:18px}
+.pr s{color:var(--muted);font-weight:500;font-size:14px;margin-left:6px}
+.p .add{margin-top:auto;border:1.5px solid var(--ink);background:#fff;border-radius:999px;padding:9px;font-weight:700}
+.p .add:hover{background:var(--ink);color:#fff}
+.empty{padding:30px;text-align:center;border:1px dashed var(--line);border-radius:var(--r);color:var(--muted)}
+/* drawer + modal */
+.shade{position:fixed;inset:0;background:rgba(30,20,10,.45);opacity:0;pointer-events:none;transition:.2s;z-index:40}
+.shade.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,100%);background:#fff;z-index:41;transform:translateX(100%);transition:.25s;display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.d-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+.d-head h3{margin:0;font-family:Georgia,serif;font-size:22px}
+.x{border:0;background:var(--cream);border-radius:50%;width:34px;height:34px;font-size:18px}
+.d-body{flex:1;overflow:auto;padding:16px 20px}
+.d-foot{border-top:1px solid var(--line);padding:16px 20px}
+.progress{background:var(--cream);border-radius:10px;padding:10px 12px;font-size:14px;margin-bottom:14px}
+.progress .tr{height:7px;background:#e6dacb;border-radius:99px;margin-top:7px;overflow:hidden}
+.progress .tr i{display:block;height:100%;background:var(--sage);transition:width .3s}
+.ci{display:grid;grid-template-columns:64px 1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+.ci .th{width:64px;height:64px;background:var(--cream);border-radius:10px;display:grid;place-items:center}
+.ci .th svg{width:80%;height:80%}
+.ci .t{font-weight:700;font-size:15px}
+.ci .v{font-size:13px;color:var(--muted)}
+.qty{display:inline-flex;border:1px solid var(--line);border-radius:999px;margin-top:6px}
+.qty button{border:0;background:transparent;width:30px;height:28px;font-weight:700}
+.qty span{min-width:24px;text-align:center;line-height:28px;font-size:14px}
+.rm{border:0;background:none;color:var(--muted);font-size:13px;text-decoration:underline;padding:0}
+.code{display:flex;gap:8px;margin-bottom:10px}
+.code input{flex:1;border:1px solid var(--line);border-radius:9px;padding:9px 10px;text-transform:uppercase}
+.code button{border:0;background:var(--ink);color:#fff;border-radius:9px;padding:0 14px;font-weight:700}
+.msg{font-size:13px;margin:-4px 0 10px}
+.msg.ok{color:var(--sage)}.msg.err{color:var(--accent-d)}
+.sum{display:flex;justify-content:space-between;margin:4px 0;font-size:15px}
+.sum.tot{font-size:19px;font-weight:800;margin:10px 0 14px}
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;z-index:42;pointer-events:none;opacity:0;transition:.2s}
+.modal.on{opacity:1;pointer-events:auto}
+.m-box{background:#fff;border-radius:18px;max-width:900px;width:100%;max-height:92vh;overflow:auto;position:relative}
+.m-box .x{position:absolute;top:14px;right:14px;z-index:2}
+.pd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;padding:28px}
+.gal{background:var(--cream);border-radius:14px;aspect-ratio:1/1;display:grid;place-items:center}
+.gal svg{width:80%;height:80%}
+.pd h2{font-family:Georgia,serif;font-size:30px;margin:0 0 4px}
+.opt-l{font-weight:700;font-size:14px;margin:16px 0 8px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:600}
+.opts button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.swatch{width:34px;height:34px;border-radius:50%!important;padding:0!important;border:2px solid #fff!important;box-shadow:0 0 0 1.5px var(--line)}
+.swatch.on{box-shadow:0 0 0 2.5px var(--ink)!important}
+.buy{display:flex;gap:10px;margin:20px 0 14px}
+.buy .qty{margin:0;height:48px;align-items:center}
+.buy .qty button{height:46px;width:38px}
+.buy .btn{flex:1}
+.stock{font-size:14px;color:var(--sage);font-weight:600}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-top:18px}
+.tabs button{border:0;background:none;padding:10px 12px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.tabs button.on{color:var(--ink);border-color:var(--accent)}
+.tab-c{font-size:15px;color:#4c433c;padding:12px 0}
+.rev{border-bottom:1px solid var(--line);padding:8px 0}
+.together{padding:0 28px 28px}
+.together h4{margin:0 0 10px;font-family:Georgia,serif;font-size:20px}
+.mini{display:flex;gap:12px;overflow:auto}
+.mini .p{min-width:170px}
+/* checkout */
+.co{display:none;padding:30px 0 60px}
+.co.on{display:block}
+.steps{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.steps span{flex:1;min-width:120px;text-align:center;padding:10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:600;font-size:14px;color:var(--muted)}
+.steps span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.steps span.done{background:var(--cream);color:var(--ink)}
+.co-grid{display:grid;grid-template-columns:1fr 360px;gap:26px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.panel h3{margin:0 0 14px;font-family:Georgia,serif;font-size:22px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:14px;font-weight:600;margin-bottom:5px}
+.fld input{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:15px}
+.fld input.bad{border-color:var(--accent);background:#fff6f2}
+.fld .e{font-size:12px;color:var(--accent-d);min-height:14px}
+.ch{display:block;border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer}
+.ch.on{border-color:var(--ink);background:#fffdf9}
+.ch .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ch input{accent-color:var(--accent);margin-right:8px}
+.ch .sub{font-size:13px;color:var(--muted);margin:4px 0 0 26px}
+.lockers{margin:12px 0 0 26px}
+.lockers input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.lk{display:flex;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-bottom:6px;font-size:14px;cursor:pointer;background:#fff}
+.lk.on{border-color:var(--sage);background:#f3f7f1}
+.lk b{display:block}
+.blik{margin:12px 0 0 26px}
+.blik input{letter-spacing:10px;font-size:24px;font-weight:800;text-align:center;width:220px;border:1.5px solid var(--line);border-radius:12px;padding:10px}
+.nav-btns{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.done-box{text-align:center;padding:40px 22px}
+.done-box .ok{width:70px;height:70px;border-radius:50%;background:#e6efe2;color:var(--sage);display:grid;place-items:center;font-size:36px;margin:0 auto 14px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,120px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:999px;font-weight:600;font-size:14px;z-index:60;transition:.3s;white-space:nowrap}
+.toast.on{transform:translate(-50%,0)}
+footer{background:#2a2420;color:#d9cfc4;padding:34px 0;font-size:14px}
+footer .wrap{display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}
+footer h4{color:#fff;margin:0 0 8px}
+footer a{color:#d9cfc4;text-decoration:none;display:block;margin:3px 0}
+@media (max-width:900px){
+  .shop,.co-grid,.pd{grid-template-columns:1fr}
+  .hero{grid-template-columns:1fr}.hero-art{height:200px}
+  .perks{grid-template-columns:1fr 1fr}
+  aside{display:none}aside.open{display:block}
+  .f2{grid-template-columns:1fr}
+  footer .wrap{grid-template-columns:1fr}
+  .search{display:none}
+}
+@media (min-width:901px){#filtersBtn{display:none}}
+</style>
+</head>
+<body>
+<div class="demo-bar">Projekt przykładowy – sklep demonstracyjny, zamówienia nie są realizowane · <a href="index.html">portfolio Marcina</a></div>
+<div class="ship-bar" id="shipBar">Darmowa dostawa od 199 zł · Wysyłka w 24 h · 30 dni na zwrot</div>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#" onclick="goShop();return false">Lumi<small>świece · dekoracje</small></a>
+    <div class="search"><input id="q" type="search" placeholder="Szukaj: świeca, wazon, koc…" aria-label="Szukaj produktów"></div>
+    <button class="icon-btn" id="cartBtn" aria-label="Koszyk">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+      <span class="cnt" id="cnt">0</span>
+    </button>
+  </div>
+</header>
+
+<main id="shopView">
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Ciepło domu w każdym detalu</h1>
+        <p>Ręcznie lane świece sojowe, ceramika i tekstylia z naturalnych materiałów. Kod <b>START10</b> daje −10% na pierwsze zamówienie.</p>
+        <button class="btn btn-acc" onclick="document.getElementById('grid').scrollIntoView({behavior:'smooth'})">Zobacz kolekcję</button>
+      </div>
+      <div class="hero-art" id="heroArt"></div>
+    </section>
+    <div class="perks">
+      <div class="perk">🚚<div><b>Paczkomaty InPost</b>od 12,99 zł, dostawa w 24 h</div></div>
+      <div class="perk">📱<div><b>BLIK i szybkie przelewy</b>płatność w 30 sekund</div></div>
+      <div class="perk">↩️<div><b>30 dni na zwrot</b>bez podawania przyczyny</div></div>
+      <div class="perk">🌿<div><b>Naturalne składniki</b>wosk sojowy, len, glina</div></div>
+    </div>
+    <div class="shop">
+      <aside id="aside">
+        <h3>Kategorie</h3>
+        <div class="cats" id="cats"></div>
+        <h3>Cena (zł)</h3>
+        <div class="price-f"><input type="number" id="pmin" placeholder="od" min="0"> – <input type="number" id="pmax" placeholder="do" min="0"></div>
+        <h3>Pokaż</h3>
+        <label class="chk"><input type="checkbox" id="fSale"> Tylko promocje</label>
+        <label class="chk"><input type="checkbox" id="fNew"> Tylko nowości</label>
+      </aside>
+      <div>
+        <div class="toolbar">
+          <div><button class="btn btn-out" id="filtersBtn" style="padding:7px 14px">Filtry</button> <span class="muted" id="found"></span></div>
+          <select id="sort" aria-label="Sortowanie">
+            <option value="pop">Najpopularniejsze</option>
+            <option value="asc">Cena: od najniższej</option>
+            <option value="desc">Cena: od najwyższej</option>
+            <option value="new">Nowości</option>
+            <option value="rate">Najlepiej oceniane</option>
+          </select>
+        </div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<main class="co" id="coView">
+  <div class="wrap">
+    <div class="steps" id="steps"><span>1. Dane</span><span>2. Dostawa</span><span>3. Płatność</span><span>4. Gotowe</span></div>
+    <div class="co-grid">
+      <div class="panel" id="coPanel"></div>
+      <div class="panel" id="coSum"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><h4>Lumi</h4>Sklep demonstracyjny przygotowany jako projekt przykładowy: filtry i wyszukiwarka, karta produktu z wariantami, koszyk z kodem rabatowym i progiem darmowej dostawy, wybór paczkomatu i płatność BLIK. W prawdziwym wdrożeniu – WooCommerce, Shoper lub Shopify z prawdziwymi płatnościami.</div>
+    <div><h4>Zakupy</h4><a href="#">Dostawa i płatności</a><a href="#">Zwroty i reklamacje</a><a href="#">Regulamin</a></div>
+    <div><h4>Autor</h4><a href="index.html">Portfolio Marcina</a><a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a></div>
+  </div>
+</footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" aria-label="Koszyk">
+  <div class="d-head"><h3>Koszyk</h3><button class="x" onclick="closeAll()" aria-label="Zamknij">×</button></div>
+  <div class="d-body" id="dBody"></div>
+  <div class="d-foot" id="dFoot"></div>
+</aside>
+<div class="modal" id="modal"><div class="m-box" id="mBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- grafiki produktów (SVG) ---------- */
+function art(type,c,c2){
+  c2=c2||'#e8d9c6';
+  switch(type){
+    case 'candle': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="172" rx="62" ry="10" fill="#000" opacity=".07"/><rect x="52" y="70" width="96" height="100" rx="14" fill="${c}"/><rect x="52" y="110" width="96" height="34" fill="#fff" opacity=".85"/><text x="100" y="132" text-anchor="middle" font-family="Georgia" font-size="15" fill="#6b5d52">LUMI</text><ellipse cx="100" cy="70" rx="48" ry="9" fill="${c2}"/><line x1="100" y1="70" x2="100" y2="54" stroke="#3b302a" stroke-width="3"/><path d="M100 26 C88 42 92 54 100 56 C108 54 112 42 100 26Z" fill="#f2b33d"/><path d="M100 38 C95 46 97 52 100 53 C103 52 105 46 100 38Z" fill="#fff3c4"/></svg>`;
+    case 'jar': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="174" rx="58" ry="9" fill="#000" opacity=".07"/><path d="M58 70 h84 v88 a14 14 0 0 1 -14 14 h-56 a14 14 0 0 1 -14 -14z" fill="${c}" opacity=".9"/><rect x="62" y="52" width="76" height="20" rx="5" fill="#8a6a4f"/><rect x="70" y="105" width="60" height="38" rx="4" fill="#fff" opacity=".9"/><text x="100" y="128" text-anchor="middle" font-family="Georgia" font-size="13" fill="#6b5d52">Lumi</text></svg>`;
+    case 'vase': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="176" rx="46" ry="8" fill="#000" opacity=".07"/><path d="M82 30 h36 v16 c0 14 30 30 30 70 c0 40 -22 58 -48 58 c-26 0 -48 -18 -48 -58 c0 -40 30 -56 30 -70z" fill="${c}"/><path d="M70 110 q30 14 60 0" stroke="${c2}" stroke-width="5" fill="none"/><path d="M74 128 q26 12 52 0" stroke="${c2}" stroke-width="4" fill="none"/><path d="M100 30 C96 8 82 4 76 8 M100 30 C104 6 120 2 126 8" stroke="#7d8f6f" stroke-width="3" fill="none"/></svg>`;
+    case 'pillow': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="170" rx="70" ry="9" fill="#000" opacity=".07"/><path d="M34 52 q66 -14 132 0 q10 54 0 108 q-66 14 -132 0 q-10 -54 0 -108z" fill="${c}"/><g stroke="${c2}" stroke-width="3" opacity=".8"><line x1="50" y1="80" x2="150" y2="80"/><line x1="48" y1="106" x2="152" y2="106"/><line x1="50" y1="132" x2="150" y2="132"/></g></svg>`;
+    case 'blanket': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="172" rx="70" ry="9" fill="#000" opacity=".07"/><rect x="36" y="64" width="128" height="100" rx="10" fill="${c}"/><rect x="36" y="64" width="128" height="34" rx="10" fill="${c2}"/><g stroke="#fff" stroke-width="2" opacity=".6"><line x1="60" y1="64" x2="60" y2="164"/><line x1="100" y1="64" x2="100" y2="164"/><line x1="140" y1="64" x2="140" y2="164"/></g><g stroke="${c}" stroke-width="3"><line x1="44" y1="164" x2="44" y2="176"/><line x1="56" y1="164" x2="56" y2="176"/><line x1="144" y1="164" x2="144" y2="176"/><line x1="156" y1="164" x2="156" y2="176"/></g></svg>`;
+    case 'diffuser': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="174" rx="44" ry="8" fill="#000" opacity=".07"/><path d="M68 100 h64 v62 a10 10 0 0 1 -10 10 h-44 a10 10 0 0 1 -10 -10z" fill="${c}" opacity=".85"/><rect x="88" y="86" width="24" height="16" rx="3" fill="#3b302a"/><g stroke="#8a6a4f" stroke-width="3"><line x1="96" y1="88" x2="74" y2="22"/><line x1="100" y1="88" x2="100" y2="16"/><line x1="104" y1="88" x2="128" y2="22"/><line x1="98" y1="88" x2="86" y2="18"/><line x1="102" y1="88" x2="116" y2="18"/></g></svg>`;
+    case 'holder': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="166" rx="60" ry="9" fill="#000" opacity=".07"/><path d="M50 120 h100 l-12 40 h-76z" fill="${c}"/><ellipse cx="100" cy="120" rx="50" ry="10" fill="${c2}"/><rect x="84" y="78" width="32" height="42" rx="4" fill="#fbf4e8"/><line x1="100" y1="78" x2="100" y2="66" stroke="#3b302a" stroke-width="3"/><path d="M100 42 C92 54 95 63 100 64 C105 63 108 54 100 42Z" fill="#f2b33d"/></svg>`;
+    case 'bowl': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="160" rx="66" ry="9" fill="#000" opacity=".07"/><path d="M34 98 h132 c0 34 -28 58 -66 58 c-38 0 -66 -24 -66 -58z" fill="${c}"/><ellipse cx="100" cy="98" rx="66" ry="14" fill="${c2}"/><ellipse cx="100" cy="98" rx="54" ry="9" fill="#000" opacity=".08"/><circle cx="84" cy="94" r="9" fill="#e0a64b"/><circle cx="104" cy="92" r="10" fill="#c9573a"/><circle cx="120" cy="96" r="8" fill="#9db06d"/></svg>`;
+    case 'set': return `<svg viewBox="0 0 200 200"><ellipse cx="100" cy="172" rx="76" ry="9" fill="#000" opacity=".07"/><rect x="28" y="96" width="52" height="72" rx="10" fill="${c}"/><rect x="88" y="70" width="60" height="98" rx="10" fill="${c2}"/><rect x="132" y="112" width="44" height="56" rx="9" fill="${c}" opacity=".75"/><g stroke="#3b302a" stroke-width="3"><line x1="54" y1="96" x2="54" y2="86"/><line x1="118" y1="70" x2="118" y2="58"/><line x1="154" y1="112" x2="154" y2="102"/></g><g fill="#f2b33d"><path d="M54 66 C49 74 51 82 54 83 C57 82 59 74 54 66Z"/><path d="M118 36 C112 46 114 55 118 56 C122 55 124 46 118 36Z"/><path d="M154 84 C150 90 151 98 154 99 C157 98 158 90 154 84Z"/></g></svg>`;
+  }
+}
+
+/* ---------- produkty (fikcyjne) ---------- */
+const CATS = {swiece:'Świece',zapachy:'Zapachy do domu',ceramika:'Ceramika',tekstylia:'Tekstylia',zestawy:'Zestawy prezentowe'};
+const P = [
+  {id:1,cat:'swiece',name:'Świeca sojowa „Bursztyn”',type:'candle',price:59,old:null,rate:4.9,rev:128,pop:98,isNew:false,
+   colors:[['Bursztyn','#d39b5b'],['Krem','#efe2cc'],['Szałwia','#a7b59a']],sizes:['180 g','320 g (+20 zł)'],stock:14,
+   desc:'Ręcznie lana świeca z wosku sojowego z bawełnianym knotem. Nuty: bursztyn, wanilia, drzewo sandałowe. Czas palenia ok. 45 h (180 g).'},
+  {id:2,cat:'swiece',name:'Świeca w słoiku „Las po deszczu”',type:'jar',price:69,old:89,rate:4.8,rev:94,pop:95,isNew:false,
+   colors:[['Zieleń mchu','#8fa182'],['Grafit','#6f6a66']],sizes:['250 g'],stock:6,
+   desc:'Świeca w szklanym słoiku z drewnianym wieczkiem. Nuty: mech, cedr, wilgotna ziemia. Czas palenia ok. 55 h.'},
+  {id:3,cat:'zapachy',name:'Dyfuzor z patyczkami „Len i bawełna”',type:'diffuser',price:79,old:null,rate:4.7,rev:61,pop:88,isNew:true,
+   colors:[['Przezroczysty','#d7e3e6'],['Bursztynowe szkło','#c98b4a']],sizes:['100 ml','200 ml (+30 zł)'],stock:22,
+   desc:'Dyfuzor zapachowy na 6–8 tygodni. Świeży zapach czystej pościeli z nutą białych kwiatów.'},
+  {id:4,cat:'ceramika',name:'Wazon ceramiczny „Fala”',type:'vase',price:129,old:null,rate:4.9,rev:43,pop:90,isNew:true,
+   colors:[['Piasek','#d8c3a5'],['Terakota','#c06a45'],['Biel','#f1ece4']],sizes:['22 cm','30 cm (+40 zł)'],stock:5,
+   desc:'Ręcznie toczony wazon z gliny kamionkowej, szkliwiony od wewnątrz – nadaje się do świeżych kwiatów.'},
+  {id:5,cat:'ceramika',name:'Świecznik „Gniazdo”',type:'holder',price:49,old:65,rate:4.6,rev:37,pop:70,isNew:false,
+   colors:[['Terakota','#c06a45'],['Grafit','#5f5a56']],sizes:['Ø 12 cm'],stock:18,
+   desc:'Ceramiczny świecznik na świecę słupkową lub tealight. Każdy egzemplarz jest nieco inny.'},
+  {id:6,cat:'tekstylia',name:'Poduszka lniana „Prążek”',type:'pillow',price:89,old:null,rate:4.8,rev:52,pop:80,isNew:false,
+   colors:[['Len naturalny','#cdbb9f'],['Rdza','#b5562f'],['Szałwia','#9aab8e']],sizes:['45 × 45 cm','50 × 50 cm (+10 zł)'],stock:30,
+   desc:'Poszewka ze stonowanego lnu z wypełnieniem z włókna z recyklingu. Zamek kryty, pranie w 40°C.'},
+  {id:7,cat:'tekstylia',name:'Koc z frędzlami „Wieczór”',type:'blanket',price:179,old:219,rate:4.9,rev:76,pop:93,isNew:false,
+   colors:[['Karmel','#c08a55'],['Oliwka','#8a8c5c'],['Popiel','#a9a39b']],sizes:['130 × 170 cm'],stock:9,
+   desc:'Miękki koc z bawełny z domieszką wełny, z ręcznie wiązanymi frędzlami.'},
+  {id:8,cat:'zestawy',name:'Zestaw prezentowy „Hygge”',type:'set',price:149,old:null,rate:5.0,rev:39,pop:97,isNew:true,
+   colors:[['Ciepły','#d39b5b'],['Leśny','#8fa182']],sizes:['3 świece + bilecik'],stock:12,
+   desc:'Trzy świece w różnych rozmiarach w pudełku prezentowym z bilecikiem – idealne na święta.'},
+  {id:9,cat:'swiece',name:'Świeca „Pierniczek”',type:'candle',price:55,old:null,rate:4.8,rev:210,pop:99,isNew:true,
+   colors:[['Cynamon','#b9733f'],['Czerwień','#a8443a']],sizes:['180 g','320 g (+20 zł)'],stock:40,
+   desc:'Edycja świąteczna: piernik, goździki i pomarańcza. Bestseller grudnia.'},
+  {id:10,cat:'zapachy',name:'Wosk zapachowy „Kawa z kardamonem”',type:'jar',price:29,old:null,rate:4.5,rev:28,pop:60,isNew:false,
+   colors:[['Kawa','#7b5a43']],sizes:['6 kostek'],stock:50,
+   desc:'Kostki wosku do kominka zapachowego. Jedna kostka pachnie ok. 8 h.'},
+  {id:11,cat:'ceramika',name:'Miska „Kamień”',type:'bowl',price:69,old:null,rate:4.7,rev:19,pop:55,isNew:false,
+   colors:[['Piasek','#d8c3a5'],['Grafit','#5f5a56']],sizes:['Ø 18 cm'],stock:3,
+   desc:'Ręcznie robiona miska na drobiazgi lub owoce, szkliwo matowe.'},
+  {id:12,cat:'zestawy',name:'Zestaw „Spokojny wieczór”',type:'set',price:199,old:239,rate:4.9,rev:24,pop:85,isNew:false,
+   colors:[['Szałwia','#a7b59a'],['Krem','#efe2cc']],sizes:['świeca + dyfuzor + koc mini'],stock:7,
+   desc:'Świeca 320 g, dyfuzor 100 ml i miękki koc 90 × 120 cm w pudełku.'}
+];
+const REVIEWS=[['Ania z Krakowa',5,'Pachnie obłędnie, pali się równo i długo. Wrócę po kolejne!'],['Paweł',5,'Kupiłem na prezent – piękne opakowanie, szybka wysyłka.'],['Magda',4,'Bardzo ładny produkt, zapach mógłby być odrobinę intensywniejszy.']];
+const LOCKERS=[['KRA01M','Kraków, ul. Długa 12','Żabka, 24/7'],['KRA45N','Kraków, ul. Wielicka 28','przy Biedronce'],['WAW12A','Warszawa, ul. Puławska 145','stacja Orlen, 24/7'],['WAW88M','Warszawa, al. Jana Pawła II 43','parking'],['POZ03B','Poznań, ul. Głogowska 92','Lidl, 24/7'],['WRO21C','Wrocław, ul. Legnicka 58','Galeria, poziom -1'],['GDA07K','Gdańsk, ul. Grunwaldzka 211','Żabka'],['KIE14D','Kielce, ul. Warszawska 26','24/7'],['LOD30E','Łódź, ul. Piotrkowska 160','Rossmann']];
+const FREE=199, zl=n=>n.toFixed(2).replace('.',',')+' zł';
+
+/* ---------- stan ---------- */
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let cart=store.get('lumi_cart',[]), code=store.get('lumi_code',null);
+let fCat='all';
+const $=id=>document.getElementById(id);
+function stars(r){const f=Math.round(r);return '★★★★★'.slice(0,f)+'☆☆☆☆☆'.slice(0,5-f)}
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2200)}
+function unit(item){const p=P.find(x=>x.id===item.id);return p.price+(/\+(\d+)/.test(item.size)?+item.size.match(/\+(\d+)/)[1]:0)}
+
+/* ---------- lista ---------- */
+function renderCats(){
+  const n=k=>k==='all'?P.length:P.filter(p=>p.cat===k).length;
+  $('cats').innerHTML=[['all','Wszystkie produkty'],...Object.entries(CATS)].map(([k,v])=>`<button data-c="${k}" class="${fCat===k?'on':''}">${v}<span>${n(k)}</span></button>`).join('');
+  $('cats').querySelectorAll('button').forEach(b=>b.onclick=()=>{fCat=b.dataset.c;renderCats();renderGrid()});
+}
+function card(p){
+  const badge=p.old?`<span class="badge sale">−${Math.round((1-p.price/p.old)*100)}%</span>`:p.isNew?'<span class="badge new">Nowość</span>':'';
+  return `<div class="p"><div class="img" onclick="openP(${p.id})">${badge}${art(p.type,p.colors[0][1])}</div><div class="in">
+    <div class="nm" onclick="openP(${p.id})">${p.name}</div><div class="stars">${stars(p.rate)}<span>${p.rate.toFixed(1)} (${p.rev})</span></div>
+    <div class="pr">${zl(p.price)}${p.old?`<s>${zl(p.old)}</s>`:''}</div>
+    <button class="add" onclick="quickAdd(${p.id})">Dodaj do koszyka</button></div></div>`;
+}
+function renderGrid(){
+  const q=$('q').value.trim().toLowerCase(), mn=+$('pmin').value||0, mx=+$('pmax').value||1e9;
+  let list=P.filter(p=>(fCat==='all'||p.cat===fCat)&&p.price>=mn&&p.price<=mx&&(!$('fSale').checked||p.old)&&(!$('fNew').checked||p.isNew)
+    &&(!q||(p.name+' '+p.desc+' '+CATS[p.cat]).toLowerCase().includes(q)));
+  const s=$('sort').value;
+  list.sort((a,b)=>s==='asc'?a.price-b.price:s==='desc'?b.price-a.price:s==='new'?(b.isNew-a.isNew)||(b.pop-a.pop):s==='rate'?b.rate-a.rate:b.pop-a.pop);
+  $('found').textContent=list.length+' '+(list.length===1?'produkt':list.length%10>=2&&list.length%10<=4&&(list.length%100<10||list.length%100>=20)?'produkty':'produktów');
+  $('grid').innerHTML=list.length?list.map(card).join(''):'<div class="empty">Nic nie znaleźliśmy. Spróbuj innej frazy albo wyczyść filtry.</div>';
+}
+['q','pmin','pmax'].forEach(id=>$(id).addEventListener('input',renderGrid));
+['sort','fSale','fNew'].forEach(id=>$(id).addEventListener('change',renderGrid));
+$('filtersBtn').onclick=()=>$('aside').classList.toggle('open');
+
+/* ---------- karta produktu ---------- */
+let sel={};
+function openP(id){
+  const p=P.find(x=>x.id===id); sel={id,color:0,size:0,qty:1,tab:'opis'};
+  drawP(); $('modal').classList.add('on'); $('shade').classList.add('on');
+}
+function drawP(){
+  const p=P.find(x=>x.id===sel.id), price=p.price+(/\+(\d+)/.test(p.sizes[sel.size])?+p.sizes[sel.size].match(/\+(\d+)/)[1]:0);
+  const others=P.filter(x=>x.id!==p.id&&(x.cat===p.cat||x.cat==='zestawy')).slice(0,4);
+  const tabC={opis:`<p>${p.desc}</p><p>Wyprodukowano w Polsce. Opakowanie z papieru z recyklingu.</p>`,
+    wysylka:'<p>Paczkomat InPost 12,99 zł, kurier 16,99 zł, odbiór osobisty 0 zł. Zamówienia do 14:00 wysyłamy tego samego dnia. Darmowa dostawa od 199 zł. Zwrot w ciągu 30 dni.</p>',
+    opinie:REVIEWS.map(r=>`<div class="rev"><b>${r[0]}</b> <span class="stars">${stars(r[1])}</span><div>${r[2]}</div></div>`).join('')};
+  $('mBox').innerHTML=`<button class="x" onclick="closeAll()" aria-label="Zamknij">×</button>
+  <div class="pd"><div class="gal">${art(p.type,p.colors[sel.color][1])}</div><div>
+    <div class="muted" style="font-size:13px;text-transform:uppercase;letter-spacing:1px">${CATS[p.cat]}</div>
+    <h2>${p.name}</h2><div class="stars">${stars(p.rate)}<span>${p.rate.toFixed(1)} · ${p.rev} opinii</span></div>
+    <div class="pr" style="font-size:26px">${zl(price)}${p.old?`<s>${zl(p.old)}</s>`:''}</div>
+    <div class="opt-l">Kolor: <span class="muted" style="font-weight:500">${p.colors[sel.color][0]}</span></div>
+    <div class="opts">${p.colors.map((c,i)=>`<button class="swatch ${i===sel.color?'on':''}" style="background:${c[1]}" title="${c[0]}" aria-label="${c[0]}" onclick="sel.color=${i};drawP()"></button>`).join('')}</div>
+    <div class="opt-l">Wariant</div>
+    <div class="opts">${p.sizes.map((s,i)=>`<button class="${i===sel.size?'on':''}" onclick="sel.size=${i};drawP()">${s}</button>`).join('')}</div>
+    <div class="buy"><div class="qty"><button onclick="sel.qty=Math.max(1,sel.qty-1);drawP()" aria-label="Mniej">−</button><span>${sel.qty}</span><button onclick="sel.qty=Math.min(${p.stock},sel.qty+1);drawP()" aria-label="Więcej">+</button></div>
+      <button class="btn btn-acc" onclick="addSel()">Dodaj do koszyka · ${zl(price*sel.qty)}</button></div>
+    <div class="stock">${p.stock<=6?`● Zostało tylko ${p.stock} szt.`:'● Dostępny – wysyłka w 24 h'}</div>
+    <div class="tabs">${[['opis','Opis'],['wysylka','Wysyłka i zwroty'],['opinie','Opinie ('+p.rev+')']].map(t=>`<button class="${sel.tab===t[0]?'on':''}" onclick="sel.tab='${t[0]}';drawP()">${t[1]}</button>`).join('')}</div>
+    <div class="tab-c">${tabC[sel.tab]}</div>
+  </div></div>
+  <div class="together"><h4>Często kupowane razem</h4><div class="mini">${others.map(card).join('')}</div></div>`;
+}
+function addSel(){const p=P.find(x=>x.id===sel.id);addCart(p.id,p.colors[sel.color][0],p.sizes[sel.size],sel.qty);closeAll();openCart()}
+function quickAdd(id){const p=P.find(x=>x.id===id);addCart(id,p.colors[0][0],p.sizes[0],1);toast('Dodano: '+p.name)}
+
+/* ---------- koszyk ---------- */
+function addCart(id,color,size,qty){
+  const ex=cart.find(i=>i.id===id&&i.color===color&&i.size===size);
+  if(ex)ex.qty+=qty;else cart.push({id,color,size,qty});
+  save();
+}
+function save(){store.set('lumi_cart',cart);store.set('lumi_code',code);renderCount();if($('drawer').classList.contains('on'))renderCart();if($('coView').classList.contains('on'))renderSum()}
+function totals(){
+  const sub=cart.reduce((s,i)=>s+unit(i)*i.qty,0);
+  const disc=code==='START10'?Math.round(sub*10)/100:0;
+  const ship=co.ship?(sub-disc>=FREE&&co.ship!=='odbior'?0:SHIP[co.ship].price):null;
+  return {sub,disc,ship,total:sub-disc+(ship||0)};
+}
+function renderCount(){const n=cart.reduce((s,i)=>s+i.qty,0);$('cnt').textContent=n;
+  const t=totals(), left=FREE-(t.sub-t.disc);
+  $('shipBar').innerHTML=cart.length?(left>0?`Brakuje <b>${zl(left)}</b> do darmowej dostawy`:'🎉 Masz <b>darmową dostawę</b>'):'Darmowa dostawa od 199 zł · Wysyłka w 24 h · 30 dni na zwrot';}
+function renderCart(){
+  if(!cart.length){$('dBody').innerHTML='<div class="empty" style="margin-top:20px">Koszyk jest pusty.<br><br><button class="btn btn-acc" onclick="closeAll()">Wracam do zakupów</button></div>';$('dFoot').innerHTML='';return}
+  const t=totals(), left=FREE-(t.sub-t.disc);
+  $('dBody').innerHTML=`<div class="progress">${left>0?`Dodaj produkty za <b>${zl(left)}</b>, a dostawa będzie gratis`:'🎉 Masz darmową dostawę!'}<div class="tr"><i style="width:${Math.min(100,(t.sub-t.disc)/FREE*100)}%"></i></div></div>`+
+  cart.map((i,k)=>{const p=P.find(x=>x.id===i.id);const col=p.colors.find(c=>c[0]===i.color)||p.colors[0];
+    return `<div class="ci"><div class="th">${art(p.type,col[1])}</div><div><div class="t">${p.name}</div><div class="v">${i.color} · ${i.size.replace(/ \(\+\d+ zł\)/,'')}</div>
+    <div class="qty"><button onclick="chq(${k},-1)" aria-label="Mniej">−</button><span>${i.qty}</span><button onclick="chq(${k},1)" aria-label="Więcej">+</button></div></div>
+    <div style="text-align:right"><b>${zl(unit(i)*i.qty)}</b><br><button class="rm" onclick="cart.splice(${k},1);save()">Usuń</button></div></div>`}).join('');
+  $('dFoot').innerHTML=`<div class="code"><input id="codeIn" placeholder="Kod rabatowy" value="${code||''}"><button onclick="applyCode()">Użyj</button></div><div class="msg ${code?'ok':''}" id="codeMsg">${code?'Kod START10: −10% naliczone':'Wpisz START10, żeby sprawdzić rabat'}</div>
+  <div class="sum"><span>Produkty</span><span>${zl(t.sub)}</span></div>${t.disc?`<div class="sum" style="color:var(--sage)"><span>Rabat</span><span>−${zl(t.disc)}</span></div>`:''}
+  <div class="sum"><span>Dostawa</span><span>${left<=0?'0,00 zł':'od 12,99 zł'}</span></div>
+  <div class="sum tot"><span>Razem</span><span>${zl(t.sub-t.disc)}</span></div>
+  <button class="btn btn-acc btn-block" onclick="startCheckout()">Przejdź do kasy</button>`;
+}
+function chq(k,d){const p=P.find(x=>x.id===cart[k].id);cart[k].qty=Math.min(p.stock,cart[k].qty+d);if(cart[k].qty<1)cart.splice(k,1);save()}
+function applyCode(){const v=$('codeIn').value.trim().toUpperCase();if(v==='START10'){code=v;save();toast('Rabat −10% naliczony')}else{$('codeMsg').className='msg err';$('codeMsg').textContent='Ten kod nie działa. Spróbuj START10.'}}
+function openCart(){renderCart();$('drawer').classList.add('on');$('shade').classList.add('on')}
+function closeAll(){['drawer','modal','shade'].forEach(i=>$(i).classList.remove('on'))}
+$('cartBtn').onclick=openCart;$('shade').onclick=closeAll;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeAll()});
+
+/* ---------- kasa ---------- */
+const SHIP={inpost:{n:'Paczkomat InPost 24/7',price:12.99,sub:'Dostawa zwykle następnego dnia roboczego'},kurier:{n:'Kurier DPD',price:16.99,sub:'Dostawa pod drzwi w 1–2 dni robocze'},odbior:{n:'Odbiór osobisty – pracownia w Krakowie',price:0,sub:'Gotowe do odbioru po SMS-ie, zwykle w 2 h'}};
+const PAY={blik:{n:'BLIK',sub:'Wpisz 6-cyfrowy kod z aplikacji banku'},p24:{n:'Szybki przelew',sub:'Wybór banku na następnym kroku'},card:{n:'Karta płatnicza',sub:'Visa, Mastercard, Apple Pay, Google Pay'}};
+let co={step:1,data:{},ship:null,locker:null,pay:'blik',blik:''};
+function goShop(){$('coView').classList.remove('on');$('shopView').style.display='';window.scrollTo(0,0)}
+function startCheckout(){if(!cart.length)return;closeAll();co.step=1;$('shopView').style.display='none';$('coView').classList.add('on');renderCo();window.scrollTo(0,0)}
+function renderSteps(){[...$('steps').children].forEach((s,i)=>s.className=i+1===co.step?'on':i+1<co.step?'done':'')}
+function renderSum(){
+  const t=totals();
+  $('coSum').innerHTML=`<h3>Twoje zamówienie</h3>`+cart.map(i=>{const p=P.find(x=>x.id===i.id);return `<div class="sum" style="font-size:14px"><span>${i.qty} × ${p.name}<br><span class="muted">${i.color} · ${i.size.replace(/ \(\+\d+ zł\)/,'')}</span></span><span>${zl(unit(i)*i.qty)}</span></div>`}).join('')+
+  `<hr style="border:0;border-top:1px solid var(--line);margin:12px 0"><div class="sum"><span>Produkty</span><span>${zl(t.sub)}</span></div>${t.disc?`<div class="sum" style="color:var(--sage)"><span>Rabat START10</span><span>−${zl(t.disc)}</span></div>`:''}
+  <div class="sum"><span>Dostawa</span><span>${t.ship===null?'wybierz w kroku 2':t.ship===0?'0,00 zł':zl(t.ship)}</span></div><div class="sum tot"><span>Do zapłaty</span><span>${zl(t.total)}</span></div>
+  ${co.step<4?'<button class="btn btn-out btn-block" onclick="goShop()">← Wróć do sklepu</button>':''}`;
+}
+function fld(id,l,type,ph,v){return `<div class="fld"><label for="${id}">${l}</label><input id="${id}" type="${type}" placeholder="${ph||''}" value="${v||''}"><div class="e" id="${id}E"></div></div>`}
+function renderCo(){
+  renderSteps();renderSum();const d=co.data;let h='';
+  if(co.step===1){
+    h=`<h3>Dane do zamówienia</h3><div class="f2">${fld('fName','Imię i nazwisko','text','Anna Kowalska',d.name)}${fld('fMail','E-mail','email','anna@example.com',d.mail)}</div>
+    <div class="f2">${fld('fPhone','Telefon (do SMS od kuriera)','tel','500 600 700',d.phone)}${fld('fZip','Kod pocztowy','text','00-000',d.zip)}</div>
+    ${fld('fStreet','Ulica i numer','text','ul. Lipowa 5/2',d.street)}${fld('fCity','Miasto','text','Kraków',d.city)}
+    <label class="chk"><input type="checkbox" id="fInv"> Chcę fakturę na firmę</label>
+    <div class="nav-btns"><span></span><button class="btn btn-acc" onclick="step1()">Dalej: dostawa →</button></div>`;
+  }
+  if(co.step===2){
+    h=`<h3>Sposób dostawy</h3>`+Object.entries(SHIP).map(([k,s])=>{const t=totals();const free=t.sub-t.disc>=FREE&&k!=='odbior';
+      return `<label class="ch ${co.ship===k?'on':''}"><div class="row"><span><input type="radio" name="ship" ${co.ship===k?'checked':''} onchange="co.ship='${k}';renderCo()"><b>${s.n}</b></span><b>${s.price===0||free?'0,00 zł':zl(s.price)}</b></div><div class="sub">${s.sub}${free?' · gratis od 199 zł':''}</div>
+      ${k==='inpost'&&co.ship==='inpost'?`<div class="lockers"><input id="lkQ" placeholder="Wpisz miasto lub kod paczkomatu, np. Kraków" oninput="drawLockers()" value="${co.lkq||''}"><div id="lkList"></div></div>`:''}</label>`}).join('')+
+    `<div class="e" id="shipE" style="color:var(--accent-d);font-size:14px"></div><div class="nav-btns"><button class="btn btn-out" onclick="co.step=1;renderCo()">← Wstecz</button><button class="btn btn-acc" onclick="step2()">Dalej: płatność →</button></div>`;
+  }
+  if(co.step===3){
+    h=`<h3>Płatność</h3>`+Object.entries(PAY).map(([k,s])=>`<label class="ch ${co.pay===k?'on':''}"><div class="row"><span><input type="radio" name="pay" ${co.pay===k?'checked':''} onchange="co.pay='${k}';renderCo()"><b>${s.n}</b></span></div><div class="sub">${s.sub}</div>
+      ${k==='blik'&&co.pay==='blik'?`<div class="blik"><input id="blikIn" inputmode="numeric" maxlength="6" placeholder="••••••" value="${co.blik}" oninput="this.value=this.value.replace(/\\D/g,'');co.blik=this.value"><div class="e" id="blikE"></div><div class="muted" style="font-size:13px">W demo zadziała dowolne 6 cyfr.</div></div>`:''}</label>`).join('')+
+    `<label class="chk" style="margin-top:8px"><input type="checkbox" id="fTerms"> Akceptuję regulamin sklepu i politykę prywatności</label><div class="e" id="termsE" style="color:var(--accent-d);font-size:13px"></div>
+    <div class="nav-btns"><button class="btn btn-out" onclick="co.step=2;renderCo()">← Wstecz</button><button class="btn btn-acc" onclick="step3()">Zamawiam i płacę ${zl(totals().total)}</button></div>`;
+  }
+  if(co.step===4){
+    const nr='LU-'+(20261100+Math.floor(Math.random()*900));
+    const where=co.ship==='inpost'?`do paczkomatu <b>${co.locker[0]}</b> (${co.locker[1]})`:co.ship==='kurier'?`kurierem na adres ${d.street}, ${d.zip} ${d.city}`:'do odbioru w pracowni';
+    h=`<div class="done-box"><div class="ok">✓</div><h3>Dziękujemy, ${d.name.split(' ')[0]}!</h3><p>Zamówienie <b>${nr}</b> zostało opłacone. Wyślemy je ${where}.<br>Potwierdzenie trafiło na <b>${d.mail}</b>.</p>
+      <p class="muted" style="font-size:14px">To sklep demonstracyjny – zamówienie nie zostanie zrealizowane, a płatność nie została pobrana.</p><button class="btn btn-acc" onclick="cart=[];code=null;save();co={step:1,data:{},ship:null,locker:null,pay:'blik',blik:''};goShop()">Wróć do sklepu</button></div>`;
+  }
+  $('coPanel').innerHTML=h; if(co.step===2&&co.ship==='inpost')drawLockers();
+}
+function drawLockers(){
+  const qEl=$('lkQ'); if(!qEl)return; co.lkq=qEl.value; const q=qEl.value.trim().toLowerCase();
+  const list=LOCKERS.filter(l=>!q||(l[0]+' '+l[1]).toLowerCase().includes(q)).slice(0,4);
+  $('lkList').innerHTML=list.length?list.map(l=>`<div class="lk ${co.locker&&co.locker[0]===l[0]?'on':''}" onclick="event.preventDefault();co.locker=${JSON.stringify(l).replace(/"/g,'&quot;')};drawLockers()"><span><b>${l[0]}</b>${l[1]}</span><span class="muted">${l[2]}</span></div>`).join(''):'<div class="muted" style="font-size:14px">Brak paczkomatów dla tej frazy w demo – spróbuj „Kraków”, „Warszawa” lub „Kielce”.</div>';
+}
+function step1(){
+  const v={name:$('fName').value.trim(),mail:$('fMail').value.trim(),phone:$('fPhone').value.trim(),zip:$('fZip').value.trim(),street:$('fStreet').value.trim(),city:$('fCity').value.trim()};
+  const rules={fName:[v.name.split(' ').length>=2,'Podaj imię i nazwisko'],fMail:[/^\S+@\S+\.\S+$/.test(v.mail),'Sprawdź adres e-mail'],fPhone:[v.phone.replace(/\D/g,'').length>=9,'Podaj 9-cyfrowy numer'],
+    fZip:[/^\d{2}-\d{3}$/.test(v.zip),'Format: 00-000'],fStreet:[v.street.length>3,'Podaj ulicę i numer'],fCity:[v.city.length>1,'Podaj miasto']};
+  let ok=true;Object.entries(rules).forEach(([id,[good,msg]])=>{$(id).classList.toggle('bad',!good);$(id+'E').textContent=good?'':msg;if(!good)ok=false});
+  co.data=v;if(ok){co.step=2;renderCo();window.scrollTo(0,0)}
+}
+function step2(){
+  if(!co.ship){$('shipE').textContent='Wybierz sposób dostawy.';return}
+  if(co.ship==='inpost'&&!co.locker){$('shipE').textContent='Wybierz paczkomat z listy.';return}
+  co.step=3;renderCo();window.scrollTo(0,0)
+}
+function step3(){
+  let ok=true;
+  if(co.pay==='blik'&&!/^\d{6}$/.test(co.blik)){$('blikE').textContent='Kod BLIK ma 6 cyfr.';ok=false}
+  if(!$('fTerms').checked){$('termsE').textContent='Zaznacz akceptację regulaminu.';ok=false}else $('termsE').textContent='';
+  if(ok){co.step=4;renderCo();window.scrollTo(0,0)}
+}
+
+/* ---------- start ---------- */
+$('heroArt').innerHTML=art('set','#d39b5b','#efe2cc').replace('<svg','<svg style="width:70%;height:90%"');
+renderCats();renderGrid();renderCount();
+</script>
+</body>
+</html>
