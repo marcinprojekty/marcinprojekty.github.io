@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Rolland – części do pługów i maszyny (projekt demonstracyjny)</title>
+<meta name="description" content="Projekt demonstracyjny nowej strony Rolland – Technika Rolnicza: wyszukiwarka części do pługów, komplety na sezon, linia PRO, przedsprzedaż i konfigurator maszyn.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23167A3D'/%3E%3Cpath d='M7 20l3-9 4 5 2-7 2 7 4-5 3 9z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#F1F4F1; --white:#fff; --ink:#18241C; --ink-2:#4A5A50; --line:#D3DBD5; --line-2:#BCC8C0;
+  --green:#167A3D; --green-d:#0F5C2D; --forest:#0C3A20; --forest-2:#124A2A;
+  --signal:#F2B500; --signal-d:#C98F00; --steel:#2F3A35; --red:#C8361B;
+  --r:6px; --wide:"wdth" 125; --mid:"wdth" 112;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 Archivo,system-ui,sans-serif;font-variation-settings:"wdth" 100}
+img{display:block;max-width:100%}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+h1,h2,h3{margin:0;font-variation-settings:var(--wide);line-height:1.02;letter-spacing:-.01em}
+h2{font-size:clamp(28px,4vw,44px);font-weight:800}
+h3{font-size:20px;font-weight:750;font-variation-settings:var(--mid)}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+
+/* demo bar */
+.demobar{background:var(--steel);color:#DDE6E0;font-size:13.5px}
+.demobar .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:38px;padding-top:6px;padding-bottom:6px}
+.demobar b{color:#fff;font-weight:600}
+.demobar a{color:#fff;text-underline-offset:3px}
+
+/* header */
+header.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:22px;height:68px}
+.brand{display:flex;align-items:center;flex:none;text-decoration:none}
+.brand svg{height:40px;width:auto}
+nav.main{display:flex;gap:4px;margin-left:8px;overflow-x:auto;scrollbar-width:none}
+nav.main::-webkit-scrollbar{display:none}
+nav.main a{text-decoration:none;font-weight:600;font-size:15px;padding:8px 11px;border-radius:var(--r);white-space:nowrap;color:var(--ink-2)}
+.dealer .txt{white-space:nowrap}
+nav.main a:hover{color:var(--ink);background:var(--paper)}
+.tools{margin-left:auto;display:flex;align-items:center;gap:10px}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden}
+.seg button{border:0;background:transparent;padding:7px 11px;font-weight:650;font-size:14px;cursor:pointer;color:var(--ink-2)}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.dealer{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;user-select:none}
+.switch{width:38px;height:22px;border-radius:11px;background:var(--line-2);position:relative;transition:background .2s;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.dealer input{position:absolute;opacity:0;pointer-events:none}
+.dealer input:checked+.switch{background:var(--green)}
+.dealer input:checked+.switch::after{transform:translateX(16px)}
+.dealer input:focus-visible+.switch{outline:3px solid var(--signal);outline-offset:2px}
+.cartbtn{display:flex;align-items:center;gap:8px;border:0;background:var(--green);color:#fff;font-weight:700;padding:10px 14px;border-radius:var(--r);cursor:pointer}
+.cartbtn:hover{background:var(--green-d)}
+.cartbtn .badge{min-width:22px;height:22px;border-radius:11px;background:var(--signal);color:var(--ink);font-size:13px;display:grid;place-items:center;padding:0 6px}
+
+/* hero */
+.hero{background:var(--forest);color:#EAF2EC;position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px 44px;align-items:center;padding-top:52px;padding-bottom:44px}
+.hero h1{font-size:clamp(34px,3.9vw,54px);font-weight:850;color:#fff;text-wrap:balance}
+.hero .finder{grid-column:1/-1}
+.hero .lead{margin-top:18px;font-size:18px;color:#BFD3C5;max-width:34ch}
+.stats{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap}
+.stats div{border-left:3px solid var(--signal);padding-left:12px}
+.stats strong{display:block;font-size:28px;font-weight:800;font-variation-settings:var(--wide);color:#fff;line-height:1.1}
+.stats span{font-size:14px;color:#A9C2B2}
+.diagram{position:relative}
+.diagram svg{width:100%;height:auto;display:block}
+.diagram .hint{font-size:14px;color:#A9C2B2;margin-top:6px}
+.pp{cursor:pointer}
+.pp .fill{fill:rgba(234,242,236,.10);stroke:#DCE9E0;stroke-width:2;transition:fill .18s,stroke .18s}
+.pp:hover .fill,.pp:focus .fill{fill:rgba(242,181,0,.55);stroke:var(--signal)}
+.pp.on .fill{fill:var(--signal);stroke:var(--signal)}
+.pp:focus{outline:none}
+.lbl{font:650 18px Archivo,sans-serif;fill:#E6F0E9;font-variation-settings:var(--mid);pointer-events:none}
+.lbl.on{fill:var(--signal)}
+.cap{font:500 13px Archivo,sans-serif;fill:#8DB29A}
+.leader{stroke:#8DB29A;stroke-width:1.4;fill:none}
+.finder{margin-top:8px;background:#fff;border-radius:10px;padding:16px;display:grid;grid-template-columns:1.3fr 1.3fr 1fr auto;gap:12px;color:var(--ink);box-shadow:0 18px 40px -18px rgba(0,0,0,.45)}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:13px;font-weight:650;color:var(--ink-2)}
+.field select,.field input{height:44px;border:1px solid var(--line-2);border-radius:var(--r);padding:0 12px;background:#fff;width:100%}
+.field select:focus,.field input:focus{outline:2px solid var(--green);outline-offset:0;border-color:var(--green)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:var(--r);border:0;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.primary{background:var(--green);color:#fff}
+.btn.primary:hover{background:var(--green-d)}
+.btn.ghost{background:transparent;border:1px solid var(--line-2);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.signal{background:var(--signal);color:var(--ink)}
+.btn.signal:hover{background:#FFC61A}
+.finder .btn{align-self:end}
+
+/* sections */
+section{padding:72px 0}
+section.hero{padding:0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px;flex-wrap:wrap}
+.sec-head p{color:var(--ink-2);max-width:56ch;margin-top:10px}
+
+/* parts */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-2)}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip .c{opacity:.6;margin-left:4px;font-weight:500}
+.resbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:var(--ink-2);font-size:15px;gap:12px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;overflow:hidden}
+.card .ph{aspect-ratio:4/3;background:#fff;border-bottom:1px solid var(--line);display:grid;place-items:center;position:relative}
+.card .ph img{width:100%;height:100%;object-fit:contain;padding:8px}
+.card .tag{position:absolute;top:10px;left:10px;background:var(--paper);border:1px solid var(--line);font-size:12.5px;font-weight:650;padding:3px 8px;border-radius:4px;color:var(--ink-2)}
+.card .tag.pro{background:var(--signal);border-color:var(--signal);color:var(--ink)}
+.card .body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card h3{font-size:16.5px;line-height:1.25}
+.specs{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13.5px;margin:0}
+.specs dt{color:var(--ink-2)}
+.specs dd{margin:0;font-weight:600;text-align:right}
+.price{display:flex;align-items:baseline;gap:8px;margin-top:auto}
+.price strong{font-size:22px;font-weight:800;font-variation-settings:var(--mid)}
+.price s{color:var(--ink-2);font-size:14px}
+.price small{color:var(--ink-2);font-size:13px}
+.addrow{display:flex;gap:8px}
+.qty{display:flex;align-items:center;border:1px solid var(--line-2);border-radius:var(--r);height:40px}
+.qty button{width:32px;height:38px;border:0;background:transparent;cursor:pointer;font-size:18px;color:var(--ink-2)}
+.qty input{width:34px;border:0;text-align:center;font-weight:700;-moz-appearance:textfield}
+.qty input::-webkit-inner-spin-button{-webkit-appearance:none}
+.addrow .btn{height:40px;flex:1;padding:0 10px}
+.added{background:var(--ink)!important}
+.empty{grid-column:1/-1;background:#fff;border:1px dashed var(--line-2);border-radius:10px;padding:36px;text-align:center;color:var(--ink-2)}
+.more{display:flex;justify-content:center;margin-top:22px}
+
+/* kit */
+.kit{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:28px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px}
+.panel+.panel{margin-top:16px}
+.stack{display:flex;flex-direction:column;gap:14px}
+.bodies{display:flex;gap:6px}
+.bodies button{flex:1;height:52px;border:1px solid var(--line-2);border-radius:var(--r);background:#fff;font-weight:800;font-size:18px;cursor:pointer;font-variation-settings:var(--mid)}
+.bodies button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ktable{width:100%;border-collapse:collapse;font-size:15px}
+.ktable th{font-size:13px;text-align:left;color:var(--ink-2);font-weight:600;padding:0 8px 10px;border-bottom:1px solid var(--line)}
+.ktable td{padding:11px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.ktable td.r,.ktable th.r{text-align:right}
+.ktable .thumb{width:46px;height:36px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:4px}
+.ktable .nm{display:flex;gap:10px;align-items:center}
+.ktable small{display:block;color:var(--ink-2);font-size:12.5px}
+.totals{display:grid;grid-template-columns:1fr auto;gap:6px 18px;margin-top:16px;font-size:15px}
+.totals .big{font-size:26px;font-weight:850;font-variation-settings:var(--mid)}
+.totals .save{color:var(--green);font-weight:700}
+
+/* pro */
+.pro{background:#E6EBE7}
+.procols{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:start}
+.range{display:flex;flex-direction:column;gap:8px}
+.range .rv{display:flex;justify-content:space-between;font-size:14px;font-weight:650}
+.range .rv b{font-size:20px;font-variation-settings:var(--mid)}
+input[type=range]{width:100%;accent-color:var(--green);height:28px}
+.soil{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.soil button{border:1px solid var(--line-2);background:#fff;border-radius:var(--r);padding:9px 4px;font-weight:650;font-size:14px;cursor:pointer}
+.soil button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.compare{display:grid;gap:18px}
+.bar{display:grid;grid-template-columns:110px 1fr 120px;align-items:center;gap:12px}
+.bar .t{font-weight:700}
+.bar .track{height:26px;background:#fff;border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.bar .fillb{height:100%;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.bar .v{text-align:right;font-weight:800;font-size:18px;font-variation-settings:var(--mid)}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--ink-2);flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.verdict{background:var(--forest);color:#fff;border-radius:10px;padding:22px;display:grid;grid-template-columns:1fr auto;gap:8px 20px;align-items:center}
+.verdict strong{font-size:clamp(26px,3.4vw,38px);font-weight:850;font-variation-settings:var(--wide);color:var(--signal)}
+.verdict p{color:#C9DACF;font-size:15px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.facts div{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px}
+.facts b{display:block;font-size:20px;font-variation-settings:var(--mid)}
+.facts span{font-size:13px;color:var(--ink-2)}
+.note{font-size:13px;color:var(--ink-2)}
+.sharepro svg{width:100%;height:auto}
+
+/* presale */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:8px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.step{padding:20px;border-right:1px solid var(--line);position:relative}
+.step:last-child{border-right:0}
+.step .d{font-size:14px;color:var(--ink-2);font-weight:600}
+.step .pct{font-size:44px;font-weight:900;font-variation-settings:var(--wide);line-height:1.05;margin:6px 0}
+.step p{font-size:14.5px;color:var(--ink-2)}
+.step.now{background:var(--forest);color:#fff}
+.step.now .d,.step.now p{color:#BFD3C5}
+.step.now .pct{color:var(--signal)}
+.step.past{opacity:.45}
+.step .now-tag{position:absolute;top:14px;right:14px;background:var(--signal);color:var(--ink);font-size:12.5px;font-weight:750;padding:3px 8px;border-radius:4px}
+.presale-cta{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.presale-cta p{max-width:62ch;color:var(--ink-2)}
+
+/* configurator */
+.conf{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:28px;align-items:start}
+.machine{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;position:sticky;top:88px}
+.machine .ph{background:#fff;aspect-ratio:900/490;display:grid;place-items:center}
+.machine .ph img{width:100%;height:100%;object-fit:contain}
+.machine .meta{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.machine .meta div{padding:14px;border-right:1px solid var(--line)}
+.machine .meta div:last-child{border-right:0}
+.machine .meta b{display:block;font-size:18px;font-variation-settings:"wdth" 100;font-weight:800;white-space:nowrap}
+.machine .meta span{font-size:13px;color:var(--ink-2)}
+.models{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.models button{border:1px solid var(--line-2);background:#fff;border-radius:var(--r);padding:10px 4px;cursor:pointer;font-weight:800;font-variation-settings:var(--mid)}
+.models button small{display:block;font-weight:500;font-size:12px;color:var(--ink-2);font-variation-settings:"wdth" 100}
+.models button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.models button[aria-pressed=true] small{color:#C9D4CD}
+.rollers{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line-2);border-radius:var(--r);padding:10px 12px;cursor:pointer;background:#fff;font-size:14.5px}
+.opt:hover{border-color:var(--ink-2)}
+.opt input{accent-color:var(--green);width:18px;height:18px;flex:none;margin:0}
+.opt .p{margin-left:auto;font-weight:700;white-space:nowrap;font-size:14px}
+.opt.sel{border-color:var(--green);background:#F3FAF5}
+.opts{display:flex;flex-direction:column;gap:6px}
+.sumbox{background:var(--forest);color:#fff;border-radius:10px;padding:20px}
+.sumbox .row{display:flex;justify-content:space-between;gap:12px;font-size:14.5px;color:#C9DACF;padding:3px 0}
+.sumbox .row b{color:#fff;font-weight:650}
+.sumbox .total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(255,255,255,.18);margin-top:10px;padding-top:12px}
+.sumbox .total strong{font-size:32px;font-weight:900;font-variation-settings:var(--wide);color:var(--signal)}
+.sumbox .btn{width:100%;margin-top:14px}
+.warn{font-size:13.5px;color:var(--red);font-weight:600}
+
+/* footer */
+footer{background:var(--steel);color:#C9D4CD;padding:44px 0 30px;font-size:15px}
+footer .wrap{display:grid;grid-template-columns:2fr 1fr 1fr;gap:28px}
+footer h4{margin:0 0 10px;color:#fff;font-size:15px}
+footer a{color:#fff}
+footer .fine{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14);padding-top:18px;font-size:13px;color:#9FB0A6}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(12,24,16,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:#fff;z-index:61;transform:translateX(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+.drawer header h3{font-size:22px}
+.x{width:40px;height:40px;border:0;background:var(--paper);border-radius:var(--r);cursor:pointer;font-size:22px;line-height:1}
+.dlist{flex:1;overflow:auto;padding:8px 20px}
+.ditem{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.ditem img{width:52px;height:42px;object-fit:contain;border:1px solid var(--line);border-radius:4px}
+.ditem .n{font-size:14.5px;font-weight:650;line-height:1.25}
+.ditem small{color:var(--ink-2);font-size:12.5px}
+.ditem .rm{border:0;background:none;color:var(--ink-2);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
+.dfoot{border-top:1px solid var(--line);padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.dfoot .opt{font-size:14px}
+.dsum{display:flex;justify-content:space-between;font-size:15px}
+.dsum.big{font-size:22px;font-weight:850;font-variation-settings:var(--mid)}
+.dempty{padding:40px 10px;text-align:center;color:var(--ink-2)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:8px;font-weight:600;opacity:0;transition:opacity .2s,transform .2s;z-index:80;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.drawer.open~.toast{bottom:auto;top:16px;z-index:70}
+.modal{position:fixed;inset:0;display:none;place-items:center;z-index:90;background:rgba(12,24,16,.55);padding:16px}
+.modal.open{display:grid}
+.modal .box{background:#fff;border-radius:12px;max-width:460px;width:100%;padding:26px}
+.modal h3{font-size:24px;margin-bottom:10px}
+.modal p{color:var(--ink-2);margin-bottom:16px}
+
+/* responsive */
+@media (max-width:1520px){ .dealer .txt .long{display:none} }
+@media (min-width:1521px){ .dealer .txt .short{display:none} }
+@media (max-width:1240px){ .cartbtn .lbl2{display:none} nav.main a{padding:8px 8px;font-size:14.5px} }
+@media (max-width:1060px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hero .wrap{grid-template-columns:1fr;gap:18px;padding-top:36px}
+  .finder{grid-template-columns:1fr 1fr}
+  .finder .btn{grid-column:1/-1}
+  .kit,.procols,.conf{grid-template-columns:1fr}
+  .machine{position:static}
+}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .top .wrap{height:auto;flex-wrap:wrap;gap:10px;padding-top:10px;padding-bottom:10px}
+  nav.main{order:3;width:100%;margin:0 -4px}
+  .brand svg{height:30px}
+  .tools{gap:8px}
+  .seg button{padding:6px 8px;font-size:13px}
+  .dealer .txt{display:none}
+  .cartbtn{padding:8px 10px}
+  nav.main a{padding:6px 8px;font-size:14px}
+  .specs dd{overflow-wrap:anywhere}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card .body{padding:10px}
+  .card h3{font-size:14.5px}
+  .specs{font-size:12.5px}
+  .price strong{font-size:18px}
+  .addrow{flex-direction:column}
+  .qty{width:100%;justify-content:space-between}
+  section{padding:52px 0}
+  .timeline{grid-template-columns:1fr 1fr}
+  .step:nth-child(2){border-right:0}
+  .step:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .models{grid-template-columns:repeat(3,1fr)}
+  .rollers{grid-template-columns:1fr}
+  .machine .meta{grid-template-columns:1fr 1fr}
+  .machine .meta div:nth-child(2){border-right:0}
+  .machine .meta div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .facts{grid-template-columns:1fr}
+  .bar{grid-template-columns:84px 1fr 96px;gap:8px}
+  .bar .v{font-size:15px}
+  footer .wrap{grid-template-columns:1fr}
+  .ktable .hide-s{display:none}
+  .demobar .wrap{flex-direction:column;align-items:flex-start;gap:2px}
+  .cartbtn .lbl2{display:none}
+  .finder{grid-template-columns:1fr}
+  .lbl{font-size:26px}
+  .cap{font-size:20px}
+  .hero .wrap{padding-top:28px}
+  .stats{gap:18px}
+  .stats strong{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="demobar"><div class="wrap">
+  <span data-i="demo"><b>Projekt demonstracyjny</b> przygotowany dla Rolland – Technika Rolnicza. Części, zdjęcia i dane maszyn pochodzą z rolland.pl, ceny są przykładowe.</span>
+  <span data-i="demo2">Przygotował: <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></span>
+</div></div>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#" aria-label="Rolland – Technika Rolnicza">
+    <svg viewBox="0 0 220 64" role="img" aria-hidden="true"><path d="M86 15l5-11 7 7 7-9 7 9 7-7 5 11z" fill="#167A3D"/><text x="110" y="40" text-anchor="middle" font-family="Archivo" font-weight="900" font-size="30" style="font-variation-settings:'wdth' 112" fill="#18241C">ROLLAND</text><text x="110" y="54" text-anchor="middle" font-family="Archivo" font-weight="600" font-size="10.5" letter-spacing="1.6" fill="#167A3D">TECHNIKA ROLNICZA</text><rect x="22" y="59" width="176" height="3" fill="#167A3D"/></svg>
+  </a>
+  <nav class="main" aria-label="Sekcje">
+    <a href="#czesci" data-i="nav1">Części do pługów</a>
+    <a href="#komplet" data-i="nav2">Komplet na sezon</a>
+    <a href="#pro" data-i="nav3">Linia PRO</a>
+    <a href="#przedsprzedaz" data-i="nav4">Przedsprzedaż</a>
+    <a href="#maszyny" data-i="nav5">Maszyny</a>
+  </nav>
+  <div class="tools">
+    <div class="seg" role="group" aria-label="Język">
+      <button type="button" data-lang="pl" aria-pressed="true">PL</button>
+      <button type="button" data-lang="de" aria-pressed="false">DE</button>
+    </div>
+    <label class="dealer"><input type="checkbox" id="dealer"><span class="switch"></span><span class="txt" data-i="dealer"><span class="long">Ceny dla dealera</span><span class="short">Dealer</span></span></label>
+    <button class="cartbtn" type="button" id="openCart" aria-label="Lista zamówienia"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl2" data-i="list">Zamówienie</span><span class="badge num" id="cartCount">0</span></button>
+  </div>
+</div></header>
+
+<main>
+<section class="hero" aria-labelledby="h1"><div class="wrap">
+  <div>
+    <h1 id="h1" data-i="h1">Części do Twojego pługa. Z ceną, od ręki.</h1>
+    <p class="lead" data-i="lead">Wybierz markę pługa i kliknij część na rysunku. Pokażemy pasujące lemiesze, dłuta, odkładnie i płozy Rolland z cenami.</p>
+    <div class="stats">
+      <div><strong class="num">4 346</strong><span data-i="st1">części w katalogu</span></div>
+      <div><strong class="num">70</strong><span data-i="st2">marek pługów</span></div>
+      <div><strong class="num">1999</strong><span data-i="st3">produkujemy od roku</span></div>
+    </div>
+  </div>
+  <div class="diagram">
+    <svg viewBox="0 0 820 470" role="group" aria-label="Rysunek korpusu pługa – kliknij część">
+      <defs>
+        <pattern id="soilpat" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="4" cy="5" r="1.4" fill="#2C6743"/><circle cx="13" cy="13" r="1.1" fill="#26583A"/><circle cx="14" cy="3" r=".8" fill="#2C6743"/></pattern>
+        <linearGradient id="soilfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C3A20" stop-opacity="0"/><stop offset="1" stop-color="#0C3A20" stop-opacity=".9"/></linearGradient>
+      </defs>
+      <rect x="0" y="252" width="820" height="218" fill="#0F4426"/>
+      <rect x="0" y="252" width="820" height="218" fill="url(#soilpat)"/>
+      <rect x="0" y="380" width="820" height="90" fill="url(#soilfade)"/>
+      <line x1="0" y1="252" x2="820" y2="252" stroke="#5E8A6E" stroke-width="1.5" stroke-dasharray="8 6"/>
+      <text x="808" y="244" text-anchor="end" class="cap" data-i="ground">poziom gruntu</text>
+      <path d="M104 24 L152 24 M116 14 L104 24 L116 34" stroke="#8DB29A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="162" y="29" class="cap" data-i="dir">kierunek jazdy</text>
+      <!-- grządziel -->
+      <path d="M118 52 L782 52 Q798 52 798 68 L798 72 Q798 88 782 88 L118 88 Q102 88 102 72 L102 68 Q102 52 118 52 Z" fill="#164A2C" stroke="#8DB29A" stroke-width="2"/>
+      <g fill="none" stroke="#8DB29A" stroke-width="1.6"><circle cx="196" cy="70" r="5"/><circle cx="316" cy="70" r="5"/><circle cx="612" cy="70" r="5"/><circle cx="636" cy="70" r="5"/><circle cx="772" cy="70" r="5"/></g>
+      <!-- ramię kroju i przedpłużka -->
+      <path d="M196 88 L184 214" stroke="#8DB29A" stroke-width="12" stroke-linecap="round"/>
+      <path d="M316 88 L330 214" stroke="#8DB29A" stroke-width="10" stroke-linecap="round"/>
+      <!-- krój talerzowy -->
+      <g class="pp" data-t="kroj" tabindex="0" role="button" aria-label="Krój">
+        <circle class="fill" cx="182" cy="232" r="60"/>
+        <circle cx="182" cy="232" r="13" fill="#0C3A20" stroke="#DCE9E0" stroke-width="2" pointer-events="none"/>
+      </g>
+      <!-- przedpłużek -->
+      <g class="pp" data-t="przedpluzek" tabindex="0" role="button" aria-label="Przedpłużek">
+        <path class="fill" d="M290 282 C300 252 316 230 338 216 C352 212 368 212 384 214 L380 226 C362 234 350 252 342 274 Z"/>
+        <path class="fill" d="M272 290 L346 278 L350 288 L280 298 Z"/>
+      </g>
+      <!-- korpus (słupica) -->
+      <g class="pp" data-t="korpus" tabindex="0" role="button" aria-label="Korpus">
+        <path class="fill" d="M600 88 L646 88 L640 168 Q636 202 618 222 L566 232 Q592 206 596 170 Z"/>
+      </g>
+      <!-- odkładnia -->
+      <g class="pp" data-t="odkladnia" tabindex="0" role="button" aria-label="Odkładnia">
+        <path class="fill" d="M548 238 C640 204 704 200 770 204 L764 222 C708 236 670 266 642 304 C618 338 600 362 590 382 L496 382 C504 330 520 280 548 238 Z"/>
+      </g>
+      <!-- pierś -->
+      <g class="pp" data-t="piers" tabindex="0" role="button" aria-label="Pierś">
+        <path class="fill" d="M412 384 C432 330 452 290 478 258 C500 250 524 244 548 238 C520 280 504 330 496 382 Z"/>
+      </g>
+      <!-- płoza -->
+      <g class="pp" data-t="ploza" tabindex="0" role="button" aria-label="Płoza">
+        <path class="fill" d="M584 386 L744 384 Q756 384 756 394 L756 396 Q756 404 744 404 L584 404 Z"/>
+      </g>
+      <!-- lemiesz -->
+      <g class="pp" data-t="lemiesz" tabindex="0" role="button" aria-label="Lemiesz">
+        <path class="fill" d="M408 386 L590 382 L594 396 L588 406 L412 406 Z"/>
+      </g>
+      <!-- dłuto -->
+      <g class="pp" data-t="dluto" tabindex="0" role="button" aria-label="Dłuto">
+        <path class="fill" d="M332 414 L408 388 L414 404 L350 422 Z"/>
+      </g>
+      <!-- podpisy -->
+      <g>
+        <path class="leader" d="M138 190 L104 150 L46 150"/><text class="lbl" data-l="kroj" x="46" y="140">Krój</text>
+        <path class="leader" d="M362 218 L392 156 L446 156"/><text class="lbl" data-l="przedpluzek" x="392" y="146">Przedpłużek</text>
+        <path class="leader" d="M642 150 L690 132 L726 132"/><text class="lbl" data-l="korpus" x="690" y="122">Korpus</text>
+        <path class="leader" d="M720 214 L746 176 L796 176"/><text class="lbl" data-l="odkladnia" x="796" y="166" text-anchor="end">Odkładnia</text>
+        <path class="leader" d="M460 320 L420 330 L380 330"/><text class="lbl" data-l="piers" x="374" y="336" text-anchor="end">Pierś</text>
+        <path class="leader" d="M690 404 L706 440 L740 440"/><text class="lbl" data-l="ploza" x="746" y="446">Płoza</text>
+        <path class="leader" d="M500 406 L512 440 L548 440"/><text class="lbl" data-l="lemiesz" x="554" y="446">Lemiesz</text>
+        <path class="leader" d="M360 418 L344 446 L306 446"/><text class="lbl" data-l="dluto" x="300" y="452" text-anchor="end">Dłuto</text>
+      </g>
+    </svg>
+    <p class="hint" data-i="hint">Kliknij część na rysunku albo wybierz ją z listy.</p>
+  </div>
+  <form class="finder" id="finder" onsubmit="return false">
+    <div class="field"><label for="fBrand" data-i="fBrand">Marka pługa</label><select id="fBrand"></select></div>
+    <div class="field"><label for="fType" data-i="fType">Część</label><select id="fType"></select></div>
+    <div class="field"><label for="fSide" data-i="fSide">Strona</label><select id="fSide"></select></div>
+    <button class="btn signal" type="button" id="fGo" data-i="fGo">Pokaż części</button>
+  </form>
+</div></section>
+
+<section id="czesci" aria-labelledby="h-parts"><div class="wrap">
+  <div class="sec-head">
+    <div><h2 id="h-parts" data-i="hParts">Części do pługów</h2><p data-i="pParts">Zamienniki do pługów Lemken, Kverneland, Rabe, Vogel &amp; Noot, Överum i Unia Grudziądz. Blacha trudnościeralna, otwory i wymiary zgodne z oryginałem.</p></div>
+    <div class="field" style="min-width:min(320px,100%)"><label for="q" data-i="search">Szukaj po numerze katalogowym</label><input id="q" type="search" placeholder="np. 3352021, 073054, IBIS" autocomplete="off"></div>
+  </div>
+  <div class="chips" id="typeChips" role="group" aria-label="Rodzaj części"></div>
+  <div class="resbar"><span id="resInfo" aria-live="polite"></span><span class="note" data-i="vatnote">Ceny netto, przykładowe. Wysyłka w 24 h.</span></div>
+  <div class="grid" id="grid"></div>
+  <div class="more"><button class="btn ghost" id="moreBtn" type="button" data-i="more">Pokaż więcej</button></div>
+</div></section>
+
+<section id="komplet" aria-labelledby="h-kit" style="padding-top:20px"><div class="wrap">
+  <div class="sec-head"><div><h2 id="h-kit" data-i="hKit">Komplet na sezon</h2><p data-i="pKit">Wszystkie części zużywające się w jednym zamówieniu – policzone na liczbę korpusów Twojego pługa. Komplet jest tańszy niż te same części kupowane osobno.</p></div></div>
+  <div class="kit">
+    <div class="panel stack">
+      <div class="field"><label for="kBrand" data-i="fBrand">Marka pługa</label><select id="kBrand"></select></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="bodies">Liczba korpusów (skib)</span><div class="bodies" id="kBodies" role="group"></div></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="kWhat">Co wchodzi w komplet</span>
+        <div class="opts" id="kParts"></div></div>
+      <label class="opt" id="kProWrap"><input type="checkbox" id="kPro"><span data-i="kPro">Wersja PRO z węglikiem (lemiesze, dłuta, płozy)</span></label>
+    </div>
+    <div class="panel">
+      <table class="ktable" id="kTable"><thead><tr><th data-i="thPart">Część</th><th class="r" data-i="thQty">Ilość</th><th class="r hide-s" data-i="thUnit">Cena szt.</th><th class="r" data-i="thSum">Razem</th></tr></thead><tbody></tbody></table>
+      <div class="totals" id="kTotals"></div>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn primary" id="kAdd" type="button" data-i="kAdd">Dodaj komplet do zamówienia</button></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="pro" class="pro" aria-labelledby="h-pro"><div class="wrap">
+  <div class="sec-head"><div><h2 id="h-pro" data-i="hPro">Linia PRO: dłużej w polu, taniej na hektar</h2><p data-i="pPro">Lemiesze, dłuta i płozy z płytkami z węglika wolframu na krawędziach roboczych. Kosztują więcej, ale wymienia się je kilka razy rzadziej. Policz, ile to daje w Twoim gospodarstwie.</p></div></div>
+  <div class="procols">
+    <div class="panel stack">
+      <div class="range"><div class="rv"><label for="ha" data-i="ha">Hektary orki w roku</label><b class="num" id="haV"></b></div><input type="range" id="ha" min="20" max="1500" step="10" value="250"></div>
+      <div class="range"><div class="rv"><label for="bod" data-i="bodies">Liczba korpusów (skib)</label><b class="num" id="bodV"></b></div><input type="range" id="bod" min="2" max="8" step="1" value="5"></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="soilL">Gleba</span><div class="soil" id="soil" role="group"></div></div>
+      <div class="sharepro" aria-hidden="true">
+        <svg viewBox="0 0 420 120"><path d="M14 92 L360 86 L360 58 L120 52 L30 74 Z" fill="#2F3A35"/><path d="M14 92 L60 82 L64 92 Z" fill="#F2B500"/><g fill="#F2B500"><rect x="70" y="84" width="40" height="7" rx="1"/><rect x="116" y="83" width="40" height="7" rx="1"/><rect x="162" y="82" width="40" height="7" rx="1"/><rect x="208" y="82" width="40" height="7" rx="1"/><rect x="254" y="81" width="40" height="7" rx="1"/><rect x="300" y="80" width="40" height="7" rx="1"/></g><circle cx="180" cy="68" r="6" fill="#E6EBE7"/><circle cx="290" cy="66" r="6" fill="#E6EBE7"/><text x="210" y="116" text-anchor="middle" font-size="12.5" fill="#4A5A50" font-family="Archivo" data-i="carbide">płytki z węglika na krawędzi tnącej</text></svg>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="verdict"><div><p id="saveL" data-i="saveL">Oszczędność w sezonie z linią PRO</p><p id="beHint" style="color:#fff;font-size:14px;margin-top:4px"></p><strong class="num" id="saveV"></strong></div><div style="text-align:right"><p data-i="perHa">na hektar</p><strong class="num" style="font-size:22px;color:#fff" id="saveHa"></strong></div></div>
+      <div class="panel compare">
+        <div class="bar"><span class="t" data-i="std">Standard</span><div class="track"><div class="fillb" id="bStd" style="background:#7E8D85"></div></div><span class="v num" id="vStd"></span></div>
+        <div class="bar"><span class="t">PRO</span><div class="track"><div class="fillb" id="bPro" style="background:var(--signal)"></div></div><span class="v num" id="vPro"></span></div>
+        <div class="legend"><span data-i="legend">Koszt części i przestojów na wymianę w jednym sezonie</span></div>
+        <div class="facts">
+          <div><b class="num" id="fStd"></b><span data-i="fStd">wymian kompletu – standard</span></div>
+          <div><b class="num" id="fPro"></b><span data-i="fPro">wymian kompletu – PRO</span></div>
+          <div><b class="num" id="fH"></b><span data-i="fH">godzin przestoju mniej</span></div>
+        </div>
+      </div>
+      <p class="note" data-i="assume">Założenia przykładowe: trwałość kompletu standardowego 22–70 ha zależnie od gleby, PRO 3,5 raza dłużej, wymiana 25 min na korpus, ciągnik z operatorem 180 zł/h. Rolland wstawia tu własne wyniki z testów.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="przedsprzedaz" aria-labelledby="h-pre"><div class="wrap">
+  <div class="sec-head"><div><h2 id="h-pre" data-i="hPre">Przedsprzedaż zimowa</h2><p data-i="pPre">Zamów części na wiosnę już teraz i zapłać mniej. Odbiór lub wysyłka w marcu, bez przedpłaty. My planujemy produkcję, Ty masz części przed sezonem.</p></div></div>
+  <div class="timeline" id="timeline"></div>
+  <div class="presale-cta"><p id="preText"></p><button class="btn primary" type="button" id="preBtn" data-i="preBtn">Zamów w przedsprzedaży</button></div>
+</div></section>
+
+<section id="maszyny" aria-labelledby="h-conf" style="background:#fff;border-top:1px solid var(--line)"><div class="wrap">
+  <div class="sec-head"><div><h2 id="h-conf" data-i="hConf">Skonfiguruj agregat Grander AB</h2><p data-i="pConf">Wybierz szerokość, wał doprawiający i wyposażenie. Cena i wymagana moc ciągnika liczą się na bieżąco.</p></div></div>
+  <div class="conf">
+    <div class="machine">
+      <div class="ph"><img src="img/grander-ab.webp" alt="Agregat bezorkowy Rolland Grander AB" width="900" height="490"></div>
+      <div class="meta">
+        <div><b class="num" id="mW"></b><span data-i="mW">szerokość robocza</span></div>
+        <div><b class="num" id="mT"></b><span data-i="mT">redlic typu Horsch</span></div>
+        <div><b class="num" id="mHp"></b><span data-i="mHp">wymagana moc</span></div>
+        <div><b class="num" id="mKg"></b><span data-i="mKg">masa z wałem</span></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="cModel">Model</span><div class="models" id="cModels" role="group"></div></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="cRoller">Wał doprawiający</span><div class="rollers" id="cRollers" role="radiogroup"></div></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="cOpts">Wyposażenie dodatkowe</span><div class="opts" id="cOpts"></div></div>
+      <div class="field"><label for="hp" data-i="cHp">Moc Twojego ciągnika (KM)</label><input id="hp" type="number" inputmode="numeric" min="40" max="600" value="150"><span class="warn" id="hpWarn" aria-live="polite"></span></div>
+      <div class="sumbox" id="cSum"></div>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><h4>Rolland – Technika Rolnicza</h4><p data-i="fAbout">Producent części do maszyn rolniczych i maszyn uprawowych. Od 1999 roku w Przedborzu.</p></div>
+  <div><h4 data-i="fContact">Kontakt</h4><p>Brzostek 17, 97-570 Przedbórz<br><a href="tel:+48504949564">+48 504 949 564</a><br><a href="tel:+48796914688">+48 796 914 688</a><br><a href="mailto:biuro@rolland.pl">biuro@rolland.pl</a></p></div>
+  <div><h4 data-i="fNow">Obecna strona</h4><p><a href="https://www.rolland.pl/pl/" target="_blank" rel="noopener">rolland.pl</a></p></div>
+  <p class="fine" data-i="fine">Projekt demonstracyjny – nie jest oficjalną stroną Rolland. Nazwy części, numery katalogowe, zdjęcia i dane maszyn pochodzą z rolland.pl, ceny i założenia kalkulatorów są przykładowe.</p>
+</div></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Zamówienie" aria-hidden="true">
+  <header><h3 data-i="dTitle">Zamówienie</h3><button class="x" id="closeCart" type="button" aria-label="Zamknij">×</button></header>
+  <div class="dlist" id="dlist"></div>
+  <div class="dfoot" id="dfoot"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="box"><h3 id="mTitle"></h3><p id="mText"></p><button class="btn primary" type="button" id="mOk">OK</button></div></div>
+
+<script>
+const DATA = [[3943,"Kverneland","lemiesz","Lemiesz Kverneland 073 055 - Lewy","073055","l","380 mm","4","86 / 119 / 120 mm","2021/01/3943-lemiesz-kverneland-073-055-lewy-0-4.jpg"],[3942,"Kverneland","lemiesz","Lemiesz Kverneland 073 054 - Prawy","073054","p","380 mm","4","86 / 119 / 120 mm","2021/01/3942-lemiesz-kverneland-073-054-prawy-0-4.jpg"],[3941,"Kverneland","lemiesz","Lemiesz Kverneland 053 064 - Prawy","053064","p","403 mm","3","91 / 150 mm","2021/01/3941-lemiesz-kverneland-053-064-prawy-0-4.jpg"],[3940,"Kverneland","lemiesz","Lemiesz Kverneland 053 075 - Prawy","053075","p","292 mm","3","92 / 106 mm","2021/01/3940-lemiesz-kverneland-053-075-prawy-0-4.jpg"],[3939,"Kverneland","lemiesz","Lemiesz Kverneland 053 031 - Prawy","053031","p","303 mm","2","150 mm","2021/01/3939-lemiesz-kverneland-053-031-prawy-0-4.jpg"],[4000,"Kverneland","odkladnia","Odkładnia Kverneland 073 284 - L - Lewa","073284 - L","l","","8","","2021/02/4000-odkladnia-kverneland-073-284-l-lewa-0-4.jpg"],[3999,"Kverneland","odkladnia","Odkładnia Kverneland 073 284 - R - Prawa","073284 - R","p","","8","","2021/02/3999-odkladnia-kverneland-073-284-r-prawa-0-4.jpg"],[3998,"Kverneland","odkladnia","Odkładnia Kverneland 053 225 - Prawa","053225","p","","5","","2021/02/3998-odkladnia-kverneland-053-225-prawa-0-4.jpg"],[4032,"Kverneland","piers","Pierś Kverneland 073 298 - Lewa","073298","l","","3","","2021/02/4032-piers-kverneland-073-298-lewa-0-4.jpg"],[4031,"Kverneland","piers","Pierś Kverneland 073 297 - Prawa","073297","p","","3","","2021/02/4031-piers-kverneland-073-297-prawa-0-4.jpg"],[2699,"Kverneland","ploza","Płoza długa Kverneland 073 605 - Lewa","073605","l","","6","","2020/03/2699-ploza-dluga-kverneland-073-605-lewa-0-4.jpg"],[2027,"Kverneland","ploza","Płoza długa Kverneland 073 625 - Lewa","073625","l","","5","","2020/11/2027-ploza-dluga-kverneland-073-625-lewa-0-4.jpg"],[2026,"Kverneland","ploza","Płoza długa Kverneland 073 624 - Prawa","073624","p","","","","2020/11/2026-ploza-dluga-kverneland-073-624-prawa-0-4.jpg"],[3273,"Kverneland","przedpluzek","Odkładnia przedpłużka Kverneland 076 813 - Lewa","076813","l","","2","","2020/05/3273-odkladnia-przedpluzka-kverneland-073-813-l-0-4.jpg"],[3272,"Kverneland","przedpluzek","Odkładnia przedpłużka Kverneland 076 812 - Prawa","076812","p","","2","","2020/05/3272-odkladnia-przedpluzka-kverneland-073-812-p-0-4.jpg"],[2520,"Lemken","dluto","Dłuto Lemken WS 2 S (336 3981) - Lewe","WS2S / 3363981","l","","3","","2020/02/2520-dluto-lemken-ws-2-s-336-3981-lewe-0-4.jpg"],[2519,"Lemken","dluto","Dłuto Lemken WS 2 S (336 3980) - Prawe","WS2S / 3363980","p","","3","","2020/02/2519-dluto-lemken-ws-2-s-336-3980-prawe--0-4.jpg"],[2518,"Lemken","dluto","Dłuto Lemken WG 2 S (336 3987) - Lewe","WG2S / 3363987","l","","3","","2020/02/2518-dluto-lemken-wg-2-s-336-3987-lewe-0-4.jpg"],[2517,"Lemken","dluto","Dłuto Lemken WG 2 S (336 3986) - Prawe","WG2S / 3363986","p","","3","","2020/02/2517-dluto-lemken-wg-2-s-336-3986-prawe--0-4.jpg"],[2516,"Lemken","dluto","Dłuto Lemken S 2 W (336 5541) - Lewe","S2W / 3365541","l","","2","55 mm","2020/02/2516-dluto-lemken-s-2-w-336-5541-lewe-0-4.jpg"],[2515,"Lemken","dluto","Dłuto Lemken S 2 W (336 5540) - Prawe","S2W / 3365540","p","","2","55 mm","2020/02/2515-dluto-lemken-s-2-w-336-5540-prawe--0-4.jpg"],[2711,"Lemken","korpus","Korpus Lemken KU 2 E - R - Prawy","KU2E-R","p","","","","2020/03/2711-korpus-lemken-ku-2-e-r-prawy-0-4.jpg"],[3294,"Lemken","lemiesz","Lemiesz Lemken RB1 (333 4090)","RB1 / 3334090","b","654 mm","4","105 / 300 / 105 mm","2020/06/3294-lemiesz-lemken-rb1-333-4090--0-4.jpg"],[2504,"Lemken","lemiesz","Lemiesz Lemken SB 56 (335 2035) - Lewy","SB56 / 3352035","l","405 mm","3","135 mm","2020/02/2504-lemiesz-lemken-sb-56-335-2035-lewy-0-4.jpg"],[54,"Lemken","lemiesz","Lemiesz Lemken SB 43 (335 2021) - Lewy","SB43 / 3352021","l","270 mm","2","135 mm","2020/02/54-lemiesz-lemken-sb-43-335-2021-lewy--0-4.jpg"],[4012,"Lemken","odkladnia","Odkładnia Lemken LW 2 - L - Lewa","LW2 - L","l","","6","","2021/02/4012-odkladnia-lemken-lw-2-l-lewa-0-4.jpg"],[4011,"Lemken","odkladnia","Odkładnia Lemken LW 2 - R - Prawa","LW2 - R","p","","6","","2021/02/4011-odkladnia-lemken-lw-2-r-prawa-0-4.jpg"],[4010,"Lemken","odkladnia","Odkładnia Lemken LU 3 - L - Lewa","LU3 - L","l","","6","","2021/02/4010-odkladnia-lemken-lu-3-l-lewa-0-4.jpg"],[4034,"Lemken","piers","Pierś Lemken WS 1 K (345 0503) - Lewa","WS1K / 3450503","l","","2","","2021/02/4034-piers-lemken-ws-1-k-345-0503-lewa-0-4.jpg"],[4033,"Lemken","piers","Pierś Lemken WS 1 K (345 0502) - Prawa","WS1K / 3450502","p","","2","","2021/02/4033-piers-lemken-ws-1-k-345-0502-prawa-0-4.jpg"],[4062,"Lemken","ploza","Płoza Lemken A 1 V (340 1561)","A1V / 3401561","b","","2","","2021/03/4062-ploza-lemken-a-1-v-340-1561-0-4.jpg"],[3785,"Lemken","ploza","Płoza Lemken WS 2 M (340 1871) - Lewa","WS2M / 3401871","l","","8","","2020/03/2645-ploza-lemken-ws-2-a-340-1871-lewa-0-4.jpg"],[3784,"Lemken","ploza","Płoza Lemken WS 2 M (340 1870) - Prawa","WS2M / 3401870","p","","8","","2020/03/2644-ploza-lemken-ws-2-a-340-1870-prawa-0-4.jpg"],[4073,"Lemken","przedpluzek","Lemiesz przedpłużka Lemken S 245 (336 3723) - Lewy","S245 / 3363723","l","242 mm","2","86 mm","2021/03/4073-lemiesz-przedpluzka-lemken-s-245-336-3723--0-4.jpg"],[4072,"Lemken","przedpluzek","Lemiesz przedpłużka Lemken S 245 (336 3722) - Prawy","S245 / 3363722","p","242 mm","2","86 mm","2021/03/4072-lemiesz-przedpluzka-lemken-s-245-336-3722--0-4.jpg"],[3155,"Overum","dluto","Dłuto Overum 92 200 - Lewe","92200","l","","2","","2020/05/3155-dluto-overum-92-200-lewe-0-4.jpg"],[3154,"Overum","dluto","Dłuto Overum 92 199 - Prawe","92199","p","","2","","2020/05/3154-dluto-overum-92-199-prawe-0-4.jpg"],[3151,"Overum","dluto","Dłuto Overum 80 543 - Lewe","80543","l","","3","","2020/05/3151-dluto-overum-80-543-lewe-0-4.jpg"],[3150,"Overum","dluto","Dłuto Overum 80 514 - Prawe","80514","p","","3","","2020/05/3150-dluto-overum-80-514-prawe-0-4.jpg"],[3271,"Overum","korpus","Korpus Overum XL - L - Lewy","XL - L","l","","","","2020/05/3271-korpus-overum-xl-l-lewy-0-4.jpg"],[3137,"Overum","lemiesz","Lemiesz Overum 92 219 - Prawy","92219","p","270 mm","2","124 mm","2020/05/3137-lemiesz-overum-92-219-prawy-0-4.jpg"],[3136,"Overum","lemiesz","Lemiesz Overum 92 217 - Lewy","92217","l","270 mm","2","124 mm","2020/05/3136-lemiesz-overum-92-217-lewy-0-4.jpg"],[3135,"Overum","lemiesz","Lemiesz Overum 96 091 - Lewy","96091","l","284 mm","2","127 mm","2020/05/3135-lemiesz-overum-96-091-lewy-0-4.jpg"],[3134,"Overum","lemiesz","Lemiesz Overum 96 090 - Prawy","96090","p","284 mm","2","127 mm","2020/05/3134-lemiesz-overum-96-090-prawy-0-4.jpg"],[3133,"Overum","lemiesz","Lemiesz Overum 94 603 - Lewy","94603","l","255 mm","2","127 mm","2020/05/3133-lemiesz-overum-94-603-lewy-0-4.jpg"],[3176,"Overum","odkladnia","Odkładnia Overum SMK 71290 - XXL - Prawa","SMK71290 - XXL","p","","5","","2020/05/3175-odkladnia-overum-smk-71290-xl-prawa--0-4.jpg"],[3175,"Overum","odkladnia","Odkładnia Overum SMK 71290 - XL - Prawa","SMK71290 - XL","p","","5","","2020/05/3175-odkladnia-overum-smk-71290-xl-prawa--0-4.jpg"],[3174,"Overum","odkladnia","Odkładnia Overum OOV 1 - Prawa","OOV 1","p","","5","","2020/05/3174-odkladnia-overum-oov--1-prawa--0-4.jpg"],[3267,"Overum","ploza","Krój płozy Overum 94 623 - Lewy","94623","l","","","","2020/05/3267-kroj-plozy-overum-94-623-lewy-0-4.jpg"],[3266,"Overum","ploza","Krój płozy Overum 94 622 - Prawy","94622","p","","","","2020/05/3266-kroj-plozy-overum-94-622-prawy-0-4.jpg"],[3265,"Overum","ploza","Krój płozy Overum 29 439 - Lewy","29439","l","","","","2020/05/3265-kroj-plozy-overum-29-439-lewy-0-4.jpg"],[3255,"Overum","przedpluzek","Odkładnia przedpłużka Overum 81519 - Prawa","81519","p","","2","","2020/05/3255-odkladnia-przedpluzka-overum-81519-prawy-0-4.jpg"],[3460,"Rabe Werk","dluto","Dłuto Rabe Werk MP 350 (27510902) - L - Lewe","MP350 / 27510902 - L","l","","3","","2020/07/3459-dluto-rabe-werk-mp-350-27510901-r-prawe--0-4.jpg"],[3459,"Rabe Werk","dluto","Dłuto Rabe Werk MP 350 (27510901) - R - Prawe","MP350 / 27510901 - R","p","","3","","2020/07/3459-dluto-rabe-werk-mp-350-27510901-r-prawe--0-4.jpg"],[3458,"Rabe Werk","dluto","Dłuto Rabe Werk MP 293 (27011202) - L - Lewe","MP293 / 27011202 - L","l","","3","","2020/07/3458-dluto-rabe-werk-mp-293-27011202-l-lewe-0-4.jpg"],[3457,"Rabe Werk","dluto","Dłuto Rabe Werk MP 293 (27011201) - R - Prawe","MP293 / 27011201 - R","p","","3","","2020/07/3457-dluto-rabe-werk-mp-293-27011201-r-prawe--0-4.jpg"],[3454,"Rabe Werk","lemiesz","Lemiesz Rabe Werk 276 10124 - L - Lewy","27610124 - L","l","344 mm","3","125 / 110 mm","2020/07/3454-lemiesz-rabe-werk-276-10124-l-lewy-0-4.jpg"],[3453,"Rabe Werk","lemiesz","Lemiesz Rabe Werk 276 10123 - R - Prawy","27610123 - R","p","344 mm","3","125 / 110 mm","2020/07/3453-lemiesz-rabe-werk-276-10123-r-prawy-0-4.jpg"],[3452,"Rabe Werk","lemiesz","Lemiesz Rabe Werk 272 304 01 - Prawy","27230401 - R","p","340 mm","2","145 mm","2020/07/3452-lemiesz-rabe-werk-272-304-01-prawy-0-4.jpg"],[3451,"Rabe Werk","lemiesz","Lemiesz Rabe Werk SSP GMHH - L - Lewy","SSPGMHH - L","l","324 mm","2","148 mm","2020/07/3451-lemiesz-rabe-werk-ssp-gmhh-l-lewy-0-4.jpg"],[3450,"Rabe Werk","lemiesz","Lemiesz Rabe Werk SSP GMHH - R - Prawy","SSPGMHH - R","p","324 mm","2","148 mm","2020/07/3450-lemiesz-rabe-werk-ssp-gmhh-r-prawy-0-4.jpg"],[4016,"Rabe Werk","odkladnia","Odkładnia Rabe Werk HRP 300 X - L - Lewa","HRP300X - L","l","","6","","2021/02/4016-odkladnia-rabe-werk-hrp-300-x-l-lewa-0-4.jpg"],[4015,"Rabe Werk","odkladnia","Odkładnia Rabe Werk HRP 300 X - R - Prawa","HRP300X - R","p","","6","","2021/02/4015-odkladnia-rabe-werk-hrp-300-x-r-prawa-0-4.jpg"],[3549,"Rabe Werk","odkladnia","Odkładnia Rabe Werk RP NH - L - Lewa","RPNH - L","l","","4","","2020/07/3549-odkladnia-rabe-werk-rp-nh-l-lewa-0-4.jpg"],[4038,"Rabe Werk","piers","Pierś Rabe Werk VRP 366 P - L - Lewa","VRP366P - L","l","","3","","2021/02/4038-piers-rabe-werk-vrp-366-p-l-lewa-0-4.jpg"],[4037,"Rabe Werk","piers","Pierś Rabe Werk VRP 366 P - R - Prawa","VRP366P - R","p","","3","","2021/02/4037-piers-rabe-werk-vrp-366-p-r-prawa-0-4.jpg"],[3735,"Rabe Werk","ploza","Część przednia płozy Rabe Werk UVP 290 - L - Lewa","UVP290 - L","l","","1","","2020/07/3735-czesc-przednia-plozy-rabe-werk-uvp-290-l-l-0-4.jpg"],[3734,"Rabe Werk","ploza","Część przednia płozy Rabe Werk UVP 290 - R - Prawa","UVP290 - R","p","","1","","2020/07/3734-czesc-przednia-plozy-rabe-werk-uvp-290-r-p-0-4.jpg"],[3733,"Rabe Werk","ploza","Część przednia płozy Rabe Werk WP 350 - L - Lewa","WP350 - L","l","","","","2020/07/3733-czesc-przednia-plozy-rabe-werk-wp-350-l-le-0-4.jpg"],[3783,"Rabe Werk","przedpluzek","Odkładnia przedpłużka Rabe Werk RDG 17 (27420702) - Lewa","RDG17 / 27420702 - L","l","","2","","2020/07/3783-odkladnia-przedpluzka-rabe-werk-rdg-17-274-0-4.jpg"],[3782,"Rabe Werk","przedpluzek","Odkładnia przedpłużka Rabe Werk RDG 17 (27420701) - Prawa","RDG17 / 27420701 - R","p","","2","","2020/07/3782-odkladnia-przedpluzka-rabe-werk-rdg-17-274-0-4.jpg"],[4433,"Unia Grudziądz","dluto","Dłuto Unia Grudziądz 3-otworowe - Lewe","3-otworowe - L","l","","3","","2023/05/4433-dluto-prawe-unia-grudziadz-0-4.jpg"],[4432,"Unia Grudziądz","dluto","Dłuto Unia Grudziądz 3-otworowe - Prawe","3-otworowe - R","p","","3","","2023/05/4432-dluto-prawe-unia-grudziadz-0-4.jpg"],[57,"Unia Grudziądz","dluto","Dłuto Unia Grudziądz 2-otworowe - Prawe","2-otworowe - R","p","","2","","2019/03/57-dluto-prawe-unia-grudziadz-0-4.jpg"],[56,"Unia Grudziądz","dluto","Dłuto Unia Grudziądz 2-otworowe - Lewe","2-otworowe - L","l","","2","","2019/03/56-dluto-0-4.jpg"],[4531,"Unia Grudziądz","korpus","Korpus Unia Grudziądz ZX - L - Lewy","ZX - L","l","","","","2023/06/4531-korpus-unia-grudziadz-zx-l-lewy-0-4.jpg"],[4524,"Unia Grudziądz","kroj","Krój nożowy Unia Grudziądz 1153/00-008/0 - L - Lewy","1153/00-008/0","l","","2","","2023/06/4524-kroj-nozowy-unia-grudziadz-1153-00-008-0-l-0-4.jpg"],[4523,"Unia Grudziądz","kroj","Krój nożowy Unia Grudziądz 1153/00-007/0 - R - Prawy","1153/00-007/0","p","","2","","2023/06/4523-kroj-nozowy-unia-grudziadz-1153-00-007-0-r-0-4.jpg"],[4445,"Unia Grudziądz","lemiesz","Lemiesz Unia Grudziądz Atlas - L - Lewy","Atlas - L","l","423 mm","3","116 / 116 mm","2023/05/4445-lemiesz-unia-grudziadz-atlas-l-lewy-0-4.jpg"],[4444,"Unia Grudziądz","lemiesz","Lemiesz Unia Grudziądz Atlas - R - Prawy","Atlas - R","p","423 mm","3","116 / 116 mm","2023/05/4444-lemiesz-unia-grudziadz-atlas-r-prawy-0-4.jpg"],[4443,"Unia Grudziądz","lemiesz","Lemiesz Unia Grudziądz IBIS ZX - L - Lewy","IBIS ZX - L","l","468 mm","4","65 / 140 / 120 mm","2023/05/4443-lemiesz-ibis-zx-l-lewy-0-4.jpg"],[4442,"Unia Grudziądz","lemiesz","Lemiesz Unia Grudziądz IBIS ZX - R - Prawy","IBIS ZX - R","p","468 mm","4","65 / 140 / 120 mm","2023/05/4442-lemiesz-ibis-zx-r-prawy-0-4.jpg"],[4441,"Unia Grudziądz","lemiesz","Lemiesz Unia Grudziądz IBIS XXL - L - Lewy","IBIS XXL - L","l","452 mm","4","60 / 142 / 120 mm","2023/05/4441-lemiesz-ibis-xxl-l-lewy-0-4.jpg"],[4460,"Unia Grudziądz","odkladnia","Odkładnia Unia Grudziądz LX 1153/22-001/0 - L - Lewa","LX 1153/22-001/0 - L","l","","7","","2023/05/4460-odkladnia-unia-grudziadz-lx-1153-22-001-0--0-4.jpg"],[4459,"Unia Grudziądz","odkladnia","Odkładnia Unia Grudziądz LX 1153/21-001/0 - R - Prawa","LX 1153/21-001/0 - R","p","","7","","2023/05/4459-odkladnia-unia-grudziadz-lx-1153-21-001-0--0-4.jpg"],[4458,"Unia Grudziądz","odkladnia","Odkładnia Unia Grudziądz 1023 02004 - R - Prawa","102302004 - R","p","","5","","2023/05/4458-odkladnia-unia-grudziadz-1023-02004-r-praw-0-4.jpg"],[4475,"Unia Grudziądz","piers","Pierś Unia Grudziądz ZX 1153/52-002/0 - L - Lewa","ZX 1153/52-002/0 - L","l","","3","","2023/05/4475-piers-unia-grudziadz-zx-1153-52-002-0-l-le-0-4.jpg"],[4474,"Unia Grudziądz","piers","Pierś Unia Grudziądz ZX 1153/51-002/0 - R - Prawa","ZX 1153/51-002/0 - R","p","","3","","2023/05/4474-piers-unia-grudziadz-zx-1153-51-002-0-r-pr-0-4.jpg"],[4497,"Unia Grudziądz","ploza","Płoza długa Unia Grudziądz AS 309 - R - Prawa","AS 309 - R","p","","4","","2023/05/4497-ploza-dluga-unia-grudziadz-as-309-r-prawa-0-4.jpg"],[4496,"Unia Grudziądz","ploza","Płoza krótka Unia Grudziądz AS 305 - R - Prawa","AS 305 - R","p","","2","","2023/05/4496-ploza-krotka-unia-grudziadz-as-305-r-prawa-0-4.jpg"],[4495,"Unia Grudziądz","ploza","Płoza krótka Unia Grudziądz PŁK 024 - L - Lewa","PŁK 024 - L","l","","2","","2023/05/4495-ploza-krotka-unia-grudziadz-plk-024-l-lewa-0-4.jpg"],[4511,"Unia Grudziądz","przedpluzek","Odkładnia przedpłużka Unia Grudziądz MX - R - Prawa","MX - R","p","","2","","2023/06/4511-odkladnia-przedpluzka-unia-grudziadz-mx-r--0-4.jpg"],[4510,"Unia Grudziądz","przedpluzek","Odkładnia przedpłużka Unia Grudziądz MX - L - Lewa","MX - L","l","","2","","2023/06/4510-odkladnia-przedpluzka-unia-grudziadz-mx-l--0-4.jpg"],[4661,"Vogel & Noot","lemiesz","Lemiesz Vogel & Noot UNM 43 / UN 430 - L - Lewy","UNM43 PK501401 - L","l","420 mm","3","105 / 105 mm","2024/05/4661-lemiesz-vogel-noot-unm-43-pk-5014-01-un-43-0-4.jpg"],[4660,"Vogel & Noot","lemiesz","Lemiesz Vogel & Noot UNM 43 / UN 430 - R - Prawy","UNM43 PK501301 - R","p","420 mm","3","105 / 105 mm","2024/05/4660-lemiesz-vogel-noot-unm-43-pk5-013-01-un-43-0-4.jpg"],[4659,"Vogel & Noot","lemiesz","Lemiesz Vogel & Noot UNM 40 / UN 400 - L - Lewy","UNM40 PK401401 - L","l","398 mm","3","105 / 105 mm","2024/05/4659-lemiesz-vogel-noot-unm-40-pk4-014-01-un-40-0-4.jpg"],[4658,"Vogel & Noot","lemiesz","Lemiesz Vogel & Noot UNM 40 / UN 400 - R - Prawy","UNM40 PK401301 - R","p","398 mm","3","105 / 105 mm","2024/05/4658-lemiesz-vogel-noot-unm-40-pk4-013-01-un-40-0-4.jpg"],[4691,"Vogel & Noot","odkladnia","Odkładnia Vogel & Noot WXL 430 (PR600002) - L - Lewa","WXL430 PR600002 - L","l","","12","","2024/12/4691-odkladnia-vogelnoot-wxl-430-pr600002-l-lew-0-4.jpg"],[4690,"Vogel & Noot","odkladnia","Odkładnia Vogel & Noot WXL 430 (PR600001) - R - Prawa","WXL430 PR600001 - R","p","","12","","2024/12/4690-odkladnia-vogelnoot-wxl-430-pr600001-r-pra-0-4.jpg"],[4689,"Vogel & Noot","odkladnia","Odkładnia Vogel & Noot NH 6 (PK1.002.01) - L - Lewa","NH6 PK100201 - L","l","","11","","2024/12/4689-odkladnia-vogelnoot-nh-6-pk1-002-01-l-lewa-0-4.jpg"],[4718,"Vogel & Noot","piers","Pierś Vogel & Noot UN 430 PK 500203 - Lewa","UN430 PK500203 - L","l","","2","","2025/06/4718-piers-vogel-noot-un-430-pk-500203-lewa-0-4.jpg"],[4717,"Vogel & Noot","piers","Pierś Vogel & Noot UN 430 PK 500103 - Prawa","UN430 PK500103 - R","p","","2","","2025/06/4717-piers-vogel-noot-un-430-pk-500103-prawa--0-4.jpg"],[4755,"Vogel & Noot","ploza","Krój płozy Vogel & Noot PK 201901 - Lewy","PK 201901 - L","l","","2","","2026/04/4755-kroj-plozy-vogel-noot-pk-201901-lewy-0-4.jpg"],[4754,"Vogel & Noot","ploza","Krój płozy Vogel & Noot PK 202001 - Prawy","PK 202001 - R","p","","2","","2026/04/4754-kroj-plozy-vogel-noot-pk-202001-prawy--0-4.jpg"],[4735,"Vogel & Noot","ploza","Część przednia płozy Vogel & Noot PK 814 003 - L - Lewa","PK 814003 - L","l","","2","110 mm","2026/01/4735-czesc-przednia-plozy-vogel-noot-pk-814-003-0-4.jpg"],[4745,"Vogel & Noot","przedpluzek","Lemiesz przedpłużka Vogel & Noot S240 - L - Lewy","S240 - PA305501A - L","l","186 mm","2","85 mm","2026/04/4745-lemiesz-przedpluzka-vogel-noot-s240-pa-305-0-4.jpg"],[4744,"Vogel & Noot","przedpluzek","Lemiesz przedpłużka Vogel & Noot S240 - R - Prawy","S240 - PA305401A - R","p","186 mm","2","85 mm","2026/04/4744-lemiesz-przedpluzka-vogel-noot-s240-pa-305-0-4.jpg"]];
+</script>
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+let lang = 'pl', dealer = false;
+const EUR = 4.3, DEALER = 0.22;
+const vat = () => lang === 'de' ? 0.19 : 0.23; // klient w Niemczech: niemiecki VAT
+
+/* ---------- teksty ---------- */
+const T = {
+  pl: {},
+  de: {
+    demo: '<b>Demo-Projekt</b> für Rolland – Landtechnik. Teile, Fotos und Maschinendaten stammen von rolland.pl, die Preise sind Beispiele.',
+    demo2: 'Erstellt von: <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a>',
+    nav1: 'Pflugteile', nav2: 'Saison-Set', nav3: 'PRO-Linie', nav4: 'Vorbestellung', nav5: 'Maschinen',
+    dealer: '<span class="long">Händlerpreise</span><span class="short">Händler</span>', list: 'Bestellung', dTitle: 'Bestellung',
+    h1: 'Teile für Ihren Pflug. Mit Preis, sofort.',
+    lead: 'Wählen Sie die Pflugmarke und klicken Sie auf das Teil in der Zeichnung. Wir zeigen passende Rolland-Scharen, Spitzen, Streichbleche und Anlagen mit Preis.',
+    st1: 'Teile im Katalog', st2: 'Pflugmarken', st3: 'Produktion seit',
+    fBrand: 'Pflugmarke', fType: 'Teil', fSide: 'Seite', fGo: 'Teile anzeigen',
+    hint: 'Klicken Sie auf ein Teil in der Zeichnung oder wählen Sie es aus der Liste.',
+    ground: 'Bodenoberfläche', dir: 'Fahrtrichtung',
+    hParts: 'Pflugverschleißteile', pParts: 'Ersatzteile für Pflüge von Lemken, Kverneland, Rabe, Vogel & Noot, Överum und Unia Grudziądz. Verschleißfester Stahl, Bohrungen und Maße wie im Original.',
+    search: 'Suche nach Teilenummer', vatnote: 'Nettopreise, Beispielpreise. Versand innerhalb von 24 h.', more: 'Mehr anzeigen',
+    hKit: 'Saison-Set', pKit: 'Alle Verschleißteile in einer Bestellung – berechnet nach der Anzahl der Körper Ihres Pfluges. Das Set ist günstiger als die gleichen Teile einzeln.',
+    bodies: 'Anzahl der Körper', kWhat: 'Im Set enthalten', kPro: 'PRO-Version mit Hartmetall (Scharen, Spitzen, Anlagen)',
+    thPart: 'Teil', thQty: 'Menge', thUnit: 'Stückpreis', thSum: 'Summe', kAdd: 'Set zur Bestellung hinzufügen',
+    hPro: 'PRO-Linie: länger im Feld, günstiger pro Hektar', pPro: 'Scharen, Spitzen und Anlagen mit Hartmetallplatten an den Arbeitskanten. Sie kosten mehr, werden aber mehrfach seltener gewechselt. Rechnen Sie nach, was das in Ihrem Betrieb bringt.',
+    ha: 'Pflügen pro Jahr (ha)', soilL: 'Boden', carbide: 'Hartmetallplatten an der Schneidkante',
+    saveL: 'Ersparnis pro Saison mit der PRO-Linie', perHa: 'pro Hektar', std: 'Standard',
+    legend: 'Kosten für Teile und Stillstand durch Wechsel in einer Saison',
+    fStd: 'Set-Wechsel – Standard', fPro: 'Set-Wechsel – PRO', fH: 'Stunden weniger Stillstand',
+    assume: 'Beispielannahmen: Haltbarkeit des Standard-Sets 22–70 ha je nach Boden, PRO 3,5-mal länger, Wechsel 25 Min. pro Körper, Traktor mit Fahrer 42 €/h. Rolland setzt hier eigene Testergebnisse ein.',
+    hPre: 'Wintervorbestellung', pPre: 'Bestellen Sie die Teile für das Frühjahr jetzt und zahlen Sie weniger. Abholung oder Versand im März, ohne Vorauszahlung. Wir planen die Produktion, Sie haben die Teile vor der Saison.',
+    preBtn: 'Jetzt vorbestellen',
+    hConf: 'Grubber Grander AB konfigurieren', pConf: 'Wählen Sie Arbeitsbreite, Nachlaufwalze und Ausstattung. Preis und benötigte Traktorleistung werden sofort berechnet.',
+    mW: 'Arbeitsbreite', mT: 'Zinken Typ Horsch', mHp: 'benötigte Leistung', mKg: 'Gewicht mit Walze',
+    cModel: 'Modell', cRoller: 'Nachlaufwalze', cOpts: 'Zusatzausstattung', cHp: 'Leistung Ihres Traktors (PS)',
+    fAbout: 'Hersteller von Ersatzteilen für Landmaschinen und von Bodenbearbeitungsgeräten. Seit 1999 in Przedbórz, Polen.',
+    fContact: 'Kontakt', fNow: 'Aktuelle Website',
+    fine: 'Demo-Projekt – keine offizielle Website von Rolland. Teilebezeichnungen, Teilenummern, Fotos und Maschinendaten stammen von rolland.pl, Preise und Rechnerannahmen sind Beispiele.'
+  }
+};
+$$('[data-i]').forEach(el => { T.pl[el.dataset.i] = el.innerHTML; });
+const S = { // krótkie teksty używane w skrypcie
+  pl: { all: 'Wszystkie', any: 'Dowolna', left: 'Lewa', right: 'Prawa', both: 'Obustronna', results: n => `${n} ${n === 1 ? 'część' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? 'części' : 'części'}`, add: 'Dodaj', added: 'Dodano', nr: 'Nr kat.', len: 'Długość', holes: 'Otwory', spacing: 'Rozstaw', side: 'Strona', none: 'Brak części dla tych filtrów. Zmień markę albo rodzaj części – albo zadzwoń: +48 504 949 564.', net: 'netto', gross: 'brutto', dealerP: 'cena dealera', toastAdd: n => `Dodano do zamówienia: ${n}`, kitSave: 'Rabat za komplet (8%)', kitTotal: 'Razem netto', kitGross: 'Brutto', kitAdded: 'Komplet dodany do zamówienia', pcs: 'szt.', proSuffix: ' – PRO z węglikiem', perSeason: '/ sezon', save: 'Oszczędzasz', soil: ['Lekka', 'Średnia', 'Ciężka', 'Kamienista'], until: 'do', from: 'od', catalog: 'cena katalogowa', nowTag: 'Teraz', stepTxt: ['Najwyższy rabat. Najlepiej na pełne komplety.', 'Wciąż sporo taniej niż w sezonie.', 'Ostatnia chwila na rabat przedsezonowy.', 'Sezon: ceny katalogowe, części z magazynu.'], preNow: (p, d) => `Teraz obowiązuje rabat <b>${p}%</b> – zamów do ${d}. Rabat naliczy się automatycznie w zamówieniu.`, preOff: 'Przedsprzedaż ruszy 1 listopada.', empty: 'Zamówienie jest puste. Dodaj części z katalogu albo komplet na sezon.', sub: 'Wartość netto', presale: 'Przedsprzedaż – odbiór w marcu', disc: 'Rabat przedsprzedaży', dealerDisc: 'Cena dealera (−22%)', vat: 'VAT 23%', total: 'Do zapłaty brutto', send: 'Wyślij zamówienie', remove: 'Usuń', sentT: 'Zamówienie wysłane', sentP: n => `To demo – w prawdziwym sklepie zamówienie (${n}) trafiłoby do biura Rolland, a klient dostałby potwierdzenie e-mailem.`, base: 'Agregat', roller: 'Wał', options: 'Wyposażenie', cNet: 'Cena netto', cGross: 'brutto', cAsk: 'Zapytaj o termin dostawy', hpLow: (need) => `Ten model potrzebuje ciągnika ${need}. Wybierz węższy model.`, hpOk: '', askedT: 'Zapytanie wysłane', askedP: 'To demo – w prawdziwej stronie konfiguracja z ceną trafiłaby do Rolland, a handlowiec oddzwoniłby z terminem dostawy.', kgUnit: 'kg', hpUnit: 'KM', teeth: n => n, presaleBtn: 'Przedsprzedaż włączona w zamówieniu', proSave: 'PRO taniej o', otherBrands: (t, b) => `${t}: w demo brak dla ${b} – pokazuję wszystkie marki`, noPay: 'Przy tym areale PRO się nie opłaca', noPayHint: 'Zostań przy częściach standardowych – PRO zwraca się od ok. ' },
+  de: { all: 'Alle', any: 'Beliebig', left: 'Links', right: 'Rechts', both: 'Beidseitig', results: n => `${n} ${n === 1 ? 'Teil' : 'Teile'}`, add: 'Hinzufügen', added: 'Hinzugefügt', nr: 'Teile-Nr.', len: 'Länge', holes: 'Bohrungen', spacing: 'Abstand', side: 'Seite', none: 'Keine Teile für diese Filter. Ändern Sie Marke oder Teil – oder rufen Sie an: +48 504 949 564.', net: 'netto', gross: 'brutto', dealerP: 'Händlerpreis', toastAdd: n => `Zur Bestellung hinzugefügt: ${n}`, kitSave: 'Set-Rabatt (8 %)', kitTotal: 'Summe netto', kitGross: 'Brutto', kitAdded: 'Set zur Bestellung hinzugefügt', pcs: 'Stk.', proSuffix: ' – PRO mit Hartmetall', perSeason: '/ Saison', save: 'Sie sparen', soil: ['Leicht', 'Mittel', 'Schwer', 'Steinig'], until: 'bis', from: 'ab', catalog: 'Listenpreis', nowTag: 'Jetzt', stepTxt: ['Höchster Rabatt. Am besten für komplette Sets.', 'Immer noch deutlich günstiger als in der Saison.', 'Letzte Chance auf den Vorsaisonrabatt.', 'Saison: Listenpreise, Teile ab Lager.'], preNow: (p, d) => `Jetzt gilt ein Rabatt von <b>${p} %</b> – bestellen Sie bis ${d}. Der Rabatt wird in der Bestellung automatisch berechnet.`, preOff: 'Die Vorbestellung startet am 1. November.', empty: 'Die Bestellung ist leer. Fügen Sie Teile aus dem Katalog oder ein Saison-Set hinzu.', sub: 'Warenwert netto', presale: 'Vorbestellung – Abholung im März', disc: 'Vorbestellrabatt', dealerDisc: 'Händlerpreis (−22 %)', vat: 'MwSt. 19 %', total: 'Gesamt brutto', send: 'Bestellung senden', remove: 'Entfernen', sentT: 'Bestellung gesendet', sentP: n => `Dies ist eine Demo – im echten Shop ginge die Bestellung (${n}) an Rolland und der Kunde bekäme eine Bestätigung per E-Mail.`, base: 'Grubber', roller: 'Walze', options: 'Ausstattung', cNet: 'Nettopreis', cGross: 'brutto', cAsk: 'Liefertermin anfragen', hpLow: (need) => `Dieses Modell braucht einen Traktor mit ${need}. Wählen Sie ein schmaleres Modell.`, hpOk: '', askedT: 'Anfrage gesendet', askedP: 'Dies ist eine Demo – auf der echten Website ginge die Konfiguration mit Preis an Rolland und ein Verkäufer würde mit dem Liefertermin zurückrufen.', kgUnit: 'kg', hpUnit: 'PS', teeth: n => n, presaleBtn: 'Vorbestellung in der Bestellung aktiviert', proSave: 'PRO günstiger um', otherBrands: (t, b) => `${t}: im Demo keine für ${b} – alle Marken werden angezeigt`, noPay: 'Bei dieser Fläche lohnt sich PRO nicht', noPayHint: 'Bleiben Sie bei Standardteilen – PRO rechnet sich ab ca. ' }
+};
+const TYPES = [
+  ['lemiesz', 'Lemiesze', 'Scharen'], ['dluto', 'Dłuta', 'Spitzen'], ['odkladnia', 'Odkładnie', 'Streichbleche'], ['piers', 'Piersi', 'Streichblechbrüste'],
+  ['ploza', 'Płozy', 'Anlagen'], ['przedpluzek', 'Przedpłużki', 'Vorschäler'], ['kroj', 'Kroje', 'Seche'], ['korpus', 'Korpusy', 'Körper']
+];
+const typeName = t => { const r = TYPES.find(x => x[0] === t); return r ? r[lang === 'de' ? 2 : 1] : t; };
+
+/* ---------- dane części ---------- */
+const parts = DATA.map(r => ({ id: r[0], brand: r[1], type: r[2], name: r[3], nr: r[4], side: r[5], len: r[6], holes: r[7], spacing: r[8], img: 'img/' + r[9].split('/').pop().replace(/\.jpg$/, '.webp') }));
+const ORDER = ['lemiesz', 'dluto', 'odkladnia', 'piers', 'ploza', 'przedpluzek', 'kroj', 'korpus'];
+parts.sort((a, b) => ORDER.indexOf(a.type) - ORDER.indexOf(b.type) || a.name.localeCompare(b.name, 'pl'));
+const nine = x => Math.max(9, Math.round(x / 10) * 10 - 1);
+parts.forEach(p => {
+  const L = parseInt(p.len) || 0, H = parseInt(p.holes) || 2, n = p.name.toLowerCase();
+  let v;
+  switch (p.type) {
+    case 'lemiesz': v = 92 + (L || 330) * 0.19 + H * 6; break;
+    case 'dluto': v = 48 + H * 9; break;
+    case 'odkladnia': v = /listwa/.test(n) ? 120 : 430 + H * 22; break;
+    case 'piers': v = 175 + H * 14; break;
+    case 'ploza': v = /krój/.test(n) ? 79 : /przednia/.test(n) ? 92 : /długa/.test(n) ? 185 : 118 + H * 6; break;
+    case 'przedpluzek': v = /lemiesz/.test(n) ? 58 + (L ? L * 0.05 : 0) : 139 + H * 8; break;
+    case 'kroj': v = 124; break;
+    case 'korpus': v = 1290; break;
+    default: v = 99;
+  }
+  p.price = nine(v);
+  p.proAble = ['lemiesz', 'dluto', 'ploza'].includes(p.type) && !/krój/.test(n);
+  p.pro = nine(p.price * 2.4);
+});
+const deName = s => s
+  .replace(/Lemiesz przedpłużka/g, 'Vorschäler-Schar').replace(/Odkładnia przedpłużka/g, 'Vorschäler-Streichblech')
+  .replace(/Krój płozy/g, 'Anlagenmesser').replace(/Część przednia płozy/g, 'Anlagenspitze').replace(/Krój nożowy/g, 'Messersech')
+  .replace(/Płoza długa/g, 'Lange Anlage').replace(/Płoza krótka/g, 'Kurze Anlage').replace(/Płoza/g, 'Anlage')
+  .replace(/Lemiesz/g, 'Schar').replace(/Dłuto/g, 'Spitze').replace(/Odkładnia/g, 'Streichblech').replace(/Pierś/g, 'Brust').replace(/Korpus/g, 'Körper')
+  .replace(/-otworowe/g, '-Loch').replace(/ - (Lewy|Lewa|Lewe)$/, ' – links').replace(/ - (Prawy|Prawa|Prawe)$/, ' – rechts');
+const pname = p => lang === 'de' ? deName(p.name) : p.name.replace(/ - (Lewy|Lewa|Lewe|Prawy|Prawa|Prawe)$/, ' – $1');
+const brands = [...new Set(parts.map(p => p.brand))];
+
+/* ---------- ceny ---------- */
+const money = (zl, opts = {}) => {
+  let v = zl; if (dealer && !opts.noDealer) v = v * (1 - DEALER);
+  if (lang === 'de') return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: opts.cents ? 2 : 0 }).format(v / EUR);
+  return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', maximumFractionDigits: opts.cents ? 2 : 0 }).format(v);
+};
+
+/* ---------- toast / modal ---------- */
+let tt; const toast = msg => { const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2200); };
+const modal = (t, p) => { $('#toast').classList.remove('show'); $('#mTitle').textContent = t; $('#mText').textContent = p; $('#modal').classList.add('open'); $('#mOk').focus(); };
+$('#mOk').onclick = () => $('#modal').classList.remove('open');
+$('#modal').onclick = e => { if (e.target.id === 'modal') $('#modal').classList.remove('open'); };
+
+/* ---------- koszyk ---------- */
+const cart = new Map(); // key -> {key,id,pro,qty,label,img,price}
+let presale = false;
+const cartAdd = (p, qty = 1, pro = false) => {
+  const key = p.id + (pro ? 'P' : '');
+  const it = cart.get(key) || { key, id: p.id, pro, qty: 0 };
+  it.qty += qty; cart.set(key, it); renderCart();
+};
+const itemPart = it => parts.find(p => p.id === it.id);
+const itemPrice = it => { const p = itemPart(it); return it.pro ? p.pro : p.price; };
+const itemName = it => pname(itemPart(it)) + (it.pro ? S[lang].proSuffix : '');
+function renderCart() {
+  const n = [...cart.values()].reduce((a, b) => a + b.qty, 0);
+  $('#cartCount').textContent = n;
+  const L = S[lang], list = $('#dlist'), foot = $('#dfoot');
+  if (!cart.size) { list.innerHTML = `<p class="dempty">${L.empty}</p>`; foot.innerHTML = ''; return; }
+  list.innerHTML = [...cart.values()].map(it => `<div class="ditem"><img src="${itemPart(it).img}" alt="" loading="lazy"><div><div class="n">${itemName(it)}</div><small>${it.qty} ${L.pcs} × ${money(itemPrice(it), { noDealer: true })} · <button class="rm" data-rm="${it.key}" type="button">${L.remove}</button></small></div><div class="num" style="font-weight:700">${money(itemPrice(it) * it.qty, { noDealer: true })}</div></div>`).join('');
+  const sub = [...cart.values()].reduce((a, it) => a + itemPrice(it) * it.qty, 0);
+  const st = presaleStage(); const pd = presale && st.pct ? st.pct : 0;
+  const afterDealer = dealer ? sub * (1 - DEALER) : sub;
+  const disc = afterDealer * pd / 100, net = afterDealer - disc;
+  foot.innerHTML = `
+    <label class="opt ${presale ? 'sel' : ''}"><input type="checkbox" id="preChk" ${presale ? 'checked' : ''} ${st.pct ? '' : 'disabled'}><span>${L.presale}${st.pct ? ` (−${st.pct}%)` : ''}</span></label>
+    <div class="dsum"><span>${L.sub}</span><span class="num">${money(sub, { noDealer: true })}</span></div>
+    ${dealer ? `<div class="dsum"><span>${L.dealerDisc}</span><span class="num">−${money(sub * DEALER, { noDealer: true })}</span></div>` : ''}
+    ${pd ? `<div class="dsum"><span>${L.disc} (−${pd}%)</span><span class="num">−${money(disc, { noDealer: true })}</span></div>` : ''}
+    <div class="dsum"><span>${L.vat}</span><span class="num">${money(net * vat(), { noDealer: true })}</span></div>
+    <div class="dsum big"><span>${L.total}</span><span class="num">${money(net * (1 + vat()), { noDealer: true })}</span></div>
+    <button class="btn primary" type="button" id="sendOrder">${L.send}</button>`;
+  $('#preChk').onchange = e => { presale = e.target.checked; renderCart(); };
+  $('#sendOrder').onclick = () => { closeCart(); modal(L.sentT, L.sentP(money(net * (1 + vat()), { noDealer: true }))); cart.clear(); presale = false; renderCart(); renderGrid(); };
+}
+$('#dlist').addEventListener('click', e => { const k = e.target.dataset.rm; if (k) { cart.delete(k); renderCart(); renderGrid(); } });
+const openCart = () => { $('#drawer').classList.add('open'); $('#scrim').classList.add('open'); $('#drawer').setAttribute('aria-hidden', 'false'); $('#closeCart').focus(); };
+const closeCart = () => { $('#drawer').classList.remove('open'); $('#scrim').classList.remove('open'); $('#drawer').setAttribute('aria-hidden', 'true'); };
+$('#openCart').onclick = openCart; $('#closeCart').onclick = closeCart; $('#scrim').onclick = closeCart;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeCart(); $('#modal').classList.remove('open'); } });
+
+/* ---------- wyszukiwarka ---------- */
+const st = { brand: 'Lemken', type: 'lemiesz', side: '', q: '', limit: 12 };
+function fillSelects() {
+  const L = S[lang];
+  const bOpts = brands.map(b => `<option value="${b}">${b}</option>`).join('');
+  $('#fBrand').innerHTML = `<option value="">${L.all}</option>` + bOpts; $('#fBrand').value = st.brand;
+  $('#kBrand').innerHTML = bOpts; $('#kBrand').value = kit.brand;
+  $('#fType').innerHTML = `<option value="">${L.all}</option>` + TYPES.map(t => `<option value="${t[0]}">${typeName(t[0])}</option>`).join(''); $('#fType').value = st.type;
+  $('#fSide').innerHTML = `<option value="">${L.any}</option><option value="l">${L.left}</option><option value="p">${L.right}</option>`; $('#fSide').value = st.side;
+}
+const filtered = () => parts.filter(p => (!st.brand || p.brand === st.brand) && (!st.type || p.type === st.type) && (!st.side || p.side === st.side || p.side === 'b' || p.side === '') && (!st.q || (p.nr + ' ' + p.name).toLowerCase().replace(/\s+/g, '').includes(st.q.toLowerCase().replace(/\s+/g, ''))));
+function renderChips() {
+  const base = parts.filter(p => (!st.brand || p.brand === st.brand));
+  const L = S[lang];
+  $('#typeChips').innerHTML = [['', L.all]].concat(TYPES.map(t => [t[0], typeName(t[0])])).map(([v, n]) => { const c = v ? base.filter(p => p.type === v).length : base.length; return c || !v ? `<button type="button" class="chip" data-type="${v}" aria-pressed="${st.type === v}">${n}<span class="c">${c}</span></button>` : ''; }).join('');
+}
+function card(p) {
+  const L = S[lang], inCart = cart.get(String(p.id)) || cart.get(p.id + '');
+  const sideTxt = p.side === 'l' ? L.left : p.side === 'p' ? L.right : p.side === 'b' ? L.both : '';
+  const rows = [[L.nr, p.nr], p.len && [L.len, p.len], p.holes && [L.holes, p.holes], p.spacing && [L.spacing, p.spacing], sideTxt && [L.side, sideTxt]].filter(Boolean);
+  return `<article class="card">
+    <div class="ph"><img src="${p.img}" alt="${pname(p)}" loading="lazy" width="360" height="358"><span class="tag">${p.brand}</span></div>
+    <div class="body">
+      <h3>${pname(p)}</h3>
+      <dl class="specs">${rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl>
+      <div class="price"><strong class="num">${money(p.price)}</strong>${dealer ? `<s class="num">${money(p.price, { noDealer: true })}</s>` : ''}<small>${dealer ? L.dealerP : L.net}</small></div>
+      ${p.proAble ? `<label class="opt" style="padding:7px 10px;font-size:13px"><input type="checkbox" data-pro="${p.id}"><span>PRO</span><span class="p num">${money(p.pro)}</span></label>` : ''}
+      <div class="addrow"><div class="qty"><button type="button" data-dec="${p.id}" aria-label="−">−</button><input type="number" min="1" max="99" value="1" id="q${p.id}" aria-label="Ilość"><button type="button" data-inc="${p.id}" aria-label="+">+</button></div><button class="btn primary" type="button" data-add="${p.id}">${L.add}</button></div>
+    </div></article>`;
+}
+function renderGrid() {
+  const L = S[lang], res = filtered();
+  $('#resInfo').textContent = `${L.results(res.length)}${st.brand ? ' · ' + st.brand : ''}${st.type ? ' · ' + typeName(st.type) : ''}`;
+  $('#grid').innerHTML = res.length ? res.slice(0, st.limit).map(card).join('') : `<div class="empty">${L.none}</div>`;
+  $('#moreBtn').style.display = res.length > st.limit ? '' : 'none';
+  renderChips(); syncDiagram();
+}
+$('#grid').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  const id = +(t.dataset.add || t.dataset.inc || t.dataset.dec); if (!id) return;
+  const inp = $('#q' + id);
+  if (t.dataset.inc) inp.value = Math.min(99, +inp.value + 1);
+  else if (t.dataset.dec) inp.value = Math.max(1, +inp.value - 1);
+  else { const p = parts.find(x => x.id === id), pro = !!$(`[data-pro="${id}"]`)?.checked; cartAdd(p, Math.max(1, +inp.value || 1), pro); t.textContent = S[lang].added; t.classList.add('added'); setTimeout(() => { t.textContent = S[lang].add; t.classList.remove('added'); }, 1300); toast(S[lang].toastAdd(pname(p) + (pro ? ' PRO' : ''))); }
+});
+$('#typeChips').addEventListener('click', e => { const b = e.target.closest('[data-type]'); if (!b) return; st.type = b.dataset.type; st.limit = 12; $('#fType').value = st.type; renderGrid(); });
+$('#moreBtn').onclick = () => { st.limit += 12; renderGrid(); };
+let qt; $('#q').addEventListener('input', e => { clearTimeout(qt); qt = setTimeout(() => { st.q = e.target.value.trim(); if (st.q) { st.brand = ''; st.type = ''; $('#fBrand').value = ''; $('#fType').value = ''; } st.limit = 12; renderGrid(); }, 150); });
+$('#fBrand').onchange = e => { st.brand = e.target.value; st.limit = 12; renderGrid(); };
+$('#fType').onchange = e => { st.type = e.target.value; st.limit = 12; renderGrid(); };
+$('#fSide').onchange = e => { st.side = e.target.value; st.limit = 12; renderGrid(); };
+$('#fGo').onclick = () => { renderGrid(); document.getElementById('czesci').scrollIntoView(); };
+/* rysunek */
+function syncDiagram() {
+  $$('.pp').forEach(g => g.classList.toggle('on', g.dataset.t === st.type));
+  $$('[data-l]').forEach(l => l.classList.toggle('on', l.dataset.l === st.type));
+}
+const pick = t => {
+  st.type = st.type === t ? '' : t; st.limit = 12; $('#fType').value = st.type;
+  if (st.type && st.brand && !parts.some(p => p.brand === st.brand && p.type === st.type)) { const was = st.brand; st.brand = ''; $('#fBrand').value = ''; toast(S[lang].otherBrands(typeName(st.type), was)); }
+  renderGrid();
+};
+$$('.pp').forEach(g => {
+  g.addEventListener('click', () => pick(g.dataset.t));
+  g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(g.dataset.t); } });
+});
+const labelTexts = () => $$('[data-l]').forEach(l => { l.textContent = (lang === 'de' ? { kroj: 'Sech', przedpluzek: 'Vorschäler', korpus: 'Körper', odkladnia: 'Streichblech', piers: 'Brust', ploza: 'Anlage', lemiesz: 'Schar', dluto: 'Spitze' } : { kroj: 'Krój', przedpluzek: 'Przedpłużek', korpus: 'Korpus', odkladnia: 'Odkładnia', piers: 'Pierś', ploza: 'Płoza', lemiesz: 'Lemiesz', dluto: 'Dłuto' })[l.dataset.l]; });
+
+/* ---------- komplet na sezon ---------- */
+const kit = { brand: 'Lemken', bodies: 5, types: { lemiesz: true, dluto: true, ploza: true, odkladnia: false, piers: false, przedpluzek: false }, pro: false };
+const KIT_TYPES = ['lemiesz', 'dluto', 'ploza', 'piers', 'odkladnia', 'przedpluzek'];
+function kitLines() {
+  const lines = [];
+  KIT_TYPES.forEach(t => {
+    if (!kit.types[t]) return;
+    const pool = parts.filter(p => p.brand === kit.brand && p.type === t);
+    if (!pool.length) return;
+    const l = pool.find(p => p.side === 'l'), r = pool.find(p => p.side === 'p'), b = pool.find(p => p.side === 'b' || p.side === '');
+    const half = Math.ceil(kit.bodies / 2), half2 = Math.floor(kit.bodies / 2);
+    // pług obrotowy: po komplecie na stronę lewą i prawą
+    if (l && r) { lines.push([l, kit.bodies]); lines.push([r, kit.bodies]); }
+    else if (b) lines.push([b, kit.bodies]);
+    else lines.push([l || r, kit.bodies]);
+  });
+  return lines;
+}
+function renderKit() {
+  const L = S[lang];
+  $('#kBodies').innerHTML = [2, 3, 4, 5, 6, 7, 8].map(n => `<button type="button" aria-pressed="${kit.bodies === n}" data-b="${n}">${n}</button>`).join('');
+  $('#kParts').innerHTML = KIT_TYPES.map(t => { const has = parts.some(p => p.brand === kit.brand && p.type === t); return `<label class="opt ${kit.types[t] && has ? 'sel' : ''}" style="${has ? '' : 'opacity:.45'}"><input type="checkbox" data-kt="${t}" ${kit.types[t] && has ? 'checked' : ''} ${has ? '' : 'disabled'}><span>${typeName(t)}</span></label>`; }).join('');
+  $('#kPro').checked = kit.pro; $('#kProWrap').classList.toggle('sel', kit.pro);
+  const lines = kitLines();
+  let sum = 0;
+  $('#kTable tbody').innerHTML = lines.map(([p, q]) => { const pro = kit.pro && p.proAble, unit = pro ? p.pro : p.price; sum += unit * q; return `<tr><td><div class="nm"><img class="thumb" src="${p.img}" alt="" loading="lazy"><div>${pname(p)}${pro ? ' <b style="color:var(--signal-d)">PRO</b>' : ''}<small>${p.nr}</small></div></div></td><td class="r num">${q}</td><td class="r num hide-s">${money(unit)}</td><td class="r num"><b>${money(unit * q)}</b></td></tr>`; }).join('') || `<tr><td colspan="4" style="color:var(--ink-2)">${L.none}</td></tr>`;
+  const disc = sum * 0.08;
+  $('#kTotals').innerHTML = `<span>${L.kitSave}</span><span class="num save">−${money(disc)}</span><span>${L.kitTotal}</span><span class="num big">${money(sum - disc)}</span><span style="color:var(--ink-2)">${L.kitGross}</span><span class="num" style="color:var(--ink-2)">${money((sum - disc) * (1 + vat()))}</span>`;
+  $('#kAdd').disabled = !lines.length;
+}
+$('#kBrand').onchange = e => { kit.brand = e.target.value; renderKit(); };
+$('#kBodies').addEventListener('click', e => { const b = e.target.closest('[data-b]'); if (b) { kit.bodies = +b.dataset.b; renderKit(); } });
+$('#kParts').addEventListener('change', e => { const t = e.target.dataset.kt; if (t) { kit.types[t] = e.target.checked; renderKit(); } });
+$('#kPro').onchange = e => { kit.pro = e.target.checked; renderKit(); };
+$('#kAdd').onclick = () => { kitLines().forEach(([p, q]) => cartAdd(p, q, kit.pro && p.proAble)); toast(S[lang].kitAdded); };
+
+/* ---------- kalkulator PRO ---------- */
+const pro = { ha: 250, bodies: 5, soil: 1 };
+const LIFE = [22, 45, 70, 30]; // ha na komplet standard: lekka (piaszczysta, najbardziej ścierna), średnia, ciężka, kamienista
+const SET_STD = 92 + 330 * .19 + 18 + 66 + 140; // lemiesz + dłuto + płoza na korpus
+function renderPro() {
+  const L = S[lang];
+  $('#haV').textContent = pro.ha + ' ha'; $('#bodV').textContent = pro.bodies;
+  $('#soil').innerHTML = L.soil.map((s, i) => `<button type="button" aria-pressed="${pro.soil === i}" data-s="${i}">${s}</button>`).join('');
+  const life = LIFE[pro.soil], lifePro = life * 3.5;
+  const nStd = Math.ceil(pro.ha / life), nPro = Math.ceil(pro.ha / lifePro);
+  const setStd = SET_STD * pro.bodies, setPro = setStd * 2.4;
+  const hrs = n => n * pro.bodies * 25 / 60, rate = 180;
+  const cStd = nStd * setStd + hrs(nStd) * rate, cPro = nPro * setPro + hrs(nPro) * rate;
+  const save = cStd - cPro, max = Math.max(cStd, cPro);
+  $('#bStd').style.width = (cStd / max * 100) + '%'; $('#bPro').style.width = (cPro / max * 100) + '%';
+  $('#vStd').textContent = money(cStd, { noDealer: true }); $('#vPro').textContent = money(cPro, { noDealer: true });
+  const pays = save > 0;
+  $('#saveL').textContent = pays ? (T[lang].saveL || T.pl.saveL) : L.noPay;
+  $('#saveV').textContent = pays ? money(save, { noDealer: true }) : '–';
+  $('#saveHa').textContent = pays ? money(save / pro.ha, { noDealer: true, cents: true }) : '–';
+  let be = pro.ha; while (be < 3000) { be += 10; const a = Math.ceil(be / life), b = Math.ceil(be / lifePro); if (a * setStd + a * pro.bodies * 25 / 60 * rate > b * setPro + b * pro.bodies * 25 / 60 * rate) break; }
+  $('#beHint').textContent = pays ? '' : L.noPayHint + be + ' ha.';
+  $('#fStd').textContent = nStd; $('#fPro').textContent = nPro;
+  $('#fH').textContent = (hrs(nStd) - hrs(nPro)).toLocaleString(lang === 'de' ? 'de-DE' : 'pl-PL', { maximumFractionDigits: 1 });
+}
+$('#ha').oninput = e => { pro.ha = +e.target.value; renderPro(); };
+$('#bod').oninput = e => { pro.bodies = +e.target.value; renderPro(); };
+$('#soil').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (b) { pro.soil = +b.dataset.s; renderPro(); } });
+
+/* ---------- przedsprzedaż ---------- */
+function presaleSteps() {
+  const now = new Date(), y = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
+  return [
+    { from: new Date(y, 10, 1), to: new Date(y, 11, 15, 23, 59), pct: 10 },
+    { from: new Date(y, 11, 16), to: new Date(y + 1, 0, 31, 23, 59), pct: 7 },
+    { from: new Date(y + 1, 1, 1), to: new Date(y + 1, 1, 28, 23, 59), pct: 5 },
+    { from: new Date(y + 1, 2, 1), to: new Date(y + 1, 5, 30, 23, 59), pct: 0 }
+  ];
+}
+function presaleStage() { const now = new Date(); return presaleSteps().find(s => now >= s.from && now <= s.to) || { pct: 0 }; }
+function renderPresale() {
+  const L = S[lang], now = new Date(), loc = lang === 'de' ? 'de-DE' : 'pl-PL';
+  const f = d => d.toLocaleDateString(loc, { day: 'numeric', month: 'long' });
+  const steps = presaleSteps();
+  $('#timeline').innerHTML = steps.map((s, i) => { const isNow = now >= s.from && now <= s.to, past = now > s.to; return `<div class="step ${isNow ? 'now' : ''} ${past ? 'past' : ''}">${isNow ? `<span class="now-tag">${L.nowTag}</span>` : ''}<div class="d">${s.pct ? `${L.until} ${f(s.to)}` : `${L.from} ${f(s.from)}`}</div><div class="pct num">${s.pct ? '−' + s.pct + '%' : '0%'}</div><p>${L.stepTxt[i]}</p></div>`; }).join('');
+  const cur = presaleStage();
+  $('#preText').innerHTML = cur.pct ? L.preNow(cur.pct, f(cur.to)) : L.preOff;
+  $('#preBtn').style.display = cur.pct ? '' : 'none';
+}
+$('#preBtn').onclick = () => { presale = true; renderCart(); openCart(); toast(S[lang].presaleBtn); };
+
+/* ---------- konfigurator ---------- */
+const MODELS = [
+  { id: 'AB-2.2', w: 2.2, t: 6, hp: [80, 120], kg: 1350, price: 23900 },
+  { id: 'AB-2.5', w: 2.5, t: 8, hp: [100, 150], kg: 1550, price: 26900 },
+  { id: 'AB-3.0', w: 3.0, t: 10, hp: [120, 170], kg: 1750, price: 30900 },
+  { id: 'AB-3.5', w: 3.5, t: 12, hp: [150, 200], kg: 2050, price: 35900 },
+  { id: 'AB-4.0', w: 4.0, t: 14, hp: [180, 220], kg: 2400, price: 39900 }
+];
+const ROLLERS = [
+  { id: 'rur', pl: 'Rurowy Ø500 mm', de: 'Rohrstabwalze Ø500 mm', ppm: 1500, kgm: 95 },
+  { id: 'rur6', pl: 'Rurowy Ø600 mm', de: 'Rohrstabwalze Ø600 mm', ppm: 1750, kgm: 115 },
+  { id: 'str', pl: 'Strunowy Ø500 mm', de: 'Stabwalze Ø500 mm', ppm: 1650, kgm: 100 },
+  { id: 'v', pl: 'Daszkowy V-ring Ø500 mm', de: 'V-Ring-Walze Ø500 mm', ppm: 2200, kgm: 150 },
+  { id: 'c', pl: 'Ceownikowy C-ring Ø500 mm', de: 'C-Ring-Walze Ø500 mm', ppm: 2300, kgm: 155 },
+  { id: 'tr', pl: 'Teownikowy T-ring Ø500 mm', de: 'T-Ring-Walze Ø500 mm', ppm: 2400, kgm: 160 },
+  { id: 'pk', pl: 'Wał Packer Ø500 mm', de: 'Packerwalze Ø500 mm', ppm: 2600, kgm: 190 },
+  { id: 'sp', pl: 'Sprężynowy Ø550 mm', de: 'Federwalze Ø550 mm', ppm: 1800, kgm: 105 },
+  { id: 'gum', pl: 'Gumowy Ø500 mm', de: 'Gummiwalze Ø500 mm', ppm: 2900, kgm: 175 },
+  { id: 'tan', pl: 'Tandem: strunowy + rurowy', de: 'Tandem: Stab- + Rohrstabwalze', ppm: 3100, kgm: 205 }
+];
+const OPTS = [
+  { id: 'hyd', pl: 'Hydrauliczna regulacja głębokości pracy', de: 'Hydraulische Tiefeneinstellung', p: 3400 },
+  { id: 'hydfold', pl: 'Hydrauliczna regulacja głębokości + składany wał do transportu', de: 'Hydraulische Tiefeneinstellung + klappbare Walze für den Transport', p: 5900, ex: 'hyd' },
+  { id: 'ind', pl: 'Wskaźnik głębokości pracy', de: 'Arbeitstiefenanzeige', p: 450 },
+  { id: 'seed', pl: 'Płyta pod siewnik poplonów', de: 'Konsole für Zwischenfruchtsäer', p: 690 },
+  { id: 'light', pl: 'Pakiet oświetlenia drogowego', de: 'Straßenbeleuchtung', p: 890 },
+  { id: 'tine', pl: 'Zgrzebło sprężynowe Ø12 mm za wałem', de: 'Federstriegel Ø12 mm hinter der Walze', pm: 650 },
+  { id: 'hard', pl: 'Napawane elementy robocze', de: 'Aufgepanzerte Verschleißteile', per: 160 },
+  { id: 'semi', pl: 'Wersja półzawieszana z dyszlem', de: 'Aufgesattelte Version mit Deichsel', p: 9800 },
+  { id: 'wheels', pl: 'Przednie koła podporowe', de: 'Vordere Stützräder', p: 2100 }
+];
+const conf = { m: 2, roller: 'rur', opts: new Set(['ind']), hp: 150 };
+const optPrice = (o, m) => o.p ?? (o.pm ? o.pm * m.w : o.per * m.t);
+function renderConf() {
+  const L = S[lang], m = MODELS[conf.m], r = ROLLERS.find(x => x.id === conf.roller);
+  $('#cModels').innerHTML = MODELS.map((x, i) => `<button type="button" aria-pressed="${conf.m === i}" data-m="${i}">${x.w.toLocaleString(lang === 'de' ? 'de-DE' : 'pl-PL', { minimumFractionDigits: 1 })} m<small>${x.id}</small></button>`).join('');
+  $('#cRollers').innerHTML = ROLLERS.map(x => `<label class="opt ${conf.roller === x.id ? 'sel' : ''}"><input type="radio" name="roller" value="${x.id}" ${conf.roller === x.id ? 'checked' : ''}><span>${x[lang]}</span><span class="p num">${money(x.ppm * m.w)}</span></label>`).join('');
+  $('#cOpts').innerHTML = OPTS.map(o => `<label class="opt ${conf.opts.has(o.id) ? 'sel' : ''}"><input type="checkbox" value="${o.id}" ${conf.opts.has(o.id) ? 'checked' : ''}><span>${o[lang]}</span><span class="p num">${money(optPrice(o, m))}</span></label>`).join('');
+  const rollerP = r.ppm * m.w, optsP = [...conf.opts].reduce((a, id) => a + optPrice(OPTS.find(o => o.id === id), m), 0);
+  const net = m.price + rollerP + optsP;
+  const kg = m.kg + Math.round(r.kgm * m.w) + (conf.opts.has('semi') ? 650 : 0) + (conf.opts.has('wheels') ? 120 : 0);
+  const loc = lang === 'de' ? 'de-DE' : 'pl-PL';
+  $('#mW').textContent = m.w.toLocaleString(loc, { minimumFractionDigits: 1 }) + ' m';
+  $('#mT').textContent = m.t; $('#mHp').textContent = `${m.hp[0]}–${m.hp[1]} ${L.hpUnit}`; $('#mKg').textContent = kg.toLocaleString(loc) + ' ' + L.kgUnit;
+  $('#hpWarn').textContent = conf.hp && conf.hp < m.hp[0] ? L.hpLow(`${m.hp[0]}–${m.hp[1]} ${L.hpUnit}`) : '';
+  $('#cSum').innerHTML = `
+    <div class="row"><span>${L.base} Grander ${m.id}</span><b class="num">${money(m.price)}</b></div>
+    <div class="row"><span>${L.roller}: ${r[lang]}</span><b class="num">${money(rollerP)}</b></div>
+    <div class="row"><span>${L.options} (${conf.opts.size})</span><b class="num">${money(optsP)}</b></div>
+    <div class="total"><span>${L.cNet}${dealer ? ' – ' + L.dealerP : ''}</span><strong class="num">${money(net)}</strong></div>
+    <div class="row"><span>${L.cGross}</span><b class="num">${money(net * (1 + vat()))}</b></div>
+    <button class="btn signal" type="button" id="askBtn">${L.cAsk}</button>`;
+  $('#askBtn').onclick = () => modal(L.askedT, L.askedP);
+}
+$('#cModels').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (b) { conf.m = +b.dataset.m; renderConf(); } });
+$('#cRollers').addEventListener('change', e => { conf.roller = e.target.value; renderConf(); });
+$('#cOpts').addEventListener('change', e => { const id = e.target.value; if (e.target.checked) { conf.opts.add(id); if (id === 'hydfold') conf.opts.delete('hyd'); if (id === 'hyd') conf.opts.delete('hydfold'); } else conf.opts.delete(id); renderConf(); });
+$('#hp').oninput = e => { conf.hp = +e.target.value; renderConf(); };
+
+/* ---------- język i dealer ---------- */
+function applyLang() {
+  document.documentElement.lang = lang;
+  $$('[data-i]').forEach(el => { const v = T[lang][el.dataset.i]; if (v !== undefined) el.innerHTML = v; });
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  $('#q').placeholder = lang === 'de' ? 'z. B. 3352021, 073054, IBIS' : 'np. 3352021, 073054, IBIS';
+  labelTexts(); fillSelects(); renderAll();
+}
+/* polska typografia: jednoliterowe wyrazy nie zostają na końcu wiersza */
+function nbsp(root = document.body) {
+  if (lang !== 'pl') return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style,svg,input,select,option,textarea') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(^|[\s(„])([aiouwzAIOUWZ]) /g, '$1$2 '); if (v !== n.nodeValue) n.nodeValue = v; }
+}
+function renderAll() { renderGrid(); renderKit(); renderPro(); renderPresale(); renderConf(); renderCart(); nbsp(); }
+$$('[data-lang]').forEach(b => b.onclick = () => { lang = b.dataset.lang; applyLang(); });
+$('#dealer').onchange = e => { dealer = e.target.checked; renderAll(); };
+
+applyLang();
+})();
+</script>
+</body>
+</html>
