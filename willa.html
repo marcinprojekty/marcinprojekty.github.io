@@ -66,14 +66,16 @@
   .hero__nav { grid-column: 7 / span 4; display: flex; gap: 28px; justify-content: flex-end; font-weight: 600; font-size: var(--step-body); }
   .hero__nav a { text-decoration: none; }
   .hero__nav a:hover { text-decoration: underline; text-underline-offset: 0.22em; }
-  .hero__cta { grid-column: 11 / span 2; justify-self: end; background: var(--bg); color: var(--ink); min-height: 46px; padding: 0 20px; }
+  .hero__cta { grid-column: 11 / span 2; justify-self: end; white-space: nowrap; background: var(--bg); color: var(--ink); min-height: 46px; padding: 0 20px; }
   .hero__cta:hover { background: #fff; }
-  .hero__title { position: absolute; z-index: 1; left: 0; right: 0; top: 13svh; text-align: center; font-size: clamp(76px, 9.6vw, 168px); line-height: 0.86; }
+  .hero__head { position: absolute; z-index: 1; left: 0; right: 0; top: 13svh; }
+  .hero__title { text-align: center; font-size: clamp(64px, min(9.6vw, 17svh), 168px); line-height: 0.86; }
   .lines .line { display: block; overflow: clip; padding: 0.16em 0 0.06em; margin: -0.16em 0 -0.06em; }
   .lines [data-line] { display: block; }
-  .hero__horizon { position: absolute; z-index: 1; left: 0; right: 0; top: 41svh; display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; padding-inline: var(--m); font-size: clamp(19px, 1.5vw, 23px); font-weight: 600; line-height: 1.3; }
-  .hero__horizon span:first-child { grid-column: 1 / span 5; text-align: right; }
-  .hero__horizon span:last-child { grid-column: 8 / span 5; }
+  .hero__horizon { margin-top: clamp(14px, 2.6svh, 28px); display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; padding-inline: var(--m); font-size: clamp(19px, 1.5vw, 23px); font-weight: 600; line-height: 1.3; }
+  .hero__horizon span { color: #fff; background: rgba(18, 24, 30, 0.5); padding: 6px 14px 7px; }
+  .hero__horizon span:first-child { grid-column: 1 / span 5; justify-self: end; }
+  .hero__horizon span:last-child { grid-column: 8 / span 5; justify-self: start; }
 
   /* ---------- Intro: zdanie trzymane, zdjęcia przechodzą obok ---------- */
   .intro { position: relative; height: 210svh; }
@@ -236,9 +238,10 @@
     .hero__cta { position: fixed; display: none; }
     .menu-word { grid-column: 9 / span 4; justify-self: end; font-weight: 600; text-decoration: none; }
     .hero__picture img { object-position: 36% 60%; }
-    .hero__title { top: 96px; font-size: 15vw; }
-    .hero__horizon { top: calc(96px + 30vw + 22px); display: block; text-align: center; font-size: 17px; }
-    .hero__horizon span { display: block; text-align: center !important; }
+    .hero__head { top: 96px; }
+    .hero__title { font-size: 15vw; }
+    .hero__horizon { margin-top: 22px; display: block; text-align: center; font-size: 17px; }
+    .hero__horizon span { display: inline-block; margin: 2px 0; }
     .hero__dock { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 96px; display: flex; align-items: center; padding: 0 16px; background: rgba(20, 24, 28, 0.45); }
     .hero__dock .button { width: 100%; }
     .intro { height: auto; padding: 96px 16px 24px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
@@ -319,11 +322,13 @@
     <a class="button hero__cta" href="#ceny">Sprawdź termin</a>
     <a class="menu-word" href="#menu">Menu</a>
   </div>
+  <div class="hero__head">
   <h1 class="hero__title lines">
     <span class="line"><span data-line style="--i:0">Kuća Skale</span></span>
     <span class="line"><span data-line style="--i:1">willa na Visie</span></span>
   </h1>
   <p class="hero__horizon"><span data-load style="--d:900ms">Kamienny dom z 1890 roku,</span> <span data-load style="--d:1000ms">112 stopni nad własną zatoczką</span></p>
+  </div>
   <div class="hero__dock"><a class="button" href="#ceny">Sprawdź termin</a></div>
 </header>
 
