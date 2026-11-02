@@ -4,95 +4,231 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Generator ofert PDF – demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js"></script>
 <style>
-  :root { --bg:#f3f5f8; --card:#fff; --ink:#18212b; --muted:#5f6b78; --line:#dfe4ea; --accent:#1f5fbf; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 "Segoe UI", system-ui, Arial, sans-serif; }
-  header { background:var(--card); border-bottom:1px solid var(--line); }
-  header .in { max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
-  header h1 { font-size:18px; margin:0; }
-  .demo { font-size:12px; font-weight:600; color:#8a5a00; background:#fff3d6; padding:3px 8px; border-radius:6px; }
-  main { max-width:1100px; margin:0 auto; padding:20px; display:grid; gap:16px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; }
-  .card h2 { font-size:15px; margin:0 0 12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
-  label { display:grid; gap:4px; font-size:13px; font-weight:600; color:var(--muted); }
-  input, select, textarea { font:inherit; color:var(--ink); padding:9px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; width:100%; }
-  textarea { min-height:70px; resize:vertical; }
-  input:focus, select:focus, textarea:focus { outline:2px solid var(--accent); outline-offset:0; }
-  .company { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
-  .company select { max-width:320px; font-weight:600; }
-  .company-info { display:flex; gap:12px; align-items:center; font-size:13px; color:var(--muted); }
-  .company-info svg { width:46px; height:46px; flex:none; }
-  .items { width:100%; border-collapse:collapse; }
-  .items th { font-size:12px; text-align:left; color:var(--muted); font-weight:600; padding:6px 6px; border-bottom:1px solid var(--line); }
-  .items td { padding:6px; border-bottom:1px solid var(--line); vertical-align:middle; }
-  .items td.num, .items th.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
-  .items input, .items select { padding:7px 8px; }
-  .del { border:0; background:none; color:#b0352b; font-size:18px; cursor:pointer; }
-  .wrap-table { overflow-x:auto; }
-  .btn { font:inherit; font-weight:600; border:1px solid var(--line); background:#fff; border-radius:8px; padding:9px 14px; cursor:pointer; }
-  .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; padding:12px 20px; font-size:16px; }
-  .totals { display:grid; justify-content:end; gap:4px; margin-top:12px; font-variant-numeric:tabular-nums; }
-  .totals div { display:flex; gap:24px; justify-content:space-between; min-width:280px; }
-  .totals .gross { font-size:18px; font-weight:700; color:var(--accent); border-top:1px solid var(--line); padding-top:6px; }
-  .words { font-size:13px; color:var(--muted); text-align:right; margin-top:4px; }
-  .actions { display:flex; gap:12px; justify-content:flex-end; flex-wrap:wrap; }
-  .err { color:#b0352b; font-size:13px; }
-  @media (max-width:640px){ .totals div{min-width:0;} }
+/* Koncepcja: formularz urzędowy z sekcjami A–D i numerowanymi kratkami, jak w dobrym programie księgowym.
+   Obok żywy arkusz A4, złożony tym samym krojem (Roboto) i układem co plik PDF. Kolor wybranej spółki pojawia się tylko tam, gdzie pojawi się w ofercie. */
+:root {
+  --desk: #dde3e0;
+  --sheet: #ffffff;
+  --bar: #c9d4ce;
+  --bar-2: #eef2ef;
+  --ink: #1d2a35;
+  --muted: #56655f;
+  --rule: #9aaba3;
+  --red: #b3261e;
+  --hl: #fffbe8;
+  --accent: #1f5fbf;
+  --ui: "Public Sans", "Segoe UI", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--desk); color: var(--ink); font: 15px/1.45 var(--ui); font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Pasek aplikacji */
+.appbar { background: var(--ink); color: #fff; }
+.appbar .in { max-width: 1480px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; gap: 8px 20px; flex-wrap: wrap; }
+.appbar .name { display: flex; align-items: center; gap: 10px; }
+.appbar svg { flex: none; }
+.appbar h1 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: .005em; }
+.appbar .demo { margin: 0; font-size: 13px; color: #c7d2cc; }
+.appbar .demo b { color: #fff; font-weight: 600; background: rgba(255,255,255,.12); padding: 2px 7px; border-radius: 2px; margin-right: 6px; }
+
+.layout { max-width: 1480px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 540px); gap: 22px; align-items: start; }
+
+/* Formularz */
+.form { background: var(--sheet); border: 1px solid var(--rule); padding: 22px 22px 26px; display: grid; gap: 22px; min-width: 0; }
+.sec h2 { margin: 0; display: flex; gap: 8px; align-items: baseline; background: var(--bar); border: 1px solid var(--rule); border-bottom: 0; padding: 6px 10px; font-size: 14px; font-weight: 700; }
+.sec h2 .ltr { min-width: 1.4em; }
+.sec h2 small { margin-left: auto; font-weight: 500; color: var(--muted); font-size: 12.5px; }
+.cells { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+.cell { display: flex; flex-direction: column; min-width: 0; padding: 5px 10px 3px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: #fff; }
+.cell .lab { font-size: 11.5px; line-height: 1.3; font-weight: 500; color: var(--muted); }
+.cell input, .cell select, .cell textarea { width: 100%; min-width: 0; border: 0; border-radius: 0; background: transparent; color: var(--ink); font: 500 15px/1.4 var(--ui); padding: 4px 0 6px; outline: none; }
+.cell select { cursor: pointer; font-weight: 600; }
+.cell textarea { min-height: 76px; resize: vertical; font-weight: 400; }
+.cell:focus-within { box-shadow: inset 0 0 0 2px var(--accent); background: var(--hl); }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: 1 / -1; }
+.c-company { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
+.company-info { display: flex; gap: 12px; align-items: center; padding: 4px 0 6px; font-size: 13px; color: var(--muted); }
+.company-info svg { width: 46px; height: 46px; flex: none; }
+
+/* Pozycje: księga */
+.ledger { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.ledger th { background: var(--bar-2); font-size: 11.5px; font-weight: 600; color: var(--muted); text-align: left; padding: 6px 8px; border: 1px solid var(--rule); border-bottom: 2px solid var(--ink); }
+.ledger td { border: 1px solid var(--rule); padding: 0; vertical-align: middle; background: #fff; }
+.ledger td:focus-within { box-shadow: inset 0 0 0 2px var(--accent); background: var(--hl); }
+.ledger input, .ledger select { width: 100%; border: 0; border-radius: 0; background: transparent; color: var(--ink); font: 500 14px/1.3 var(--ui); padding: 9px 7px; outline: none; font-variant-numeric: tabular-nums; }
+.ledger input[type="number"] { text-align: right; }
+.ledger .num { text-align: right; white-space: nowrap; }
+.ledger td.net, .ledger td.gross { padding: 9px 7px; font-size: 13.5px; background: #f7f9f8; }
+.ledger td.gross { font-weight: 600; }
+.ledger .c-lp { width: 30px; } .ledger .c-qty { width: 58px; } .ledger .c-unit { width: 54px; } .ledger .c-price { width: 92px; } .ledger .c-vat { width: 66px; } .ledger .c-net { width: 102px; } .ledger .c-gross { width: 108px; } .ledger .c-del { width: 34px; }
+.ledger td.lp { text-align: center; color: var(--muted); font-size: 13px; background: var(--bar-2); }
+.ledger tbody { counter-reset: lp; }
+.ledger tbody tr { counter-increment: lp; }
+.ledger td.lp::before { content: counter(lp) "."; }
+.del { width: 100%; height: 38px; border: 0; background: transparent; color: var(--red); font-size: 20px; line-height: 1; cursor: pointer; }
+.del:hover { background: #fbeceb; }
+.ledger-tools { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+.btn { font: 600 14.5px/1.2 var(--ui); color: var(--ink); background: #fff; border: 1px solid var(--rule); border-radius: 3px; padding: 9px 14px; cursor: pointer; }
+.btn:hover { border-color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; padding: 12px 20px; font-size: 15.5px; }
+.btn.primary:hover { filter: brightness(1.08); }
+.totals { margin: 0; display: grid; gap: 2px; min-width: 300px; }
+.totals div { display: flex; justify-content: space-between; gap: 24px; padding: 3px 0; }
+.totals dt { color: var(--muted); }
+.totals dd { margin: 0; font-weight: 600; }
+.totals .gross { font-size: 18px; font-weight: 700; border-top: 1px solid var(--ink); border-bottom: 3px double var(--ink); padding: 6px 0 5px; margin-top: 4px; }
+.totals .gross dt { color: var(--ink); }
+.totals .gross dd { color: var(--accent); font-weight: 700; }
+.words { margin: 8px 0 0; font-size: 13px; color: var(--muted); text-align: right; }
+
+/* Podgląd */
+.preview { position: sticky; top: 12px; min-width: 0; }
+.pv-head { display: flex; justify-content: space-between; align-items: center; gap: 10px 16px; flex-wrap: wrap; margin-bottom: 12px; }
+.pv-head h2 { margin: 0; font-size: 15px; font-weight: 700; }
+.pv-head p { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); }
+.err { display: block; color: var(--red); font-size: 13.5px; font-weight: 600; margin: 0 0 10px; }
+.err:empty { display: none; }
+.fit { position: relative; overflow: hidden; }
+.sheet { position: absolute; top: 0; left: 0; width: 595px; min-height: 842px; transform-origin: 0 0; background: #fff; box-shadow: 0 1px 2px rgba(29,42,53,.18), 0 10px 28px rgba(29,42,53,.16);
+  display: flex; flex-direction: column; padding: 40px 40px 0; font: 9px/1.3 "Roboto", Arial, sans-serif; color: #18212b; --c: var(--accent); }
+.sheet .grey { color: #5f6b78; }
+.p-top { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: start; }
+.p-top svg { display: block; }
+.p-co { padding-top: 4px; } .p-co b { display: block; font-size: 11px; }
+.p-title { text-align: right; } .p-title strong { display: block; font-size: 20px; font-weight: 700; color: var(--c); line-height: 1.1; } .p-title b { display: block; }
+.p-parties { display: grid; grid-template-columns: 1fr 1fr; margin-top: 22px; }
+.p-parties i { display: block; font-style: normal; font-size: 8px; font-weight: 700; color: #5f6b78; letter-spacing: .5px; }
+.p-parties b { display: block; font-size: 11px; margin-top: 3px; }
+.p-items { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.p-items th { background: var(--c); color: #fff; font-size: 8.5px; font-weight: 700; text-align: left; padding: 5px 4px; }
+.p-items td { padding: 5px 4px; border-bottom: .5px solid #dfe4ea; vertical-align: top; }
+.p-items tbody tr:nth-child(even) td { background: #f6f8fa; }
+.p-items .r { text-align: right; white-space: nowrap; } .p-items .m { text-align: center; }
+.p-sum { display: flex; justify-content: flex-end; margin-top: 12px; }
+.p-vat { width: 250px; border-collapse: collapse; }
+.p-vat th { font-size: 8px; font-weight: 700; color: #5f6b78; text-align: left; padding: 3px 4px; border-bottom: .5px solid #dfe4ea; }
+.p-vat td { padding: 3px 4px; border-bottom: .5px solid #dfe4ea; }
+.p-vat tr:last-child td { font-weight: 700; border-top: 1px solid #dfe4ea; border-bottom: 0; }
+.p-vat .r { text-align: right; white-space: nowrap; }
+.p-words { text-align: right; color: #5f6b78; margin-top: 6px; }
+.p-notes { margin-top: 22px; white-space: pre-line; }
+.p-notes i { display: block; font-style: normal; font-size: 8px; font-weight: 700; color: #5f6b78; letter-spacing: .5px; margin-bottom: 4px; white-space: normal; }
+.p-sign { align-self: flex-end; width: 200px; margin-top: 40px; border-top: .5px solid #18212b; padding-top: 3px; text-align: center; font-size: 8px; color: #5f6b78; }
+.p-foot { margin-top: auto; padding: 10px 0 22px; }
+.p-foot div { display: flex; justify-content: space-between; gap: 12px; border-top: .5px solid #dfe4ea; padding-top: 6px; font-size: 7px; color: #5f6b78; }
+.p-foot div span:last-child { text-align: right; }
+.p-empty { color: #5f6b78; text-align: center; padding: 14px 0 !important; }
+
+@media (max-width: 1320px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .preview { position: static; max-width: 640px; width: 100%; margin: 0 auto; }
+}
+@media (max-width: 760px) {
+  .layout { padding: 12px; gap: 16px; }
+  .form { padding: 14px 12px 18px; }
+  .cells, .c-company { grid-template-columns: minmax(0, 1fr); }
+  .span-2 { grid-column: auto; }
+  .sec h2 small { display: none; }
+  /* Pozycje jako bloczki */
+  .ledger, .ledger tbody { display: block; }
+  .ledger thead { display: none; }
+  .ledger tr { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border: 1px solid var(--rule); border-bottom: 2px solid var(--ink); margin-bottom: 10px; position: relative; }
+  .ledger td { display: block; border: 0; border-bottom: 1px solid var(--rule); border-right: 1px solid var(--rule); }
+  .ledger td[data-l]::before { content: attr(data-l); display: block; padding: 5px 8px 0; font-size: 11px; color: var(--muted); font-weight: 500; }
+  .ledger td.net[data-l]::before, .ledger td.gross[data-l]::before { padding: 0 0 2px; }
+  .ledger td, .ledger td.num, .ledger input[type="number"] { text-align: left; }
+  .ledger td.lp { grid-area: 1 / 1 / 2 / 2; display: grid; place-items: center; }
+  .ledger td.name-c { grid-area: 1 / 2 / 2 / 6; }
+  .ledger td.del-c { grid-area: 1 / 6 / 2 / 7; border-right: 0; display: grid; place-items: center; }
+  .ledger td.qty-c { grid-area: 2 / 1 / 3 / 3; }
+  .ledger td.unit-c { grid-area: 2 / 3 / 3 / 5; }
+  .ledger td.vat-c { grid-area: 2 / 5 / 3 / 7; border-right: 0; }
+  .ledger td.price-c { grid-area: 3 / 1 / 4 / 3; border-bottom: 0; }
+  .ledger td.net { grid-area: 3 / 3 / 4 / 5; border-bottom: 0; }
+  .ledger td.gross { grid-area: 3 / 5 / 4 / 7; border-bottom: 0; border-right: 0; }
+  .del { height: 100%; min-height: 40px; }
+  .totals { min-width: 0; width: 100%; }
+  .words { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 </style>
 <style id="pf-bar">.pf-bar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;height:30px;padding:0 12px;background:#1f3a5f;color:#fff;font:600 13px/30px "Segoe UI",system-ui,Arial,sans-serif}.pf-bar a{color:#fff;text-decoration:none}.pf-bar a:hover{text-decoration:underline}.pf-bar span{opacity:.75;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style>
 </head>
 <body>
 <div class="pf-bar"><a href="./">← Marcin – wszystkie projekty</a><span>projekt demonstracyjny</span></div>
-<header><div class="in"><h1>Generator ofert PDF</h1><span class="demo">DEMO – spółki i dane są fikcyjne</span></div></header>
-<main>
-  <section class="card">
-    <h2>Spółka wystawiająca</h2>
-    <div class="company">
-      <select id="company" aria-label="Spółka"></select>
-      <div class="company-info" id="companyInfo"></div>
-    </div>
-  </section>
+<header class="appbar"><div class="in">
+  <div class="name">
+    <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true"><path d="M1 1h13l7 7v17H1z" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M14 1v7h7" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M5 13h12M5 17h12M5 21h7" stroke="#fff" stroke-width="1.6"/></svg>
+    <h1>Generator ofert PDF</h1>
+  </div>
+  <p class="demo"><b>DEMO</b>Spółki i dane są fikcyjne.</p>
+</div></header>
 
-  <section class="card">
-    <h2>Dane oferty i klienta</h2>
-    <div class="grid">
-      <label>Numer oferty<input id="offerNo"></label>
-      <label>Data wystawienia<input id="issueDate" type="date"></label>
-      <label>Ważna do<input id="validDate" type="date"></label>
-      <label>Firma klienta<input id="clientName" placeholder="np. Przykładowa Firma Sp. z o.o."></label>
-      <label>NIP klienta<input id="clientNip" placeholder="np. 123-456-78-90"></label>
-      <label>Osoba kontaktowa<input id="clientPerson" placeholder="np. Anna Kowalska"></label>
-    </div>
-  </section>
+<div class="layout">
+  <main class="form">
+    <section class="sec" aria-labelledby="sA">
+      <h2 id="sA"><span class="ltr">A.</span>Spółka wystawiająca</h2>
+      <div class="cells c-company">
+        <label class="cell"><span class="lab">1. Spółka</span><select id="company" aria-label="Spółka"></select></label>
+        <div class="cell"><span class="lab">2. Dane spółki na ofercie</span><div class="company-info" id="companyInfo"></div></div>
+      </div>
+    </section>
 
-  <section class="card">
-    <h2>Pozycje</h2>
-    <div class="wrap-table">
-      <table class="items">
-        <thead><tr><th style="width:38%">Produkt / usługa</th><th class="num">Ilość</th><th>J.m.</th><th class="num">Cena netto</th><th>VAT</th><th class="num">Wartość netto</th><th class="num">Wartość brutto</th><th></th></tr></thead>
+    <section class="sec" aria-labelledby="sB">
+      <h2 id="sB"><span class="ltr">B.</span>Dane oferty i klienta</h2>
+      <div class="cells">
+        <label class="cell"><span class="lab">3. Numer oferty</span><input id="offerNo"></label>
+        <label class="cell"><span class="lab">4. Data wystawienia</span><input id="issueDate" type="date"></label>
+        <label class="cell"><span class="lab">5. Ważna do</span><input id="validDate" type="date"></label>
+        <label class="cell"><span class="lab">6. Firma klienta</span><input id="clientName" placeholder="np. Przykładowa Firma Sp. z o.o."></label>
+        <label class="cell"><span class="lab">7. NIP klienta</span><input id="clientNip" placeholder="np. 123-456-78-90"></label>
+        <label class="cell"><span class="lab">8. Osoba kontaktowa</span><input id="clientPerson" placeholder="np. Anna Kowalska"></label>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="sC">
+      <h2 id="sC"><span class="ltr">C.</span>Pozycje<small>Kwoty przeliczają się na bieżąco</small></h2>
+      <table class="ledger">
+        <colgroup><col class="c-lp"><col><col class="c-qty"><col class="c-unit"><col class="c-price"><col class="c-vat"><col class="c-net"><col class="c-gross"><col class="c-del"></colgroup>
+        <thead><tr><th>Lp.</th><th>Produkt / usługa</th><th class="num">Ilość</th><th>J.m.</th><th class="num">Cena netto</th><th>VAT</th><th class="num">Wartość netto</th><th class="num">Wartość brutto</th><th><span class="vh">Usuń</span></th></tr></thead>
         <tbody id="rows"></tbody>
       </table>
+      <div class="ledger-tools">
+        <button class="btn" id="addRow" type="button">+ Dodaj pozycję</button>
+        <div>
+          <dl class="totals" id="totals"></dl>
+          <p class="words" id="words"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="sD">
+      <h2 id="sD"><span class="ltr">D.</span>Uwagi i warunki</h2>
+      <div class="cells">
+        <label class="cell span-3"><span class="lab">9. Treść widoczna pod pozycjami</span><textarea id="notes">Termin realizacji: do 14 dni od akceptacji oferty.
+Płatność: przelew 14 dni od daty wystawienia faktury.</textarea></label>
+      </div>
+    </section>
+  </main>
+
+  <aside class="preview" aria-labelledby="pvTitle">
+    <div class="pv-head">
+      <div><h2 id="pvTitle">Podgląd oferty</h2><p>Arkusz A4, tak jak w pliku PDF</p></div>
+      <button class="btn primary" id="pdfBtn" type="button">Pobierz ofertę PDF</button>
     </div>
-    <p><button class="btn" id="addRow" type="button">+ Dodaj pozycję</button></p>
-    <div class="totals" id="totals"></div>
-    <div class="words" id="words"></div>
-  </section>
-
-  <section class="card">
-    <h2>Uwagi i warunki</h2>
-    <textarea id="notes">Termin realizacji: do 14 dni od akceptacji oferty.
-Płatność: przelew 14 dni od daty wystawienia faktury.</textarea>
-  </section>
-
-  <div class="actions">
-    <span class="err" id="err"></span>
-    <button class="btn primary" id="pdfBtn" type="button">Pobierz ofertę PDF</button>
-  </div>
-</main>
+    <span class="err" id="err" role="alert"></span>
+    <div class="fit" id="fit"><div class="sheet" id="sheet" aria-label="Podgląd dokumentu oferty"></div></div>
+  </aside>
+</div>
 
 <script>
 // ===== Konfiguracja spółek (w wersji produkcyjnej: prawdziwe logo i dane od klienta) =====
@@ -145,19 +281,20 @@ $('offerNo').value = `AB/OF/${today.getFullYear()}/${String(today.getMonth()+1).
 const rows = $('rows');
 function addRow(d = {}) {
   const tr = document.createElement('tr');
-  tr.innerHTML = `<td><input class="name" placeholder="Nazwa produktu lub usługi" value="${esc(d.name||'')}"></td>
-    <td class="num"><input class="qty" type="number" min="0" step="any" value="${d.qty ?? 1}" style="width:80px"></td>
-    <td><input class="unit" value="${esc(d.unit||'szt.')}" style="width:70px"></td>
-    <td class="num"><input class="price" type="number" min="0" step="0.01" value="${d.price ?? ''}" style="width:120px"></td>
-    <td><select class="vat">${VAT_RATES.map(r => `<option value="${r.v}" ${String(r.v)===String(d.vat??0.23)?'selected':''}>${r.l}</option>`).join('')}</select></td>
-    <td class="num net"></td><td class="num gross"></td>
-    <td><button class="del" type="button" aria-label="Usuń pozycję">×</button></td>`;
+  tr.innerHTML = `<td class="lp" aria-hidden="true"></td>
+    <td class="name-c" data-l="Produkt / usługa"><input class="name" aria-label="Produkt / usługa" placeholder="Nazwa produktu lub usługi" value="${esc(d.name||'')}"></td>
+    <td class="num qty-c" data-l="Ilość"><input class="qty" aria-label="Ilość" type="number" min="0" step="any" value="${d.qty ?? 1}"></td>
+    <td class="unit-c" data-l="J.m."><input class="unit" aria-label="Jednostka miary" value="${esc(d.unit||'szt.')}"></td>
+    <td class="num price-c" data-l="Cena netto"><input class="price" aria-label="Cena netto" type="number" min="0" step="0.01" value="${d.price ?? ''}"></td>
+    <td class="vat-c" data-l="VAT"><select class="vat" aria-label="Stawka VAT">${VAT_RATES.map(r => `<option value="${r.v}" ${String(r.v)===String(d.vat??0.23)?'selected':''}>${r.l}</option>`).join('')}</select></td>
+    <td class="num net" data-l="Wartość netto"></td><td class="num gross" data-l="Wartość brutto"></td>
+    <td class="del-c"><button class="del" type="button" aria-label="Usuń pozycję">×</button></td>`;
   rows.appendChild(tr); calc();
 }
 rows.addEventListener('input', calc);
 rows.addEventListener('change', calc);
 rows.addEventListener('click', e => { if (e.target.classList.contains('del')) { e.target.closest('tr').remove(); calc(); } });
-$('addRow').addEventListener('click', () => addRow());
+$('addRow').addEventListener('click', () => { addRow(); rows.lastElementChild.querySelector('.name').focus(); });
 
 function items() {
   return [...rows.querySelectorAll('tr')].map(tr => {
@@ -180,8 +317,9 @@ function calc() {
   const list = items();
   list.forEach(i => { i.tr.querySelector('.net').textContent = money(i.net); i.tr.querySelector('.gross').textContent = money(i.gross); });
   const s = summary(list);
-  $('totals').innerHTML = `<div><span>Razem netto</span><span>${money(s.net)}</span></div><div><span>VAT</span><span>${money(s.vat)}</span></div><div class="gross"><span>Razem brutto</span><span>${money(s.gross)}</span></div>`;
+  $('totals').innerHTML = `<div><dt>Razem netto</dt><dd>${money(s.net)}</dd></div><div><dt>VAT</dt><dd>${money(s.vat)}</dd></div><div class="gross"><dt>Razem brutto</dt><dd>${money(s.gross)}</dd></div>`;
   $('words').textContent = 'Słownie: ' + inWords(s.gross);
+  renderPreview();
 }
 
 // ===== Kwota słownie (PL) =====
@@ -198,6 +336,42 @@ function inWords(amount) {
   while (n > 0 && g < 3) { const c = n % 1000; if (c) { let w = (g===1 && c===1) ? '' : three(c); if (g>0) w = (w ? w+' ' : '') + form(c, groups[g]); parts.unshift(w.trim()); } n = Math.floor(n/1000); g++; }
   return `${parts.join(' ')} ${form(zl,['złoty','złote','złotych'])} ${String(gr).padStart(2,'0')}/100`;
 }
+
+// ===== Podgląd na żywo (ten sam układ co PDF) =====
+const sheet = $('sheet'), fit = $('fit');
+function renderPreview() {
+  const c = company(), list = items().filter(i => i.name || i.price), s = summary(list);
+  const v = id => esc($(id).value);
+  const rowsHtml = list.length ? list.map((i,k) => `<tr><td>${k+1}</td><td>${esc(i.name || '—')}</td><td class="r">${String(i.qty).replace('.',',')}</td><td>${esc(i.unit)}</td><td class="r">${money(i.price)}</td><td class="m">${i.vat==='zw'?'zw.':Math.round(i.vat*100)+'%'}</td><td class="r">${money(i.net)}</td><td class="r">${money(i.gross)}</td></tr>`).join('')
+    : `<tr><td colspan="8" class="p-empty">Dodaj pozycję z nazwą i ceną, a pojawi się tutaj.</td></tr>`;
+  const vatRows = Object.entries(s.by).map(([k,x]) => `<tr><td>VAT ${k}</td><td class="r">${money(x.net)}</td><td class="r">${money(x.vat)}</td><td class="r">${money(x.gross)}</td></tr>`).join('');
+  const notes = $('notes').value.trim();
+  sheet.style.setProperty('--c', c.color);
+  sheet.innerHTML = `
+    <div class="p-top">${logoSvg(c,56,false)}
+      <div class="p-co"><b>${esc(c.name)}</b><div class="grey">${esc(c.address)}</div><div class="grey">${c.phone} · ${c.email}</div></div>
+      <div class="p-title"><strong>OFERTA</strong><b>${v('offerNo')}</b><div class="grey">Data: ${fmtDate($('issueDate').value)}</div><div class="grey">Ważna do: ${fmtDate($('validDate').value)}</div></div></div>
+    <div class="p-parties">
+      <div><i>DLA</i><b>${v('clientName') || '—'}</b>${$('clientNip').value ? '<div>NIP ' + v('clientNip') + '</div>' : ''}${$('clientPerson').value ? '<div>Osoba kontaktowa: ' + v('clientPerson') + '</div>' : ''}</div>
+      <div><i>OD</i><b>${esc(c.name)}</b><div>NIP ${c.nip}</div><div>${c.email}</div></div></div>
+    <table class="p-items"><thead><tr><th>Lp.</th><th>Produkt / usługa</th><th>Ilość</th><th>J.m.</th><th>Cena netto</th><th>VAT</th><th>Wartość netto</th><th>Wartość brutto</th></tr></thead><tbody>${rowsHtml}</tbody></table>
+    <div class="p-sum"><table class="p-vat"><thead><tr><th>Stawka</th><th class="r">Netto</th><th class="r">VAT</th><th class="r">Brutto</th></tr></thead>
+      <tbody>${vatRows}<tr><td>RAZEM</td><td class="r">${money(s.net)}</td><td class="r">${money(s.vat)}</td><td class="r" style="color:${c.color}">${money(s.gross)}</td></tr></tbody></table></div>
+    <div class="p-words">Słownie: ${inWords(s.gross)}</div>
+    ${notes ? `<div class="p-notes"><i>UWAGI I WARUNKI</i>${esc($('notes').value)}</div>` : ''}
+    <div class="p-sign">Podpis osoby wystawiającej</div>
+    <div class="p-foot"><div><span>${esc(c.name)}<br>${esc(c.address)}</span><span>NIP ${c.nip} · KRS ${c.krs} · REGON ${c.regon}<br>Konto: ${c.bank}</span></div></div>`;
+  fitSheet();
+}
+function fitSheet() {
+  const k = Math.min(fit.clientWidth / 595, 1.25);
+  sheet.style.transform = `scale(${k})`;
+  fit.style.height = Math.ceil(sheet.offsetHeight * k) + 'px';
+}
+document.querySelector('.form').addEventListener('input', e => { if (!rows.contains(e.target)) renderPreview(); });
+document.querySelector('.form').addEventListener('change', e => { if (!rows.contains(e.target)) renderPreview(); });
+if (window.ResizeObserver) new ResizeObserver(fitSheet).observe(fit); else addEventListener('resize', fitSheet);
+if (document.fonts) document.fonts.ready.then(fitSheet);
 
 // ===== PDF =====
 function buildDoc() {

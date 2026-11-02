@@ -5,146 +5,253 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Strony i narzędzia dla producentów maszyn – Marcin</title>
 <meta name="description" content="Katalogi maszyn PL/EN/DE, karty techniczne, kalkulatory doboru maszyny do ciągnika i konfiguratory 3D dla producentów maszyn rolniczych. Działające przykłady.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600..900&family=Sofia+Sans:ital,wght@0,400..700;1,400&display=swap">
 <style>
+/* Koncepcja: karta techniczna z hali producenta. Stal ocynkowana, lakier maszynowy, rysunek z linią wymiarową.
+   Najmocniejszy element: rysunek brony w karcie maszyny, który zmienia szerokość razem z wybranym modelem. */
 :root{
-  --green:#1f4d2b;--green-2:#2f6b3d;--amber:#e8a317;--amber-d:#b97f0c;
-  --bg:#f6f5f0;--card:#ffffff;--ink:#1d2320;--muted:#5d6661;--line:#dfe2dc;--soft:#eef2ea;
-  --radius:14px;
+  --stal:#d8dbd6;      /* tło: stal ocynkowana */
+  --arkusz:#f3f4f1;    /* karty techniczne */
+  --grafit:#22262b;    /* tekst, kreska */
+  --szary:#555b62;     /* tekst pomocniczy */
+  --rysa:#b9bdb7;      /* cienkie linie */
+  --lakier:#e2560f;    /* lakier maszynowy: akcent */
+  --lakier-d:#b9430a;
+  --ziemia:#5b4632;    /* gleba */
+  --disp:"Big Shoulders Display","Arial Narrow","Roboto Condensed",sans-serif;
+  --body:"Sofia Sans","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:16px}
-a{color:var(--green-2)}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-header.top{background:var(--green);color:#fff}
-header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px}
-.logo span.m{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--amber);color:var(--green);font-weight:800}
-nav a{color:#e9f1e6;text-decoration:none;margin-left:18px;font-size:15px}
-nav a:hover{color:#fff;text-decoration:underline}
-.hero{background:linear-gradient(180deg,var(--green) 0%,var(--green-2) 100%);color:#fff;padding:56px 0 64px}
-.hero h1{font-size:clamp(28px,4.4vw,44px);line-height:1.15;margin:0 0 14px;max-width:780px}
-.hero p{font-size:18px;max-width:700px;color:#e3ecdf;margin:0 0 24px}
-.btn{display:inline-block;border:0;border-radius:10px;padding:12px 20px;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none}
-.btn-amber{background:var(--amber);color:#1d2320}
-.btn-amber:hover{background:#f2b22e}
-.btn-ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.55);margin-left:10px}
-.btn-green{background:var(--green);color:#fff}
-.btn-green:hover{background:var(--green-2)}
-.btn-line{background:#fff;color:var(--green);border:2px solid var(--green)}
-.facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
-.facts span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:6px 12px;border-radius:999px;font-size:14px}
-section{padding:56px 0}
-h2{font-size:clamp(24px,3vw,32px);margin:0 0 8px;color:var(--green)}
-.lead{color:var(--muted);margin:0 0 28px;max-width:760px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
-.card h3{margin:0 0 6px;font-size:18px}
-.card p{margin:0;color:var(--muted);font-size:15px}
-.ico{width:42px;height:42px;border-radius:10px;background:var(--soft);display:grid;place-items:center;margin-bottom:12px;color:var(--green)}
-.demo{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:28px}
-.demo-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;border-bottom:1px solid var(--line);background:#fbfbf8}
-.demo-head h3{margin:0;font-size:19px;color:var(--green)}
-.tag{font-size:12px;font-weight:700;color:var(--amber-d);background:#fff6e0;border:1px solid #f3dca6;border-radius:999px;padding:3px 10px;white-space:nowrap}
-.demo-body{padding:22px}
-.why{font-size:14px;color:var(--muted);margin:0 0 18px;padding:10px 14px;background:var(--soft);border-radius:10px}
-.why b{color:var(--green)}
-/* kalkulator */
-.calc{display:grid;grid-template-columns:320px 1fr;gap:24px}
-.field{margin-bottom:16px}
-.field label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
-.field select,.field input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font-size:15px;background:#fff}
-.range-row{display:flex;align-items:center;gap:12px}
-.range-row input{flex:1;accent-color:var(--green)}
-.range-row output{min-width:78px;text-align:right;font-weight:700;color:var(--green);font-size:18px}
-.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
-.seg button{flex:1;border:0;background:#fff;padding:9px 6px;font-size:14px;cursor:pointer;border-right:1px solid var(--line)}
-.seg button:last-child{border-right:0}
-.seg button.on{background:var(--green);color:#fff;font-weight:700}
-.res-title{font-weight:700;margin:0 0 10px}
-.res{display:grid;gap:10px}
-.res-item{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center;border:1px solid var(--line);border-radius:11px;padding:12px 14px}
-.res-item.best{border-color:var(--green);box-shadow:0 0 0 2px rgba(47,107,61,.15)}
-.res-item .nm{font-weight:700}
-.res-item .meta{grid-column:1/2;font-size:13px;color:var(--muted)}
-.bar{grid-column:1/3;height:8px;background:#edf0ea;border-radius:99px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--green-2)}
-.badge{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--green);white-space:nowrap}
-.res-item.best .badge{background:var(--green);color:#fff}
-.empty{color:var(--muted);font-size:15px;padding:14px;border:1px dashed var(--line);border-radius:11px}
-/* karta maszyny */
-.lang{display:flex;gap:6px}
-.lang button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;font-weight:700;font-size:13px;cursor:pointer}
-.lang button.on{background:var(--green);color:#fff;border-color:var(--green)}
-.machine{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:start}
-.machine-img{background:linear-gradient(180deg,#eef3ea,#e2eadc);border-radius:12px;padding:16px;display:grid;place-items:center}
-.machine-img svg{width:100%;height:auto;max-height:280px}
-.thumbs{display:flex;gap:8px;margin-top:10px}
-.thumbs span{flex:1;height:44px;border-radius:8px;background:#e6ece1;border:1px solid var(--line)}
-.machine h4{font-size:24px;margin:0 0 4px}
-.machine .sub{color:var(--muted);margin:0 0 14px}
-table.spec{width:100%;border-collapse:collapse;font-size:15px;margin-bottom:16px}
-table.spec th,table.spec td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
-table.spec th{color:var(--muted);font-weight:500;width:58%}
-table.spec td{font-weight:700}
-.variants{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.variants button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:600}
-.variants button.on{border-color:var(--amber-d);background:#fff6e0}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;font-family:var(--body);font-size:17px;line-height:1.5;background:var(--stal);color:var(--grafit);overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--grafit)}
+:focus-visible{outline:3px solid var(--lakier);outline-offset:2px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(16px,3.5vw,40px)}
+h1,h2,h3,h4{margin:0;font-family:var(--disp);font-weight:800;line-height:.95;letter-spacing:.005em;text-wrap:balance}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+
+/* nagłówek */
+header.top{border-bottom:2px solid var(--grafit)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.logo{display:flex;align-items:center;gap:12px;font-weight:600;font-size:16px;line-height:1.2}
+.logo .m{display:inline-grid;place-items:center;width:38px;height:38px;background:var(--lakier);color:var(--grafit);font-family:var(--disp);font-weight:900;font-size:26px;border:2px solid var(--grafit)}
+nav{display:flex;gap:26px}
+nav a{text-decoration:none;font-weight:600;font-size:16px;padding:6px 0;border-bottom:3px solid transparent}
+nav a:hover{border-bottom-color:var(--lakier)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border:2px solid var(--grafit);background:transparent;color:var(--grafit);font-weight:700;font-size:16px;text-decoration:none;cursor:pointer;border-radius:0}
+.btn:hover{background:var(--grafit);color:#fff}
+.btn-paint{background:var(--lakier);border-color:var(--lakier);color:var(--grafit)}
+.btn-paint:hover{background:var(--lakier-d);border-color:var(--lakier-d);color:#fff}
+.btn-dark{background:var(--grafit);color:#fff}
+.btn-dark:hover{background:#3a4047}
+
+/* hero */
+.hero{padding:56px 0 64px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:40px 56px;align-items:end}
+.hero h1{font-size:clamp(44px,6.3vw,86px);font-weight:800;line-height:.92}
+.hero p{font-size:19px;max-width:56ch;margin:24px 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+/* tabliczka znamionowa */
+.plate{position:relative;background:var(--arkusz);border:2px solid var(--grafit);padding:22px 26px 18px}
+.plate::before,.plate::after,.plate .rv::before,.plate .rv::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#c3c7c1;border:1.5px solid var(--grafit)}
+.plate::before{top:8px;left:8px}.plate::after{top:8px;right:8px}
+.plate .rv::before{bottom:8px;left:8px}.plate .rv::after{bottom:8px;right:8px}
+.plate-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:2px solid var(--grafit);padding:0 8px 10px;margin-bottom:4px}
+.plate-h b{font-family:var(--disp);font-weight:800;font-size:28px;line-height:1}
+.plate-h span{font-size:14px;color:var(--szary)}
+.plate ul{list-style:none;margin:0;padding:0 8px}
+.plate li{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rysa);font-weight:600}
+.plate li:last-child{border-bottom:0}
+.plate li::before{content:"";width:10px;height:10px;background:var(--lakier);flex:none}
+
+/* sekcje */
+section{padding:72px 0}
+.sec-h{font-size:clamp(38px,5vw,64px);margin-bottom:12px}
+.lead{color:var(--szary);max-width:62ch;margin-bottom:32px;font-size:18px}
+
+/* arkusz demo */
+.demo{background:var(--arkusz);border:2px solid var(--grafit);margin-bottom:40px}
+.demo-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;padding:0 18px 0 0;background:var(--grafit);color:#fff}
+.demo-head h3{display:flex;align-items:center;gap:16px;font-size:clamp(24px,2.8vw,32px);font-weight:800;line-height:1.05;padding:10px 0}
+.demo-head h3 .no{display:grid;place-items:center;align-self:stretch;min-width:56px;background:var(--lakier);color:var(--grafit);font-size:34px;margin:-10px 0}
+.head-r{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:10px 0}
+.tag{font-size:14px;color:#c9cdd1;white-space:nowrap}
+.lang{display:flex;border:1.5px solid #8d949b}
+.lang button{border:0;border-left:1.5px solid #8d949b;background:transparent;color:#fff;min-width:44px;min-height:36px;font-weight:700;font-size:14px;cursor:pointer}
+.lang button:first-child{border-left:0}
+.lang button.on{background:#fff;color:var(--grafit)}
+.demo-body{padding:28px clamp(16px,3vw,32px) 32px}
+.why{font-size:16px;color:var(--szary);max-width:76ch;margin:0 0 26px;padding-left:14px;border-left:4px solid var(--lakier)}
+.why b{color:var(--grafit)}
+
+/* 1. kalkulator */
+.calc{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:32px}
+.field{margin-bottom:20px}
+.field label,.field .lbl{display:block;font-weight:700;font-size:15px;margin-bottom:8px}
+.field select,.field input[type=number]{width:100%;min-height:46px;padding:8px 12px;border:2px solid var(--grafit);background:#fff;font-size:16px;border-radius:0}
+.readout{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+.readout output{font-family:var(--disp);font-weight:900;font-size:64px;line-height:.9;font-variant-numeric:tabular-nums}
+.readout small{font-size:14px;color:var(--szary)}
+input[type=range]{width:100%;accent-color:var(--lakier);height:28px;margin:0}
+.scale{display:flex;justify-content:space-between;font-size:13px;color:var(--szary);border-top:1px solid var(--grafit);padding-top:3px;background:repeating-linear-gradient(90deg,var(--grafit) 0 1px,transparent 1px 10%) top/100% 6px no-repeat}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid var(--grafit)}
+.seg button{border:0;border-left:2px solid var(--grafit);background:#fff;min-height:48px;padding:6px 4px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.seg button:first-child{border-left:0}
+.seg button i{width:14px;height:14px;border:1.5px solid var(--grafit);flex:none}
+.seg button.on{background:var(--grafit);color:#fff}
+.seg button.on i{border-color:#fff}
+.note{font-size:14px;color:var(--szary)}
+.res-title{font-family:var(--disp);font-weight:800;font-size:28px;line-height:1;margin:0 0 14px}
+.res{display:grid;gap:0;border-top:2px solid var(--grafit)}
+.res-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:baseline;padding:14px 0 16px 18px;border-bottom:1px solid var(--rysa);position:relative}
+.res-item.best{background:#fff}
+.res-item.best::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--lakier)}
+.res-item .nm{font-family:var(--disp);font-weight:800;font-size:30px;line-height:1}
+.res-item .nm small{font-family:var(--body);font-weight:600;font-size:16px;color:var(--szary);margin-left:6px}
+.res-item .meta{grid-column:1/-1;font-size:15px;color:var(--szary)}
+.badge{font-size:14px;font-weight:700;white-space:nowrap;padding-right:14px}
+.res-item.best .badge{color:var(--lakier-d)}
+.pct{font-size:14px;font-weight:700;padding-right:14px;white-space:nowrap;align-self:center;margin-top:6px}
+.bar{grid-column:1/2;margin:6px 0 0 0;height:14px;border:1.5px solid var(--grafit);background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),var(--rysa) calc(10% - 1px) 10%) #fff;position:relative}
+.bar i{display:block;height:100%;background:var(--grafit)}
+.res-item.best .bar i{background:var(--lakier)}
+.empty{color:var(--szary);font-size:16px;padding:18px;border:2px dashed var(--rysa);margin-top:14px;background:#fff}
+
+/* 2. karta maszyny */
+.machine{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;align-items:start}
+.draw{background:#fff;border:1.5px solid var(--grafit);background-image:linear-gradient(var(--arkusz) 1px,transparent 1px),linear-gradient(90deg,var(--arkusz) 1px,transparent 1px);background-size:20px 20px;padding:10px}
+.draw svg{display:block;width:100%;height:auto}
+.draw svg text{font-family:var(--body)}
+.draw svg .dim{font-family:var(--disp);font-weight:800}
+.draw-cap{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--szary);margin-top:8px}
+.model{font-size:clamp(56px,7vw,92px);font-weight:900;line-height:.85}
+.fam-n{font-weight:700;font-size:18px;margin:8px 0 6px}
+.machine .sub{color:var(--szary);margin:0 0 18px}
+.variants{display:flex;flex-wrap:wrap;margin:0 0 20px;border-top:2px solid var(--grafit);border-left:2px solid var(--grafit)}
+.variants button{flex:1 0 auto;min-width:72px;min-height:44px;border:0;border-right:2px solid var(--grafit);border-bottom:2px solid var(--grafit);background:#fff;font-family:var(--disp);font-weight:800;font-size:20px;cursor:pointer;padding:0 10px}
+.variants button.on{background:var(--lakier)}
+table.spec{width:100%;border-collapse:collapse;font-size:16px;margin-bottom:22px}
+table.spec th,table.spec td{padding:9px 0;border-bottom:1px solid var(--rysa);text-align:left;vertical-align:baseline}
+table.spec th{color:var(--szary);font-weight:400;width:55%;padding-right:14px}
+table.spec td{font-weight:700;font-variant-numeric:tabular-nums}
+table.spec tr:first-child th,table.spec tr:first-child td{border-top:2px solid var(--grafit)}
 .actions{display:flex;gap:10px;flex-wrap:wrap}
-/* katalog */
-.filters{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px}
-.filters .field{margin:0;min-width:180px;flex:1}
-.cat{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-.cat-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
-.cat-card .pic{height:110px;background:linear-gradient(180deg,#eef3ea,#e0e8da);display:grid;place-items:center}
-.cat-card .pic svg{width:70%;height:auto}
-.cat-card .in{padding:12px 14px;flex:1;display:flex;flex-direction:column}
-.cat-card .fam{font-size:12px;color:var(--amber-d);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
-.cat-card .nm{font-weight:700;margin:2px 0 6px}
-.cat-card ul{margin:0 0 10px;padding:0;list-style:none;font-size:13px;color:var(--muted)}
-.cat-card a{margin-top:auto;font-size:14px;font-weight:700;text-decoration:none}
-.count{font-size:14px;color:var(--muted);margin:0 0 12px}
-/* więcej */
-.more{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.more a.card{text-decoration:none;color:inherit;display:block}
-.more a.card:hover{border-color:var(--green-2)}
-.more .go{display:inline-block;margin-top:10px;font-weight:700;color:var(--green-2)}
+
+/* 3. katalog */
+.filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:6px}
+.filters .field{margin:0}
+.count{font-size:15px;color:var(--szary);margin:12px 0 16px}
+.cat{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.cat-card{position:relative;background:#fff;border:2px solid var(--grafit);display:flex;flex-direction:column}
+.cat-card::before,.cat-card::after{content:"";position:absolute;top:7px;width:8px;height:8px;border-radius:50%;background:#c3c7c1;border:1.5px solid var(--grafit)}
+.cat-card::before{left:7px}.cat-card::after{right:7px}
+.cat-card .pic{height:104px;display:grid;place-items:center;border-bottom:1.5px solid var(--grafit);padding:14px 24px 8px}
+.cat-card .pic svg{width:78%;height:auto}
+.cat-card .in{padding:12px 16px 14px;flex:1;display:flex;flex-direction:column}
+.cat-card .fam{font-size:14px;color:var(--szary);font-weight:600}
+.cat-card .nm{font-family:var(--disp);font-weight:900;font-size:34px;line-height:1;margin:2px 0 10px}
+.cat-card ul{margin:0 0 12px;padding:0;list-style:none;font-size:15px}
+.cat-card li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-top:1px solid var(--rysa)}
+.cat-card li span{color:var(--szary)}
+.cat-card li b{font-variant-numeric:tabular-nums}
+.cat-card a{margin-top:auto;align-self:flex-start;font-size:15px;font-weight:700;text-decoration:none;border-bottom:3px solid var(--lakier);padding:2px 0}
+.cat-card a:hover{color:var(--lakier-d)}
+
+/* inne projekty */
+.more-h{font-size:clamp(30px,3.4vw,42px);margin:56px 0 16px}
+.more{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:2px solid var(--grafit)}
+.more a{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 16px;padding:20px 24px 22px 0;text-decoration:none;border-bottom:1px solid var(--rysa)}
+.more a+a{padding-left:24px;border-left:1px solid var(--rysa)}
+.more a svg{grid-row:1/4;width:40px;height:40px;color:var(--lakier-d)}
+.more h3{font-size:30px}
+.more p{color:var(--szary);font-size:16px}
+.more .go{font-weight:700;border-bottom:3px solid var(--lakier);justify-self:start;margin-top:6px}
+.more a:hover h3{color:var(--lakier-d)}
+
+/* co robię */
+#co-robie{background:var(--arkusz);border-top:2px solid var(--grafit);border-bottom:2px solid var(--grafit)}
+.svc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 40px}
+.svc div{padding:20px 0 26px;border-top:2px solid var(--grafit)}
+.svc h3{font-size:28px;margin-bottom:8px}
+.svc p{color:var(--szary);font-size:16px}
+
 /* kroki */
-.steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.step{position:relative;padding-top:52px}
-.step::before{counter-increment:s;content:counter(s);position:absolute;top:18px;left:22px;width:28px;height:28px;border-radius:50%;background:var(--amber);color:var(--green);font-weight:800;display:grid;place-items:center}
-.contact{background:var(--green);color:#fff;border-radius:var(--radius);padding:36px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px}
-.contact h2{color:#fff}
-.contact p{color:#e3ecdf;margin:0;max-width:600px}
-footer{padding:26px 0 40px;color:var(--muted);font-size:14px}
-.note{font-size:13px;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 40px;counter-reset:s}
+.steps li{counter-increment:s;border-top:2px solid var(--grafit);padding-top:14px}
+.steps li::before{content:counter(s);display:block;font-family:var(--disp);font-weight:900;font-size:88px;line-height:.85;color:var(--lakier);margin-bottom:10px}
+.steps h3{font-size:30px;margin-bottom:8px}
+.steps p{color:var(--szary);font-size:16px}
+
+/* kontakt */
+.contact{background:var(--lakier);border:2px solid var(--grafit);padding:clamp(24px,4vw,44px);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 40px;align-items:end}
+.contact h2{font-size:clamp(38px,5vw,64px);margin-bottom:12px}
+.contact p{max-width:58ch;font-size:18px}
+.contact .btn{word-break:break-all;text-align:center;min-height:56px}
+
+footer{padding:28px 0 44px;border-top:2px solid var(--grafit);font-size:15px;color:var(--szary)}
+footer .note{display:block;margin-top:6px}
+
 /* modal */
-.modal{position:fixed;inset:0;background:rgba(20,30,22,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal{position:fixed;inset:0;background:rgba(34,38,43,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:60}
 .modal.on{display:flex}
-.modal .box{background:#fff;border-radius:14px;max-width:440px;width:100%;padding:24px}
-.modal h4{margin:0 0 4px;font-size:20px}
-.modal .field input,.modal .field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit}
-.modal .ok{display:none;background:var(--soft);border-radius:10px;padding:14px;color:var(--green);font-weight:600}
-@media (max-width:860px){
-  .grid3,.steps{grid-template-columns:1fr}
-  .calc,.machine,.more{grid-template-columns:1fr}
+.modal .box{background:var(--arkusz);border:2px solid var(--grafit);max-width:460px;width:100%;max-height:94vh;overflow:auto}
+.modal .box-h{background:var(--grafit);color:#fff;padding:14px 22px}
+.modal h4{font-size:30px;font-weight:800}
+.modal .box-h .note{color:#d0d4d8;margin-top:4px}
+.modal form,.modal .ok{margin:20px 22px 22px}
+.modal .field input,.modal .field textarea{width:100%;padding:10px 12px;border:2px solid var(--grafit);font:inherit;background:#fff;border-radius:0}
+.modal .ok{display:none;border-left:6px solid var(--lakier);background:#fff;padding:14px 16px;font-weight:600}
+
+@media (max-width:900px){
   nav{display:none}
-  .btn-ghost{margin:10px 0 0}
+  .hero .wrap,.calc,.machine,.contact{grid-template-columns:minmax(0,1fr)}
+  .svc,.steps{grid-template-columns:minmax(0,1fr)}
+  .more{grid-template-columns:minmax(0,1fr)}
+  .more a+a{padding-left:0;border-left:0}
+  .filters{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .filters .field:first-child{grid-column:1/-1}
+  .steps li{padding-bottom:24px}
+}
+@media (max-width:520px){
+  .demo-head{padding:0}
+  .demo-head h3{padding-right:12px}
+  .head-r{padding:0 12px 12px 72px;width:100%}
+  .filters{grid-template-columns:minmax(0,1fr)}
+  .readout output{font-size:54px}
+  .logo .t{font-size:15px}
+  .plate{padding:20px 16px 16px}
+  .variants button{min-width:64px;font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
 }
 @media print{
-  header.top,.hero,section:not(#karta),.contact,footer,.demo-head .tag,.actions,.variants,.why,.lang{display:none!important}
-  #karta{padding:0}
-  .demo{border:0}
+  .pf-bar,header.top,.hero,#co-robie,#jak,#kontakt,footer,.modal,#przyklady>.wrap>.sec-h,#przyklady>.wrap>.lead,#kalkulator,#katalog,.more-h,.more,.demo-head .head-r,.actions,.variants,.why{display:none!important}
   body{background:#fff}
+  section{padding:0}
+  .demo{border:0;margin:0}
+  .demo-head{background:#fff;color:#000}
+  .demo-head h3 .no{display:none}
+  .machine{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:24px}
+  .model{font-size:60px}
 }
 </style>
+<style id="pf-bar">.pf-bar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;height:30px;padding:0 12px;background:#1f3a5f;color:#fff;font:600 13px/30px "Segoe UI",system-ui,Arial,sans-serif}.pf-bar a{color:#fff;text-decoration:none}.pf-bar a:hover{text-decoration:underline}.pf-bar span{opacity:.75;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style>
 </head>
 <body>
+<div class="pf-bar"><a href="./">← Marcin – wszystkie projekty</a><span>projekt demonstracyjny</span></div>
 
 <header class="top">
   <div class="wrap">
-    <div class="logo"><span class="m">M</span> Marcin · strony i narzędzia dla producentów</div>
-    <nav>
+    <div class="logo"><span class="m" aria-hidden="true">M</span><span class="t">Marcin, strony i narzędzia dla producentów</span></div>
+    <nav aria-label="Sekcje">
       <a href="#przyklady">Przykłady</a>
       <a href="#co-robie">Co robię</a>
       <a href="#kontakt">Kontakt</a>
@@ -152,36 +259,48 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px}
   </div>
 </header>
 
+<main>
 <div class="hero">
   <div class="wrap">
-    <h1>Strona, która sprzedaje maszyny także wtedy, gdy handlowiec śpi</h1>
-    <p>Przygotowuję dla producentów maszyn rolniczych katalogi online w kilku językach, czytelne karty techniczne, kalkulatory doboru maszyny do ciągnika i konfiguratory 3D. Poniżej działające przykłady – można w nich klikać.</p>
-    <a class="btn btn-amber" href="#przyklady">Zobacz przykłady</a>
-    <a class="btn btn-ghost" href="#kontakt">Zapytaj o bezpłatny przegląd strony</a>
-    <div class="facts">
-      <span>Katalog PL / EN / DE</span><span>Dane z Państwa folderów</span><span>Bez abonamentu</span><span>Pełne dostępy u Państwa</span>
+    <div>
+      <h1>Strona, która sprzedaje maszyny także wtedy, gdy handlowiec śpi</h1>
+      <p>Przygotowuję dla producentów maszyn rolniczych katalogi online w kilku językach, czytelne karty techniczne, kalkulatory doboru maszyny do ciągnika i konfiguratory 3D. Poniżej działające przykłady – można w nich klikać.</p>
+      <div class="cta">
+        <a class="btn btn-paint" href="#przyklady">Zobacz przykłady</a>
+        <a class="btn" href="#kontakt">Zapytaj o bezpłatny przegląd strony</a>
+      </div>
+    </div>
+    <div class="plate" aria-label="W skrócie"><i class="rv" aria-hidden="true"></i>
+      <div class="plate-h"><b>W skrócie</b><span>dla producentów maszyn</span></div>
+      <ul>
+        <li>Katalog PL / EN / DE</li>
+        <li>Dane z Państwa folderów</li>
+        <li>Bez abonamentu</li>
+        <li>Pełne dostępy u Państwa</li>
+      </ul>
     </div>
   </div>
 </div>
 
 <section id="przyklady">
   <div class="wrap">
-    <h2>Działające przykłady</h2>
+    <h2 class="sec-h">Działające przykłady</h2>
     <p class="lead">To projekty przykładowe na fikcyjnych danych (marka „Agro-Przykład”). W prawdziwym wdrożeniu wstawiam Państwa modele, parametry, zdjęcia i kolory firmy.</p>
 
     <!-- KALKULATOR -->
     <div class="demo" id="kalkulator">
-      <div class="demo-head"><h3>1. Kalkulator „Dobierz maszynę do ciągnika”</h3><span class="tag">Projekt przykładowy</span></div>
+      <div class="demo-head"><h3><span class="no">1</span>Kalkulator „Dobierz maszynę do ciągnika”</h3><div class="head-r"><span class="tag">Projekt przykładowy</span></div></div>
       <div class="demo-body">
         <p class="why"><b>Po co:</b> rolnik i diler w kilka sekund widzą, który model pasuje do ich ciągnika – zamiast dzwonić z pytaniem albo kupić u konkurencji maszynę, którą łatwiej było dobrać.</p>
         <div class="calc">
           <div>
             <div class="field">
               <label for="hp">Moc ciągnika</label>
-              <div class="range-row"><input type="range" id="hp" min="60" max="320" step="5" value="140"><output id="hpOut">140 KM</output></div>
+              <div class="readout"><output id="hpOut" for="hp">140 KM</output><small>60–320 KM</small></div>
+              <input type="range" id="hp" min="60" max="320" step="5" value="140">
             </div>
             <div class="field">
-              <label>Rodzaj pracy</label>
+              <label for="work">Rodzaj pracy</label>
               <select id="work">
                 <option value="talerz">Uprawa pożniwna – brona talerzowa</option>
                 <option value="kult">Uprawa ścierniska – kultywator</option>
@@ -190,16 +309,16 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px}
               </select>
             </div>
             <div class="field">
-              <label>Gleba</label>
-              <div class="seg" id="soil">
-                <button data-v="0.85">Lekka</button><button data-v="1" class="on">Średnia</button><button data-v="1.2">Ciężka</button>
+              <span class="lbl" id="soilL">Gleba</span>
+              <div class="seg" id="soil" role="group" aria-labelledby="soilL">
+                <button type="button" data-v="0.85" aria-pressed="false"><i style="background:#c8a76e"></i>Lekka</button><button type="button" data-v="1" class="on" aria-pressed="true"><i style="background:#8a6a45"></i>Średnia</button><button type="button" data-v="1.2" aria-pressed="false"><i style="background:#4b3828"></i>Ciężka</button>
               </div>
             </div>
             <p class="note">Zapotrzebowanie mocy liczone z tabel producenta i poprawki na glebę. Reguły doboru ustalam zawsze z działem technicznym firmy.</p>
           </div>
           <div>
             <p class="res-title" id="resTitle">Pasujące modele</p>
-            <div class="res" id="res"></div>
+            <div class="res" id="res" aria-live="polite"></div>
           </div>
         </div>
       </div>
@@ -208,39 +327,24 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px}
     <!-- KARTA MASZYNY -->
     <div class="demo" id="karta">
       <div class="demo-head">
-        <h3>2. Karta maszyny w trzech językach</h3>
-        <div style="display:flex;gap:10px;align-items:center"><div class="lang" id="langCard"><button data-l="pl" class="on">PL</button><button data-l="en">EN</button><button data-l="de">DE</button></div><span class="tag">Projekt przykładowy</span></div>
+        <h3><span class="no">2</span>Karta maszyny w trzech językach</h3>
+        <div class="head-r"><div class="lang" id="langCard" role="group" aria-label="Język karty"><button type="button" data-l="pl" class="on" aria-pressed="true">PL</button><button type="button" data-l="en" aria-pressed="false">EN</button><button type="button" data-l="de" aria-pressed="false">DE</button></div><span class="tag">Projekt przykładowy</span></div>
       </div>
       <div class="demo-body">
         <p class="why"><b>Po co:</b> parametry jako tekst, a nie zdjęcie strony folderu – Google je czyta, klient z zagranicy widzi je w swoim języku, a diler pobiera kartę PDF jednym kliknięciem.</p>
         <div class="machine">
           <div>
-            <div class="machine-img">
-              <svg viewBox="0 0 420 220" aria-label="Rysunek brony talerzowej">
-                <rect x="40" y="70" width="330" height="22" rx="5" fill="#2f6b3d"/>
-                <rect x="190" y="30" width="34" height="44" rx="4" fill="#1f4d2b"/>
-                <path d="M207 30 L207 12 L250 12" stroke="#1f4d2b" stroke-width="8" fill="none" stroke-linecap="round"/>
-                <rect x="60" y="92" width="290" height="10" rx="4" fill="#24552f"/>
-                <g fill="#e8a317" stroke="#b97f0c" stroke-width="2">
-                  <ellipse cx="80" cy="128" rx="13" ry="26"/><ellipse cx="116" cy="128" rx="13" ry="26"/><ellipse cx="152" cy="128" rx="13" ry="26"/><ellipse cx="188" cy="128" rx="13" ry="26"/><ellipse cx="224" cy="128" rx="13" ry="26"/><ellipse cx="260" cy="128" rx="13" ry="26"/><ellipse cx="296" cy="128" rx="13" ry="26"/><ellipse cx="332" cy="128" rx="13" ry="26"/>
-                </g>
-                <rect x="55" y="166" width="300" height="10" rx="4" fill="#24552f"/>
-                <g fill="none" stroke="#1f4d2b" stroke-width="5">
-                  <circle cx="110" cy="196" r="17"/><circle cx="205" cy="196" r="17"/><circle cx="300" cy="196" r="17"/>
-                </g>
-                <line x1="90" y1="196" x2="320" y2="196" stroke="#1f4d2b" stroke-width="4"/>
-              </svg>
-            </div>
-            <div class="thumbs"><span></span><span></span><span></span><span></span></div>
+            <div class="draw" id="mDraw"></div>
           </div>
           <div>
-            <h4 id="mName"></h4>
+            <h4 class="model" id="mModel"></h4>
+            <p class="fam-n" id="mName"></p>
             <p class="sub" id="mSub"></p>
-            <div class="variants" id="variants"></div>
+            <div class="variants" id="variants" role="group" aria-label="Model"></div>
             <table class="spec" id="spec"></table>
             <div class="actions">
-              <button class="btn btn-green" id="askBtn"></button>
-              <button class="btn btn-line" id="pdfBtn"></button>
+              <button type="button" class="btn btn-paint" id="askBtn"></button>
+              <button type="button" class="btn" id="pdfBtn"></button>
             </div>
           </div>
         </div>
@@ -250,63 +354,63 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px}
     <!-- KATALOG -->
     <div class="demo" id="katalog">
       <div class="demo-head">
-        <h3>3. Katalog online z filtrami</h3>
-        <div style="display:flex;gap:10px;align-items:center"><div class="lang" id="langCat"><button data-l="pl" class="on">PL</button><button data-l="en">EN</button><button data-l="de">DE</button></div><span class="tag">Projekt przykładowy</span></div>
+        <h3><span class="no">3</span>Katalog online z filtrami</h3>
+        <div class="head-r"><div class="lang" id="langCat" role="group" aria-label="Język katalogu"><button type="button" data-l="pl" class="on" aria-pressed="true">PL</button><button type="button" data-l="en" aria-pressed="false">EN</button><button type="button" data-l="de" aria-pressed="false">DE</button></div><span class="tag">Projekt przykładowy</span></div>
       </div>
       <div class="demo-body">
         <p class="why"><b>Po co:</b> każda maszyna jest o jedno kliknięcie od menu, z aktualnymi danymi – bez starego katalogu PDF i bez kart, w które nie da się kliknąć.</p>
         <div class="filters">
           <div class="field"><label id="fTypeL" for="fType"></label><select id="fType"></select></div>
           <div class="field"><label id="fWidthL" for="fWidth"></label><select id="fWidth"></select></div>
-          <div class="field"><label id="fHpL" for="fHp"></label><input type="number" id="fHp" min="50" max="400" step="10" placeholder="np. 150"></div>
+          <div class="field"><label id="fHpL" for="fHp"></label><input type="number" id="fHp" min="50" max="400" step="10" placeholder="np. 150" inputmode="numeric"></div>
         </div>
-        <p class="count" id="count"></p>
+        <p class="count" id="count" aria-live="polite"></p>
         <div class="cat" id="cat"></div>
       </div>
     </div>
 
-    <h3 style="margin:36px 0 14px;color:var(--green)">Inne moje projekty przykładowe</h3>
+    <h3 class="more-h">Inne moje projekty przykładowe</h3>
     <div class="more">
-      <a class="card" href="konfigurator-3d.html">
-        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg></div>
+      <a href="konfigurator-3d.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg>
         <h3>Konfigurator 3D</h3>
         <p>Klient obraca produkt, zmienia wymiary i wyposażenie, a na końcu wysyła gotowe zapytanie. Dla maszyn: wybór szerokości, wału, opcji i koloru.</p>
-        <span class="go">Otwórz demo →</span>
+        <span class="go">Otwórz demo</span>
       </a>
-      <a class="card" href="generator-ofert.html">
-        <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></div>
+      <a href="generator-ofert.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
         <h3>Generator ofert PDF</h3>
         <p>Handlowiec wybiera maszynę i opcje, a narzędzie liczy cenę i tworzy ofertę PDF z logo firmy – w minutę zamiast pół godziny w Wordzie.</p>
-        <span class="go">Otwórz demo →</span>
+        <span class="go">Otwórz demo</span>
       </a>
     </div>
   </div>
 </section>
 
-<section id="co-robie" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section id="co-robie">
   <div class="wrap">
-    <h2>Co mogę zrobić dla Państwa firmy</h2>
+    <h2 class="sec-h">Co mogę zrobić dla Państwa firmy</h2>
     <p class="lead">Najczęściej zaczynamy od jednej rzeczy, która od razu przynosi zapytania, a resztę dokładamy etapami.</p>
-    <div class="grid3">
-      <div class="card"><div class="ico">🌍</div><h3>Wersje językowe, które widzi Google</h3><p>Osobne adresy dla PL, EN, DE i innych języków, przetłumaczone opisy maszyn i poprawne oznaczenia – żeby diler z zagranicy znalazł Państwa w swojej wyszukiwarce.</p></div>
-      <div class="card"><div class="ico">📋</div><h3>Katalog i karty techniczne</h3><p>Wszystkie maszyny z folderu jako czytelne karty z parametrami w tekście, wariantami i kartą PDF do pobrania. Aktualizacja w panelu, bez drukowania nowego katalogu.</p></div>
-      <div class="card"><div class="ico">🚜</div><h3>Kalkulator doboru</h3><p>Dobór maszyny do mocy ciągnika, rodzaju pracy i gleby, z przyciskiem „Zapytaj o cenę”. Zapytanie trafia do Państwa z gotowymi danymi klienta.</p></div>
-      <div class="card"><div class="ico">🧩</div><h3>Konfigurator 3D</h3><p>Maszyna do obejrzenia z każdej strony, z wyborem szerokości i wyposażenia – na stronę i na targi, na tablet przy stoisku.</p></div>
-      <div class="card"><div class="ico">🔧</div><h3>Porządek na obecnej stronie</h3><p>Naprawa martwych linków i pustych podstron, brakujących opisów dla Google, nieklikalnych kart i niespójnych nazw modeli.</p></div>
-      <div class="card"><div class="ico">📨</div><h3>Formularze dla dilerów</h3><p>Zapytanie ofertowe, zamówienie części albo zgłoszenie serwisowe – z numerem maszyny i zdjęciami, prosto na skrzynkę działu sprzedaży.</p></div>
+    <div class="svc">
+      <div><h3>Wersje językowe, które widzi Google</h3><p>Osobne adresy dla PL, EN, DE i innych języków, przetłumaczone opisy maszyn i poprawne oznaczenia – żeby diler z zagranicy znalazł Państwa w swojej wyszukiwarce.</p></div>
+      <div><h3>Katalog i karty techniczne</h3><p>Wszystkie maszyny z folderu jako czytelne karty z parametrami w tekście, wariantami i kartą PDF do pobrania. Aktualizacja w panelu, bez drukowania nowego katalogu.</p></div>
+      <div><h3>Kalkulator doboru</h3><p>Dobór maszyny do mocy ciągnika, rodzaju pracy i gleby, z przyciskiem „Zapytaj o cenę”. Zapytanie trafia do Państwa z gotowymi danymi klienta.</p></div>
+      <div><h3>Konfigurator 3D</h3><p>Maszyna do obejrzenia z każdej strony, z wyborem szerokości i wyposażenia – na stronę i na targi, na tablet przy stoisku.</p></div>
+      <div><h3>Porządek na obecnej stronie</h3><p>Naprawa martwych linków i pustych podstron, brakujących opisów dla Google, nieklikalnych kart i niespójnych nazw modeli.</p></div>
+      <div><h3>Formularze dla dilerów</h3><p>Zapytanie ofertowe, zamówienie części albo zgłoszenie serwisowe – z numerem maszyny i zdjęciami, prosto na skrzynkę działu sprzedaży.</p></div>
     </div>
   </div>
 </section>
 
-<section>
+<section id="jak">
   <div class="wrap">
-    <h2>Jak pracuję</h2>
+    <h2 class="sec-h">Jak pracuję</h2>
     <p class="lead">Konkretnie, etapami i bez abonamentów.</p>
-    <div class="steps">
-      <div class="card step"><h3>Bezpłatny przegląd strony</h3><p>Sprawdzam Państwa stronę tak, jak zobaczy ją klient i Google, i wysyłam listę konkretnych rzeczy, które warto poprawić.</p></div>
-      <div class="card step"><h3>Propozycja z ceną</h3><p>Jedna stała kwota i termin dla wybranego zakresu. Najpierw makieta lub demo na Państwa danych do akceptacji.</p></div>
-      <div class="card step"><h3>Wdrożenie i przekazanie</h3><p>Wdrażam etapami, testuję na telefonie i komputerze, przekazuję pełne dostępy i krótką instrukcję. Strona jest w 100% Państwa.</p></div>
-    </div>
+    <ol class="steps">
+      <li><h3>Bezpłatny przegląd strony</h3><p>Sprawdzam Państwa stronę tak, jak zobaczy ją klient i Google, i wysyłam listę konkretnych rzeczy, które warto poprawić.</p></li>
+      <li><h3>Propozycja z ceną</h3><p>Jedna stała kwota i termin dla wybranego zakresu. Najpierw makieta lub demo na Państwa danych do akceptacji.</p></li>
+      <li><h3>Wdrożenie i przekazanie</h3><p>Wdrażam etapami, testuję na telefonie i komputerze, przekazuję pełne dostępy i krótką instrukcję. Strona jest w 100% Państwa.</p></li>
+    </ol>
   </div>
 </section>
 
@@ -317,24 +421,24 @@ footer{padding:26px 0 40px;color:var(--muted);font-size:14px}
         <h2>Bezpłatny przegląd Państwa strony</h2>
         <p>Proszę napisać, jaką stronę mam sprawdzić – w ciągu 2 dni roboczych odeślę listę konkretnych poprawek i propozycję z ceną.</p>
       </div>
-      <a class="btn btn-amber" href="mailto:marcin.projekty.www@gmail.com?subject=Przegl%C4%85d%20strony">marcin.projekty.www@gmail.com</a>
+      <a class="btn btn-dark" href="mailto:marcin.projekty.www@gmail.com?subject=Przegl%C4%85d%20strony">marcin.projekty.www@gmail.com</a>
     </div>
   </div>
 </section>
+</main>
 
-<footer><div class="wrap">Marcin · strony, katalogi i narzędzia dla producentów maszyn · <a href="index.html">pozostałe projekty</a><br><span class="note">Wszystkie przykłady na tej stronie to projekty przykładowe na fikcyjnych danych.</span></div></footer>
+<footer><div class="wrap">Marcin, strony, katalogi i narzędzia dla producentów maszyn. <a href="index.html">Pozostałe projekty</a><span class="note">Wszystkie przykłady na tej stronie to projekty przykładowe na fikcyjnych danych.</span></div></footer>
 
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
   <div class="box">
-    <h4 id="mTitle"></h4>
-    <p class="note" id="mInfo" style="margin:0 0 14px"></p>
+    <div class="box-h"><h4 id="mTitle"></h4><p class="note" id="mInfo"></p></div>
     <form id="mForm">
-      <div class="field"><label id="mL1" for="mF1"></label><input id="mF1" required></div>
-      <div class="field"><label id="mL2" for="mF2"></label><input id="mF2" type="email" required></div>
+      <div class="field"><label id="mL1" for="mF1"></label><input id="mF1" required autocomplete="name"></div>
+      <div class="field"><label id="mL2" for="mF2"></label><input id="mF2" type="email" required autocomplete="email"></div>
       <div class="field"><label id="mL3" for="mF3"></label><textarea id="mF3" rows="3"></textarea></div>
-      <div class="actions"><button class="btn btn-green" type="submit" id="mSend"></button><button class="btn btn-line" type="button" id="mClose"></button></div>
+      <div class="actions"><button class="btn btn-paint" type="submit" id="mSend"></button><button class="btn" type="button" id="mClose"></button></div>
     </form>
-    <div class="ok" id="mOk"></div>
+    <div class="ok" id="mOk" role="status"></div>
   </div>
 </div>
 
@@ -352,6 +456,7 @@ const FAM = {
     models:[{n:'G 3',w:2.0,teeth:3,kg:780},{n:'G 5',w:3.0,teeth:5,kg:1150},{n:'G 7',w:4.2,teeth:7,kg:1640}]}
 };
 const fmt = (x,d=0)=>x.toLocaleString('pl-PL',{minimumFractionDigits:d,maximumFractionDigits:d});
+const press=(sel,btn)=>document.querySelectorAll(sel).forEach(x=>{const on=x===btn;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});
 
 /* ---------- 1. kalkulator ---------- */
 let soil = 1;
@@ -375,16 +480,16 @@ function calc(){
     const ha = x.m.w * f.speed * 0.75 / 10;
     const load = Math.min(100, Math.round(x.req/P*100));
     return '<div class="res-item'+(i===0?' best':'')+'">'
-      + '<div class="nm">'+x.m.n+' · '+fmt(x.m.w,1)+' m</div>'
+      + '<div class="nm">'+x.m.n+'<small>'+fmt(x.m.w,1)+' m</small></div>'
       + '<span class="badge">'+(i===0?'Najlepiej pasuje':'Pasuje')+'</span>'
-      + '<div class="meta">Potrzebna moc ok. '+x.req+' KM · wydajność ok. '+fmt(ha,1)+' ha/h · masa '+fmt(x.m.kg)+' kg</div>'
-      + '<div class="bar" title="Wykorzystanie mocy ciągnika: '+load+'%"><i style="width:'+load+'%"></i></div>'
+      + '<div class="meta">Potrzebna moc ok. '+x.req+' KM, wydajność ok. '+fmt(ha,1)+' ha/h, masa '+fmt(x.m.kg)+' kg</div>'
+      + '<div class="bar" role="img" aria-label="Wykorzystanie mocy ciągnika: '+load+'%" title="Wykorzystanie mocy ciągnika: '+load+'%"><i style="width:'+load+'%"></i></div><span class="pct" aria-hidden="true">'+load+'% mocy</span>'
       + '</div>';
   }).join('');
 }
 hp.addEventListener('input',calc); work.addEventListener('change',calc);
 document.querySelectorAll('#soil button').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('#soil button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); soil=+b.dataset.v; calc();
+  press('#soil button',b); soil=+b.dataset.v; calc();
 }));
 calc();
 
@@ -392,68 +497,100 @@ calc();
 const T = {
   pl:{sub:'Brona talerzowa zawieszana do uprawy pożniwnej i przedsiewnej. Talerze na łożyskach bezobsługowych, wał doprowadzający do wyboru.',
       rows:['Szerokość robocza','Liczba talerzy','Średnica talerzy','Masa','Zapotrzebowanie mocy','Prędkość robocza','Wydajność'],
-      ask:'Zapytaj o ofertę',pdf:'Pobierz kartę PDF',hpU:'KM',hU:'ha/h',
+      ask:'Zapytaj o ofertę',pdf:'Pobierz kartę PDF',hpU:'KM',hU:'ha/h',view:'Widok z góry',
       mT:'Zapytanie ofertowe',mI:'Model: ',l1:'Imię i nazwisko / firma',l2:'E-mail',l3:'Wiadomość (np. moc ciągnika, termin)',send:'Wyślij zapytanie',close:'Zamknij',
       ok:'Dziękujemy! W prawdziwym wdrożeniu zapytanie trafiłoby teraz do działu sprzedaży razem z wybranym modelem.'},
   en:{sub:'Mounted disc harrow for stubble and seedbed cultivation. Maintenance-free disc bearings, choice of rear rollers.',
       rows:['Working width','Number of discs','Disc diameter','Weight','Power requirement','Working speed','Output'],
-      ask:'Request a quote',pdf:'Download PDF data sheet',hpU:'HP',hU:'ha/h',
+      ask:'Request a quote',pdf:'Download PDF data sheet',hpU:'HP',hU:'ha/h',view:'Top view',
       mT:'Request a quote',mI:'Model: ',l1:'Name / company',l2:'E-mail',l3:'Message (e.g. tractor power, date)',send:'Send request',close:'Close',
       ok:'Thank you! In a real website the request would now go to the sales team together with the selected model.'},
   de:{sub:'Angebaute Scheibenegge für Stoppel- und Saatbettbearbeitung. Wartungsfreie Scheibenlager, Nachläufer nach Wahl.',
       rows:['Arbeitsbreite','Anzahl der Scheiben','Scheibendurchmesser','Gewicht','Leistungsbedarf','Arbeitsgeschwindigkeit','Flächenleistung'],
-      ask:'Angebot anfragen',pdf:'Datenblatt als PDF',hpU:'PS',hU:'ha/h',
+      ask:'Angebot anfragen',pdf:'Datenblatt als PDF',hpU:'PS',hU:'ha/h',view:'Draufsicht',
       mT:'Angebot anfragen',mI:'Modell: ',l1:'Name / Firma',l2:'E-Mail',l3:'Nachricht (z. B. Traktorleistung, Termin)',send:'Anfrage senden',close:'Schließen',
       ok:'Vielen Dank! Auf einer echten Website ginge die Anfrage jetzt mit dem gewählten Modell an den Vertrieb.'}
 };
 let cLang='pl', cIdx=1;
+// rysunek brony z góry: szerokość ramy i liczba talerzy zależą od modelu
+function drawing(m,t,num){
+  const ink='#22262b',paint='#e2560f',steel='#aeb4ba',W=560,cx=W/2,px=82*m.w,x0=cx-px/2,x1=cx+px/2,n=m.disc/2,sp=px/n;
+  let s=`<svg viewBox="0 0 ${W} 330" role="img" aria-label="${t.view}: ${m.n}, ${t.rows[0].toLowerCase()} ${num(m.w,1)} m">`;
+  s+=`<defs><pattern id="roll" width="8" height="26" patternUnits="userSpaceOnUse"><rect width="8" height="26" fill="#fff"/><rect width="2" height="26" fill="${ink}"/></pattern><marker id="ar" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 1 L10 5 L0 9 z" fill="${ink}"/></marker></defs>`;
+  // zaczep trzypunktowy
+  s+=`<path d="M${cx-34} 74 L${cx-14} 26 L${cx+14} 26 L${cx+34} 74" fill="none" stroke="${ink}" stroke-width="3"/><rect x="${cx-20}" y="16" width="40" height="14" fill="${paint}" stroke="${ink}" stroke-width="2"/>`;
+  // rama
+  s+=`<rect x="${x0-6}" y="72" width="${px+12}" height="16" fill="${paint}" stroke="${ink}" stroke-width="2"/>`;
+  // dwie sekcje talerzy
+  [[112,16],[156,-16]].forEach(([y,a],r)=>{
+    s+=`<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="${ink}" stroke-width="3"/>`;
+    for(let i=0;i<n;i++){const x=x0+sp*(i+.5)+(r?sp/4:-sp/4);
+      s+=`<ellipse cx="${x.toFixed(1)}" cy="${y}" rx="3.2" ry="14" transform="rotate(${a} ${x.toFixed(1)} ${y})" fill="${steel}" stroke="${ink}" stroke-width="1.3"/>`;}
+    s+=`<line x1="${x0+4}" y1="88" x2="${x0+4}" y2="${y}" stroke="${ink}" stroke-width="2"/><line x1="${x1-4}" y1="88" x2="${x1-4}" y2="${y}" stroke="${ink}" stroke-width="2"/>`;
+  });
+  // wał doprowadzający
+  s+=`<line x1="${x0+4}" y1="156" x2="${x0+4}" y2="200" stroke="${ink}" stroke-width="2"/><line x1="${x1-4}" y1="156" x2="${x1-4}" y2="200" stroke="${ink}" stroke-width="2"/><rect x="${x0}" y="198" width="${px}" height="26" fill="url(#roll)" stroke="${ink}" stroke-width="2"/>`;
+  // linia wymiarowa
+  s+=`<line x1="${x0}" y1="228" x2="${x0}" y2="292" stroke="${ink}" stroke-width="1" stroke-dasharray="4 3"/><line x1="${x1}" y1="228" x2="${x1}" y2="292" stroke="${ink}" stroke-width="1" stroke-dasharray="4 3"/>`;
+  s+=`<line x1="${x0+1}" y1="282" x2="${x1-1}" y2="282" stroke="${ink}" stroke-width="1.5" marker-start="url(#ar)" marker-end="url(#ar)"/>`;
+  s+=`<rect x="${cx-46}" y="256" width="92" height="22" fill="#fff"/><text class="dim" x="${cx}" y="276" text-anchor="middle" font-size="28" fill="${ink}">${num(m.w,1)} m</text><text x="${cx}" y="312" text-anchor="middle" font-size="14" fill="#555b62">${t.rows[0]}</text>`;
+  // kierunek jazdy
+  s+=`<g fill="none" stroke="${ink}" stroke-width="1.5"><line x1="${W-24}" y1="70" x2="${W-24}" y2="22" marker-end="url(#ar)"/></g>`;
+  return s+'</svg><div class="draw-cap"><span>'+t.view+'</span><span>'+m.n+'</span></div>';
+}
 function card(){
   const f=FAM.talerz, m=f.models[cIdx], t=T[cLang];
+  document.getElementById('mModel').textContent = m.n;
   document.getElementById('mName').textContent = (cLang==='pl'?'Brona talerzowa ':cLang==='en'?'Disc harrow ':'Scheibenegge ') + m.n;
   document.getElementById('mSub').textContent = t.sub;
-  document.getElementById('variants').innerHTML = f.models.map((x,i)=>'<button data-i="'+i+'" class="'+(i===cIdx?'on':'')+'">'+x.n+'</button>').join('');
-  document.querySelectorAll('#variants button').forEach(b=>b.addEventListener('click',()=>{cIdx=+b.dataset.i;card();}));
+  document.getElementById('variants').innerHTML = f.models.map((x,i)=>'<button type="button" data-i="'+i+'" aria-pressed="'+(i===cIdx)+'" class="'+(i===cIdx?'on':'')+'">'+x.n+'</button>').join('');
+  document.querySelectorAll('#variants button').forEach(b=>b.addEventListener('click',()=>{cIdx=+b.dataset.i;card();document.querySelector('#variants button[data-i="'+cIdx+'"]').focus();}));
   const num=(x,d=0)=>x.toLocaleString(cLang==='en'?'en-GB':cLang==='de'?'de-DE':'pl-PL',{minimumFractionDigits:d,maximumFractionDigits:d});
   const req=Math.round(f.kw*m.w);
   const vals=[num(m.w,1)+' m', m.disc, '560 mm', num(m.kg)+' kg', req+'–'+Math.round(req*1.25)+' '+t.hpU, '10–15 km/h', num(m.w*1.0,1)+'–'+num(m.w*1.4,1)+' '+t.hU];
-  document.getElementById('spec').innerHTML = t.rows.map((r,i)=>'<tr><th>'+r+'</th><td>'+vals[i]+'</td></tr>').join('');
+  document.getElementById('spec').innerHTML = t.rows.map((r,i)=>'<tr><th scope="row">'+r+'</th><td>'+vals[i]+'</td></tr>').join('');
+  document.getElementById('mDraw').innerHTML = drawing(m,t,num);
   document.getElementById('askBtn').textContent=t.ask; document.getElementById('pdfBtn').textContent=t.pdf;
+  document.getElementById('karta').setAttribute('lang',cLang);
 }
 document.querySelectorAll('#langCard button').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('#langCard button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); cLang=b.dataset.l; card();
+  press('#langCard button',b); cLang=b.dataset.l; card();
 }));
 document.getElementById('pdfBtn').addEventListener('click',()=>window.print());
 card();
 
 /* modal */
-const modal=document.getElementById('modal');
+const modal=document.getElementById('modal');let lastFocus=null;
 function openModal(model,lang){
   const t=T[lang||'pl'];
   document.getElementById('mTitle').textContent=t.mT; document.getElementById('mInfo').textContent=t.mI+model;
   document.getElementById('mL1').textContent=t.l1; document.getElementById('mL2').textContent=t.l2; document.getElementById('mL3').textContent=t.l3;
   document.getElementById('mSend').textContent=t.send; document.getElementById('mClose').textContent=t.close;
   document.getElementById('mOk').textContent=t.ok; document.getElementById('mOk').style.display='none'; document.getElementById('mForm').style.display='block';
-  modal.classList.add('on');
+  modal.setAttribute('lang',lang||'pl');
+  lastFocus=document.activeElement; modal.classList.add('on'); document.getElementById('mF1').focus();
 }
+function closeModal(){if(!modal.classList.contains('on'))return;modal.classList.remove('on');if(lastFocus)lastFocus.focus()}
 document.getElementById('askBtn').addEventListener('click',()=>openModal(FAM.talerz.models[cIdx].n,cLang));
-document.getElementById('mClose').addEventListener('click',()=>modal.classList.remove('on'));
-modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('on')});
-document.getElementById('mForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('mForm').style.display='none';document.getElementById('mOk').style.display='block';setTimeout(()=>modal.classList.remove('on'),3500)});
+document.getElementById('mClose').addEventListener('click',closeModal);
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+document.getElementById('mForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('mForm').style.display='none';document.getElementById('mOk').style.display='block';setTimeout(closeModal,3500)});
 
 /* ---------- 3. katalog ---------- */
 const CT = {
   pl:{type:'Rodzaj maszyny',width:'Szerokość robocza',hp:'Moc ciągnika (KM)',all:'Wszystkie',w1:'do 3 m',w2:'3–4 m',w3:'ponad 4 m',
-      found:n=>'Znaleziono maszyn: '+n,wid:'Szerokość',pow:'Moc',mass:'Masa',more:'Karta maszyny →',none:'Brak maszyn dla wybranych filtrów.'},
+      found:n=>'Znaleziono maszyn: '+n,wid:'Szerokość',pow:'Moc',mass:'Masa',more:'Karta maszyny',none:'Brak maszyn dla wybranych filtrów.'},
   en:{type:'Machine type',width:'Working width',hp:'Tractor power (HP)',all:'All',w1:'up to 3 m',w2:'3–4 m',w3:'over 4 m',
-      found:n=>'Machines found: '+n,wid:'Width',pow:'Power',mass:'Weight',more:'Data sheet →',none:'No machines match the selected filters.'},
+      found:n=>'Machines found: '+n,wid:'Width',pow:'Power',mass:'Weight',more:'Data sheet',none:'No machines match the selected filters.'},
   de:{type:'Maschinentyp',width:'Arbeitsbreite',hp:'Traktorleistung (PS)',all:'Alle',w1:'bis 3 m',w2:'3–4 m',w3:'über 4 m',
-      found:n=>'Gefundene Maschinen: '+n,wid:'Breite',pow:'Leistung',mass:'Gewicht',more:'Datenblatt →',none:'Keine Maschinen für die gewählten Filter.'}
+      found:n=>'Gefundene Maschinen: '+n,wid:'Breite',pow:'Leistung',mass:'Gewicht',more:'Datenblatt',none:'Keine Maschinen für die gewählten Filter.'}
 };
 const ICON = {
-  talerz:'<svg viewBox="0 0 120 60"><rect x="10" y="12" width="100" height="8" rx="3" fill="#2f6b3d"/><g fill="#e8a317" stroke="#b97f0c"><ellipse cx="25" cy="34" rx="5" ry="11"/><ellipse cx="42" cy="34" rx="5" ry="11"/><ellipse cx="59" cy="34" rx="5" ry="11"/><ellipse cx="76" cy="34" rx="5" ry="11"/><ellipse cx="93" cy="34" rx="5" ry="11"/></g><circle cx="35" cy="52" r="6" fill="none" stroke="#1f4d2b" stroke-width="3"/><circle cx="85" cy="52" r="6" fill="none" stroke="#1f4d2b" stroke-width="3"/></svg>',
-  kult:'<svg viewBox="0 0 120 60"><rect x="10" y="12" width="100" height="8" rx="3" fill="#2f6b3d"/><g stroke="#1f4d2b" stroke-width="4" stroke-linecap="round" fill="none"><path d="M22 20 q4 18 -2 28"/><path d="M42 20 q4 18 -2 28"/><path d="M62 20 q4 18 -2 28"/><path d="M82 20 q4 18 -2 28"/><path d="M102 20 q4 18 -2 28"/></g></svg>',
-  aus:'<svg viewBox="0 0 120 60"><rect x="10" y="10" width="100" height="8" rx="3" fill="#2f6b3d"/><rect x="18" y="22" width="84" height="10" rx="3" fill="#e8a317"/><g stroke="#1f4d2b" stroke-width="3"><line x1="20" y1="32" x2="20" y2="44"/><line x1="40" y1="32" x2="40" y2="44"/><line x1="60" y1="32" x2="60" y2="44"/><line x1="80" y1="32" x2="80" y2="44"/><line x1="100" y1="32" x2="100" y2="44"/></g><rect x="14" y="46" width="92" height="9" rx="4" fill="none" stroke="#1f4d2b" stroke-width="3"/></svg>',
-  glebosz:'<svg viewBox="0 0 120 60"><rect x="20" y="10" width="80" height="9" rx="3" fill="#2f6b3d"/><g stroke="#e8a317" stroke-width="5" stroke-linecap="round" fill="none"><path d="M35 19 v24 l8 8"/><path d="M60 19 v24 l8 8"/><path d="M85 19 v24 l8 8"/></g></svg>'
+  talerz:'<svg viewBox="0 0 120 60" aria-hidden="true"><rect x="10" y="12" width="100" height="8" fill="#e2560f" stroke="#22262b" stroke-width="1.5"/><g fill="#aeb4ba" stroke="#22262b" stroke-width="1.3"><ellipse cx="25" cy="34" rx="5" ry="11"/><ellipse cx="42" cy="34" rx="5" ry="11"/><ellipse cx="59" cy="34" rx="5" ry="11"/><ellipse cx="76" cy="34" rx="5" ry="11"/><ellipse cx="93" cy="34" rx="5" ry="11"/></g><circle cx="35" cy="52" r="6" fill="#fff" stroke="#22262b" stroke-width="2.5"/><circle cx="85" cy="52" r="6" fill="#fff" stroke="#22262b" stroke-width="2.5"/></svg>',
+  kult:'<svg viewBox="0 0 120 60" aria-hidden="true"><rect x="10" y="12" width="100" height="8" fill="#e2560f" stroke="#22262b" stroke-width="1.5"/><g stroke="#22262b" stroke-width="4" stroke-linecap="round" fill="none"><path d="M22 20 q4 18 -2 28"/><path d="M42 20 q4 18 -2 28"/><path d="M62 20 q4 18 -2 28"/><path d="M82 20 q4 18 -2 28"/><path d="M102 20 q4 18 -2 28"/></g></svg>',
+  aus:'<svg viewBox="0 0 120 60" aria-hidden="true"><rect x="10" y="10" width="100" height="8" fill="#e2560f" stroke="#22262b" stroke-width="1.5"/><rect x="18" y="22" width="84" height="10" fill="#aeb4ba" stroke="#22262b" stroke-width="1.5"/><g stroke="#22262b" stroke-width="3"><line x1="20" y1="32" x2="20" y2="44"/><line x1="40" y1="32" x2="40" y2="44"/><line x1="60" y1="32" x2="60" y2="44"/><line x1="80" y1="32" x2="80" y2="44"/><line x1="100" y1="32" x2="100" y2="44"/></g><rect x="14" y="46" width="92" height="9" rx="4" fill="#fff" stroke="#22262b" stroke-width="2.5"/></svg>',
+  glebosz:'<svg viewBox="0 0 120 60" aria-hidden="true"><rect x="20" y="10" width="80" height="9" fill="#e2560f" stroke="#22262b" stroke-width="1.5"/><g stroke="#22262b" stroke-width="5" stroke-linecap="round" fill="none"><path d="M35 19 v24 l8 8"/><path d="M60 19 v24 l8 8"/><path d="M85 19 v24 l8 8"/></g></svg>'
 };
 const ALL = Object.entries(FAM).flatMap(([k,f])=>f.models.map(m=>({k,f,m,req:Math.round(f.unit==='z'?f.kw*m.teeth:f.kw*m.w)})));
 let kLang='pl';
@@ -465,6 +602,7 @@ function fillFilters(){
   ft.value=vt; fw.value=vw;
   document.getElementById('fTypeL').textContent=t.type; document.getElementById('fWidthL').textContent=t.width; document.getElementById('fHpL').textContent=t.hp;
   document.getElementById('fHp').placeholder = kLang==='pl'?'np. 150':kLang==='en'?'e.g. 150':'z. B. 150';
+  document.getElementById('katalog').setAttribute('lang',kLang);
 }
 function catalog(){
   const t=CT[kLang], vt=document.getElementById('fType').value, vw=document.getElementById('fWidth').value, P=+document.getElementById('fHp').value||0;
@@ -477,14 +615,14 @@ function catalog(){
   document.getElementById('cat').innerHTML = list.length ? list.map(x=>
     '<div class="cat-card"><div class="pic">'+ICON[x.k]+'</div><div class="in">'
     +'<div class="fam">'+x.f[kLang].replace(/ [A-Z]+$/,'')+'</div><div class="nm">'+x.m.n+'</div>'
-    +'<ul><li>'+t.wid+': '+num(x.m.w,1)+' m</li><li>'+t.pow+': '+x.req+'–'+Math.round(x.req*1.25)+' '+hpU+'</li><li>'+t.mass+': '+num(x.m.kg)+' kg</li></ul>'
-    +'<a href="#karta" data-k="'+x.k+'">'+t.more+'</a></div></div>').join('')
+    +'<ul><li><span>'+t.wid+'</span><b>'+num(x.m.w,1)+' m</b></li><li><span>'+t.pow+'</span><b>'+x.req+'–'+Math.round(x.req*1.25)+' '+hpU+'</b></li><li><span>'+t.mass+'</span><b>'+num(x.m.kg)+' kg</b></li></ul>'
+    +'<a href="#karta" data-k="'+x.k+'" aria-label="'+t.more+' '+x.m.n+'">'+t.more+'</a></div></div>').join('')
     : '<div class="empty">'+t.none+'</div>';
 }
 ['fType','fWidth'].forEach(id=>document.getElementById(id).addEventListener('change',catalog));
 document.getElementById('fHp').addEventListener('input',catalog);
 document.querySelectorAll('#langCat button').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('#langCat button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); kLang=b.dataset.l; fillFilters(); catalog();
+  press('#langCat button',b); kLang=b.dataset.l; fillFilters(); catalog();
 }));
 fillFilters(); catalog();
 </script>

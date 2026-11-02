@@ -4,96 +4,271 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Twoja Nuta – piosenki na zamówienie (demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-  :root { --bg:#fbf7f2; --ink:#231c2b; --muted:#6c6276; --line:#eadfd3; --accent:#c2416b; --accent2:#3b2a5c; --card:#ffffff; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 "Segoe UI", system-ui, Arial, sans-serif; }
-  .wrap { max-width:1040px; margin:0 auto; padding:0 20px; }
-  .demo { background:#fff3d6; color:#8a5a00; text-align:center; font-size:13px; font-weight:600; padding:6px; }
-  header { padding:18px 0; } header .wrap { display:flex; justify-content:space-between; align-items:center; }
-  .logo { font-weight:800; font-size:20px; color:var(--accent2); } .logo span { color:var(--accent); }
-  nav a { margin-left:18px; color:var(--ink); text-decoration:none; font-weight:600; font-size:15px; }
-  .hero { padding:40px 0 56px; display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:center; }
-  .hero h1 { font-size:clamp(32px,5vw,50px); line-height:1.1; margin:0 0 16px; color:var(--accent2); }
-  .hero p { font-size:18px; color:var(--muted); margin:0 0 24px; }
-  .btn { display:inline-block; background:var(--accent); color:#fff; border:0; border-radius:999px; padding:14px 26px; font:inherit; font-weight:700; cursor:pointer; text-decoration:none; }
-  .btn.ghost { background:transparent; color:var(--accent2); border:2px solid var(--accent2); margin-left:8px; }
-  .vinyl { aspect-ratio:1; border-radius:50%; background: radial-gradient(circle, var(--accent) 0 14%, #1d1626 14.5% 16%, #2a2136 16% 100%); position:relative; box-shadow:0 20px 50px rgba(59,42,92,.3); max-width:360px; margin:0 auto; }
-  .vinyl::after { content:""; position:absolute; inset:6%; border-radius:50%; background: repeating-radial-gradient(circle, transparent 0 6px, rgba(255,255,255,.05) 6px 7px); }
-  .vinyl.spin { animation: spin 3s linear infinite; } @keyframes spin { to { transform:rotate(360deg); } }
-  section { padding:48px 0; } h2 { font-size:30px; margin:0 0 20px; color:var(--accent2); }
-  .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-  .step { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px; }
-  .step b { display:block; font-size:18px; margin-bottom:6px; }
-  .step .n { color:var(--accent); font-weight:800; font-size:14px; }
-  .samples { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-  .sample { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; display:flex; align-items:center; gap:14px; }
-  .play { width:48px; height:48px; border-radius:50%; border:0; background:var(--accent2); color:#fff; font-size:18px; cursor:pointer; flex:none; }
-  .sample small { color:var(--muted); display:block; }
-  form { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:24px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  label { display:grid; gap:6px; font-size:14px; font-weight:600; }
-  input, select, textarea { font:inherit; padding:11px 12px; border:1px solid var(--line); border-radius:10px; background:#fffdfb; }
-  textarea { min-height:120px; resize:vertical; }
-  .full { grid-column:1/-1; }
-  .chips { display:flex; gap:8px; flex-wrap:wrap; }
-  .chip { border:1px solid var(--line); background:#fff; border-radius:999px; padding:8px 14px; cursor:pointer; font:inherit; font-size:14px; }
-  .chip[aria-pressed="true"] { background:var(--accent2); color:#fff; border-color:var(--accent2); }
-  .summary { grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:16px; }
-  .price { font-size:28px; font-weight:800; color:var(--accent); }
-  .err { color:#b0352b; font-size:14px; }
-  .modal { position:fixed; inset:0; background:rgba(20,14,30,.55); display:grid; place-items:center; padding:20px; }
-  .modal[hidden] { display:none; }
-  .modal .box { background:#fff; border-radius:20px; padding:28px; max-width:460px; }
-  footer { padding:30px 0; color:var(--muted); font-size:14px; text-align:center; }
-  @media (max-width:800px){ .hero, .steps, .samples, form { grid-template-columns:1fr; } nav { display:none; } }
+/* Koncepcja: strona to pięciolinia. Melodie próbek są zapisane jako prawdziwe nuty i zapalają się w rytm odtwarzania.
+   Zamówienie wypełnia się jak bilecik do prezentu. Reszta jest cicha: śliwkowy wieczór, różowy papier, złoto tylko dla dźwięku. */
+:root {
+  --plum: #2e1230;
+  --plum-2: #44193f;
+  --paper: #f7dcd6;
+  --rose: #ff4f7b;
+  --gold: #f4c35a;
+  --mist: #c9a6c2;
+  --line: rgba(247, 220, 214, .26);
+  --serif: "Bodoni Moda", Didot, "Bodoni MT", Georgia, serif;
+  --sans: "Figtree", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--plum); color: var(--paper); font: 17px/1.6 var(--sans); overflow-x: hidden; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+.demo { margin: 0; padding: 7px 16px; text-align: center; font-size: 13px; color: var(--mist); border-bottom: 1px solid var(--line); }
+
+/* Nagłówek */
+.top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 28px; padding-top: 22px; padding-bottom: 10px; }
+.logo { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 28px; color: var(--paper); text-decoration: none; letter-spacing: -.01em; }
+.top nav { display: flex; flex-wrap: wrap; gap: 4px 24px; }
+.top nav a { color: var(--paper); text-decoration: none; font-size: 15px; font-weight: 500; padding: 4px 0; border-bottom: 1px solid transparent; }
+.top nav a:hover { border-bottom-color: var(--rose); }
+
+/* Hero: tytuł nad pięciolinią */
+.hero { padding: 48px 0 64px; }
+.hero h1 { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: clamp(44px, 8vw, 112px); line-height: 1; letter-spacing: -.025em; margin: 0; max-width: 11.5ch; text-wrap: balance; }
+.hero h1 .kw { margin-right: -.13em; }
+.stave { position: relative; margin: 34px 0 6px; }
+.stave svg { display: block; }
+.stave .play { position: absolute; top: 50%; transform: translateY(-50%); }
+.now { margin: 0; font-size: 14px; color: var(--mist); }
+.now b { color: var(--paper); font-weight: 600; }
+.hero-foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 48px; align-items: end; margin-top: 30px; }
+.hero-foot p.lead { font-size: 19px; line-height: 1.6; margin: 0; max-width: 46ch; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* Nuty */
+.sl { stroke: var(--line); stroke-width: 1; }
+.bar-thin { stroke: var(--line); stroke-width: 1; }
+.bar-thick { fill: rgba(247, 220, 214, .5); }
+.nt ellipse { fill: var(--paper); }
+.nt .st, .nt .ll, .nt .sh { stroke: var(--paper); stroke-width: 1.4; fill: none; }
+.nt { transition: opacity .2s; }
+.is-playing [data-staff].live .nt { opacity: .45; }
+.nt.on { opacity: 1 !important; }
+.nt.on ellipse { fill: var(--gold); }
+.nt.on .st, .nt.on .ll, .nt.on .sh { stroke: var(--gold); }
+.nt.on ellipse { transform-box: fill-box; transform-origin: center; animation: hit .25s ease-out; }
+@keyframes hit { from { filter: drop-shadow(0 0 0 var(--gold)); } 40% { filter: drop-shadow(0 0 7px var(--gold)); } to { filter: none; } }
+
+/* Przyciski */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 12px 26px; border: 0; border-radius: 3px; background: var(--rose); color: var(--plum); font: 700 16px/1.2 var(--sans); text-decoration: none; cursor: pointer; }
+.btn:hover { background: #ff7396; }
+.btn.ghost { background: transparent; color: var(--paper); box-shadow: inset 0 0 0 1.5px var(--paper); }
+.btn.ghost:hover { background: rgba(247, 220, 214, .1); }
+.play { width: 50px; height: 50px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: var(--paper); color: var(--plum); cursor: pointer; }
+.play::before { content: ""; width: 15px; height: 17px; margin-left: 4px; background: currentColor; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.play[aria-pressed="true"] { background: var(--gold); }
+.play[aria-pressed="true"]::before { width: 14px; height: 14px; margin-left: 0; clip-path: none; }
+.play-lg { width: 68px; height: 68px; }
+.play-lg::before { width: 20px; height: 23px; margin-left: 5px; }
+.play-lg[aria-pressed="true"]::before { width: 18px; height: 18px; }
+
+/* Sekcje */
+.block { padding: 72px 0; border-top: 1px solid var(--line); }
+h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(34px, 4.6vw, 54px); line-height: 1.05; letter-spacing: -.015em; margin: 0 0 36px; }
+.muted { color: var(--mist); font-size: 14px; }
+
+/* Jak to działa: trzy takty */
+.bars { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); position: relative; }
+.bars li { position: relative; padding: 34px 28px 8px; border-left: 1px solid var(--line); }
+.bars li:last-child::after { content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 8px; border-left: 1px solid var(--line); border-right: 4px solid rgba(247, 220, 214, .5); }
+.bars .n { position: absolute; top: 0; left: 10px; font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--gold); line-height: 1; }
+.bars b { display: block; font-family: var(--serif); font-size: 25px; font-weight: 500; line-height: 1.2; margin-bottom: 10px; }
+.bars p { margin: 0; color: var(--mist); max-width: 32ch; }
+
+/* Próbki */
+.samples { list-style: none; margin: 0 0 18px; padding: 0; border-top: 1px solid var(--line); }
+.sample { display: grid; grid-template-columns: 50px minmax(180px, 260px) minmax(0, 1fr); align-items: center; gap: 12px 28px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.sample .meta b { display: block; font-family: var(--serif); font-size: 26px; font-weight: 500; line-height: 1.15; }
+.sample .meta span { color: var(--mist); font-size: 15px; }
+.mini { min-width: 0; }
+.mini svg { display: block; width: 100%; }
+
+/* Zamówienie */
+.order { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 56px; align-items: start; }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 28px; }
+.full { grid-column: 1 / -1; }
+.field { display: grid; gap: 6px; font-size: 14px; font-weight: 600; color: var(--mist); }
+.field input, .field select, .field textarea { width: 100%; font: 400 17px/1.5 var(--sans); color: var(--paper); background: transparent; border: 0; border-bottom: 1.5px solid var(--mist); border-radius: 0; padding: 8px 0; }
+.field select { cursor: pointer; }
+.field select option { background: var(--plum); color: var(--paper); }
+.field textarea { min-height: 130px; resize: vertical; border: 1.5px solid var(--mist); padding: 12px 14px; border-radius: 2px; }
+.field input::placeholder, .field textarea::placeholder { color: rgba(201, 166, 194, .7); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); outline: none; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.field [aria-invalid="true"] { border-color: var(--rose); }
+fieldset.field { border: 0; margin: 0; padding: 0; min-width: 0; }
+fieldset.field legend { padding: 0; margin-bottom: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { display: grid; gap: 1px; text-align: left; min-width: 118px; padding: 10px 16px; border: 1.5px solid var(--line); border-radius: 2px; background: transparent; color: var(--paper); font: 600 16px/1.3 var(--sans); cursor: pointer; }
+.chip small { font-weight: 400; font-size: 14px; color: var(--mist); }
+.chip:hover { border-color: var(--mist); }
+.chip[aria-pressed="true"] { background: var(--paper); border-color: var(--paper); color: var(--plum); }
+.chip[aria-pressed="true"] small { color: var(--plum-2); }
+
+/* Bilecik */
+.tag-wrap { position: sticky; top: 20px; padding-top: 46px; }
+.tag-wrap .string { position: absolute; top: 0; left: 50%; width: 120px; height: 66px; transform: translateX(-50%); overflow: visible; }
+.tag-wrap .string path { fill: none; stroke: var(--rose); stroke-width: 2.5; stroke-linecap: round; }
+.tag { position: relative; background: var(--paper); color: var(--plum); padding: 58px 30px 30px; clip-path: polygon(22% 0, 78% 0, 100% 11%, 100% 100%, 0 100%, 0 11%); }
+.tag::before { content: ""; position: absolute; top: 22px; left: 50%; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: var(--plum); box-shadow: 0 0 0 4px #e9c6bf; }
+.tag .k { margin: 0; font-size: 14px; color: #7a4a6c; }
+.tag .who { margin: 0 0 18px; font-family: var(--serif); font-style: italic; font-size: 40px; font-weight: 500; line-height: 1.1; overflow-wrap: anywhere; }
+.tag .who.empty { color: #b0879f; }
+.tag dl { margin: 0 0 22px; display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 15px; border-top: 1px solid #e3bdb6; padding-top: 16px; }
+.tag dt { color: #7a4a6c; }
+.tag dd { margin: 0; font-weight: 600; text-align: right; }
+.total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid #e3bdb6; padding-top: 14px; margin-bottom: 18px; }
+.total span { font-size: 14px; color: #7a4a6c; }
+.price { font-family: var(--serif); font-variation-settings: "opsz" 14; font-size: 40px; font-weight: 600; line-height: 1; }
+.tag .btn { width: 100%; background: var(--plum); color: var(--paper); }
+.tag .btn:hover { background: var(--plum-2); }
+.tag :focus-visible { outline-color: var(--plum); }
+.err { display: block; min-height: 0; margin: 0 0 12px; color: #b3133f; font-size: 14px; font-weight: 600; }
+.err:empty { margin: 0; }
+
+/* Modal */
+.modal { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 20px; background: rgba(24, 6, 26, .72); }
+.modal[hidden] { display: none; }
+.modal .box { width: 100%; max-width: 480px; background: var(--paper); color: var(--plum); padding: 34px 30px 30px; border-top: 6px solid var(--rose); }
+.modal h2 { font-style: italic; font-size: 34px; margin: 0 0 14px; }
+.modal p { margin: 0 0 14px; }
+.modal .small { font-size: 14px; color: #7a4a6c; margin-bottom: 22px; }
+.modal .btn { background: var(--plum); color: var(--paper); }
+.modal :focus-visible { outline-color: var(--plum); }
+
+footer { border-top: 1px solid var(--line); padding: 30px 0 40px; color: var(--mist); font-size: 14px; }
+footer .wrap { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px 24px; }
+footer .logo { font-size: 22px; }
+
+@media (max-width: 900px) {
+  .order { grid-template-columns: 1fr; gap: 40px; }
+  .tag-wrap { position: relative; top: 0; max-width: 420px; }
+  .hero-foot { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .wrap { padding: 0 16px; }
+  .hero { padding: 30px 0 48px; }
+  .bars { grid-template-columns: 1fr; }
+  .bars li { border-left: 0; border-top: 1px solid var(--line); padding: 30px 0 22px 0; }
+  .bars .n { left: 0; top: 8px; }
+  .bars li:last-child::after { display: none; }
+  .bars li:last-child { border-bottom: 5px double rgba(247, 220, 214, .5); }
+  .sample { grid-template-columns: 50px minmax(0, 1fr); gap: 8px 16px; }
+  .mini { grid-column: 1 / -1; }
+  .fields { grid-template-columns: 1fr; }
+  .block { padding: 56px 0; }
+  .tag { padding: 56px 22px 24px; }
+  .tag .who { font-size: 32px; }
+  .chip { min-width: 0; flex: 1 1 130px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
 </style>
 <style id="pf-bar">.pf-bar{position:relative;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:10px;height:30px;padding:0 12px;background:#1f3a5f;color:#fff;font:600 13px/30px "Segoe UI",system-ui,Arial,sans-serif}.pf-bar a{color:#fff;text-decoration:none}.pf-bar a:hover{text-decoration:underline}.pf-bar span{opacity:.75;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}</style>
 </head>
 <body>
 <div class="pf-bar"><a href="./">← Marcin – wszystkie projekty</a><span>projekt demonstracyjny</span></div>
-<div class="demo">Projekt przykładowy · marka „Twoja Nuta” jest fikcyjna</div>
-<header><div class="wrap"><div class="logo">Twoja<span>Nuta</span></div><nav><a href="#jak">Jak to działa</a><a href="#probki">Próbki</a><a href="#zamow">Zamów</a></nav></div></header>
+<p class="demo">Projekt przykładowy. Marka „Twoja Nuta” jest fikcyjna.</p>
 
-<main class="wrap">
-  <section class="hero">
-    <div>
-      <h1>Piosenka o Was. Napisana na zamówienie.</h1>
-      <p>Opowiedz nam swoją historię, a my zamienimy ją w piosenkę na urodziny, ślub, rocznicę albo po prostu bez okazji. Gotowe nagranie w 5 dni.</p>
-      <a class="btn" href="#zamow">Zamów piosenkę</a><a class="btn ghost" href="#probki">Posłuchaj próbek</a>
+<header class="wrap top">
+  <a class="logo" href="#">Twoja Nuta</a>
+  <nav aria-label="Sekcje strony"><a href="#jak">Jak to działa</a><a href="#probki">Próbki</a><a href="#zamow">Zamów</a></nav>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hTitle">
+    <div class="wrap"><h1 id="hTitle">Piosenka o <span class="kw">W</span>as. Napisana na zamówienie.</h1></div>
+    <div class="stave live" id="heroStave">
+      <button class="play play-lg" id="heroPlay" type="button" data-s="pop" aria-pressed="false" aria-label="Odtwórz próbkę Pop"></button>
+      <div id="heroSvg"></div>
     </div>
-    <div class="vinyl" id="vinyl" aria-hidden="true"></div>
-  </section>
-
-  <section id="jak">
-    <h2>Jak to działa</h2>
-    <div class="steps">
-      <div class="step"><span class="n">KROK 1</span><b>Opowiadasz historię</b>Imiona, wspomnienia, wspólne żarty. Im więcej szczegółów, tym bardziej osobista piosenka.</div>
-      <div class="step"><span class="n">KROK 2</span><b>Wybierasz styl</b>Pop, ballada, rock, disco polo czy akustycznie. Do każdego stylu masz próbki.</div>
-      <div class="step"><span class="n">KROK 3</span><b>Dostajesz nagranie</b>Gotowy plik MP3 i tekst piosenki przychodzą na Twój e-mail.</div>
+    <div class="wrap">
+      <p class="now" id="now" aria-live="polite">Na pięciolinii: <b>Pop</b>, „Nasze lato”</p>
+      <div class="hero-foot">
+        <p class="lead">Opowiedz nam swoją historię, a my zamienimy ją w piosenkę na urodziny, ślub, rocznicę albo po prostu bez okazji. Gotowe nagranie w 5 dni.</p>
+        <div class="cta"><a class="btn" href="#zamow">Zamów piosenkę</a><a class="btn ghost" href="#probki">Posłuchaj próbek</a></div>
+      </div>
     </div>
   </section>
 
-  <section id="probki">
-    <h2>Posłuchaj próbek</h2>
-    <div class="samples" id="samples"></div>
-    <p style="color:var(--muted);font-size:14px">W wersji demo próbki są generowanymi melodiami. Docelowo w tym miejscu będą prawdziwe nagrania.</p>
+  <section class="block" id="jak" aria-labelledby="hJak">
+    <div class="wrap">
+      <h2 id="hJak">Jak to działa</h2>
+      <ol class="bars">
+        <li><span class="n">1</span><b>Opowiadasz historię</b><p>Imiona, wspomnienia, wspólne żarty. Im więcej szczegółów, tym bardziej osobista piosenka.</p></li>
+        <li><span class="n">2</span><b>Wybierasz styl</b><p>Pop, ballada, rock, disco polo czy akustycznie. Do każdego stylu masz próbki.</p></li>
+        <li><span class="n">3</span><b>Dostajesz nagranie</b><p>Gotowy plik MP3 i tekst piosenki przychodzą na Twój e-mail.</p></li>
+      </ol>
+    </div>
   </section>
 
-  <section id="zamow">
-    <h2>Zamów piosenkę</h2>
-    <form id="order" novalidate>
-      <label>Okazja<select id="occasion"><option>Urodziny</option><option>Ślub</option><option>Rocznica</option><option>Imieniny</option><option>Dzień Matki / Ojca</option><option>Bez okazji</option></select></label>
-      <label>Dla kogo (imię)<input id="forWho" placeholder="np. Kasia"></label>
-      <div class="full"><label style="margin-bottom:6px">Styl muzyczny</label><div class="chips" id="styles"></div></div>
-      <label class="full">Twoja historia<textarea id="story" placeholder="Jak się poznaliście? Co was łączy? Jakie słowa albo wspomnienia powinny pojawić się w piosence?"></textarea></label>
-      <label>Czas realizacji<select id="speed"><option value="0">Standard – 5 dni</option><option value="80">Ekspres – 48 h (+80 zł)</option></select></label>
-      <label>Twój e-mail<input id="email" type="email" placeholder="adres@przyklad.pl"></label>
-      <div class="summary"><div><div style="color:var(--muted);font-size:14px">Do zapłaty</div><div class="price" id="price">249 zł</div></div><span class="err" id="err"></span><button class="btn" type="submit">Przejdź do płatności</button></div>
-    </form>
+  <section class="block" id="probki" aria-labelledby="hProbki">
+    <div class="wrap">
+      <h2 id="hProbki">Posłuchaj próbek</h2>
+      <ul class="samples" id="samples"></ul>
+      <p class="muted">W wersji demo próbki są generowanymi melodiami. Docelowo w tym miejscu będą prawdziwe nagrania.</p>
+    </div>
+  </section>
+
+  <section class="block" id="zamow" aria-labelledby="hZamow">
+    <div class="wrap">
+      <h2 id="hZamow">Zamów piosenkę</h2>
+      <form id="order" class="order" novalidate>
+        <div class="fields">
+          <label class="field">Okazja<select id="occasion"><option>Urodziny</option><option>Ślub</option><option>Rocznica</option><option>Imieniny</option><option>Dzień Matki / Ojca</option><option>Bez okazji</option></select></label>
+          <label class="field">Dla kogo (imię)<input id="forWho" placeholder="np. Kasia" autocomplete="off"></label>
+          <fieldset class="field full"><legend>Styl muzyczny</legend><div class="chips" id="styles"></div></fieldset>
+          <label class="field full">Twoja historia<textarea id="story" placeholder="Jak się poznaliście? Co was łączy? Jakie słowa albo wspomnienia powinny pojawić się w piosence?"></textarea></label>
+          <label class="field">Czas realizacji<select id="speed"><option value="0">Standard – 5 dni</option><option value="80">Ekspres – 48 h (+80 zł)</option></select></label>
+          <label class="field">Twój e-mail<input id="email" type="email" placeholder="adres@przyklad.pl" autocomplete="email"></label>
+        </div>
+
+        <div class="tag-wrap">
+          <svg class="string" viewBox="0 0 120 66" aria-hidden="true"><path d="M60 64 C 58 40, 20 34, 30 14 C 38 0, 70 2, 86 8"/></svg>
+          <aside class="tag" aria-label="Podsumowanie zamówienia">
+            <p class="k">Piosenka dla</p>
+            <p class="who empty" id="tagWho">imię bliskiej osoby</p>
+            <dl>
+              <dt>Okazja</dt><dd id="tagOcc">Urodziny</dd>
+              <dt>Styl</dt><dd id="tagStyle">Pop</dd>
+              <dt>Czas realizacji</dt><dd id="tagTime">Standard – 5 dni</dd>
+            </dl>
+            <div class="total"><span>Do zapłaty</span><strong class="price" id="price" aria-live="polite">249 zł</strong></div>
+            <span class="err" id="err" role="alert"></span>
+            <button class="btn" type="submit" id="submitBtn">Przejdź do płatności</button>
+          </aside>
+        </div>
+      </form>
+    </div>
   </section>
 </main>
-<footer>Twoja Nuta · projekt przykładowy strony do zamawiania piosenek</footer>
-<div class="modal" id="modal" hidden><div class="box"><h2 style="font-size:24px">Dziękujemy za zamówienie!</h2><p id="modalText"></p><p style="color:var(--muted);font-size:14px">W wersji produkcyjnej w tym miejscu klient przechodzi do płatności (BLIK, przelew, karta), a po opłaceniu dostaje automatyczne potwierdzenie e-mailem.</p><button class="btn" id="close">Zamknij</button></div></div>
+
+<footer><div class="wrap"><span class="logo">Twoja Nuta</span><span>Projekt przykładowy strony do zamawiania piosenek.</span></div></footer>
+
+<div class="modal" id="modal" hidden>
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <h2 id="mTitle">Dziękujemy za zamówienie!</h2>
+    <p id="modalText"></p>
+    <p class="small">W wersji produkcyjnej w tym miejscu klient przechodzi do płatności (BLIK, przelew, karta), a po opłaceniu dostaje automatyczne potwierdzenie e-mailem.</p>
+    <button class="btn" id="close" type="button">Zamknij</button>
+  </div>
+</div>
 
 <script>
 const STYLES = [
@@ -103,20 +278,87 @@ const STYLES = [
   { id:'disco', name:'Disco polo', price:229, notes:[64,66,68,69,68,66,64,61,64,66], wave:'square', tempo:.17 },
   { id:'akustyk', name:'Akustycznie', price:269, notes:[55,59,62,67,62,59,57,60,64,67], wave:'triangle', tempo:.3 },
 ];
-let style = 'pop', ac = null, playing = null;
+const TITLES = { pop:'„Nasze lato” – urodziny', ballada:'„Dziesięć lat” – rocznica', rock:'„Szef na medal” – dla szefa' };
+const $ = id => document.getElementById(id);
+const byId = id => STYLES.find(s => s.id === id);
+let style = 'pop', ac = null, playing = null, cur = null, t0 = 0, p0 = 0, raf = 0, lastK = -2, shown = 'pop';
 
-// Próbki (generowane melodie przez Web Audio)
-document.getElementById('samples').innerHTML = STYLES.slice(0,3).map(s => `<div class="sample"><button class="play" data-s="${s.id}" aria-label="Odtwórz próbkę ${s.name}">▶</button><div><b>${s.name}</b><small>${s.id==='pop'?'„Nasze lato” – urodziny':s.id==='ballada'?'„Dziesięć lat” – rocznica':'„Szef na medal” – dla szefa'}</small></div></div>`).join('');
-document.getElementById('samples').addEventListener('click', e => {
+// ===== Zapis melodii na pięciolinii (SVG) =====
+const PC = [0,0,1,1,2,3,3,4,4,5,5,6];      // stopień diatoniczny dla klasy dźwięku
+const SHARP = [0,1,0,1,0,0,1,0,1,0,1,0];
+const dia = n => Math.floor(n / 12) * 7 + PC[n % 12];
+function staffSvg(notes, w, gap, x0, x1) {
+  const ids = notes.map(dia), mid = Math.round((Math.min(...ids) + Math.max(...ids)) / 2);
+  const h = gap * 10, cy = h / 2, step = (x1 - x0) / notes.length;
+  let s = `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true" focusable="false">`;
+  for (let k = -2; k <= 2; k++) s += `<line class="sl" x1="0" x2="${x1}" y1="${cy + k * gap}" y2="${cy + k * gap}"/>`;
+  s += `<line class="bar-thin" x1="${x1 - 7}" x2="${x1 - 7}" y1="${cy - 2 * gap}" y2="${cy + 2 * gap}"/><rect class="bar-thick" x="${x1 - 3.5}" y="${cy - 2 * gap}" width="3.5" height="${4 * gap}"/>`;
+  notes.forEach((n, i) => {
+    const d = ids[i] - mid, y = cy - d * gap / 2, x = x0 + step * (i + .4);
+    let g = `<g class="nt" data-i="${i}">`;
+    for (let L = 6; L <= Math.abs(d); L += 2) { const ly = cy - Math.sign(d) * L * gap / 2; g += `<line class="ll" x1="${x - gap * 1.1}" x2="${x + gap * 1.1}" y1="${ly}" y2="${ly}"/>`; }
+    if (SHARP[n % 12]) { const a = x - gap * 1.7, q = gap * .26; g += `<path class="sh" d="M${a - q} ${y - gap * .95}V${y + gap * 1.05}M${a + q} ${y - gap * 1.05}V${y + gap * .95}M${a - gap * .5} ${y - gap * .2}L${a + gap * .5} ${y - gap * .45}M${a - gap * .5} ${y + gap * .45}L${a + gap * .5} ${y + gap * .2}"/>`; }
+    const up = d < 0, sx = up ? x + gap * .56 : x - gap * .56;
+    g += `<line class="st" x1="${sx}" x2="${sx}" y1="${y}" y2="${up ? y - gap * 3.3 : y + gap * 3.3}"/>`;
+    g += `<ellipse cx="${x}" cy="${y}" rx="${gap * .62}" ry="${gap * .44}" transform="rotate(-22 ${x} ${y})"/></g>`;
+    s += g;
+  });
+  return s + '</svg>';
+}
+function renderHero() {
+  const el = $('heroStave'), w = el.clientWidth, small = w < 640, gap = small ? 11 : 16;
+  const pad = Math.max(small ? 16 : 24, (w - 1160) / 2 + 24), btn = small ? 50 : 68;
+  const s = byId(shown);
+  el.dataset.staff = s.id;
+  $('heroPlay').style.left = pad + 'px';
+  $('heroSvg').innerHTML = staffSvg(s.notes, w, gap, pad + btn + (small ? 18 : 36), w - pad);
+  $('heroPlay').dataset.s = s.id;
+  $('heroPlay').setAttribute('aria-label', (playing === s.id ? 'Zatrzymaj próbkę ' : 'Odtwórz próbkę ') + s.name);
+  $('heroPlay').classList.toggle('play-lg', !small);
+}
+function renderMinis() {
+  document.querySelectorAll('.mini').forEach(m => { const w = m.clientWidth; if (w) m.innerHTML = staffSvg(byId(m.dataset.staff).notes, w, 7, 20, w); });
+}
+
+// ===== Próbki (generowane melodie przez Web Audio) =====
+$('samples').innerHTML = STYLES.slice(0,3).map(s => `<li class="sample">
+  <button class="play" type="button" data-s="${s.id}" aria-pressed="false" aria-label="Odtwórz próbkę ${s.name}"></button>
+  <div class="meta"><b>${s.name}</b><span>${TITLES[s.id]}</span></div>
+  <div class="mini live" data-staff="${s.id}"></div></li>`).join('');
+
+document.addEventListener('click', e => {
   const b = e.target.closest('.play'); if (!b) return;
   if (playing === b.dataset.s) { stop(); return; }
-  play(STYLES.find(s => s.id === b.dataset.s), b);
+  play(byId(b.dataset.s), b);
 });
-function stop() { if (ac) { ac.close(); ac = null; } playing = null; document.querySelectorAll('.play').forEach(p => p.textContent = '▶'); document.getElementById('vinyl').classList.remove('spin'); }
+function setPressed() {
+  document.querySelectorAll('.play').forEach(p => {
+    const on = p.dataset.s === playing, n = byId(p.dataset.s).name;
+    p.setAttribute('aria-pressed', on);
+    p.setAttribute('aria-label', (on ? 'Zatrzymaj próbkę ' : 'Odtwórz próbkę ') + n);
+  });
+}
+function clearNotes() { document.querySelectorAll('.nt.on').forEach(n => n.classList.remove('on')); lastK = -2; }
+function stop() {
+  if (ac) { ac.close(); ac = null; }
+  playing = null; cur = null; clearInterval(raf); clearNotes();
+  document.body.classList.remove('is-playing'); setPressed();
+}
+function tick() {
+  if (!ac || !cur) return;
+  const i = Math.floor((performance.now() - p0) / 1000 / cur.tempo), n = cur.notes.length;
+  const k = i >= 0 && i < n * 2 ? i % n : -1;
+  if (k !== lastK) {
+    clearNotes(); lastK = k;
+    if (k >= 0) document.querySelectorAll(`[data-staff="${cur.id}"] .nt[data-i="${k}"]`).forEach(el => el.classList.add('on'));
+  }
+}
 function play(s, btn) {
-  stop(); ac = new (window.AudioContext || window.webkitAudioContext)(); playing = s.id; btn.textContent = '■';
-  document.getElementById('vinyl').classList.add('spin');
-  const t0 = ac.currentTime + 0.05;
+  stop(); ac = new (window.AudioContext || window.webkitAudioContext)(); playing = s.id; cur = s;
+  if (shown !== s.id) { shown = s.id; renderHero(); }
+  $('now').innerHTML = `Na pięciolinii: <b>${s.name}</b>, ${TITLES[s.id] ? TITLES[s.id].split(' – ')[0] : ''}`;
+  setPressed(); document.body.classList.add('is-playing');
+  t0 = ac.currentTime + 0.05; p0 = performance.now() + 50;
   for (let r = 0; r < 2; r++) s.notes.forEach((n, i) => {
     const t = t0 + (r * s.notes.length + i) * s.tempo, o = ac.createOscillator(), g = ac.createGain();
     o.type = s.wave; o.frequency.value = 440 * Math.pow(2, (n - 69) / 12);
@@ -124,27 +366,52 @@ function play(s, btn) {
     o.connect(g).connect(ac.destination); o.start(t); o.stop(t + s.tempo);
   });
   const myCtx = ac; setTimeout(() => { if (ac === myCtx) stop(); }, s.notes.length * 2 * s.tempo * 1000 + 300);
+  raf = setInterval(tick, 30); tick();
 }
 
-// Formularz zamówienia
-const stylesEl = document.getElementById('styles');
-function renderStyles() { stylesEl.innerHTML = STYLES.map(s => `<button type="button" class="chip" data-s="${s.id}" aria-pressed="${s.id===style}">${s.name} · ${s.price} zł</button>`).join(''); }
-stylesEl.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; style = c.dataset.s; renderStyles(); price(); });
-function price() { const p = STYLES.find(s => s.id === style).price + Number(document.getElementById('speed').value); document.getElementById('price').textContent = p + ' zł'; return p; }
-document.getElementById('speed').addEventListener('change', price);
-document.getElementById('order').addEventListener('submit', e => {
-  e.preventDefault();
-  const err = document.getElementById('err'), story = document.getElementById('story').value.trim(), email = document.getElementById('email').value.trim(), who = document.getElementById('forWho').value.trim();
-  if (!who) return err.textContent = 'Podaj imię osoby, dla której jest piosenka.';
-  if (story.length < 30) return err.textContent = 'Opisz historię trochę dokładniej (min. 30 znaków).';
-  if (!/^\S+@\S+\.\S+$/.test(email)) return err.textContent = 'Podaj poprawny adres e-mail.';
-  err.textContent = '';
-  const s = STYLES.find(x => x.id === style);
-  document.getElementById('modalText').textContent = `Piosenka „${document.getElementById('occasion').value}” dla: ${who}, styl: ${s.name}. Kwota: ${price()} zł. Potwierdzenie wyślemy na ${email}.`;
-  document.getElementById('modal').hidden = false;
+// ===== Formularz zamówienia =====
+const stylesEl = $('styles');
+function renderStyles() { stylesEl.innerHTML = STYLES.map(s => `<button type="button" class="chip" data-s="${s.id}" aria-pressed="${s.id===style}">${s.name}<small>${s.price} zł</small></button>`).join(''); }
+stylesEl.addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if (!c) return; style = c.dataset.s;
+  stylesEl.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x.dataset.s === style));
+  price();
 });
-document.getElementById('close').onclick = () => document.getElementById('modal').hidden = true;
-renderStyles(); price();
+function price() {
+  const p = byId(style).price + Number($('speed').value);
+  $('price').textContent = p + ' zł'; updateTag(); return p;
+}
+function updateTag() {
+  const who = $('forWho').value.trim(), el = $('tagWho');
+  el.textContent = who || 'imię bliskiej osoby'; el.classList.toggle('empty', !who);
+  $('tagOcc').textContent = $('occasion').value;
+  $('tagStyle').textContent = byId(style).name;
+  $('tagTime').textContent = $('speed').selectedOptions[0].textContent.replace(/\s*\(.*\)$/, '');
+}
+$('speed').addEventListener('change', price);
+$('occasion').addEventListener('change', updateTag);
+$('forWho').addEventListener('input', updateTag);
+['forWho','story','email'].forEach(id => $(id).addEventListener('input', () => $(id).removeAttribute('aria-invalid')));
+function fail(id, msg) { $('err').textContent = msg; $(id).setAttribute('aria-invalid', 'true'); $(id).focus(); }
+$('order').addEventListener('submit', e => {
+  e.preventDefault();
+  const err = $('err'), story = $('story').value.trim(), email = $('email').value.trim(), who = $('forWho').value.trim();
+  if (!who) return fail('forWho', 'Podaj imię osoby, dla której jest piosenka.');
+  if (story.length < 30) return fail('story', 'Opisz historię trochę dokładniej (min. 30 znaków).');
+  if (!/^\S+@\S+\.\S+$/.test(email)) return fail('email', 'Podaj poprawny adres e-mail.');
+  err.textContent = '';
+  const s = byId(style);
+  $('modalText').textContent = `Piosenka „${$('occasion').value}” dla: ${who}, styl: ${s.name}. Kwota: ${price()} zł. Potwierdzenie wyślemy na ${email}.`;
+  $('modal').hidden = false; $('close').focus();
+});
+function closeModal() { $('modal').hidden = true; $('submitBtn').focus(); }
+$('close').onclick = closeModal;
+$('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').hidden) closeModal(); });
+
+renderStyles(); price(); renderHero(); renderMinis();
+let rT; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { renderHero(); renderMinis(); lastK = -2; }, 120); });
+if (document.fonts) document.fonts.ready.then(() => { renderHero(); renderMinis(); });
 </script>
 </body>
 </html>
