@@ -8,318 +8,379 @@
 <meta property="og:description" content="Modele 3D Lamborghini, konfigurator, dźwięk V12 i animacje przy przewijaniu.">
 <meta property="og:image" content="https://marcinprojekty.github.io/img-obroty.jpg">
 <meta name="theme-color" content="#0b0e13">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20230%22%3E%3Cpath%20d%3D%22M100%206%20L188%2038%20L188%20120%20Q188%20158%20100%20222%20Q12%20158%2012%20120%20L12%2038%20Z%22%20fill%3D%22%230b0e13%22%20stroke%3D%22%23ffad2a%22%20stroke-width%3D%2212%22%2F%3E%3Cpath%20d%3D%22M64.6%20133.4%20A50%2050%200%201%201%20135.4%20133.4%22%20fill%3D%22none%22%20stroke%3D%22%23ece9e2%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22%2F%3E%3Cline%20x1%3D%22100%22%20y1%3D%2298%22%20x2%3D%22134%22%20y2%3D%2272%22%20stroke%3D%22%23ffad2a%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 <style>:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Obroty Salon Poznań</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Big+Shoulders+Display:wght@500;700;900&family=Chakra+Petch:wght@400;500;600&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 230%22%3E%3Cpath d=%22M100 6 L188 38 L188 120 Q188 158 100 222 Q12 158 12 120 L12 38 Z%22 fill=%22%230b0e13%22 stroke=%22%23ffad2a%22 stroke-width=%2212%22/%3E%3Cpath d=%22M64.6 133.4 A50 50 0 1 1 135.4 133.4%22 fill=%22none%22 stroke=%22%23eceef0%22 stroke-width=%2212%22 stroke-linecap=%22round%22/%3E%3Cline x1=%22100%22 y1=%2298%22 x2=%22134%22 y2=%2272%22 stroke=%22%23ffad2a%22 stroke-width=%2212%22 stroke-linecap=%22round%22/%3E%3C/svg%3E">
+<link rel="preload" href="./fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./fonts/bigshoulders-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-/* Układ: nocny tor. Pełnoekranowe sceny 3D i zdjęcia przeplatane wąskimi pasami HUD; tekst trzyma się lewej krawędzi siatki. */
+/* Czcionki hostowane lokalnie (bez zapytań do Google). Archivo i Big Shoulders Display, licencja SIL OFL 1.1. */
+@font-face { font-family: "Archivo"; src: url(./fonts/archivo-latin-ext.woff2) format("woff2"); font-weight: 300 800; font-stretch: 62% 125%; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Archivo"; src: url(./fonts/archivo-latin.woff2) format("woff2"); font-weight: 300 800; font-stretch: 62% 125%; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Big Shoulders Display"; src: url(./fonts/bigshoulders-latin-ext.woff2) format("woff2"); font-weight: 700 900; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Big Shoulders Display"; src: url(./fonts/bigshoulders-latin.woff2) format("woff2"); font-weight: 700 900; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+/* Kierunek: auto jest bohaterem, typografia robi resztę.
+   Dwa ciche kolory (asfalt nocą, chłodna biel) i jeden głośny (bursztyn lampy sodowej) tylko na głównych przyciskach i obrotomierzu.
+   Tekst: Archivo (lekko rozszerzone, ciasne nagłówki). Liczby i znak: Big Shoulders Display, jak wskaźniki na desce rozdzielczej. */
 :root {
   color-scheme: dark;
-  --bg: #0b0e13;          /* asfalt nocą */
-  --bg-2: #121722;        /* płyta salonu */
-  --line: rgba(236, 233, 226, .13);
-  --fg: #ece9e2;          /* ciepła biel */
-  --muted: #8f95a2;
-  --amber: #ffad2a;       /* złoto lampy sodowej */
-  --ice: #a8d6ff;         /* LED reflektora */
-  --f-display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
-  --f-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --f-hud: "Chakra Petch", ui-monospace, Menlo, Consolas, monospace;
+  --bg: #0b0e13;          /* asfalt nocą: 60% */
+  --bg-2: #131821;        /* płyta salonu: 30% */
+  --bg-3: #1a2029;
+  --fg: #eceef0;          /* chłodna biel */
+  --fg-2: #c8ccd2;
+  --muted: #9aa1ad;
+  --amber: #ffad2a;       /* jedyny głośny kolor: 10% */
+  --on-amber: #15100a;
+  --red: #ff4d2a;
+  --error: #ffb4a3;
+  --tone: rgba(236, 238, 240, .08);
+  --tone-2: rgba(236, 238, 240, .15);
+  --f-text: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-num: "Big Shoulders Display", "Arial Narrow", sans-serif;
   --gut: max(clamp(16px, 4vw, 56px), env(safe-area-inset-left, 0px));
   --gut-r: max(clamp(16px, 4vw, 56px), env(safe-area-inset-right, 0px));
-  --ease: cubic-bezier(.2, .7, .1, 1);
+  --t-display: clamp(38px, 6.4vw, 116px);
+  --t-h2: clamp(34px, 4.8vw, 80px);
+  --t-h3: clamp(20px, 1.6vw, 25px);
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
+  --ease-in-out: cubic-bezier(.77, 0, .175, 1);
 }
 * { box-sizing: border-box; }
-html { background: var(--bg); }
+html { background: var(--bg); scrollbar-color: #2a313c var(--bg); }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
-body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.55; overflow-x: clip; -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font-size: 17px; line-height: 1.55; overflow-x: clip; -webkit-font-smoothing: antialiased; caret-color: var(--amber); }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--bg); }
 body.locked { overflow: hidden; }
-a { color: inherit; }
+::selection { background: var(--amber); color: var(--on-amber); }
+a { color: inherit; text-underline-offset: .2em; }
 button { font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
-.wrap { width: 100%; max-width: 1440px; margin: 0 auto; padding-left: var(--gut); padding-right: var(--gut-r); }
-.hud { font-family: var(--f-hud); text-transform: uppercase; letter-spacing: .14em; font-size: 12px; }
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
+.wrap { width: 100%; max-width: 1520px; margin: 0 auto; padding-left: var(--gut); padding-right: var(--gut-r); }
 .muted { color: var(--muted); }
-.amber { color: var(--amber); }
-h1, h2, h3 { font-family: var(--f-body); font-variation-settings: "wdth" 125; text-transform: uppercase; font-weight: 300; line-height: .98; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
-h1 b, h2 b, h3 b { font-weight: 700; }
-h2 { font-size: clamp(32px, 4.6vw, 70px); }
-p { margin: 0; max-width: 62ch; }
+.note { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+h1, h2, h3 { font-family: var(--f-text); font-weight: 600; font-stretch: 112%; letter-spacing: -.035em; line-height: .94; margin: 0; text-wrap: balance; }
+h2 { font-size: var(--t-h2); }
+h3 { font-size: var(--t-h3); letter-spacing: -.02em; line-height: 1.1; }
+p { margin: 0; max-width: 60ch; text-wrap: pretty; }
+.num { font-family: var(--f-num); font-weight: 900; font-variant-numeric: tabular-nums; letter-spacing: 0; line-height: .9; }
 
-/* ---------- Przyciski ---------- */
-.btn { --h: 54px; display: inline-flex; align-items: center; gap: 12px; height: var(--h); padding: 0 26px; border-radius: 999px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-decoration: none; font-family: var(--f-hud); text-transform: uppercase; letter-spacing: .12em; font-size: 13px; font-weight: 600; transition: background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease); white-space: nowrap; }
-.btn:hover { border-color: var(--fg); }
-.btn.solid { background: var(--amber); color: #15100a; border-color: var(--amber); }
-.btn.solid:hover { background: var(--fg); border-color: var(--fg); }
-.btn .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-.btn[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-
-/* ---------- Logo ---------- */
-.badge-svg { overflow: visible; }
+/* ---------- Przyciski: prostokątne, jeden kształt na całej stronie ---------- */
+.btn { --h: 52px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: var(--h); padding: 0 24px; border: 0; border-radius: 2px; background: var(--tone); color: var(--fg); cursor: pointer; text-decoration: none; font: 600 15px/1 var(--f-text); letter-spacing: .005em; white-space: nowrap; transition: background-color .2s ease, color .2s ease, transform .16s var(--ease-out); }
+.btn:active { transform: scale(.97); }
+.btn.solid { background: var(--amber); color: var(--on-amber); }
+.btn.light { background: var(--fg); color: var(--bg); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { background: var(--tone-2); }
+  .btn.solid:hover { background: #ffc061; }
+  .btn.light:hover { background: #fff; }
+}
+.btn:disabled { opacity: .5; cursor: progress; }
 
 /* ---------- Ekran ładowania ---------- */
 #loader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--bg); padding: 24px; }
-#loader .box { display: grid; justify-items: center; gap: 26px; }
-#loader svg { width: min(260px, 60vw); height: auto; }
-#loader .pct { font-family: var(--f-display); font-weight: 900; font-size: 40px; line-height: 1; font-variant-numeric: tabular-nums; }
-#loader .enter { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+#loader .box { display: grid; justify-items: center; gap: 22px; text-align: center; }
+#loader svg { width: min(200px, 52vw); height: auto; overflow: visible; }
+#loader .pct { font-size: 44px; }
+#loader .enter { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 #loader .enter[hidden] { display: none; }
-#loader small { color: var(--muted); text-align: center; }
 .curtain { position: fixed; left: 0; right: 0; height: 50.5%; background: var(--bg); z-index: 99; pointer-events: none; }
-.curtain.top { top: 0; border-bottom: 1px solid rgba(255, 173, 42, .5); } .curtain.bot { bottom: 0; border-top: 1px solid rgba(255, 173, 42, .5); }
+.curtain.top { top: 0; } .curtain.bot { bottom: 0; }
 
-/* ---------- Nawigacja ---------- */
-.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding-top: calc(env(safe-area-inset-top, 0px) + 16px); padding-bottom: 16px; background: linear-gradient(var(--bg), rgba(11, 14, 19, 0)); pointer-events: none; }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.nav a, .nav button { pointer-events: auto; }
-.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-.logo svg { width: 34px; height: 39px; }
-.logo b { font-family: var(--f-display); font-weight: 900; font-size: 28px; letter-spacing: .06em; }
-.nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
-.nav ul a { text-decoration: none; position: relative; padding: 6px 0; }
-.nav ul a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--amber); transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease); }
-.nav ul a:hover::after { transform: scaleX(1); transform-origin: left; }
-.nav .right { display: flex; gap: 10px; align-items: center; }
-.nav .btn { --h: 44px; }
-.snd { --h: 44px; padding: 0 16px; }
+/* ---------- Nawigacja: zwykły pasek, prędkościomierz zamiast ozdób ---------- */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding-top: calc(env(safe-area-inset-top, 0px) + 14px); padding-bottom: 14px; transition: background-color .25s ease; }
+.nav.solid { background: var(--bg); }
+.nav .wrap { display: flex; align-items: center; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: 20px; flex: none; }
+.logo svg { width: 32px; height: 37px; }
+.logo b { font-family: var(--f-num); font-weight: 900; font-size: 26px; letter-spacing: .05em; }
+.nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
+.nav ul a { text-decoration: none; font-size: 15px; font-weight: 500; color: var(--fg-2); padding: 8px 0; transition: color .2s ease; }
+.nav ul a:hover { color: var(--fg); text-decoration: underline; text-decoration-thickness: 1px; }
+.nav .right { display: flex; gap: 8px; align-items: center; margin-left: auto; }
+.nav .btn { --h: 44px; padding: 0 18px; }
+.speedo { display: flex; align-items: center; gap: 8px; margin-right: 14px; }
+.speedo svg { width: 30px; height: 30px; flex: none; }
+.speedo .v { display: grid; line-height: 1.05; }
+.speedo .v b { font-family: var(--f-num); font-weight: 800; font-size: 20px; font-variant-numeric: tabular-nums; }
+.speedo .v b i { font-style: normal; font-family: var(--f-text); font-weight: 500; font-size: 13px; color: var(--muted); margin-left: 4px; }
+.speedo .v span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .snd .bars { display: inline-flex; gap: 2px; align-items: end; height: 14px; }
-.snd .bars i { width: 2px; background: currentColor; height: 4px; transition: height .3s; }
+.snd .bars i { width: 2px; background: currentColor; height: 4px; }
+.snd[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 .snd[aria-pressed="true"] .bars i { animation: eq 1s infinite ease-in-out alternate; }
 .snd[aria-pressed="true"] .bars i:nth-child(2) { animation-delay: .2s; } .snd[aria-pressed="true"] .bars i:nth-child(3) { animation-delay: .4s; }
 @keyframes eq { from { height: 3px; } to { height: 14px; } }
-@media (max-width: 1080px) { .nav ul { display: none; } }
-@media (max-width: 520px) { .logo b { display: none; } .nav .jazda { display: none; } }
+.menu-btn { display: none; }
+#menu { position: fixed; inset: 0; z-index: 49; overflow: auto; overscroll-behavior: contain; background: var(--bg); padding: calc(env(safe-area-inset-top, 0px) + 92px) 0 36px; }
+#menu[hidden] { display: none; }
+#menu ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+#menu ul a { display: block; padding: 6px 0; font-size: clamp(28px, 7vw, 44px); font-weight: 600; font-stretch: 112%; letter-spacing: -.03em; text-decoration: none; }
+#menu .menu-cta { margin-top: 24px; }
+@media (max-width: 1239px) { .nav ul { display: none; } .menu-btn { display: inline-flex; } }
+@media (max-width: 760px) { .speedo { display: none; } }
+@media (max-width: 560px) { .nav .jazda { display: none; } }
+@media (max-width: 400px) { .logo b { display: none; } .logo { margin-right: 0; } }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero: auto duże, nagłówek na dole ---------- */
 #hero { position: relative; height: 100svh; min-height: 640px; overflow: clip; }
 .gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
-#hero .over { position: absolute; inset: 0; display: grid; grid-template-rows: 1fr auto; pointer-events: none; padding-top: 120px; padding-bottom: 28px; }
-#hero .over .wrap { display: grid; align-content: end; gap: 22px; }
-#hero h1 { font-size: clamp(40px, 6vw, 96px); max-width: 13ch; }
-#hero .lead { font-size: clamp(16px, 1.4vw, 19px); color: #cfccc5; max-width: 46ch; }
-#hero .actions { display: flex; flex-wrap: wrap; gap: 12px; pointer-events: auto; }
-.strip { border-top: 1px solid var(--line); margin-top: 22px; padding-top: 16px; display: flex; flex-wrap: wrap; gap: 14px 40px; justify-content: space-between; align-items: center; pointer-events: auto; }
-.strip .specs { display: flex; flex-wrap: wrap; gap: 8px 30px; }
-.strip .specs b { font-family: var(--f-display); font-weight: 700; font-size: 26px; display: block; line-height: 1; text-transform: none; letter-spacing: .02em; }
-.tach { position: absolute; right: var(--gut-r); top: 118px; text-align: right; pointer-events: none; }
-.tach .num { font-family: var(--f-display); font-weight: 900; font-size: 64px; line-height: 1; font-variant-numeric: tabular-nums; }
-.tach .bar { width: 240px; height: 4px; background: var(--line); margin: 10px 0 0 auto; overflow: hidden; border-radius: 2px; }
-.tach .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--ice), var(--amber) 70%, #ff4d2a); transform-origin: left; transform: scaleX(.1); }
+#hero .over { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: clamp(28px, 6vh, 64px); pointer-events: none; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 25rem); gap: 28px 56px; align-items: end; }
+#hero h1 { font-size: var(--t-display); }
+.hero-side { display: grid; gap: 22px; pointer-events: auto; }
+.hero-side p { color: var(--fg-2); max-width: 40ch; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; pointer-events: auto; }
+.tach { position: absolute; right: var(--gut-r); top: clamp(92px, 13vh, 132px); text-align: right; pointer-events: none; }
+.tach .num { font-size: clamp(56px, 5.4vw, 88px); }
+.tach .unit { font-size: 14px; color: var(--muted); }
+.tach .bar { width: 200px; height: 3px; background: var(--tone-2); margin: 12px 0 0 auto; overflow: hidden; position: relative; }
+.tach .bar i { display: block; height: 100%; background: var(--amber); transform-origin: left; transform: scaleX(0); }
+.tach .bar::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 6%; background: var(--red); opacity: .8; }
 .tach .note { margin-top: 10px; }
-.drag-hint { display: inline-flex; gap: 10px; align-items: center; }
-.drag-hint::before { content: ""; width: 34px; height: 1px; background: currentColor; }
+@media (max-width: 999px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } #hero h1 { font-size: clamp(38px, 8.4vw, 84px); } }
 @media (max-width: 760px) {
   .tach { display: none; }
   #hero { height: auto; min-height: 100svh; }
-  #hero .gl { height: 50svh; bottom: auto; top: 50px; -webkit-mask-image: linear-gradient(#000 78%, transparent); mask-image: linear-gradient(#000 78%, transparent); }
-  #hero .over { position: relative; padding-top: calc(48svh + 40px); }
-  #hero h1 { font-size: clamp(34px, 10vw, 48px); }
-  .strip .specs b { font-size: 22px; }
+  #hero .gl { height: 52svh; bottom: auto; top: 56px; -webkit-mask-image: linear-gradient(#000 80%, transparent); mask-image: linear-gradient(#000 80%, transparent); }
+  #hero .over { position: relative; padding-top: calc(52svh + 40px); }
+  #hero h1 { font-size: clamp(30px, 9.2vw, 46px); }
 }
-
-/* ---------- Pasek marek ---------- */
-.marquee { border-block: 1px solid var(--line); overflow: clip; padding-block: 22px; }
-.marquee .track { display: flex; width: max-content; will-change: transform; }
-.marquee span { font-family: var(--f-display); font-weight: 700; font-size: clamp(30px, 4.4vw, 60px); text-transform: uppercase; padding-inline: 34px; display: inline-flex; align-items: center; gap: 68px; white-space: nowrap; }
-.marquee span::after { content: ""; width: 12px; height: 12px; background: var(--amber); transform: rotate(45deg); }
-.marquee span:nth-child(even) { -webkit-text-stroke: 1px var(--fg); color: transparent; }
 
 /* ---------- Anatomia ---------- */
 #anatomia { position: relative; height: 100svh; min-height: 620px; overflow: clip; }
-#anatomia .head { position: absolute; top: 96px; left: 0; right: 0; pointer-events: none; }
-#anatomia .head .wrap { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; }
-#anatomia h2 { font-size: clamp(28px, 3.6vw, 54px); }
-.steps { position: absolute; left: 0; right: 0; bottom: 40px; pointer-events: none; }
-.steps .wrap { position: relative; min-height: 230px; }
-.step { position: absolute; left: var(--gut); right: var(--gut-r); bottom: 0; max-width: 520px; display: grid; gap: 12px; opacity: 0; visibility: hidden; }
+#anatomia .head { position: absolute; top: 104px; left: 0; right: 0; pointer-events: none; }
+#anatomia .head .wrap { display: flex; justify-content: space-between; align-items: end; gap: 12px 24px; flex-wrap: wrap; }
+.steps { position: absolute; left: 0; right: 0; bottom: 48px; pointer-events: none; }
+.steps .wrap { position: relative; min-height: 240px; }
+.step { position: absolute; left: var(--gut); right: var(--gut-r); bottom: 0; max-width: 680px; display: grid; gap: 14px; opacity: 0; visibility: hidden; }
 .step.first { opacity: 1; visibility: visible; }
-.step h3 { font-size: clamp(24px, 2.8vw, 40px); }
-.step .big { font-family: var(--f-display); font-weight: 900; font-size: clamp(60px, 8vw, 120px); line-height: .9; color: var(--amber); font-variant-numeric: tabular-nums; }
-.step .big small { font-size: .38em; color: var(--fg); margin-left: 8px; letter-spacing: .04em; }
-.prog { position: absolute; right: var(--gut-r); bottom: 44px; display: grid; gap: 10px; justify-items: end; }
-.prog i { width: 46px; height: 2px; background: var(--line); display: block; position: relative; overflow: hidden; }
-.prog i b { position: absolute; inset: 0; background: var(--amber); transform: scaleX(0); transform-origin: left; }
-@media (max-width: 760px) { .prog { display: none; } .steps { bottom: 24px; } #anatomia .head { top: 80px; } }
+.step h3 { font-size: clamp(30px, 3.2vw, 52px); line-height: .98; }
+.step p { color: var(--fg-2); max-width: 42ch; }
+.step .big { font-size: clamp(72px, 8.4vw, 136px); }
+.step .big small { font-family: var(--f-text); font-weight: 500; font-size: 17px; color: var(--muted); margin-left: 10px; letter-spacing: 0; }
+.prog { position: absolute; right: var(--gut-r); bottom: 56px; display: flex; gap: 6px; }
+.prog i { width: 40px; height: 3px; background: var(--tone-2); display: block; position: relative; overflow: hidden; }
+.prog i b { position: absolute; inset: 0; background: var(--fg); transform: scaleX(0); transform-origin: left; }
+@media (max-width: 760px) { .prog { display: none; } .steps { bottom: 28px; } #anatomia .head { top: 84px; } }
 
-/* ---------- Galeria w plenerze ---------- */
+/* ---------- W plenerze: jedno zdjęcie na cały ekran ---------- */
 #plener { position: relative; height: 100svh; min-height: 560px; overflow: clip; background: #000; }
 .shot { position: absolute; inset: 0; overflow: hidden; }
 .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-.shot::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 14, 19, .55), rgba(11, 14, 19, 0) 30%, rgba(11, 14, 19, 0) 55%, rgba(11, 14, 19, .85)); }
-.shot .cap { position: absolute; left: 0; right: 0; bottom: 104px; z-index: 2; }
-.shot .cap .wrap { display: grid; gap: 12px; justify-items: start; }
-.shot h3 { font-size: clamp(30px, 4vw, 60px); }
-.shot .cap .ln { width: 120px; height: 1px; background: var(--amber); transform-origin: left; }
-.shot .cap p { color: #d6d2ca; }
-#plener .counter { position: absolute; z-index: 3; right: var(--gut-r); top: 104px; font-family: var(--f-hud); font-size: 14px; letter-spacing: .14em; font-variant-numeric: tabular-nums; }
-#plener .counter span { color: var(--muted); font-size: .5em; }
-#plener .title { position: absolute; z-index: 3; left: 0; right: 0; top: 96px; pointer-events: none; }
-#plener .thumbs { position: absolute; z-index: 3; right: var(--gut-r); bottom: 48px; display: flex; gap: 8px; }
-#plener .thumbs i { width: 30px; height: 3px; background: rgba(236, 233, 226, .25); position: relative; overflow: hidden; }
-#plener .thumbs i b { position: absolute; inset: 0; background: var(--amber); transform: scaleX(0); transform-origin: left; }
-@media (max-width: 760px) { #plener .thumbs { display: none; } #plener .counter { top: 84px; } .shot .cap { bottom: 40px; } }
+.shot::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(rgba(5, 7, 10, 0), rgba(5, 7, 10, .78)); }
+.shot::before { content: ""; position: absolute; inset: 0 0 72%; z-index: 1; background: linear-gradient(rgba(5, 7, 10, .62), rgba(5, 7, 10, 0)); }
+.shot .cap { position: absolute; left: 0; right: 0; bottom: clamp(40px, 9vh, 96px); z-index: 2; }
+.shot .cap .wrap { display: grid; gap: 14px; justify-items: start; }
+.shot h3 { font-size: var(--t-h2); line-height: .94; letter-spacing: -.035em; }
+.shot .cap p { color: var(--fg-2); font-size: 16px; }
+#plener .title { position: absolute; z-index: 20; left: 0; right: 0; top: 96px; pointer-events: none; }
+#plener .title h2 { font-size: clamp(22px, 1.9vw, 28px); letter-spacing: -.02em; }
+#plener .thumbs { position: absolute; z-index: 20; right: var(--gut-r); bottom: clamp(48px, 9vh, 104px); display: flex; gap: 6px; }
+#plener .thumbs i { width: 28px; height: 3px; background: rgba(236, 238, 240, .28); position: relative; overflow: hidden; }
+#plener .thumbs i b { position: absolute; inset: 0; background: var(--fg); transform: scaleX(0); transform-origin: left; }
+@media (max-width: 760px) { #plener .thumbs { display: none; } #plener .title { top: 84px; } }
 
-/* ---------- Auta na placu ---------- */
-#auta { padding-block: 120px 0; overflow: clip; }
-#auta .top { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px; }
-.rail { display: flex; gap: 22px; padding-left: var(--gut); padding-right: var(--gut-r); width: max-content; padding-bottom: 120px; }
-.card { width: min(520px, 82vw); flex: none; display: grid; gap: 16px; cursor: pointer; background: none; border: 0; padding: 0; text-align: left; }
-.card .ph { aspect-ratio: 4 / 3; border-radius: 6px; overflow: hidden; position: relative; background: var(--bg-2); max-width: 100%; }
-.card .ph img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.06); transition: transform 1s var(--ease); }
-.card:hover .ph img { transform: scale(1.14); }
-.card .ph .tag { position: absolute; left: 14px; top: 14px; padding: 6px 10px; background: rgba(11, 14, 19, .72); border-radius: 4px; }
-.card .row { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
-.card h3 { font-size: 22px; font-weight: 400; }
-.card .price { font-family: var(--f-display); font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.card .meta { display: flex; gap: 18px; flex-wrap: wrap; }
-@media (max-width: 760px) { .rail-wrap { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; } .rail-wrap::-webkit-scrollbar { display: none; } .card { scroll-snap-align: start; } .rail { padding-bottom: 80px; } }
+/* ---------- Na placu: rząd do przeciągania ---------- */
+#auta { padding-block: clamp(110px, 14vw, 200px) clamp(90px, 10vw, 160px); }
+#auta .top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); align-items: end; gap: 20px 40px; margin-bottom: 48px; }
+#auta .top p { color: var(--fg-2); }
+.rail-wrap { overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gut); scrollbar-width: thin; scrollbar-color: #39414d transparent; padding-bottom: 22px; cursor: grab; }
+.rail-wrap.dragging { cursor: grabbing; scroll-snap-type: none; }
+.rail-wrap.dragging .card { pointer-events: none; }
+.rail { display: flex; gap: 20px; padding-left: var(--gut); padding-right: var(--gut-r); width: max-content; }
+.card { width: clamp(272px, 33vw, 560px); flex: none; display: grid; gap: 14px; align-content: start; cursor: pointer; background: none; border: 0; padding: 0; text-align: left; scroll-snap-align: start; }
+.card .ph { aspect-ratio: 4 / 3; overflow: hidden; background: var(--bg-2); }
+.card .ph img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s var(--ease-out); -webkit-user-drag: none; user-select: none; }
+@media (hover: hover) and (pointer: fine) { .card:hover .ph img { transform: scale(1.03); } }
+.card .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 16px; align-items: baseline; }
+.card h3 { font-size: 22px; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.card .price { font-family: var(--f-num); font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.card .meta { font-size: 14px; color: var(--muted); }
+.card:focus-visible { outline-offset: 6px; }
+@media (max-width: 760px) { #auta .top { grid-template-columns: minmax(0, 1fr); } .card { width: 82vw; } }
 
-/* ---------- Liczby ---------- */
-#liczby { border-top: 1px solid var(--line); }
-#liczby .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.stat { padding: 44px 24px 48px 0; border-right: 1px solid var(--line); display: grid; gap: 10px; align-content: start; }
-.stat + .stat { padding-left: 24px; }
-.stat:last-child { border-right: 0; }
-.stat b { font-family: var(--f-display); font-weight: 900; font-size: clamp(64px, 7vw, 118px); line-height: .9; font-variant-numeric: tabular-nums; }
-.stat b em { font-style: normal; font-size: .4em; color: var(--amber); margin-left: 6px; }
-@media (max-width: 860px) { #liczby .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stat { border-bottom: 1px solid var(--line); } .stat:nth-child(2n) { border-right: 0; } .stat:nth-child(2n+1) { padding-left: 0; } }
-
-/* ---------- Konfigurator ---------- */
-#konfigurator { position: relative; border-top: 1px solid var(--line); }
-#konfigurator .grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
-.stage { position: sticky; top: 0; height: 100svh; min-height: 560px; align-self: start; background: radial-gradient(90% 70% at 50% 70%, #1a2130, var(--bg)); }
-.stage .loading { position: absolute; left: var(--gut); bottom: 28px; }
-.stage .views { position: absolute; left: 50%; transform: translateX(-50%); bottom: 24px; display: flex; gap: 6px; padding: 6px; border-radius: 999px; background: rgba(11, 14, 19, .85); border: 1px solid var(--line); }
-.stage .views button { height: 36px; padding: 0 14px; border-radius: 999px; border: 0; background: transparent; cursor: pointer; font-family: var(--f-hud); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
-.stage .views button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-.stage .sel-name { position: absolute; left: var(--gut); top: 104px; }
-.stage .sel-name b { display: block; font-family: var(--f-display); font-weight: 900; font-size: clamp(36px, 4vw, 60px); line-height: 1; text-transform: uppercase; }
-.panel { padding: 104px var(--gut-r) 56px 40px; display: grid; gap: 26px; align-content: start; border-left: 1px solid var(--line); }
-.panel h2 { font-size: clamp(28px, 3.2vw, 48px); }
-.grp { display: grid; gap: 10px; }
-.grp .lab { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
-.grp .lab output { font-size: 14px; color: var(--fg); }
-.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; }
-.seg button { min-height: 42px; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--line); background: transparent; cursor: pointer; font-family: var(--f-hud); font-size: 12px; letter-spacing: .06em; line-height: 1.2; }
-.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
-.dots { display: flex; flex-wrap: wrap; gap: 10px; }
-.dots button { width: 38px; height: 38px; border-radius: 50%; padding: 0; cursor: pointer; border: 2px solid var(--bg); outline: 1px solid var(--line); background: var(--c); box-shadow: inset 0 -8px 14px rgba(0, 0, 0, .35), inset 0 6px 10px rgba(255, 255, 255, .18); transition: transform .3s var(--ease); }
-.dots button:hover { transform: scale(1.1); }
-.dots button[aria-pressed="true"] { outline: 2px solid var(--amber); outline-offset: 2px; }
-.sum { border-top: 1px solid var(--line); padding-top: 18px; display: grid; gap: 8px; }
-.sum .row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
-.sum .row span:last-child { font-variant-numeric: tabular-nums; color: var(--muted); }
-.total { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-top: 1px solid var(--line); padding-top: 18px; }
-.total b { font-family: var(--f-display); font-weight: 900; font-size: clamp(40px, 4vw, 60px); line-height: 1; font-variant-numeric: tabular-nums; }
-.calc { display: grid; gap: 16px; padding: 22px; border-radius: 10px; background: var(--bg-2); }
-.calc label { display: grid; gap: 8px; }
-.calc .lab { display: flex; justify-content: space-between; gap: 12px; }
-.calc output { font-family: var(--f-hud); font-variant-numeric: tabular-nums; }
-input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; cursor: pointer; }
-input[type="range"]::-webkit-slider-runnable-track { height: 2px; background: linear-gradient(90deg, var(--amber) var(--p, 50%), var(--line) var(--p, 50%)); }
-input[type="range"]::-moz-range-track { height: 2px; background: var(--line); }
-input[type="range"]::-moz-range-progress { height: 2px; background: var(--amber); }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--fg); margin-top: -8px; border: 3px solid var(--bg-2); }
-input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--fg); border: 3px solid var(--bg-2); }
-.rate { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
-.rate b { font-family: var(--f-display); font-size: 40px; font-weight: 900; font-variant-numeric: tabular-nums; }
-@media (max-width: 980px) {
-  #konfigurator .grid { grid-template-columns: minmax(0, 1fr); }
-  .stage { position: sticky; top: 0; height: 52svh; min-height: 340px; z-index: 2; border-bottom: 1px solid var(--line); }
-  .stage .sel-name { top: 70px; } .stage .sel-name b { font-size: 30px; }
-  .stage .views { bottom: 12px; } .stage .views button { padding: 0 10px; }
-  .stage .loading { bottom: 64px; }
-  .panel { border-left: 0; padding: 32px var(--gut-r) 64px var(--gut); }
+/* ---------- Liczby: jedna liczba na zdjęciu ---------- */
+#liczby { padding-bottom: clamp(90px, 10vw, 160px); }
+.fig-photo { position: relative; height: 88svh; min-height: 520px; overflow: hidden; background: #000; }
+.fig-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fig-photo::after { content: ""; position: absolute; inset: 0; background: rgba(5, 7, 10, .28); }
+.fig-photo::before { content: ""; position: absolute; inset: 52% 0 0; z-index: 1; background: linear-gradient(rgba(5, 7, 10, 0), rgba(5, 7, 10, .82)); }
+.fig-photo .head, .fig-photo .base { position: absolute; left: 0; right: 0; z-index: 2; }
+.fig-photo .head { top: clamp(88px, 12vh, 120px); }
+.fig-photo .head h2 { font-size: clamp(26px, 2.6vw, 42px); max-width: 16ch; }
+.fig-photo .base { bottom: 0; }
+.fig-photo .base .wrap { display: flex; justify-content: space-between; align-items: end; gap: 24px; }
+.fig-photo .fig { font-size: clamp(130px, 19vw, 300px); line-height: .78; margin-bottom: -.02em; }
+.fig-photo .base p { max-width: 30ch; font-size: 18px; color: var(--fg); padding-bottom: 28px; }
+.figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding-top: 56px; }
+.figs div { display: grid; gap: 8px; align-content: start; }
+.figs b { font-size: clamp(48px, 4.6vw, 72px); }
+.figs b small { font-family: var(--f-text); font-weight: 500; font-size: 17px; color: var(--muted); margin-left: 8px; }
+.figs span { color: var(--fg-2); max-width: 28ch; }
+@media (max-width: 760px) {
+  .fig-photo { height: 80svh; }
+  .fig-photo .base .wrap { flex-direction: column-reverse; align-items: start; gap: 12px; }
+  .fig-photo .base p { padding-bottom: 0; font-size: 16px; }
+  .fig-photo .fig { font-size: 34vw; }
+  .figs { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-top: 40px; }
 }
 
+/* ---------- Konfigurator ---------- */
+#konfigurator { position: relative; }
+#konfigurator .grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+.stage { position: sticky; top: 0; height: 100svh; min-height: 560px; align-self: start; background: var(--bg); }
+.stage .loading { position: absolute; left: var(--gut); bottom: 84px; }
+.stage .views { position: absolute; left: 50%; transform: translateX(-50%); bottom: 24px; display: flex; gap: 4px; padding: 4px; background: rgba(19, 24, 33, .92); border-radius: 2px; }
+.stage .views button { height: 40px; padding: 0 16px; border: 0; border-radius: 2px; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; white-space: nowrap; color: var(--fg-2); transition: background-color .2s ease, color .2s ease; }
+.stage .views button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.stage .sel-name { position: absolute; left: var(--gut); top: 104px; right: var(--gut); font-size: clamp(30px, 3.2vw, 54px); }
+.panel { padding: 112px var(--gut-r) 72px 48px; display: grid; gap: 30px; align-content: start; background: var(--bg-2); min-width: 0; }
+.panel .intro { display: grid; gap: 14px; }
+.panel .intro p { color: var(--fg-2); }
+.panel h2 { font-size: clamp(34px, 3.4vw, 56px); }
+.grp { display: grid; gap: 12px; min-width: 0; }
+.grp[hidden] { display: none; }
+.lab { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; font-size: 14px; }
+.lab > span:first-child { color: var(--muted); }
+.lab output { color: var(--fg); text-align: right; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
+.seg button { min-height: 50px; padding: 8px 10px; border: 0; border-radius: 2px; background: var(--tone); cursor: pointer; font-size: 14px; font-weight: 500; line-height: 1.25; color: var(--fg); transition: background-color .2s ease, color .2s ease, transform .16s var(--ease-out); overflow-wrap: anywhere; }
+.seg button small { display: block; font-size: 13px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.seg button[aria-pressed="true"] small { color: #4b5260; }
+.seg button:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .seg button:not([aria-pressed="true"]):hover { background: var(--tone-2); } }
+.dots { display: flex; flex-wrap: wrap; gap: 10px; }
+.dots button { width: 40px; height: 40px; border-radius: 50%; padding: 0; cursor: pointer; border: 3px solid var(--bg-2); background: var(--c); box-shadow: 0 0 0 1px rgba(236, 238, 240, .16); /* taste-skill-ignore: obwódka próbki koloru, nie cień */ transition: transform .16s var(--ease-out); }
+.dots button:active { transform: scale(.94); }
+.dots button[aria-pressed="true"] { outline: 2px solid var(--fg); outline-offset: 2px; }
+.dots.off { opacity: .35; }
+.sum { display: grid; gap: 8px; }
+.sum .row { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; }
+.sum .row span:first-child { min-width: 0; overflow-wrap: anywhere; color: var(--fg-2); }
+.sum .row span:last-child { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+.total { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.total > span { font-size: 15px; color: var(--muted); }
+.total b { font-size: clamp(44px, 4vw, 64px); white-space: nowrap; }
+.calc { display: grid; gap: 18px; padding: 24px; border-radius: 2px; background: var(--bg-3); }
+.calc label { display: grid; gap: 8px; }
+.calc output { font-variant-numeric: tabular-nums; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 24px; background: transparent; cursor: pointer; margin: 0; }
+input[type="range"]::-webkit-slider-runnable-track { height: 3px; background: linear-gradient(90deg, var(--fg) var(--p, 50%), var(--tone-2) var(--p, 50%)); }
+input[type="range"]::-moz-range-track { height: 3px; background: var(--tone-2); }
+input[type="range"]::-moz-range-progress { height: 3px; background: var(--fg); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--fg); margin-top: -8.5px; border: 4px solid var(--bg-3); }
+input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--fg); border: 4px solid var(--bg-3); }
+.rate { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.rate > span { font-size: 15px; color: var(--muted); }
+.rate b { font-size: 44px; white-space: nowrap; }
+@media (max-width: 980px) {
+  #konfigurator .grid { grid-template-columns: minmax(0, 1fr); }
+  .stage { position: sticky; top: 0; height: 52svh; min-height: 340px; z-index: 2; }
+  .stage .sel-name { top: 72px; font-size: 28px; }
+  .stage .views { bottom: 12px; } .stage .views button { padding: 0 12px; height: 38px; }
+  .stage .loading { bottom: 64px; }
+  .panel { padding: 40px var(--gut-r) 72px var(--gut); }
+}
+@media (max-width: 380px) { .seg button { font-size: 13px; padding: 8px 6px; } .stage .views button { padding: 0 9px; font-size: 13px; } }
+
 /* ---------- Serwis (koło) ---------- */
-#serwis { position: relative; height: 100svh; min-height: 620px; overflow: clip; border-top: 1px solid var(--line); background: radial-gradient(70% 60% at 62% 50%, #161c28, var(--bg)); }
+#serwis { position: relative; height: 100svh; min-height: 620px; overflow: clip; background: var(--bg-2); }
 #serwis .copy { position: absolute; left: 0; right: 0; top: 104px; pointer-events: none; }
 #serwis .copy .wrap { display: grid; gap: 18px; }
-#serwis h2 { font-size: clamp(28px, 3.8vw, 58px); max-width: 14ch; }
+#serwis h2 { max-width: 12ch; }
+#serwis .copy p { color: var(--fg-2); max-width: 34ch; }
 .tags { position: absolute; inset: 0; pointer-events: none; }
-.tg { position: absolute; left: 0; top: 0; display: grid; gap: 4px; opacity: 0; transform: translate(-9999px, 0); }
-.tg::before { content: ""; position: absolute; left: -22px; top: 9px; width: 14px; height: 14px; border: 1px solid var(--amber); border-radius: 50%; }
-.tg b { font-family: var(--f-display); font-size: 26px; font-weight: 700; text-transform: uppercase; line-height: 1; white-space: nowrap; }
-.service-list { position: absolute; left: 0; right: 0; bottom: 36px; pointer-events: none; }
-.service-list .wrap { display: flex; gap: 10px 28px; flex-wrap: wrap; }
-@media (max-width: 760px) { .tags { display: none; } #serwis .copy { top: 84px; } }
+.tg { position: absolute; left: 0; top: 0; display: grid; gap: 2px; opacity: 0; transform: translate(-9999px, 0); }
+.tg::before { content: ""; position: absolute; left: -22px; top: 9px; width: 10px; height: 10px; border: 2px solid var(--fg); border-radius: 50%; }
+.tg span { font-size: 14px; color: var(--muted); }
+.tg b { font-family: var(--f-num); font-size: 30px; font-weight: 800; line-height: 1; white-space: nowrap; }
+.service-list { position: absolute; left: 0; right: 0; bottom: 40px; }
+.service-list ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 10px 44px; flex-wrap: wrap; }
+.service-list li { display: grid; gap: 2px; font-size: 15px; }
+.service-list li span { color: var(--muted); }
+@media (max-width: 760px) { .tags { display: none; } #serwis .copy { top: 84px; } .service-list ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; } .service-list li { font-size: 14px; } }
 
-/* ---------- Proces ---------- */
-#proces { padding-block: 130px 110px; }
-#proces .top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; margin-bottom: 64px; }
-.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); padding: 0; margin: 0; }
-.flow li { list-style: none; padding: 26px 26px 0 0; display: grid; gap: 14px; align-content: start; position: relative; }
-.flow li::before { content: ""; position: absolute; top: -1px; left: 0; height: 1px; width: 100%; background: var(--amber); transform: scaleX(var(--s, 0)); transform-origin: left; }
-.flow .n { font-family: var(--f-hud); color: var(--amber); }
-.flow h3 { font-size: clamp(20px, 1.8vw, 28px); font-weight: 400; }
-.flow p { color: #c7c4bd; }
-@media (max-width: 860px) { #proces .top { grid-template-columns: minmax(0, 1fr); } .flow { grid-template-columns: minmax(0, 1fr); } .flow li { padding: 22px 0 30px; border-bottom: 1px solid var(--line); } }
+/* ---------- Proces: kroki jako lista w skali plakatu ---------- */
+#proces { padding-block: clamp(110px, 14vw, 220px); }
+.poster { display: grid; gap: clamp(28px, 3vw, 44px); }
+.poster .rowp { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); gap: 16px 48px; align-items: first baseline; }
+.poster h2, .poster h3 { font-size: clamp(40px, 5.6vw, 92px); letter-spacing: -.04em; line-height: .95; }
+.poster h2 { color: var(--muted); }
+.poster ol { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(28px, 3vw, 44px); }
+.poster p { color: var(--fg-2); }
+@media (max-width: 760px) { .poster .rowp { grid-template-columns: minmax(0, 1fr); gap: 10px; } .poster h2, .poster h3 { font-size: 11vw; } .poster p { padding-left: 2px; } }
 
-/* ---------- Kontakt ---------- */
-#kontakt { border-top: 1px solid var(--line); padding-block: 120px; position: relative; overflow: clip; }
-#kontakt .bgimg { position: absolute; inset: 0; z-index: 0; opacity: .22; }
-#kontakt .bgimg img { width: 100%; height: 120%; object-fit: cover; display: block; }
-#kontakt .grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 56px; }
-#kontakt h2 { font-size: clamp(40px, 6.4vw, 100px); }
-.addr { display: grid; gap: 6px; margin-top: 36px; }
-.addr .sel { user-select: all; font-family: var(--f-hud); font-size: 18px; letter-spacing: .06em; }
-form { display: grid; gap: 14px; align-content: start; }
-.field { display: grid; gap: 6px; }
-.field input, .field select { height: 54px; border-radius: 8px; border: 1px solid var(--line); background: rgba(18, 23, 34, .9); color: var(--fg); padding: 0 16px; font: inherit; font-size: 16px; }
-.field input:focus, .field select:focus { border-color: var(--amber); outline: none; }
-.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
-.ok { padding: 16px 18px; border: 1px solid var(--amber); border-radius: 8px; background: rgba(11, 14, 19, .8); }
-@media (max-width: 860px) { #kontakt .grid { grid-template-columns: minmax(0, 1fr); } .two { grid-template-columns: minmax(0, 1fr); } }
+/* ---------- Kontakt: karta na zdjęciu ---------- */
+#kontakt { position: relative; overflow: clip; padding-block: clamp(110px, 12vw, 180px); min-height: 100svh; display: grid; align-items: center; }
+#kontakt .bgimg { position: absolute; inset: 0; z-index: 0; }
+#kontakt .bgimg img { width: 100%; height: 115%; object-fit: cover; object-position: 30% 50%; display: block; }
+#kontakt .bgimg::after { content: ""; position: absolute; inset: 0; background: rgba(8, 10, 14, .5); }
+#kontakt .grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 30rem); gap: 48px; align-items: end; }
+#kontakt h2 { font-size: var(--t-display); }
+.addr { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 10px 24px; margin-top: 40px; font-size: 16px; }
+.addr dt { color: var(--fg-2); }
+.addr dd { margin: 0; }
+.addr .tel { font-family: var(--f-num); font-size: 26px; font-weight: 800; letter-spacing: .02em; line-height: 1.1; }
+.card-form { background: var(--bg); padding: clamp(24px, 3vw, 36px); border-radius: 2px; }
+form { display: grid; gap: 16px; align-content: start; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label { font-size: 14px; color: var(--fg-2); }
+.field input, .field select { height: 54px; border-radius: 2px; border: 1px solid transparent; background: var(--bg-2); color: var(--fg); padding: 0 16px; font: inherit; font-size: 16px; width: 100%; min-width: 0; }
+.field input:focus, .field select:focus { border-color: var(--fg); outline: none; }
+.field input[aria-invalid="true"] { border-color: var(--error); }
+.field .err { font-size: 14px; color: var(--error); }
+.field .err:empty { display: none; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+form .btn { width: 100%; --h: 56px; }
+.ok { padding: 16px 18px; border-radius: 2px; background: var(--bg-2); overflow-wrap: anywhere; font-size: 16px; }
+@media (max-width: 900px) { #kontakt .grid { grid-template-columns: minmax(0, 1fr); } #kontakt .bgimg::after { background: rgba(8, 10, 14, .62); } }
+@media (max-width: 480px) { .two { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- Stopka ---------- */
-footer { border-top: 1px solid var(--line); padding-top: 40px; padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); overflow: clip; }
-.giant { font-family: var(--f-display); font-weight: 900; font-size: 25.5vw; line-height: .78; text-transform: uppercase; white-space: nowrap; margin-left: -.03em; }
+footer { padding-top: 48px; padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); overflow: clip; }
+.giant { font-family: var(--f-num); font-weight: 900; font-size: min(33vw, 640px); line-height: .78; text-transform: uppercase; white-space: nowrap; margin-left: -.03em; }
 .giant .char { display: inline-block; }
-.foot { display: flex; justify-content: space-between; gap: 18px 40px; flex-wrap: wrap; padding-top: 28px; border-top: 1px solid var(--line); margin-top: 20px; color: var(--muted); font-size: 13px; }
-.foot p { max-width: 80ch; }
+.foot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px 48px; padding-top: 40px; color: var(--muted); font-size: 14px; }
+.foot p { max-width: 70ch; }
+@media (max-width: 760px) { .foot { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- Szczegóły auta ---------- */
 #detail { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); background: var(--bg); }
 #detail[hidden] { display: none !important; }
 #detail .img { position: relative; overflow: hidden; background: #000; }
 #detail .img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-#detail .info { padding: calc(40px + env(safe-area-inset-top, 0px)) var(--gut-r) 40px 44px; display: grid; gap: 22px; align-content: center; overflow: auto; }
-#detail h3 { font-size: clamp(30px, 3.4vw, 52px); }
-#detail dl { display: grid; grid-template-columns: auto 1fr; gap: 10px 22px; margin: 0; border-top: 1px solid var(--line); padding-top: 18px; }
+#detail .info { padding: calc(48px + env(safe-area-inset-top, 0px)) var(--gut-r) 48px 48px; display: grid; gap: 22px; align-content: center; overflow: auto; }
+#detail .info > p { color: var(--fg-2); }
+#detail h3 { font-size: clamp(34px, 3.4vw, 56px); line-height: .96; }
+#detail dl { display: grid; grid-template-columns: auto 1fr; gap: 10px 24px; margin: 0; font-size: 16px; }
 #detail dt { color: var(--muted); }
 #detail dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
-#detail .close { position: absolute; top: calc(18px + env(safe-area-inset-top, 0px)); right: calc(18px + env(safe-area-inset-right, 0px)); --h: 46px; background: var(--bg); }
-@media (max-width: 860px) { #detail { grid-template-columns: minmax(0, 1fr); grid-template-rows: 42svh 1fr; } #detail .info { padding: 28px var(--gut-r) 40px var(--gut); align-content: start; } }
+#detail .close { position: absolute; top: calc(18px + env(safe-area-inset-top, 0px)); right: calc(18px + env(safe-area-inset-right, 0px)); --h: 44px; background: var(--bg); }
+@media (hover: hover) and (pointer: fine) { #detail .close:hover { background: var(--bg-3); } }
+@media (max-width: 860px) { #detail { grid-template-columns: minmax(0, 1fr); grid-template-rows: 40svh 1fr; } #detail .info { padding: 28px var(--gut-r) 40px var(--gut); align-content: start; } }
 
-/* ---------- HUD prędkości ---------- */
-.speedo { position: fixed; left: calc(var(--gut) - 4px); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 40; display: flex; align-items: center; gap: 12px; pointer-events: none; padding: 8px 14px 8px 8px; border-radius: 999px; background: rgba(11, 14, 19, .85); border: 1px solid var(--line); }
-.speedo svg { width: 46px; height: 46px; }
-.speedo b { font-family: var(--f-display); font-weight: 900; font-size: 28px; line-height: 1; font-variant-numeric: tabular-nums; display: inline-block; min-width: 2.3ch; text-align: right; }
-.speedo .hud { font-size: 10px; line-height: 1.3; }
-@media (max-width: 760px) { .speedo { display: none; } }
-
-/* ---------- Kursor ---------- */
-.cursor { position: fixed; left: 0; top: 0; z-index: 120; pointer-events: none; width: 44px; height: 44px; margin: -22px 0 0 -22px; border: 1px solid rgba(236, 233, 226, .55); border-radius: 50%; display: grid; place-items: center; transition: width .35s var(--ease), height .35s var(--ease), margin .35s var(--ease), background .35s, border-color .35s; }
-.cursor span { font-family: var(--f-hud); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--bg); opacity: 0; transition: opacity .25s; }
-.cursor.on { width: 88px; height: 88px; margin: -44px 0 0 -44px; background: var(--amber); border-color: var(--amber); }
-.cursor.on span { opacity: 1; }
+/* ---------- Dymek kursora nad modelami 3D i autami ---------- */
+.cursor { position: fixed; left: 0; top: 0; z-index: 120; pointer-events: none; width: 0; height: 0; }
+.cursor span { position: absolute; left: -38px; top: -38px; width: 76px; height: 76px; border-radius: 50%; background: var(--fg); color: var(--bg); display: grid; place-items: center; font-size: 13px; font-weight: 600; opacity: 0; transform: scale(.6); transition: opacity .18s ease, transform .25s var(--ease-out); }
+.cursor.on span { opacity: 1; transform: scale(1); }
 @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
 
-/* ---------- Przejście z logo ---------- */
-#wipe { position: fixed; inset: 0; z-index: 90; pointer-events: none; display: grid; place-items: center; background: var(--amber); color: var(--bg); visibility: hidden; overflow: hidden; }
-#wipe svg { width: 120px; height: auto; }
-#wipe .inner { position: absolute; inset: 0; background: var(--bg); }
-#wipe .mark { position: relative; z-index: 1; }
+/* ---------- Szybkie przejście przy skoku do sekcji ---------- */
+#wipe { position: fixed; inset: 0; z-index: 90; pointer-events: none; background: var(--bg); opacity: 0; visibility: hidden; }
 
-.fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; color: var(--muted); }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+.fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; color: var(--muted); font-size: 15px; }
+@media (prefers-reduced-motion: reduce) {
+  .snd[aria-pressed="true"] .bars i { animation: none; height: 10px; }
+  .btn:active, .seg button:active, .dots button:active { transform: none; }
+  .card .ph img { transition: none; }
+  .cursor span { transition: opacity .18s ease; transform: none; }
+}
 </style>
 </head>
 <body>
@@ -328,216 +389,233 @@ footer { border-top: 1px solid var(--line); padding-top: 40px; padding-bottom: c
 <!-- Logo salonu: tarcza z obrotomierzem -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <linearGradient id="lg-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset=".55" stop-color="#ffad2a"/><stop offset="1" stop-color="#c46a00"/></linearGradient>
     <symbol id="badge" viewBox="0 0 200 230">
-      <path d="M100 6 L188 38 L188 120 Q188 158 100 222 Q12 158 12 120 L12 38 Z" fill="#0b0e13" stroke="url(#lg-gold)" stroke-width="7" stroke-linejoin="round"/>
-      <path d="M64.6 133.4 A50 50 0 1 1 135.4 133.4" fill="none" stroke="#ece9e2" stroke-width="8" stroke-linecap="round"/>
+      <path d="M100 6 L188 38 L188 120 Q188 158 100 222 Q12 158 12 120 L12 38 Z" fill="#0b0e13" stroke="#ffad2a" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M64.6 133.4 A50 50 0 1 1 135.4 133.4" fill="none" stroke="#eceef0" stroke-width="8" stroke-linecap="round"/>
       <path d="M150 98 A50 50 0 0 1 135.4 133.4" fill="none" stroke="#ff4d2a" stroke-width="8" stroke-linecap="round"/>
       <line x1="100" y1="98" x2="134" y2="72" stroke="#ffad2a" stroke-width="7" stroke-linecap="round"/>
       <circle cx="100" cy="98" r="10" fill="#ffad2a"/>
-      <text x="100" y="186" text-anchor="middle" font-family="Big Shoulders Display, Impact, sans-serif" font-weight="900" font-size="32" letter-spacing="2" fill="#ece9e2">OBROTY</text>
+      <text x="100" y="186" text-anchor="middle" font-family="Big Shoulders Display, sans-serif" font-weight="900" font-size="32" letter-spacing="2" fill="#eceef0">OBROTY</text>
     </symbol>
   </defs>
 </svg>
 
 <div id="loader" role="status" aria-live="polite">
   <div class="box">
-    <svg class="badge-svg" viewBox="0 0 200 230" aria-label="Logo salonu Obroty">
-      <path id="ld-shield" d="M100 6 L188 38 L188 120 Q188 158 100 222 Q12 158 12 120 L12 38 Z" fill="none" stroke="url(#lg-gold)" stroke-width="5" stroke-linejoin="round"/>
-      <path id="ld-inner" d="M100 18 L177 46 L177 119 Q177 152 100 208 Q23 152 23 119 L23 46 Z" fill="none" stroke="#ffad2a" stroke-opacity=".35" stroke-width="1.2"/>
-      <path d="M64.6 133.4 A50 50 0 1 1 135.4 133.4" fill="none" stroke="rgba(236,233,226,.12)" stroke-width="8" stroke-linecap="round"/>
-      <path id="ld-arc" d="M64.6 133.4 A50 50 0 1 1 135.4 133.4" fill="none" stroke="#ece9e2" stroke-width="8" stroke-linecap="round"/>
+    <svg viewBox="0 0 200 230" aria-label="Logo salonu Obroty">
+      <path id="ld-shield" d="M100 6 L188 38 L188 120 Q188 158 100 222 Q12 158 12 120 L12 38 Z" fill="none" stroke="#ffad2a" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M64.6 133.4 A50 50 0 1 1 135.4 133.4" fill="none" stroke="rgba(236,238,240,.12)" stroke-width="8" stroke-linecap="round"/>
+      <path id="ld-arc" d="M64.6 133.4 A50 50 0 1 1 135.4 133.4" fill="none" stroke="#eceef0" stroke-width="8" stroke-linecap="round"/>
       <path id="ld-red" d="M150 98 A50 50 0 0 1 135.4 133.4" fill="none" stroke="#ff4d2a" stroke-width="8" stroke-linecap="round" opacity="0"/>
-      <g id="ld-ticks" stroke="#ece9e2" stroke-width="2.4" stroke-linecap="round"></g>
+      <g id="ld-ticks" stroke="#eceef0" stroke-width="2.4" stroke-linecap="round"></g>
       <line id="ld-needle" x1="100" y1="98" x2="100" y2="58" stroke="#ffad2a" stroke-width="6" stroke-linecap="round" style="transform-origin:100px 98px;transform:rotate(-135deg)"/>
       <circle cx="100" cy="98" r="10" fill="#ffad2a"/><circle cx="100" cy="98" r="3.8" fill="#0b0e13"/>
-      <text id="ld-word" x="100" y="186" text-anchor="middle" font-family="Big Shoulders Display, Impact, sans-serif" font-weight="900" font-size="32" letter-spacing="2" fill="#ece9e2" opacity="0">OBROTY</text>
+      <text id="ld-word" x="100" y="186" text-anchor="middle" font-family="Big Shoulders Display, sans-serif" font-weight="900" font-size="32" letter-spacing="2" fill="#eceef0" opacity="0">OBROTY</text>
     </svg>
-    <div class="pct" id="ld-pct">0%</div>
-    <small class="hud" id="ld-note">Wczytuję Lamborghini Aventador SVJ w 3D</small>
+    <div class="pct num" id="ld-pct">0%</div>
+    <p class="note" id="ld-note">Wczytuję Aventadora SVJ w&nbsp;3D</p>
     <div class="enter" id="ld-enter" hidden>
-      <button class="btn solid" id="enter-sound" type="button"><span class="dot"></span>Wejdź z dźwiękiem</button>
+      <button class="btn solid" id="enter-sound" type="button">Wejdź z&nbsp;dźwiękiem</button>
       <button class="btn" id="enter-mute" type="button">Bez dźwięku</button>
     </div>
   </div>
 </div>
 <div class="curtain top" hidden></div><div class="curtain bot" hidden></div>
 
-<header class="nav">
+<header class="nav" id="nav">
   <div class="wrap">
     <a class="logo" href="#hero" data-go aria-label="Obroty, początek strony"><svg viewBox="0 0 200 230" aria-hidden="true"><use href="#badge"/></svg><b>OBROTY</b></a>
-    <ul class="hud">
-      <li><a href="#plener" data-go>W plenerze</a></li>
+    <ul>
+      <li><a href="#plener" data-go>W&nbsp;plenerze</a></li>
       <li><a href="#auta" data-go>Na placu</a></li>
       <li><a href="#konfigurator" data-go>Konfigurator</a></li>
       <li><a href="#serwis" data-go>Serwis</a></li>
       <li><a href="#kontakt" data-go>Kontakt</a></li>
     </ul>
     <div class="right">
-      <button class="btn snd" id="snd" type="button" aria-pressed="false" aria-label="Dźwięk silnika"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="hud" id="snd-l">Dźwięk</span></button>
-      <a class="btn solid jazda" href="#kontakt" data-go><span class="dot"></span>Jazda próbna</a>
+      <div class="speedo" aria-hidden="true" title="Prędkość przewijania i przebieg strony">
+        <svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke="rgba(236,238,240,.18)" stroke-width="4" stroke-dasharray="89.5 120" transform="rotate(135 23 23)"></circle><circle id="sp-arc" cx="23" cy="23" r="19" fill="none" stroke="#eceef0" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 120" transform="rotate(135 23 23)"></circle></svg>
+        <div class="v"><b><span id="sp">0</span><i>km/h</i></b><span><span id="odo">0,00</span> km</span></div>
+      </div>
+      <button class="btn snd" id="snd" type="button" aria-pressed="false"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="snd-l">Dźwięk</span></button>
+      <a class="btn light jazda" href="#kontakt" data-go>Jazda próbna</a>
+      <button class="btn menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
     </div>
   </div>
 </header>
+<nav id="menu" hidden aria-label="Menu">
+  <div class="wrap">
+    <ul>
+      <li><a href="#plener" data-go>W&nbsp;plenerze</a></li>
+      <li><a href="#auta" data-go>Na placu</a></li>
+      <li><a href="#konfigurator" data-go>Konfigurator</a></li>
+      <li><a href="#serwis" data-go>Serwis</a></li>
+      <li><a href="#kontakt" data-go>Kontakt</a></li>
+    </ul>
+    <a class="btn solid menu-cta" href="#kontakt" data-go>Umów jazdę próbną</a>
+  </div>
+</nav>
 
 <main>
-  <section id="hero" aria-label="Lamborghini Aventador SVJ w salonie">
+  <section id="hero" aria-labelledby="hero-h">
     <canvas class="gl" id="gl-hero" data-cursor="Obróć" aria-label="Model 3D Lamborghini Aventador SVJ. Przeciągnij, aby obrócić."></canvas>
     <div class="tach" aria-hidden="true">
-      <div class="hud muted">Obroty silnika V12</div>
-      <div class="num" id="tach-num">0</div>
+      <div><span class="num" id="tach-num">0</span></div>
+      <div class="unit">obr/min</div>
       <div class="bar"><i id="tach-bar"></i></div>
-      <div class="hud muted note" id="tach-note">Silnik zgaszony</div>
+      <div class="note" id="tach-note">Silnik zgaszony</div>
     </div>
     <div class="over">
-      <div></div>
-      <div class="wrap">
-        <div class="hud amber">Lamborghini Aventador SVJ · 2019 · 6 900 km · od ręki</div>
-        <h1 data-split>Wsiadasz.<br><b>Reszta to obroty.</b></h1>
-        <p class="lead">Używane Lamborghini i inne auta sportowe w Poznaniu. Każde przechodzi u nas przegląd w 212 punktach, ma pełną historię serwisową i 24 miesiące gwarancji.</p>
-        <div class="actions">
-          <button class="btn solid magnetic" id="rev" type="button"><span class="dot"></span>Odpal silnik</button>
-          <a class="btn magnetic" href="#konfigurator" data-go>Skonfiguruj swoje</a>
-        </div>
-        <div class="strip">
-          <div class="specs hud muted">
-            <span><b>770 KM</b>przy 8500 obr/min</span>
-            <span><b>6498 cm³</b>V12 wolnossący</span>
-            <span><b>2,8 s</b>0–100 km/h</span>
-            <span><b>350+ km/h</b>prędkość maks.</span>
+      <div class="wrap hero-grid">
+        <h1 id="hero-h">Wsiadasz.<br>Reszta to obroty.</h1>
+        <div class="hero-side">
+          <p>Aventador SVJ z&nbsp;2019 roku, 6&nbsp;900&nbsp;km, do odbioru od ręki. Używane Lamborghini w&nbsp;Poznaniu: każde po przeglądzie w&nbsp;212 punktach i&nbsp;z&nbsp;gwarancją na 24 miesiące.</p>
+          <div class="actions">
+            <button class="btn solid" id="rev" type="button">Odpal silnik</button>
+            <a class="btn" href="#konfigurator" data-go>Skonfiguruj swoje</a>
           </div>
-          <span class="hud muted drag-hint">Przeciągnij auto, żeby je obrócić</span>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="marquee" aria-label="Marki w naszej ofercie">
-    <div class="track" id="mq"><span>Lamborghini</span><span>Ferrari</span><span>Porsche</span><span>McLaren</span><span>Aston Martin</span><span>Maserati</span><span>Audi Sport</span><span>Bentley</span></div>
-  </div>
-
-  <section id="anatomia" aria-label="Anatomia Aventadora SVJ">
+  <section id="anatomia" aria-labelledby="anat-h">
     <canvas class="gl" id="gl-anat" aria-hidden="true"></canvas>
     <div class="head"><div class="wrap">
-      <h2 data-split>Obejdź SVJ<br><b>dookoła</b></h2>
-      <p class="hud muted">Przewijaj, a kamera przejdzie wokół auta</p>
+      <h2 id="anat-h" data-split>Obejdź SVJ dookoła</h2>
+      <p class="note">Przewijaj, a&nbsp;kamera obejdzie auto.</p>
     </div></div>
     <div class="steps"><div class="wrap">
-      <div class="step first"><div class="hud amber">Przód</div><h3>Aerodynamika ALA 2.0</h3><p class="muted">Klapy w przednim spojlerze otwierają się w 500 ms i zmieniają docisk w zależności od zakrętu.</p></div>
-      <div class="step"><div class="hud amber">Koło</div><div class="big" data-count="20">0<small>cali z przodu</small></div><p class="muted">Kute felgi, a za nimi karbonowo-ceramiczne hamulce. Z tyłu koła mają 21 cali.</p></div>
-      <div class="step"><div class="hud amber">Tył</div><div class="big" data-count="770">0<small>KM</small></div><p class="muted">Wolnossące V12 6,5 l kręci się do 8700 obr/min. Te obroty usłyszysz po kliknięciu „Odpal silnik”.</p></div>
-      <div class="step"><div class="hud amber">Z góry</div><div class="big" data-count="1525">0<small>kg</small></div><p class="muted">Masa na sucho. W 2018 roku SVJ przejechał Nürburgring w 6:44,97, najszybciej spośród aut seryjnych.</p></div>
+      <div class="step first"><h3>Aktywna aerodynamika ALA&nbsp;2.0</h3><p>Klapy w&nbsp;przednim spojlerze otwierają się w&nbsp;500&nbsp;ms i&nbsp;zmieniają docisk przy każdym zakręcie.</p></div>
+      <div class="step"><div class="big num" data-count="20">20<small>cali z&nbsp;przodu</small></div><p>Kute felgi, a&nbsp;za nimi karbonowo-ceramiczne hamulce. Z&nbsp;tyłu koła mają 21&nbsp;cali.</p></div>
+      <div class="step"><div class="big num" data-count="770">770<small>KM</small></div><p>Wolnossące V12 6,5&nbsp;l kręci się do 8700&nbsp;obr/min. Do setki w&nbsp;2,8&nbsp;s.</p></div>
+      <div class="step"><div class="big num" data-count="1525">1525<small>kg</small></div><p>Masa na sucho. W&nbsp;2018 roku SVJ przejechał Nürburgring w&nbsp;6:44,97, najszybciej spośród aut seryjnych.</p></div>
     </div></div>
     <div class="prog" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
   </section>
 
-  <section id="plener" aria-label="Lamborghini w plenerze">
-    <div class="title"><div class="wrap"><div class="hud amber">W plenerze</div></div></div>
-    <div class="counter" aria-hidden="true"><b id="pl-n">01</b><span> / <i id="pl-t">08</i></span></div>
+  <section id="plener" aria-labelledby="pl-h">
+    <div class="title"><div class="wrap"><h2 id="pl-h">W&nbsp;plenerze</h2></div></div>
     <div id="shots"></div>
     <div class="thumbs" id="pl-thumbs" aria-hidden="true"></div>
   </section>
 
-  <section id="auta" aria-label="Auta na placu">
+  <section id="auta" aria-labelledby="auta-h">
     <div class="wrap top">
-      <h2 data-split>Na placu</h2>
-      <p class="muted">Sześć egzemplarzy gotowych do odbioru. Kliknij auto, żeby zobaczyć szczegóły.</p>
+      <h2 id="auta-h" data-split>Na placu</h2>
+      <p>Sześć aut gotowych do odbioru. Kliknij auto, żeby zobaczyć szczegóły, albo przeciągnij rząd w&nbsp;bok.</p>
     </div>
-    <div class="rail-wrap"><div class="rail" id="rail"></div></div>
+    <div class="rail-wrap" id="rail-wrap"><div class="rail" id="rail"></div></div>
   </section>
 
-  <section id="liczby" aria-label="Liczby">
-    <div class="wrap">
-      <div class="stat"><b data-count="212">0</b><span class="muted">punktów przeglądu przed wystawieniem auta</span></div>
-      <div class="stat"><b data-count="24">0<em>mies.</em></b><span class="muted">gwarancji na silnik i skrzynię</span></div>
-      <div class="stat"><b data-count="48">0<em>h</em></b><span class="muted">od decyzji do odbioru z rejestracją</span></div>
-      <div class="stat"><b data-count="0">0<em>zł</em></b><span class="muted">za transport auta w całej Polsce</span></div>
+  <section id="liczby" aria-labelledby="liczby-h">
+    <div class="fig-photo">
+      <img data-src="./img/garaz-1000.webp" data-srcset="./img/garaz-1000.webp 1000w, ./img/garaz-2000.webp 2000w" sizes="100vw" alt="Żółty Lamborghini Aventador SVJ z&nbsp;otwartymi drzwiami w&nbsp;ciemnym studiu" loading="lazy" decoding="async" width="2000" height="1334">
+      <div class="head"><div class="wrap"><h2 id="liczby-h">Sprawdzone, zanim trafi na plac</h2></div></div>
+      <div class="base"><div class="wrap">
+        <b class="fig num">212</b>
+        <p>punktów kontroli przechodzi każde auto, zanim je wystawimy. Raport z&nbsp;przeglądu dostajesz razem z&nbsp;kluczykami.</p>
+      </div></div>
+    </div>
+    <div class="wrap figs">
+      <div><b class="num">24<small>mies.</small></b><span>gwarancji na silnik i&nbsp;skrzynię</span></div>
+      <div><b class="num">48<small>h</small></b><span>od decyzji do odbioru z&nbsp;rejestracją</span></div>
+      <div><b class="num">0<small>zł</small></b><span>za transport auta w&nbsp;całej Polsce</span></div>
     </div>
   </section>
 
-  <section id="konfigurator" aria-label="Konfigurator">
+  <section id="konfigurator" aria-labelledby="conf-h">
     <div class="grid">
       <div class="stage">
         <canvas class="gl" id="gl-conf" data-cursor="Obróć" aria-label="Model 3D konfigurowanego auta. Przeciągnij, aby obrócić."></canvas>
-        <div class="sel-name"><span class="hud muted">Konfigurujesz</span><b id="conf-name">Aventador SVJ</b></div>
-        <div class="loading hud muted" id="conf-load"></div>
+        <h3 class="sel-name" id="conf-name" aria-live="polite">Aventador SVJ</h3>
+        <div class="loading note" id="conf-load" aria-live="polite"></div>
         <div class="views" role="group" aria-label="Widok kamery">
-          <button type="button" data-v="q" aria-pressed="true">3/4</button><button type="button" data-v="s">Bok</button><button type="button" data-v="r">Tył</button><button type="button" data-v="t">Z góry</button>
+          <button type="button" data-v="q" aria-pressed="true">3/4</button><button type="button" data-v="s" aria-pressed="false">Bok</button><button type="button" data-v="r" aria-pressed="false">Tył</button><button type="button" data-v="t" aria-pressed="false">Z&nbsp;góry</button>
         </div>
       </div>
       <div class="panel">
-        <div class="hud amber">Konfigurator · zmiany widać od razu w 3D</div>
-        <h2 data-split>Twoje <b>Lamborghini</b></h2>
-        <div class="grp"><div class="lab"><span class="hud muted">Model</span></div><div class="seg" id="o-model"></div></div>
-        <div class="grp"><div class="lab"><span class="hud muted">Lakier</span><output id="o-paint-l"></output></div><div class="dots" id="o-paint"></div></div>
-        <div class="grp"><div class="lab"><span class="hud muted">Wykończenie</span></div><div class="seg" id="o-finish"></div></div>
-        <div class="grp"><div class="lab"><span class="hud muted">Felgi</span><output id="o-rims-l"></output></div><div class="dots" id="o-rims"></div></div>
-        <div class="grp" data-only="svj"><div class="lab"><span class="hud muted">Zaciski hamulcowe</span><output id="o-cal-l"></output></div><div class="dots" id="o-cal"></div></div>
-        <div class="grp" data-only="svj"><div class="lab"><span class="hud muted">Elementy karbonowe</span></div><div class="seg" id="o-carbon"></div></div>
-        <div class="grp" data-only="cen"><div class="lab"><span class="hud muted">Akcenty</span><output id="o-acc-l"></output></div><div class="dots" id="o-acc"></div></div>
-        <button class="btn" id="conf-rev" type="button"><span class="dot"></span>Odpal silnik</button>
+        <div class="intro">
+          <h2 id="conf-h" data-split>Twoje Lamborghini</h2>
+          <p>Każdą zmianę od razu widać na modelu 3D obok.</p>
+        </div>
+        <div class="grp"><div class="lab"><span id="l-model">Model</span></div><div class="seg" id="o-model" role="group" aria-labelledby="l-model"></div></div>
+        <div class="grp"><div class="lab"><span id="l-paint">Lakier</span><output id="o-paint-l"></output></div><div class="dots" id="o-paint" role="group" aria-labelledby="l-paint"></div></div>
+        <div class="grp"><div class="lab"><span id="l-finish">Wykończenie</span></div><div class="seg" id="o-finish" role="group" aria-labelledby="l-finish"></div></div>
+        <div class="grp"><div class="lab"><span id="l-rims">Felgi</span><output id="o-rims-l"></output></div><div class="dots" id="o-rims" role="group" aria-labelledby="l-rims"></div></div>
+        <div class="grp" data-only="svj"><div class="lab"><span id="l-cal">Zaciski hamulcowe</span><output id="o-cal-l"></output></div><div class="dots" id="o-cal" role="group" aria-labelledby="l-cal"></div></div>
+        <div class="grp" data-only="svj"><div class="lab"><span id="l-carbon">Elementy karbonowe</span></div><div class="seg" id="o-carbon" role="group" aria-labelledby="l-carbon"></div></div>
+        <div class="grp" data-only="cen" hidden><div class="lab"><span id="l-acc">Akcenty</span><output id="o-acc-l"></output></div><div class="dots" id="o-acc" role="group" aria-labelledby="l-acc"></div></div>
+        <div><button class="btn" id="conf-rev" type="button">Odpal silnik</button></div>
         <div class="sum" id="sum"></div>
-        <div class="total"><span class="hud muted">Cena brutto</span><b id="price">0 zł</b></div>
-        <div class="calc" aria-label="Kalkulator leasingu">
-          <label for="down"><span class="lab"><span class="hud muted">Wpłata własna</span><output id="down-o">20%</output></span><input type="range" id="down" min="0" max="45" step="5" value="20"></label>
-          <label for="buy"><span class="lab"><span class="hud muted">Wykup</span><output id="buy-o">20%</output></span><input type="range" id="buy" min="1" max="40" step="1" value="20"></label>
-          <div><div class="hud muted" style="margin-bottom:8px">Okres (mies.)</div><div class="seg" id="months"><button type="button" data-m="24">24</button><button type="button" data-m="36">36</button><button type="button" data-m="48" aria-pressed="true">48</button><button type="button" data-m="60">60</button></div></div>
-          <div class="rate"><span class="hud muted">Rata netto / mies.</span><b id="rate">0 zł</b></div>
-          <p class="hud muted" style="font-size:10px">Przykładowe wyliczenie przy oprocentowaniu 8,9% rocznie. Nie jest to oferta.</p>
+        <div class="total"><span>Cena brutto</span><b class="num" id="price" aria-live="polite">0 zł</b></div>
+        <div class="calc" role="group" aria-labelledby="l-calc">
+          <h3 id="l-calc" class="sr-only">Kalkulator leasingu</h3>
+          <label for="down"><span class="lab"><span>Wpłata własna</span><output id="down-o" for="down">20%</output></span><input type="range" id="down" min="0" max="45" step="5" value="20"></label>
+          <label for="buy"><span class="lab"><span>Wykup</span><output id="buy-o" for="buy">20%</output></span><input type="range" id="buy" min="1" max="40" step="1" value="20"></label>
+          <div class="grp"><div class="lab"><span id="l-months">Okres leasingu w&nbsp;miesiącach</span></div><div class="seg" id="months" role="group" aria-labelledby="l-months"><button type="button" data-m="24" aria-pressed="false">24</button><button type="button" data-m="36" aria-pressed="false">36</button><button type="button" data-m="48" aria-pressed="true">48</button><button type="button" data-m="60" aria-pressed="false">60</button></div></div>
+          <div class="rate"><span>Rata netto miesięcznie</span><b class="num" id="rate">0 zł</b></div>
+          <p class="note">Przykładowe wyliczenie przy oprocentowaniu 8,9% rocznie. To nie jest oferta.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="serwis" aria-label="Serwis i opony">
+  <section id="serwis" aria-labelledby="serwis-h">
     <canvas class="gl" id="gl-wheel" aria-hidden="true"></canvas>
     <div class="copy"><div class="wrap">
-      <div class="hud amber">Serwis · opony · hamulce</div>
-      <h2 data-split>Rozkładamy<br><b>każde koło</b></h2>
-      <p class="muted" style="max-width:36ch">Przewijaj, a koło rozłoży się na części. Ten model zbudowaliśmy w kodzie od zera.</p>
+      <h2 id="serwis-h" data-split>Rozkładamy każde koło</h2>
+      <p>Opony, felgi i&nbsp;hamulce aut sportowych serwisujemy na miejscu. Przewijaj, a&nbsp;koło rozłoży się na części.</p>
     </div></div>
-    <div class="tags" id="tags">
-      <div class="tg" data-part="tire"><span class="hud muted">Opona</span><b>355/25 ZR21</b></div>
-      <div class="tg" data-part="rim"><span class="hud muted">Felga kuta</span><b>21″ × 13J</b></div>
-      <div class="tg" data-part="disc"><span class="hud muted">Tarcza karbonowo-ceramiczna</span><b>400 mm</b></div>
-      <div class="tg" data-part="caliper"><span class="hud muted">Zacisk</span><b>6 tłoczków</b></div>
+    <div class="tags" id="tags" aria-hidden="true">
+      <div class="tg" data-part="tire"><b>355/25 ZR21</b><span>Opona</span></div>
+      <div class="tg" data-part="rim"><b>21″ × 13J</b><span>Felga kuta</span></div>
+      <div class="tg" data-part="disc"><b>400 mm</b><span>Tarcza karbonowo-ceramiczna</span></div>
+      <div class="tg" data-part="caliper"><b>6 tłoczków</b><span>Zacisk</span></div>
     </div>
-    <div class="service-list hud muted"><div class="wrap"><span>Wymiana opon od 280 zł</span><span>Przechowalnia 4 kół 390 zł / sezon</span><span>Geometria 3D</span><span>Hamulce karbonowo-ceramiczne</span></div></div>
+    <div class="service-list"><div class="wrap"><ul>
+      <li>Wymiana opon<span>od 280 zł</span></li>
+      <li>Przechowalnia 4&nbsp;kół<span>390 zł za sezon</span></li>
+      <li>Geometria 3D<span>z&nbsp;wydrukiem pomiaru</span></li>
+      <li>Hamulce karbonowo-ceramiczne<span>przegląd i&nbsp;wymiana</span></li>
+    </ul></div></div>
   </section>
 
-  <section id="proces" aria-label="Jak kupić auto">
-    <div class="wrap">
-      <div class="top"><h2 data-split>Od klucza<br><b>do klucza</b></h2><p class="muted">Cztery kroki, zwykle w jeden tydzień. Formalności załatwiamy my, Ty tylko jeździsz.</p></div>
-      <ol class="flow">
-        <li><span class="n hud">Krok 1</span><h3>Wybierasz</h3><p>Na placu albo z listy. Wyślemy film z odpalenia na zimno i raport z przeglądu.</p></li>
-        <li><span class="n hud">Krok 2</span><h3>Jazda próbna</h3><p>Do 60 minut, także na torze w Poznaniu. Jedziesz Ty, nie handlowiec.</p></li>
-        <li><span class="n hud">Krok 3</span><h3>Finansowanie</h3><p>Leasing, kredyt albo gotówka. Odkupimy też Twoje obecne auto.</p></li>
-        <li><span class="n hud">Krok 4</span><h3>Odbiór</h3><p>Auto zarejestrowane, z pełnym bakiem i umyte. Przywieziemy je pod dom.</p></li>
+  <section id="proces" aria-labelledby="proces-h">
+    <div class="wrap poster">
+      <div class="rowp"><h2 id="proces-h">Od klucza do&nbsp;klucza</h2><p>Cztery kroki, zwykle w&nbsp;jeden tydzień. Formalności załatwiamy my, Ty tylko jeździsz.</p></div>
+      <ol>
+        <li class="rowp"><h3>Wybierasz</h3><p>Na placu albo z&nbsp;listy. Wyślemy film z&nbsp;odpalenia na zimno i&nbsp;raport z&nbsp;przeglądu.</p></li>
+        <li class="rowp"><h3>Jeździsz</h3><p>Jazda próbna do 60 minut, także na torze w&nbsp;Poznaniu. Prowadzisz Ty, nie handlowiec.</p></li>
+        <li class="rowp"><h3>Finansujesz</h3><p>Leasing, kredyt albo gotówka. Odkupimy też Twoje obecne auto.</p></li>
+        <li class="rowp"><h3>Odbierasz</h3><p>Auto zarejestrowane, z&nbsp;pełnym bakiem i&nbsp;umyte. Przywieziemy je pod dom.</p></li>
       </ol>
     </div>
   </section>
 
-  <section id="kontakt" aria-label="Kontakt">
-    <div class="bgimg" aria-hidden="true"><img src="./img/noc.jpg" alt=""></div>
+  <section id="kontakt" aria-labelledby="kontakt-h">
+    <div class="bgimg" aria-hidden="true"><img data-src="./img/noc-1000.webp" data-srcset="./img/noc-1000.webp 1000w, ./img/noc-2000.webp 2000w" sizes="100vw" alt="" loading="lazy" decoding="async" width="2000" height="1335"></div>
     <div class="wrap grid">
       <div>
-        <h2 data-split>Umów<br><b>jazdę</b></h2>
-        <div class="addr">
-          <span class="hud muted">Salon</span><span>ul. Obrotowa 9, 61-000 Poznań</span>
-          <span class="hud muted" style="margin-top:12px">Telefon</span><span class="sel">+48 600 000 000</span>
-          <span class="hud muted" style="margin-top:12px">Godziny</span><span>Pon–pt 9:00–19:00 · sob 10:00–15:00</span>
-        </div>
+        <h2 id="kontakt-h" data-split>Umów jazdę</h2>
+        <dl class="addr">
+          <dt>Salon</dt><dd>ul. Obrotowa 9, 61-000 Poznań</dd>
+          <dt>Godziny</dt><dd>pon.–pt.&nbsp;9:00–19:00<br>sob.&nbsp;10:00–15:00</dd>
+          <dt>Telefon</dt><dd class="tel">+48&nbsp;600&nbsp;000&nbsp;000</dd>
+        </dl>
       </div>
-      <form id="form" novalidate>
-        <div class="two">
-          <div class="field"><label class="hud muted" for="f-name">Imię</label><input id="f-name" name="name" autocomplete="given-name" required></div>
-          <div class="field"><label class="hud muted" for="f-phone">Telefon</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
-        </div>
-        <div class="field"><label class="hud muted" for="f-car">Auto</label><select id="f-car" name="car"></select></div>
-        <div class="field"><label class="hud muted" for="f-date">Dzień</label><input id="f-date" name="date" type="date"></div>
-        <button class="btn solid magnetic" type="submit" style="justify-self:start"><span class="dot"></span>Zarezerwuj termin</button>
-        <div id="form-msg" aria-live="polite"></div>
-      </form>
+      <div class="card-form">
+        <form id="form" novalidate>
+          <div class="two">
+            <div class="field"><label for="f-name">Imię</label><input id="f-name" autocomplete="given-name" maxlength="60" required aria-describedby="e-name"><span class="err" id="e-name" aria-live="polite"></span></div>
+            <div class="field"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" required aria-describedby="e-phone"><span class="err" id="e-phone" aria-live="polite"></span></div>
+          </div>
+          <div class="field"><label for="f-car">Auto</label><select id="f-car"></select></div>
+          <div class="field"><label for="f-date">Dzień jazdy</label><input id="f-date" type="date" required aria-describedby="e-date"><span class="err" id="e-date" aria-live="polite"></span></div>
+          <button class="btn solid" type="submit">Zarezerwuj termin</button>
+          <div id="form-msg" aria-live="polite"></div>
+        </form>
+      </div>
     </div>
   </section>
 </main>
@@ -546,29 +624,25 @@ footer { border-top: 1px solid var(--line); padding-top: 40px; padding-bottom: c
   <div class="wrap">
     <div class="giant" aria-hidden="true" id="giant">Obroty</div>
     <div class="foot">
-      <p>Projekt pokazowy. Salon Obroty, adres, telefon, ceny i auta na placu są wymyślone, a formularz niczego nie wysyła. Lamborghini i nazwy modeli należą do ich właścicieli; salon nie jest autoryzowanym dealerem.</p>
-      <p>Modele 3D: „Lamborghini Aventador SVJ SDC (FREE)” i „(FREE) Lamborghini Centenario LP-770”, autor SDC PERFORMANCE (Sketchfab), CC BY 4.0. Dźwięk: „Lamborghini Aventador SVJ – engine and exhaust sound”, ePic eXhaust (YouTube), Wikimedia Commons, CC BY 3.0. Zdjęcia: Unsplash (licencja Unsplash). Koło: model własny w three.js.</p>
+      <p>Projekt pokazowy. Salon Obroty, adres, telefon, ceny i&nbsp;auta na placu są wymyślone, a&nbsp;formularz niczego nie wysyła. Lamborghini i&nbsp;nazwy modeli należą do ich właścicieli; salon nie jest autoryzowanym dealerem.</p>
+      <p>Modele 3D: „Lamborghini Aventador SVJ SDC (FREE)” i&nbsp;„(FREE) Lamborghini Centenario LP-770”, autor SDC PERFORMANCE (Sketchfab), CC BY 4.0. Dźwięk: „Lamborghini Aventador SVJ – engine and exhaust sound”, ePic eXhaust (YouTube), Wikimedia Commons, CC BY 3.0. Zdjęcia: Unsplash (licencja Unsplash). Koło: model własny w&nbsp;three.js. Czcionki: Archivo i&nbsp;Big Shoulders Display (SIL OFL), serwowane z&nbsp;tej strony.</p>
     </div>
   </div>
 </footer>
 
 <div id="detail" hidden role="dialog" aria-modal="true" aria-labelledby="d-title">
-  <div class="img"><img id="d-img" alt=""></div>
+  <div class="img"><img id="d-img" src="./img/garaz-1000.webp" alt="" loading="lazy" decoding="async"></div>
   <div class="info">
-    <div class="hud amber" id="d-tag"></div>
+    <p id="d-tag"></p>
     <h3 id="d-title"></h3>
     <dl id="d-dl"></dl>
-    <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn solid magnetic" id="d-book" type="button"><span class="dot"></span>Umów jazdę tym autem</button></div>
+    <div><button class="btn solid" id="d-book" type="button">Umów jazdę tym autem</button></div>
   </div>
   <button class="btn close" id="d-close" type="button" aria-label="Zamknij szczegóły">Zamknij</button>
 </div>
 
-<div class="speedo" aria-hidden="true">
-  <svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke="rgba(236,233,226,.15)" stroke-width="3" stroke-dasharray="89.5 120" transform="rotate(135 23 23)"></circle><circle id="sp-arc" cx="23" cy="23" r="19" fill="none" stroke="#ffad2a" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 120" transform="rotate(135 23 23)"></circle></svg>
-  <div><b id="sp">0</b> <span class="hud muted">km/h</span><div class="hud muted">Przebieg <span id="odo">0,00</span> km</div></div>
-</div>
-<div class="cursor" id="cursor"><span></span></div>
-<div id="wipe" aria-hidden="true"><div class="inner"></div><svg class="mark" viewBox="0 0 200 230"><use href="#badge"/></svg></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
+<div id="wipe" aria-hidden="true"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
@@ -590,12 +664,15 @@ const MOBILE = matchMedia('(max-width: 760px)').matches;
 const BG = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#0b0e13';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const fmt = n => new Intl.NumberFormat('pl-PL').format(Math.round(n)).replace(/ /g, ' ');
+const NB = ' ';
+const fmt = n => new Intl.NumberFormat('pl-PL').format(Math.round(n)).replace(/\s/g, NB);
+// twarda spacja po jednoliterowych słowach (a, i, o, u, w, z) w tekstach wstawianych skryptem
+const nbsp = s => String(s).replace(/(?<=^|[\s(„])([aiouwz]) /gi, '$1' + NB);
 
 /* ---------- Płynne przewijanie ---------- */
 let lenis = null;
 if (!RM) {
-  lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
+  lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
@@ -625,20 +702,20 @@ const parseModel = buf => new Promise((ok, fail) => loader.parse(buf, './', ok, 
 // obroty co 0,1 s ułożone pod nagranie: rozrusznik, odpalenie, wolne obroty, wkręcenie do 8700 i zgaszenie
 const RPM = [0,0,0,260,300,310,280,300,320,900,2030,2800,3200,2880,2560,2200,1800,1400,1250,1100,1100,1100,2270,4600,6100,7600,8100,8600,8630,8670,8700,8690,8680,8670,8660,8650,8350,6870,4200,3050,1900,1550,1200,1130,1070,1000,670,330,0];
 const audio = { ctx: null, buf: null, on: false, src: null, gain: null };
-let revBytes = fetch('./audio/svj-start.mp3').then(r => r.arrayBuffer()).catch(() => null);
+let revBytes = null; // nagranie pobieramy dopiero, gdy ktoś chce dźwięk (szybszy start strony)
 async function audioInit() {
   if (!audio.ctx) { audio.ctx = new (window.AudioContext || window.webkitAudioContext)(); audio.gain = audio.ctx.createGain(); audio.gain.gain.value = .5; audio.gain.connect(audio.ctx.destination); }
   if (audio.ctx.state === 'suspended') await audio.ctx.resume();
+  if (!revBytes) revBytes = fetch('./audio/svj-start.mp3').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
   if (!audio.buf) { const b = await revBytes; if (b) audio.buf = await audio.ctx.decodeAudioData(b.slice(0)); }
 }
 function setSound(on) {
   audio.on = on; $('#snd').setAttribute('aria-pressed', on); $('#snd-l').textContent = on ? 'Dźwięk wł.' : 'Dźwięk';
   if (!on && audio.src) { try { audio.src.stop(); } catch {} audio.src = null; }
 }
-$('#snd').addEventListener('click', async () => { if (!audio.on) { try { await audioInit(); } catch {} setSound(true); } else setSound(false); });
+$('#snd').addEventListener('click', async () => { if (!audio.on) { setSound(true); try { await audioInit(); } catch {} } else setSound(false); });
 
 const engine = { rpm: 0, shake: 0, t0: 0, playing: false, lights: 0 };
-const revListeners = [];
 async function rev() {
   if (audio.on) { try { await audioInit(); } catch {} }
   if (audio.on && audio.buf) {
@@ -647,10 +724,9 @@ async function rev() {
     engine.t0 = audio.ctx.currentTime; engine.clock = () => audio.ctx.currentTime - engine.t0;
   } else { const t = performance.now(); engine.clock = () => (performance.now() - t) / 1000; }
   engine.playing = true;
-  $('#tach-note').textContent = audio.on ? 'Nagranie: prawdziwe SVJ' : 'Włącz dźwięk w menu, żeby usłyszeć V12';
+  $('#tach-note').textContent = audio.on ? 'Nagranie: prawdziwe SVJ' : nbsp('Włącz dźwięk u góry, żeby usłyszeć V12');
   setTimeout(() => { if (!engine.playing) $('#tach-note').textContent = 'Silnik zgaszony'; }, 6000);
   gsap.to(engine, { lights: 1, duration: .25 });
-  revListeners.forEach(f => f());
 }
 gsap.ticker.add(() => {
   if (!engine.playing) { engine.rpm += (0 - engine.rpm) * .08; engine.shake *= .9; return; }
@@ -693,7 +769,7 @@ function envFor(renderer) { const pm = new THREE.PMREMGenerator(renderer); const
 function poolTexture() {
   const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d');
   const gr = g.createRadialGradient(256, 256, 0, 256, 256, 256);
-  gr.addColorStop(0, 'rgba(255,200,140,.34)'); gr.addColorStop(.5, 'rgba(255,170,90,.06)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+  gr.addColorStop(0, 'rgba(255,200,140,.30)'); gr.addColorStop(.5, 'rgba(255,170,90,.05)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
   g.fillStyle = gr; g.fillRect(0, 0, 512, 512); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
 function blobTexture(inner = .95) {
@@ -744,6 +820,11 @@ gsap.ticker.add(() => {
   const now = performance.now(), dt = Math.min(.05, (now - last) / 1000); last = now;
   for (const s of stages) { if (!s.visible) continue; s.update && s.update(dt, now / 1000); s.renderer.render(s.scene, s.camera); }
 });
+/* Sceny poniżej pierwszego ekranu budujemy dopiero, gdy są blisko (szybszy start i mniej pracy dla karty graficznej) */
+function whenNear(el, fn) {
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); fn(); } }, { rootMargin: '120% 0px' });
+  io.observe(el);
+}
 function dragRotate(canvas, state) {
   let down = false, lx = 0;
   canvas.addEventListener('pointerdown', e => { down = true; lx = e.clientX; state.dragging = true; canvas.setPointerCapture(e.pointerId); });
@@ -841,14 +922,15 @@ function finishProps(f) {
     : f === 'pearl' ? { metalness: .85, roughness: .36, clearcoat: 1, clearcoatRoughness: .05, iridescence: .45 }
     : { metalness: .5, roughness: .3, clearcoat: 1, clearcoatRoughness: .03, iridescence: 0 };
 }
-function tweenMat(mat, hex, props, dur = .9) {
+// zmiana koloru na widocznym aucie: przenikanie w miejscu, więc ease-in-out
+function tweenMat(mat, hex, props, dur = .6) {
   const c = new THREE.Color(hex);
-  gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: dur, ease: 'power2.inOut' });
+  gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: dur, ease: 'power2.inOut', overwrite: 'auto' });
   if (props) {
     const hadIri = mat.iridescence > 0, wantIri = (props.iridescence || 0) > 0;
     if (hadIri !== wantIri) { mat.iridescence = props.iridescence || 0; mat.iridescenceIOR = 1.6; mat.needsUpdate = true; }
     const { iridescence, ...rest } = props;
-    gsap.to(mat, { ...rest, duration: dur, ease: 'power2.inOut' });
+    gsap.to(mat, { ...rest, duration: dur, ease: 'power2.inOut', overwrite: 'auto' });
   }
 }
 const byId = (list, id) => list.find(x => x.id === id);
@@ -881,9 +963,9 @@ function instance(tpl) { const g = tpl.clone(true); g.userData.front = tpl.userD
   for (let i = 0; i <= 8; i++) { const a = (135 + i * 33.75) * Math.PI / 180; s += `<line x1="${(100 + 34 * Math.cos(a)).toFixed(1)}" y1="${(98 + 34 * Math.sin(a)).toFixed(1)}" x2="${(100 + 40 * Math.cos(a)).toFixed(1)}" y2="${(98 + 40 * Math.sin(a)).toFixed(1)}"/>`; }
   $('#ld-ticks').innerHTML = s;
 })();
-const shield = $('#ld-shield'), inner = $('#ld-inner'), arc = $('#ld-arc');
-[shield, inner, arc].forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; p.dataset.l = L; });
-gsap.to([shield, inner], { strokeDashoffset: 0, duration: RM ? 0 : 1.6, ease: 'power2.inOut', stagger: .2 });
+const shield = $('#ld-shield'), arc = $('#ld-arc');
+[shield, arc].forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; p.dataset.l = L; });
+gsap.to(shield, { strokeDashoffset: 0, duration: RM ? 0 : 1.4, ease: 'power2.inOut' });
 const ld = { p: 0 };
 function drawLoader() {
   arc.style.strokeDashoffset = arc.dataset.l * (1 - ld.p);
@@ -893,25 +975,24 @@ function drawLoader() {
 }
 function loadProgress(p) { gsap.to(ld, { p: Math.max(ld.p, p * .96), duration: .4, onUpdate: drawLoader }); }
 function readyToEnter() {
-  gsap.to(ld, { p: 1, duration: .5, onUpdate: drawLoader });
-  gsap.to('#ld-word', { opacity: 1, duration: .6, delay: .3 });
-  $('#ld-note').textContent = 'Gotowe. Silnik najlepiej brzmi z dźwiękiem.';
+  gsap.to(ld, { p: 1, duration: .4, onUpdate: drawLoader });
+  gsap.to('#ld-word', { opacity: 1, duration: .5, delay: .2 });
+  $('#ld-note').textContent = 'Gotowe. Silnik najlepiej brzmi z' + NB + 'dźwiękiem.';
   $('#ld-enter').hidden = false;
-  gsap.from('#ld-enter .btn', { y: 16, opacity: 0, stagger: .08, duration: .6, ease: 'expo.out' });
+  if (!RM) gsap.from('#ld-enter .btn', { y: 12, opacity: 0, stagger: .06, duration: .5, ease: 'expo.out' });
   $('#enter-sound').focus();
-  if (/[?&]shot/.test(location.search)) enter(false); // tryb do zrzutów ekranu miniaturki
+  if (/[?&]shot/.test(location.search)) enter(false); // tryb do zrzutów ekranu miniaturki
 }
 let entered = false;
 async function enter(withSound) {
   if (entered) return; entered = true;
-  if (withSound) { try { await audioInit(); setSound(true); } catch {} }
+  if (withSound) { setSound(true); try { await audioInit(); } catch {} }
   const tl = gsap.timeline();
-  tl.to(ld, { p: 1, duration: RM ? 0 : .3, ease: 'power3.in', overwrite: true, onUpdate: drawLoader })
-    .to(ld, { p: .65, duration: RM ? 0 : .3, ease: 'power2.out', onUpdate: drawLoader })
+  tl.to(ld, { p: 1, duration: RM ? 0 : .25, ease: 'power3.out', overwrite: true, onUpdate: drawLoader })
     .add(() => { $$('.curtain').forEach(c => c.hidden = false); $('#loader').remove(); document.body.classList.remove('locked'); })
-    .to('.curtain.top', { yPercent: -100, duration: RM ? .01 : 1.1, ease: 'expo.inOut' }, '+=.05')
-    .to('.curtain.bot', { yPercent: 100, duration: RM ? .01 : 1.1, ease: 'expo.inOut' }, '<')
-    .add(() => { $$('.curtain').forEach(c => c.remove()); lenis && lenis.start(); heroIn(); if (withSound) rev(); }, '-=.55');
+    .to('.curtain.top', { yPercent: -100, duration: RM ? .01 : .9, ease: 'expo.inOut' }, '+=.05')
+    .to('.curtain.bot', { yPercent: 100, duration: RM ? .01 : .9, ease: 'expo.inOut' }, '<')
+    .add(() => { $$('.curtain').forEach(c => c.remove()); lenis && lenis.start(); heroIn(); if (withSound) rev(); }, '-=.5');
 }
 $('#enter-sound').addEventListener('click', () => enter(true));
 $('#enter-mute').addEventListener('click', () => enter(false));
@@ -920,9 +1001,9 @@ $('#enter-mute').addEventListener('click', () => enter(false));
 let hero = null;
 function bigTextPlane(text) {
   const c = document.createElement('canvas'); c.width = 2048; c.height = 820; const g = c.getContext('2d');
-  g.font = '900 720px "Big Shoulders Display", Impact, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.lineWidth = 5; g.strokeStyle = 'rgba(236,233,226,.42)'; g.strokeText(text, 1024, 430);
-  const gr = g.createLinearGradient(0, 0, 0, 820); gr.addColorStop(0, 'rgba(255,173,42,.10)'); gr.addColorStop(1, 'rgba(255,173,42,0)'); g.fillStyle = gr; g.fillText(text, 1024, 430);
+  g.font = '900 720px "Big Shoulders Display", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = 'rgba(236,238,240,.035)'; g.fillText(text, 1024, 430);
+  g.lineWidth = 4; g.strokeStyle = 'rgba(236,238,240,.2)'; g.strokeText(text, 1024, 430);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
   return new THREE.Mesh(new THREE.PlaneGeometry(17, 6.8), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, fog: false }));
 }
@@ -940,13 +1021,14 @@ function buildHero() {
   dragRotate(st.canvas, state);
   addEventListener('pointermove', e => { state.mx = e.clientX / innerWidth - .5; state.my = e.clientY / innerHeight - .5; });
   ScrollTrigger.create({ trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true, onUpdate: s => state.scroll = s.progress });
+  // auto duże i wyżej w kadrze; tekst ma dla siebie dół ekranu
   st.onResize = (w, h) => {
-    st.camera.fov = w < 760 ? 35 : 30;
-    if (w >= 980) st.camera.setViewOffset(w, h, -w * .17, h * .02, w, h); else st.camera.clearViewOffset();
+    st.camera.fov = w < 760 ? 33 : w / h < 1.15 ? 40 : 27;
+    if (w >= 760) st.camera.setViewOffset(w, h, 0, h * .1, w, h); else st.camera.clearViewOffset();
     st.camera.updateProjectionMatrix();
   };
   st.onResize(st.canvas.parentElement.clientWidth, st.canvas.parentElement.clientHeight);
-  const tachNum = $('#tach-num'), tachBar = $('#tach-bar');
+  const tachNum = $('#tach-num'), tachBar = $('#tach-bar'); let lastR = -1;
   st.update = (dt, t) => {
     if (!state.dragging) { state.vel *= .93; state.rot += state.vel + (RM || engine.playing ? 0 : dt * .08); }
     car.rotation.y = state.rot + state.scroll * 1.2;
@@ -956,31 +1038,31 @@ function buildHero() {
     st.camera.lookAt(look);
     hl.intensity = engine.lights * 12;
     if (M.drl) M.drl.emissiveIntensity = 1 + engine.lights * 6;
-    tachNum.textContent = fmt(Math.round(engine.rpm / 10) * 10); tachBar.style.transform = `scaleX(${engine.rpm / 9000})`;
+    const r = Math.round(engine.rpm / 10) * 10;
+    if (r !== lastR) { lastR = r; tachNum.textContent = fmt(r); tachBar.style.transform = `scaleX(${engine.rpm / 9000})`; }
   };
   hero = { st, car, state };
+  try { st.renderer.compile(st.scene, st.camera); } catch {}
 }
 function heroIn() {
-  ScrollTrigger.sort(); ScrollTrigger.refresh();
+  ScrollTrigger.sort(); ScrollTrigger.refresh(); lazyImgs();
   if (RM) return;
   const sp = $('#hero h1')._split;
-  if (sp) gsap.from(sp.chars, { yPercent: 115, opacity: 0, filter: 'blur(8px)', duration: 1.2, ease: 'expo.out', stagger: .025 });
-  gsap.from('#hero .lead, #hero .actions, #hero .strip, #hero .hud.amber, .nav .wrap > *', { y: 26, opacity: 0, duration: 1, ease: 'expo.out', stagger: .07, delay: .25 });
-  if (hero) gsap.from(hero.state, { rot: hero.state.rot - 2.6, duration: 2.6, ease: 'expo.out' });
+  if (sp) gsap.from(sp.words, { yPercent: 110, duration: 1, ease: 'expo.out', stagger: .06 });
+  gsap.from('#hero .hero-side > *, .tach', { y: 16, opacity: 0, duration: .8, ease: 'expo.out', stagger: .07, delay: .25 });
+  gsap.from('.nav .wrap', { opacity: 0, duration: .6, ease: 'power2.out', delay: .2 });
+  if (hero) gsap.from(hero.state, { rot: hero.state.rot - 2.2, duration: 2.2, ease: 'expo.out' });
 }
 
 /* ---------- Anatomia: kamera wokół auta ---------- */
 function buildAnatomy() {
-  const st = new Stage($('#gl-anat'), { fov: 34 });
-  showroom(st.scene, { fogNear: 8, fogFar: 22 });
-  const car = instance(svj); st.scene.add(car);
-  const f = car.userData.front;
-  const cam = { x: 6.4, y: 2.4, z: 6.2 * f }, tgt = { x: 0, y: .5, z: 0 };
+  const cam = { x: 6.4, y: 2.4, z: 6.2 }, tgt = { x: 0, y: .5, z: 0 };
+  // przód auta poznajemy po modelu; do tego czasu zakładamy +Z
   const keys = [
-    [{ x: 1.8, y: .8, z: 5.4 * f }, { x: 0, y: .5, z: 1.7 * f }],
-    [{ x: 3.3, y: .5, z: 2.4 * f }, { x: .9, y: .38, z: 1.45 * f }],
-    [{ x: -2.4, y: 1.35, z: -5.5 * f }, { x: 0, y: .75, z: -1.6 * f }],
-    [{ x: .4, y: 5.6, z: -.8 * f }, { x: 0, y: .4, z: 0 }],
+    [{ x: 1.8, y: .8, z: 5.4 }, { x: 0, y: .5, z: 1.7 }],
+    [{ x: 3.3, y: .5, z: 2.4 }, { x: .9, y: .38, z: 1.45 }],
+    [{ x: -2.4, y: 1.35, z: -5.5 }, { x: 0, y: .75, z: -1.6 }],
+    [{ x: .4, y: 5.6, z: -.8 }, { x: 0, y: .4, z: 0 }],
   ];
   const narrow = () => innerWidth < 760 ? 2.1 : 1;
   const tl = gsap.timeline({ defaults: { ease: 'power2.inOut', duration: 1 } });
@@ -988,131 +1070,153 @@ function buildAnatomy() {
   keys.forEach(([p, l], i) => {
     tl.to(cam, { ...p }, i === 0 ? 0 : '>').to(tgt, { ...l }, '<');
     if (i > 0) {
-      tl.to(steps[i - 1], { autoAlpha: 0, y: -30, duration: .35 }, '<').fromTo(steps[i], { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: .45 }, '<+.35');
+      tl.to(steps[i - 1], { autoAlpha: 0, y: RM ? 0 : -24, duration: .35 }, '<').fromTo(steps[i], { autoAlpha: 0, y: RM ? 0 : 32 }, { autoAlpha: 1, y: 0, duration: .45 }, '<+.35');
       const big = $('[data-count]', steps[i]);
-      if (big) { const o = { v: 0 }, small = big.querySelector('small').outerHTML; tl.to(o, { v: +big.dataset.count, duration: .6, ease: 'power1.out', onUpdate: () => big.innerHTML = fmt(o.v) + small }, '<'); }
+      if (big && !RM) { const o = { v: 0 }, small = big.querySelector('small').outerHTML; tl.fromTo(o, { v: 0 }, { v: +big.dataset.count, duration: .6, ease: 'power1.out', onUpdate: () => big.innerHTML = fmt(o.v) + small }, '<'); }
     }
     tl.to(bars[i], { scaleX: 1, duration: 1, ease: 'none' }, '<');
     tl.to({}, { duration: .35 });
   });
   ScrollTrigger.create({ trigger: '#anatomia', refreshPriority: 5, start: 'top top', end: () => '+=' + innerHeight * 4, pin: true, scrub: RM ? true : 1, animation: tl, anticipatePin: 1 });
-  st.update = () => {
-    const n = narrow();
-    st.camera.position.set(tgt.x + (cam.x - tgt.x) * n, cam.y + (n - 1) * .6, tgt.z + (cam.z - tgt.z) * n);
-    st.camera.lookAt(tgt.x, tgt.y, tgt.z);
-  };
+  whenNear($('#anatomia'), () => {
+    const st = new Stage($('#gl-anat'), { fov: 34 });
+    showroom(st.scene, { fogNear: 8, fogFar: 22 });
+    const car = instance(svj); st.scene.add(car);
+    const f = car.userData.front;
+    st.update = () => {
+      const n = narrow();
+      st.camera.position.set(tgt.x + (cam.x - tgt.x) * n, cam.y + (n - 1) * .6, (tgt.z + (cam.z - tgt.z) * n) * f);
+      st.camera.lookAt(tgt.x, tgt.y, tgt.z * f);
+    };
+  });
 }
 
 /* ---------- W plenerze: zdjęcia odsłaniane przy przewijaniu ---------- */
 const SHOTS = [
-  { img: 'gory', t: 'Aventador S Roadster', s: 'Pomarańczowy · górska serpentyna' },
-  { img: 'przelecz', t: 'Huracán Performante Spyder', s: 'Pomarańczowy · przełęcz w Alpach' },
+  { img: 'gory', t: 'Aventador S Roadster', s: 'Pomarańczowy, górska serpentyna' },
+  { img: 'przelecz', t: 'Huracán Performante Spyder', s: 'Pomarańczowy, przełęcz w Alpach' },
   { img: 'zachod', t: 'Huracán Performante', s: 'Pusta droga tuż przed zachodem słońca' },
   { img: 'las', t: 'Huracán Performante', s: 'Złoty lakier w cieniu drzew' },
   { img: 'detal', t: 'Huracán', s: 'Pomarańczowy lakier w ostatnim świetle dnia' },
   { img: 'urus', t: 'Urus', s: 'Wiejska droga o zachodzie słońca' },
   { img: 'dym', t: 'Aventador S', s: 'Grafitowy lakier, dym i reflektor' },
-  { img: 'garaz', t: 'Aventador SVJ', s: 'Żółty · noc w studiu' },
+  { img: 'garaz', t: 'Aventador SVJ', s: 'Żółty, noc w studiu' },
 ];
+const BIGW = { detal: 1800 };
+const srcset = name => `./img/${name}-1000.webp 1000w, ./img/${name}-2000.webp ${BIGW[name] || 2000}w`;
 function buildGallery() {
-  const box = $('#shots'), th = $('#pl-thumbs'), total = String(SHOTS.length).padStart(2, '0');
-  $('#pl-t').textContent = total;
+  const box = $('#shots'), th = $('#pl-thumbs');
   SHOTS.forEach((s, i) => {
     const d = document.createElement('div'); d.className = 'shot'; d.style.zIndex = i + 1;
-    d.innerHTML = `<img src="./img/${s.img}.jpg" alt="Lamborghini ${s.t}, ${s.s}" loading="${i < 2 ? 'eager' : 'lazy'}" decoding="async"><div class="cap"><div class="wrap"><span class="hud amber" data-scramble>Lamborghini · ${String(i + 1).padStart(2, '0')}</span><h3>${s.t}</h3><span class="ln"></span><p class="hud">${s.s}</p></div></div>`;
+    d.innerHTML = `<img data-src="./img/${s.img}-1000.webp" data-srcset="${srcset(s.img)}" sizes="100vw" alt="${nbsp('Lamborghini ' + s.t + ', ' + s.s.toLowerCase())}" loading="lazy" decoding="async"><div class="cap"><div class="wrap"><h3>${s.t}</h3><p>${nbsp(s.s)}</p></div></div>`;
     box.appendChild(d); th.insertAdjacentHTML('beforeend', '<i><b></b></i>');
   });
-  const shots = $$('.shot', box), bars = $$('b', th), num = $('#pl-n');
-  const caps = shots.map(el => { const h = $('h3', el); const sp = SplitText.create(h, { type: 'chars' }); return { sp, line: $('.ln', el), rest: $$('.hud', el) }; });
-  // podpis: litery wjeżdżają z rozmyciem, linia się rysuje
-  const capIn = (c, tl, at) => tl.fromTo(c.sp.chars, { yPercent: 60, opacity: 0, filter: 'blur(8px)' }, { yPercent: 0, opacity: 1, filter: 'blur(0px)', stagger: .025, duration: .45, ease: 'power3.out' }, at)
-    .fromTo(c.line, { scaleX: 0 }, { scaleX: 1, duration: .45, ease: 'power3.inOut' }, at + .1)
-    .fromTo(c.rest, { opacity: 0, y: 12 }, { opacity: 1, y: 0, stagger: .06, duration: .35 }, at + .05);
+  const shots = $$('.shot', box), bars = $$('b', th);
+  const caps = shots.map(el => { const h = $('h3', el); const sp = SplitText.create(h, { type: 'words', mask: 'words' }); return { sp, rest: $('p', el) }; });
+  // podpis: słowa wyjeżdżają spod maski, opis dochodzi chwilę później
+  const capIn = (c, tl, at) => tl.fromTo(c.sp.words, { yPercent: 105 }, { yPercent: 0, stagger: .04, duration: .45, ease: 'power3.out' }, at)
+    .fromTo(c.rest, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, at + .1);
   const tl = gsap.timeline({ defaults: { ease: 'none' } });
   gsap.set(bars[0], { scaleX: 1 });
   shots.forEach((el, i) => {
     const img = $('img', el);
-    if (i === 0) { gsap.set(img, { scale: 1.06 }); tl.addLabel('s0', 0).to(img, { scale: 1, duration: 1 }, 0); return; }
+    if (i === 0) { gsap.set(img, { scale: 1.05 }); tl.addLabel('s0', 0).to(img, { scale: 1, duration: 1 }, 0); return; }
     const t = tl.duration();
     tl.fromTo(el, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: .7, ease: 'power3.inOut' }, t)
-      .fromTo(img, { scale: 1.25 }, { scale: 1.04, duration: .9, ease: 'power2.out' }, t)
-      .to($('img', shots[i - 1]), { yPercent: -10, duration: .7, ease: 'power3.inOut' }, t)
-      .to($('.cap', shots[i - 1]), { opacity: 0, y: -30, duration: .3 }, t)
+      .fromTo(img, { scale: 1.18 }, { scale: 1.03, duration: .9, ease: 'power2.out' }, t)
+      .to($('img', shots[i - 1]), { yPercent: -8, duration: .7, ease: 'power3.inOut' }, t)
+      .to($('.cap', shots[i - 1]), { opacity: 0, duration: .25 }, t)
       .to(bars[i], { scaleX: 1, duration: .5 }, t + .2);
     capIn(caps[i], tl, t + .45);
     tl.addLabel('s' + i, t + .95).to(img, { scale: 1, duration: .8 }, t + .95);
   });
   ScrollTrigger.create({
-    trigger: '#plener', refreshPriority: 4, start: 'top top', end: () => '+=' + innerHeight * SHOTS.length * .75, pin: true, scrub: RM ? true : .6, animation: tl, anticipatePin: 1,
-    snap: RM ? false : { snapTo: 'labelsDirectional', duration: { min: .3, max: .9 }, delay: .08, ease: 'power2.inOut' },
-    onUpdate: () => { const l = tl.currentLabel(); const i = l ? +l.slice(1) : 0; num.textContent = String(i + 1).padStart(2, '0'); }
+    trigger: '#plener', refreshPriority: 4, start: 'top top', end: () => '+=' + innerHeight * SHOTS.length * .7, pin: true, scrub: RM ? true : .6, animation: tl, anticipatePin: 1,
+    snap: RM ? false : { snapTo: 'labelsDirectional', duration: { min: .25, max: .7 }, delay: .08, ease: 'power2.inOut' },
   });
-  gsap.from(caps[0].sp.chars, { yPercent: 60, opacity: 0, filter: 'blur(8px)', stagger: .025, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '#plener', start: 'top 60%', once: true } });
+  if (!RM) gsap.from(caps[0].sp.words, { yPercent: 105, stagger: .05, duration: .8, ease: 'expo.out', scrollTrigger: { trigger: '#plener', start: 'top 60%', once: true } });
 }
 
-/* ---------- Auta na placu: prawdziwe zdjęcia ---------- */
+/* ---------- Auta na placu: rząd do przeciągania ---------- */
 const STOCK = [
-  { img: 'garaz', name: 'Aventador SVJ', tag: 'Giallo · 2019', year: 2019, km: 6900, price: 2390000, eng: 'V12 6,5 l, 770 KM', gear: '7-biegowa ISR', drive: 'Na cztery koła' },
-  { img: 'zachod', name: 'Huracán Performante', tag: 'Arancio · 2018', year: 2018, km: 12400, price: 1290000, eng: 'V10 5,2 l, 640 KM', gear: '7-biegowa dwusprzęgłowa', drive: 'Na cztery koła' },
-  { img: 'noc', name: 'Aventador S', tag: 'Nero · 2018', year: 2018, km: 15800, price: 1690000, eng: 'V12 6,5 l, 740 KM', gear: '7-biegowa ISR', drive: 'Na cztery koła' },
-  { img: 'las', name: 'Huracán Performante', tag: 'Giallo · 2019', year: 2019, km: 8100, price: 1340000, eng: 'V10 5,2 l, 640 KM', gear: '7-biegowa dwusprzęgłowa', drive: 'Na cztery koła' },
-  { img: 'urus', name: 'Urus', tag: 'Blu · 2021', year: 2021, km: 22300, price: 1090000, eng: 'V8 4,0 l biturbo, 650 KM', gear: '8-biegowa automatyczna', drive: 'Na cztery koła' },
-  { img: 'dym', name: 'Aventador S', tag: 'Grigio · 2017', year: 2017, km: 19300, price: 1590000, eng: 'V12 6,5 l, 740 KM', gear: '7-biegowa ISR', drive: 'Na cztery koła' },
+  { img: 'garaz', name: 'Aventador SVJ', col: 'Giallo', year: 2019, km: 6900, price: 2390000, eng: 'V12 6,5 l, 770 KM', gear: '7-biegowa ISR', drive: 'Na cztery koła' },
+  { img: 'zachod', name: 'Huracán Performante', col: 'Arancio', year: 2018, km: 12400, price: 1290000, eng: 'V10 5,2 l, 640 KM', gear: '7-biegowa dwusprzęgłowa', drive: 'Na cztery koła' },
+  { img: 'noc', name: 'Aventador S', col: 'Nero', year: 2018, km: 15800, price: 1690000, eng: 'V12 6,5 l, 740 KM', gear: '7-biegowa ISR', drive: 'Na cztery koła' },
+  { img: 'las', name: 'Huracán Performante', col: 'Giallo', year: 2019, km: 8100, price: 1340000, eng: 'V10 5,2 l, 640 KM', gear: '7-biegowa dwusprzęgłowa', drive: 'Na cztery koła' },
+  { img: 'urus', name: 'Urus', col: 'Blu', year: 2021, km: 22300, price: 1090000, eng: 'V8 4,0 l biturbo, 650 KM', gear: '8-biegowa automatyczna', drive: 'Na cztery koła' },
+  { img: 'dym', name: 'Aventador S', col: 'Grigio', year: 2017, km: 19300, price: 1590000, eng: 'V12 6,5 l, 740 KM', gear: '7-biegowa ISR', drive: 'Na cztery koła' },
 ];
+const carLabel = s => `Lamborghini ${s.name} (${s.col}, ${s.year})`;
 const rail = $('#rail');
 STOCK.forEach((s, i) => {
   const a = document.createElement('button'); a.type = 'button'; a.className = 'card'; a.dataset.cursor = 'Zobacz';
-  a.innerHTML = `<div class="ph"><img src="./img/${s.img}.jpg" alt="Lamborghini ${s.name}" loading="lazy" decoding="async"><span class="tag hud">${s.tag}</span></div>
-    <div class="row"><h3>${s.name}</h3><span class="price">${fmt(s.price)} zł</span></div>
-    <div class="meta hud muted"><span>${s.year}</span><span>${fmt(s.km)} km</span><span>${s.eng.split(',')[0]}</span><span>Gwarancja 24 mies.</span></div>`;
+  a.innerHTML = `<div class="ph"><img src="./img/${s.img}-1000.webp" alt="" loading="lazy" decoding="async" width="1000" height="667" draggable="false"></div>
+    <div class="row"><h3>${s.name}</h3><span class="price">${fmt(s.price)}${NB}zł</span></div>
+    <div class="meta">${s.col}, ${s.year}, ${fmt(s.km)}${NB}km, ${s.eng.split(', ')[0].replace(/ /g, NB)}</div>`;
   a.addEventListener('click', () => openDetail(i, a));
   rail.appendChild(a);
 });
-function railScroll() {
-  if (MOBILE) return;
-  const track = $('#rail');
-  gsap.to(track, { x: () => -(track.scrollWidth - innerWidth), ease: 'none', scrollTrigger: { trigger: '#auta', refreshPriority: 3, start: 'top top', end: () => '+=' + (track.scrollWidth - innerWidth), pin: true, scrub: RM ? true : .8, invalidateOnRefresh: true, anticipatePin: 1 } });
-}
-function tilt() {
-  if (matchMedia('(hover: none)').matches || RM) return;
-  $$('.card').forEach(card => {
-    const ph = $('.ph', card);
-    card.addEventListener('pointermove', e => { const b = ph.getBoundingClientRect(); const x = (e.clientX - b.left) / b.width - .5, y = (e.clientY - b.top) / b.height - .5; gsap.to(ph, { rotateY: x * 9, rotateX: -y * 7, transformPerspective: 900, duration: .6, ease: 'power3.out' }); });
-    card.addEventListener('pointerleave', () => gsap.to(ph, { rotateY: 0, rotateX: 0, duration: .9, ease: 'elastic.out(1,.5)' }));
+// przeciąganie myszą: zwykłe przewijanie w poziomie, bez przypinania sekcji
+(function dragRow() {
+  const w = $('#rail-wrap'); let down = false, x0 = 0, s0 = 0, moved = 0;
+  w.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || e.button !== 0) return; down = true; moved = 0; x0 = e.clientX; s0 = w.scrollLeft; });
+  addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - x0; if (Math.abs(dx) > 4 && !moved) w.classList.add('dragging'); moved = Math.max(moved, Math.abs(dx)); if (moved > 4) w.scrollLeft = s0 - dx; });
+  addEventListener('pointerup', () => {
+    if (!down) return; down = false;
+    if (w.classList.contains('dragging')) {
+      // przyciąganie do najbliższego auta po puszczeniu
+      const cards = $$('.card', w), pad = parseFloat(getComputedStyle(rail).paddingLeft) || 0;
+      const near = cards.reduce((b, c) => Math.abs(c.offsetLeft - pad - w.scrollLeft) < Math.abs(b.offsetLeft - pad - w.scrollLeft) ? c : b, cards[0]);
+      w.classList.remove('dragging');
+      w.scrollTo({ left: near.offsetLeft - pad, behavior: RM ? 'auto' : 'smooth' });
+    }
   });
-}
+  // kółko myszy w pionie przewija stronę, nie rząd (Lenis): rząd przewija się poziomo gładzikiem albo przeciąganiem
+})();
 let detailFrom = null;
 function openDetail(i, card) {
   const s = STOCK[i], d = $('#detail');
-  $('#d-img').src = `./img/${s.img}.jpg`; $('#d-img').alt = `Lamborghini ${s.name}`;
-  $('#d-tag').textContent = `${s.tag} · od ręki`; $('#d-title').textContent = s.name;
-  $('#d-dl').innerHTML = [['Cena brutto', fmt(s.price) + ' zł'], ['Przebieg', fmt(s.km) + ' km'], ['Rok', s.year], ['Silnik', s.eng], ['Skrzynia', s.gear], ['Napęd', s.drive], ['Gwarancja', '24 miesiące'], ['Historia', 'Pełna, w ASO']].map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
-  $('#d-book').onclick = () => { closeDetail(); $('#f-car').value = 'Lamborghini ' + s.name + ' (' + s.tag + ')'; go($('#kontakt')); };
+  $('#d-img').src = `./img/${s.img}-2000.webp`; $('#d-img').srcset = srcset(s.img); $('#d-img').sizes = '(max-width: 860px) 100vw, 60vw'; $('#d-img').alt = `Lamborghini ${s.name}`;
+  $('#d-tag').textContent = `${s.col}, ${s.year}. Do odbioru od ręki.`; $('#d-tag').textContent = nbsp($('#d-tag').textContent); $('#d-title').textContent = s.name;
+  $('#d-dl').innerHTML = [['Cena brutto', fmt(s.price) + NB + 'zł'], ['Przebieg', fmt(s.km) + NB + 'km'], ['Rok', s.year], ['Silnik', s.eng], ['Skrzynia', s.gear], ['Napęd', s.drive], ['Gwarancja', '24 miesiące'], ['Historia', 'Pełna, w' + NB + 'ASO']].map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+  $('#d-book').onclick = () => { closeDetail(true); $('#f-car').value = carLabel(s); go($('#kontakt'), $('#f-name')); };
   d.hidden = false; lenis && lenis.stop(); detailFrom = card;
   const from = $('.ph', card).getBoundingClientRect(), to = $('#detail .img').getBoundingClientRect();
   if (!RM) {
-    gsap.fromTo('#detail .img', { clipPath: `inset(${from.top - to.top}px ${to.right - from.right}px ${to.bottom - from.bottom}px ${from.left - to.left}px round 6px)` }, { clipPath: 'inset(0px 0px 0px 0px round 0px)', duration: 1, ease: 'expo.inOut' });
-    gsap.fromTo('#detail', { backgroundColor: 'rgba(11,14,19,0)' }, { backgroundColor: 'rgba(11,14,19,1)', duration: .5 });
-    gsap.from('#detail .info > *, #detail .close', { y: 30, opacity: 0, stagger: .06, duration: .8, ease: 'expo.out', delay: .45 });
-    gsap.fromTo('#d-img', { scale: 1.25 }, { scale: 1, duration: 1.4, ease: 'expo.out' });
+    // wspólny element: zdjęcie z karty rozrasta się do panelu
+    gsap.fromTo('#detail .img', { clipPath: `inset(${from.top - to.top}px ${to.right - from.right}px ${to.bottom - from.bottom}px ${from.left - to.left}px)` }, { clipPath: 'inset(0px 0px 0px 0px)', duration: .6, ease: 'power4.inOut' });
+    gsap.fromTo('#detail', { backgroundColor: 'rgba(11,14,19,0)' }, { backgroundColor: 'rgba(11,14,19,1)', duration: .3, ease: 'power2.out' });
+    gsap.from('#detail .info > *, #detail .close', { y: 16, opacity: 0, stagger: .05, duration: .5, ease: 'expo.out', delay: .3 });
+    gsap.fromTo('#d-img', { scale: 1.12 }, { scale: 1, duration: .9, ease: 'expo.out' });
   }
-  $('#d-close').focus();
+  $('#d-close').focus({ preventScroll: true });
 }
-function closeDetail() {
+function closeDetail(skipFocus) {
   const d = $('#detail'); if (d.hidden) return;
-  const done = () => { d.hidden = true; lenis && lenis.start(); detailFrom && detailFrom.focus(); };
+  const done = () => { d.hidden = true; lenis && lenis.start(); if (!skipFocus && detailFrom) detailFrom.focus({ preventScroll: true }); };
   if (RM) return done();
-  gsap.to('#detail', { opacity: 0, duration: .4, onComplete: () => { gsap.set('#detail', { opacity: 1 }); done(); } });
+  gsap.to('#detail', { opacity: 0, duration: .2, ease: 'power2.out', onComplete: () => { gsap.set('#detail', { opacity: 1 }); done(); } });
 }
-$('#d-close').addEventListener('click', closeDetail);
-addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+$('#d-close').addEventListener('click', () => closeDetail());
+// fokus nie wychodzi poza otwarte okno szczegółów
+function trapFocus(box, e) {
+  const f = $$('a[href], button:not([disabled]), input, select', box).filter(el => el.offsetParent !== null);
+  if (!f.length) return; const first = f[0], lastEl = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); lastEl.focus(); }
+  else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); first.focus(); }
+}
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (!$('#detail').hidden) closeDetail(); else if (!$('#menu').hidden) closeMenu(true); }
+  if (e.key === 'Tab' && !$('#detail').hidden) trapFocus($('#detail'), e);
+});
 
 /* ---------- Konfigurator ---------- */
 let conf = null;
+const confState = { rot: -.7, vel: 0, dragging: false, elev: 1.45, dist: 1, auto: true, k: 1 };
 function buildConfigurator() {
   const st = new Stage($('#gl-conf'), { fov: 30 });
   showroom(st.scene, { fogNear: 10, fogFar: 28 });
-  const state = { rot: -.7, vel: 0, dragging: false, elev: 1.45, dist: 1, auto: true };
+  const state = confState;
   dragRotate(st.canvas, state);
   st.canvas.addEventListener('pointerdown', () => { state.auto = false; });
   const holder = new THREE.Group(); st.scene.add(holder);
@@ -1128,74 +1232,83 @@ function buildConfigurator() {
     st.camera.position.set(6.3 * k, el * Math.min(k, 1.3), 6.8 * k); st.camera.lookAt(0, .5, 0);
   };
   const loadEl = $('#conf-load');
+  let cenLoading = null;
+  async function loadCen() {
+    loadEl.textContent = 'Wczytuję model 3D… 0%';
+    const buf = await fetchModel(MODELS.cen.file, MODELS.cen.size, p => loadEl.textContent = 'Wczytuję model 3D… ' + Math.round(p * 100) + '%');
+    const gltf = await parseModel(buf);
+    gltf.scene.traverse(o => {
+      if (!o.isMesh) return; const n = o.material.name;
+      if (n === 'Carbon_R') { M.cenCarbon = o.material; (o.userData.body = true); }
+      else if (n === 'material') o.material = M.cenRims;
+      else if (n === 'Material' || n === 'TIRE32') o.material = M.acc;
+    });
+    gltf.scene.traverse(o => { if (o.isMesh && o.material.transmission > 0) { o.material.transmission = 0; o.material.transparent = true; o.material.opacity = Math.min(o.material.opacity, .4); } });
+    // Centenario ma element sięgający niżej niż koła: podłogę liczymy od opon
+    const g = fitModel(gltf.scene, 4.7, /^(pneu|TIRE)/i); g.userData.front = frontSign(g, MODELS.cen.front); addContactShadow(g);
+    cars.cen = g; loadEl.textContent = '';
+  }
   async function show(id) {
-    $('#conf-name').textContent = MODELS[id].name;
     if (!cars[id]) {
       if (id === 'svj') cars.svj = instance(svj);
-      else {
-        loadEl.textContent = 'Wczytuję model 3D… 0%';
-        const buf = await fetchModel(MODELS.cen.file, MODELS.cen.size, p => loadEl.textContent = 'Wczytuję model 3D… ' + Math.round(p * 100) + '%');
-        const gltf = await parseModel(buf);
-        gltf.scene.traverse(o => {
-          if (!o.isMesh) return; const n = o.material.name;
-          if (n === 'Carbon_R') { M.cenCarbon = o.material; (o.userData.body = true); }
-          else if (n === 'material') o.material = M.cenRims;
-          else if (n === 'Material' || n === 'TIRE32') o.material = M.acc;
-        });
-        gltf.scene.traverse(o => { if (o.isMesh && o.material.transmission > 0) { o.material.transmission = 0; o.material.transparent = true; o.material.opacity = Math.min(o.material.opacity, .4); } });
-        const g = fitModel(gltf.scene, 4.7, /^(pneu|TIRE)/i); g.userData.front = frontSign(g, MODELS.cen.front); addContactShadow(g);
-        cars.cen = g; loadEl.textContent = '';
-        applyAll(true);
-      }
+      else { cenLoading = cenLoading || loadCen().catch(e => { cenLoading = null; throw e; }); await cenLoading; }
     }
+    if (cfg.model !== id) return; // w międzyczasie wybrano inny model
+    $('#conf-name').textContent = MODELS[id].name;
     const next = cars[id];
     if (current === next) return;
     const prev = current; current = next;
     next.rotation.y = next.userData.front > 0 ? 0 : Math.PI;
+    // szybkie przełączanie tam i z powrotem: przerywamy poprzednie przejazdy, a auto usuwamy tylko, jeśli nie wróciło na scenę
+    gsap.killTweensOf([next.position, prev && prev.position].filter(Boolean));
     if (prev && !RM) {
-      gsap.to(prev.position, { x: -9, duration: .7, ease: 'power3.in', onComplete: () => holder.remove(prev) });
-      holder.add(next); gsap.fromTo(next.position, { x: 9 }, { x: 0, duration: 1, ease: 'expo.out', delay: .45 });
+      gsap.to(prev.position, { x: -9, duration: .45, ease: 'power3.in', onComplete: () => { if (current !== prev) holder.remove(prev); } });
+      holder.add(next); gsap.fromTo(next.position, { x: 9 }, { x: 0, duration: .8, ease: 'expo.out', delay: .3 });
     } else { if (prev) holder.remove(prev); holder.add(next); next.position.x = 0; }
+    applyAll(true);
   }
   const VIEWS = { q: { rot: -.7, elev: 1.45, dist: 1 }, s: { rot: -Math.PI / 2, elev: .9, dist: .95 }, r: { rot: Math.PI - .5, elev: 1.25, dist: 1 }, t: { rot: -.25, elev: 6.2, dist: .7 } };
-  $$('.views button').forEach(b => b.addEventListener('click', () => {
-    $$('.views button').forEach(x => x.setAttribute('aria-pressed', x === b));
-    const v = VIEWS[b.dataset.v]; state.auto = false;
-    const base = current && current.userData.front < 0 ? Math.PI : 0;
-    const target = v.rot - base; let r = state.rot % (Math.PI * 2); state.rot = r;
-    gsap.to(state, { rot: target + (target - r > Math.PI ? -Math.PI * 2 : target - r < -Math.PI ? Math.PI * 2 : 0), elev: v.elev, dist: v.dist, duration: 1.2, ease: 'power3.inOut' });
-  }));
-  conf = { show, st };
+  conf = { show, st, current: () => current, VIEWS };
 }
+$$('.views button').forEach(b => b.addEventListener('click', () => {
+  $$('.views button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  if (!conf) return;
+  const state = confState, v = conf.VIEWS[b.dataset.v]; state.auto = false;
+  const cur = conf.current(), base = cur && cur.userData.front < 0 ? Math.PI : 0;
+  const target = v.rot - base; let r = state.rot % (Math.PI * 2); state.rot = r;
+  gsap.to(state, { rot: target + (target - r > Math.PI ? -Math.PI * 2 : target - r < -Math.PI ? Math.PI * 2 : 0), elev: v.elev, dist: v.dist, duration: RM ? 0 : .9, ease: 'power3.inOut', overwrite: true });
+}));
 /* Panel opcji */
+const addLabel = add => add ? '+' + fmt(add) + NB + 'zł' : '';
 function optButtons(box, list, key, kind) {
   box.innerHTML = '';
   list.forEach(o => {
     const b = document.createElement('button'); b.type = 'button'; b.dataset.id = o.id;
-    if (kind === 'dot') { b.style.setProperty('--c', o.hex); b.setAttribute('aria-label', o.name + (o.add ? ', +' + fmt(o.add) + ' zł' : '')); b.title = o.name; }
-    else b.innerHTML = o.name + (o.add ? `<br><span class="muted" style="font-size:10px">+${fmt(o.add)} zł</span>` : '');
+    if (kind === 'dot') { b.style.setProperty('--c', o.hex); b.setAttribute('aria-label', o.name + (o.add ? ', dopłata ' + addLabel(o.add) : '')); b.title = o.name + (o.add ? ' (' + addLabel(o.add) + ')' : ''); }
+    else b.innerHTML = nbsp(o.name) + (o.add ? `<small>${addLabel(o.add)}</small>` : '');
     b.setAttribute('aria-pressed', cfg[key] === o.id);
-    b.addEventListener('click', () => { cfg[key] = o.id; syncUI(); applyAll(); });
+    b.addEventListener('click', () => { if (cfg[key] === o.id) return; cfg[key] = o.id; syncUI(); applyAll(); });
     box.appendChild(b);
   });
 }
 function finishList() { return FINISH.filter(f => !f.only || f.only === cfg.model); }
 function syncUI() {
-  [['#o-paint', PAINTS, 'paint'], ['#o-rims', RIMS, 'rims'], ['#o-cal', CALIPERS, 'cal'], ['#o-acc', ACCENTS, 'acc']].forEach(([s, list, k]) => {
+  [['#o-paint', PAINTS, 'paint'], ['#o-rims', RIMS, 'rims'], ['#o-cal', CALIPERS, 'cal'], ['#o-acc', ACCENTS, 'acc'], ['#o-carbon', CARBON, 'carbon'], ['#o-model', null, 'model']].forEach(([s, list, k]) => {
     $$(s + ' button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === cfg[k]));
   });
-  $('#o-paint-l').textContent = byId(PAINTS, cfg.paint).name;
+  const carbonBody = cfg.model === 'cen' && cfg.finish === 'carbon';
+  $('#o-paint-l').textContent = carbonBody ? 'Niewidoczny pod karbonem' : byId(PAINTS, cfg.paint).name;
   $('#o-rims-l').textContent = byId(RIMS, cfg.rims).name;
   $('#o-cal-l').textContent = byId(CALIPERS, cfg.cal).name;
   $('#o-acc-l').textContent = byId(ACCENTS, cfg.acc).name;
+  const focused = document.activeElement && document.activeElement.closest('#o-finish') ? document.activeElement.dataset.id : null;
   optButtons($('#o-finish'), finishList(), 'finish', 'seg');
-  $$('#o-model button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === cfg.model));
-  $$('#o-carbon button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === cfg.carbon));
+  if (focused) { const b = $(`#o-finish button[data-id="${focused}"]`); b && b.focus(); }
   $$('[data-only]').forEach(g => g.hidden = g.dataset.only !== cfg.model);
-  $('#o-paint').style.opacity = cfg.model === 'cen' && cfg.finish === 'carbon' ? .35 : 1;
+  $('#o-paint').classList.toggle('off', carbonBody);
 }
 function applyAll(instant) {
-  const d = instant ? 0 : .9, paint = byId(PAINTS, cfg.paint), fin = finishProps(cfg.finish);
+  const d = instant ? 0 : .6, paint = byId(PAINTS, cfg.paint), fin = finishProps(cfg.finish);
   if (cfg.model === 'svj') {
     tweenMat(M.paint, paint.hex, fin, d);
     const r = byId(RIMS, cfg.rims); tweenMat(M.rims, r.hex, { metalness: r.metal, roughness: r.rough }, d);
@@ -1211,12 +1324,9 @@ function applyAll(instant) {
     const r = byId(RIMS, cfg.rims); tweenMat(M.cenRims, r.hex, { metalness: r.metal, roughness: r.rough }, d);
     tweenMat(M.acc, byId(ACCENTS, cfg.acc).hex, null, d);
     if (cfg.finish !== 'carbon') tweenMat(M.cenPaint, paint.hex, fin, d);
-    const car = conf && conf.cars;
   }
   // karoseria Centenario: karbon albo lakier
-  if (M.cenCarbon) $('#gl-conf') && conf && (function () {
-    const g = conf.st.scene; g.traverse(o => { if (o.isMesh && o.userData.body) o.material = cfg.finish === 'carbon' ? M.cenCarbon : M.cenPaint; });
-  })();
+  if (M.cenCarbon && conf) conf.st.scene.traverse(o => { if (o.isMesh && o.userData.body) o.material = cfg.finish === 'carbon' ? M.cenCarbon : M.cenPaint; });
   calc();
 }
 const shown = { price: 0, rate: 0 };
@@ -1227,32 +1337,36 @@ function calc() {
   if (!(cfg.model === 'cen' && cfg.finish === 'carbon')) add('Lakier', byId(PAINTS, cfg.paint));
   add('Wykończenie', byId(FINISH, cfg.finish)); add('Felgi', byId(RIMS, cfg.rims));
   if (cfg.model === 'svj') { add('Zaciski', byId(CALIPERS, cfg.cal)); add('Karbon', byId(CARBON, cfg.carbon)); } else add('Akcenty', byId(ACCENTS, cfg.acc));
-  $('#sum').innerHTML = items.map(([a, b], i) => `<div class="row"><span>${a}</span><span>${i === 0 ? fmt(b) + ' zł' : b ? '+' + fmt(b) + ' zł' : 'w cenie'}</span></div>`).join('');
-  const P = items.reduce((s, x) => s + x[1], 0), i = .089 / 12, n = cfg.months, W = P * cfg.down / 100, R = P * cfg.buy / 100;
-  const rate = (P / 1.23 - W / 1.23 - R / 1.23 / Math.pow(1 + i, n)) * i / (1 - Math.pow(1 + i, -n));
-  gsap.to(shown, { price: P, rate, duration: .7, ease: 'power3.out', onUpdate: () => { $('#price').textContent = fmt(shown.price) + ' zł'; $('#rate').textContent = fmt(shown.rate) + ' zł'; } });
-  $('#down-o').textContent = cfg.down + '%'; $('#buy-o').textContent = cfg.buy + '%';
-  [['#down', cfg.down, 45, 0], ['#buy', cfg.buy, 40, 1]].forEach(([s, v, max, min]) => $(s).style.setProperty('--p', ((v - min) / (max - min) * 100) + '%'));
+  $('#sum').innerHTML = items.map(([a, b], i) => `<div class="row"><span>${nbsp(a)}</span><span>${i === 0 ? fmt(b) + NB + 'zł' : b ? '+' + fmt(b) + NB + 'zł' : 'w' + NB + 'cenie'}</span></div>`).join('');
+  const P = items.reduce((s, x) => s + x[1], 0), i = .089 / 12, n = cfg.months;
+  const down = Math.min(45, Math.max(0, cfg.down)), buy = Math.min(40, Math.max(1, cfg.buy)), W = P * down / 100, R = P * buy / 100;
+  const rate = Math.max(0, (P / 1.23 - W / 1.23 - R / 1.23 / Math.pow(1 + i, n)) * i / (1 - Math.pow(1 + i, -n)));
+  const out = () => { $('#price').textContent = fmt(shown.price) + NB + 'zł'; $('#rate').textContent = fmt(shown.rate) + NB + 'zł'; };
+  if (RM) { shown.price = P; shown.rate = rate; out(); } else gsap.to(shown, { price: P, rate, duration: .5, ease: 'power3.out', overwrite: true, onUpdate: out });
+  $('#down-o').textContent = down + '%'; $('#buy-o').textContent = buy + '%';
+  $('#down').setAttribute('aria-valuetext', 'Wpłata własna ' + down + '%'); $('#buy').setAttribute('aria-valuetext', 'Wykup ' + buy + '%');
+  [['#down', down, 45, 0], ['#buy', buy, 40, 1]].forEach(([s, v, max, min]) => $(s).style.setProperty('--p', ((v - min) / (max - min) * 100) + '%'));
 }
 function buildOptions() {
   const mb = $('#o-model');
   Object.entries(MODELS).forEach(([id, m]) => {
-    const b = document.createElement('button'); b.type = 'button'; b.dataset.id = id; b.innerHTML = m.name + `<br><span class="muted" style="font-size:10px">od ${fmt(m.price)} zł</span>`;
+    const b = document.createElement('button'); b.type = 'button'; b.dataset.id = id; b.innerHTML = m.name.replace(/ (?=\S+$)/, NB) + `<small>od ${fmt(m.price)}${NB}zł</small>`;
+    b.setAttribute('aria-pressed', cfg.model === id);
     b.addEventListener('click', async () => {
       if (cfg.model === id) return;
       cfg.model = id; if (id === 'cen') { cfg.finish = 'carbon'; cfg.rims = 'argento'; } else { cfg.finish = 'gloss'; if (cfg.rims === 'argento') cfg.rims = 'nero'; }
-      syncUI(); b.disabled = true;
+      syncUI(); calc();
+      if (!conf) return; // scena jeszcze nie powstała: pokaże wybrany model, gdy się zbuduje
+      $('#o-model').setAttribute('aria-busy', 'true');
       try { await conf.show(id); } catch (e) { console.error(e); $('#conf-load').textContent = 'Nie udało się wczytać modelu. Odśwież stronę.'; }
-      b.disabled = false; applyAll();
+      $('#o-model').removeAttribute('aria-busy'); applyAll();
     });
     mb.appendChild(b);
   });
   optButtons($('#o-paint'), PAINTS, 'paint', 'dot'); optButtons($('#o-rims'), RIMS, 'rims', 'dot');
   optButtons($('#o-cal'), CALIPERS, 'cal', 'dot'); optButtons($('#o-acc'), ACCENTS, 'acc', 'dot');
   optButtons($('#o-carbon'), CARBON, 'carbon', 'seg');
-  // przyciski w panelu po kliknięciu przebudowują się w syncUI, więc kliknięcia podpinamy ponownie
-  const rebind = () => { optButtons($('#o-carbon'), CARBON, 'carbon', 'seg'); };
-  rebind(); syncUI();
+  syncUI();
   $('#down').addEventListener('input', e => { cfg.down = +e.target.value; calc(); });
   $('#buy').addEventListener('input', e => { cfg.buy = +e.target.value; calc(); });
   $$('#months button').forEach(b => b.addEventListener('click', () => { cfg.months = +b.dataset.m; $$('#months button').forEach(x => x.setAttribute('aria-pressed', x === b)); calc(); }));
@@ -1262,6 +1376,12 @@ function buildOptions() {
 /* ---------- Koło zbudowane w kodzie ---------- */
 function canvasTex(w, h, draw, rep) { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h); const t = new THREE.CanvasTexture(c); if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...rep); } return t; }
 function buildWheel() {
+  const tags = $$('#tags .tg'), ex = { k: 0 };
+  const tl = gsap.timeline(); tl.to(ex, { k: 1, ease: 'power2.inOut', duration: 1 }).to({}, { duration: .35 }); tl.fromTo(tags, { opacity: 0 }, { opacity: 1, stagger: .08, duration: .25 }, .45);
+  ScrollTrigger.create({ trigger: '#serwis', refreshPriority: 1, start: 'top top', end: () => '+=' + innerHeight * 2.2, pin: true, scrub: RM ? true : 1, animation: tl, anticipatePin: 1 });
+  whenNear($('#serwis'), () => buildWheelScene(tags, ex));
+}
+function buildWheelScene(tags, ex) {
   const st = new Stage($('#gl-wheel'), { fov: 32, alpha: true });
   st.scene.background = null; st.renderer.setClearColor(0x000000, 0);
   st.scene.add(new THREE.HemisphereLight('#dfe8ff', '#1a1208', .4));
@@ -1272,7 +1392,7 @@ function buildWheel() {
   const tread = canvasTex(256, 64, (g, w, h) => { g.fillStyle = '#888'; g.fillRect(0, 0, w, h); g.strokeStyle = '#222'; g.lineWidth = 7; for (let x = -64; x < w + 64; x += 32) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x + 26, h); g.stroke(); } g.fillStyle = '#222'; g.fillRect(0, h * .3, w, 5); g.fillRect(0, h * .66, w, 5); }, [48, 1]);
   const pts = [[.715, -.27], [.80, -.285], [.92, -.30], [.975, -.27], [1.0, -.2], [1.005, 0], [1.0, .2], [.975, .27], [.92, .30], [.80, .285], [.715, .27]].map(([x, y]) => new THREE.Vector2(x, y));
   P('tire').add(new THREE.Mesh(new THREE.LatheGeometry(pts, 160), new THREE.MeshStandardMaterial({ color: '#16171a', roughness: .86, bumpMap: tread, bumpScale: 2.2 })));
-  const wall = canvasTex(2048, 128, (g, w, h) => { g.fillStyle = '#16171a'; g.fillRect(0, 0, w, h); g.fillStyle = '#5c5f66'; g.font = '700 70px "Chakra Petch", monospace'; g.textBaseline = 'middle'; for (let k = 0; k < 2; k++) g.fillText('OBROTY  P ZERO CORSA  355/25 ZR21', k * w / 2 + 40, h / 2); });
+  const wall = canvasTex(2048, 128, (g, w, h) => { g.fillStyle = '#16171a'; g.fillRect(0, 0, w, h); g.fillStyle = '#5c5f66'; g.font = '700 66px "Archivo", sans-serif'; g.textBaseline = 'middle'; for (let k = 0; k < 2; k++) g.fillText('OBROTY  P ZERO CORSA  355/25 ZR21', k * w / 2 + 40, h / 2); });
   wall.colorSpace = THREE.SRGBColorSpace;
   const ring = new THREE.Mesh(new THREE.RingGeometry(.80, .93, 160, 1), new THREE.MeshStandardMaterial({ map: wall, roughness: .9 }));
   const uv = ring.geometry.attributes.uv, pos = ring.geometry.attributes.position;
@@ -1286,7 +1406,7 @@ function buildWheel() {
   const sg = new THREE.ExtrudeGeometry(ss, { depth: .07, bevelEnabled: true, bevelThickness: .018, bevelSize: .012, bevelSegments: 3 });
   for (let i = 0; i < 10; i++) { const s = new THREE.Mesh(sg, metal); s.rotation.x = -Math.PI / 2; const g = new THREE.Group(); g.add(s); g.rotation.y = Math.floor(i / 2) * Math.PI * 2 / 5 + (i % 2 ? 1 : -1) * .085; g.position.y = .13; rim.add(g); }
   const hub = new THREE.Mesh(new THREE.CylinderGeometry(.2, .23, .12, 48), metal); hub.position.y = .16; rim.add(hub);
-  const capTex = canvasTex(256, 256, g => { g.fillStyle = '#ffad2a'; g.beginPath(); g.arc(128, 128, 128, 0, Math.PI * 2); g.fill(); g.fillStyle = '#0b0e13'; g.font = '900 150px "Big Shoulders Display", Impact'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('O', 128, 138); });
+  const capTex = canvasTex(256, 256, g => { g.fillStyle = '#ffad2a'; g.beginPath(); g.arc(128, 128, 128, 0, Math.PI * 2); g.fill(); g.fillStyle = '#0b0e13'; g.font = '900 150px "Big Shoulders Display", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('O', 128, 138); });
   capTex.colorSpace = THREE.SRGBColorSpace;
   const cap = new THREE.Mesh(new THREE.CylinderGeometry(.085, .085, .02, 48), [polish, new THREE.MeshStandardMaterial({ map: capTex, metalness: .3, roughness: .3 }), polish]); cap.position.y = .23; rim.add(cap);
   for (let i = 0; i < 5; i++) { const a = i * Math.PI * 2 / 5 + Math.PI / 5; const n = new THREE.Mesh(new THREE.CylinderGeometry(.026, .026, .05, 6), polish); n.position.set(Math.cos(a) * .14, .23, Math.sin(a) * .14); rim.add(n); }
@@ -1301,10 +1421,8 @@ function buildWheel() {
   cs.absarc(0, 0, .69, a0, a1, false); cs.absarc(0, 0, .45, a1, a0, true); cs.closePath();
   const cal = new THREE.Mesh(new THREE.ExtrudeGeometry(cs, { depth: .2, bevelEnabled: true, bevelThickness: .03, bevelSize: .025, bevelSegments: 4, curveSegments: 32 }), new THREE.MeshPhysicalMaterial({ color: '#ffad2a', metalness: .2, roughness: .32, clearcoat: 1, clearcoatRoughness: .08 }));
   cal.rotation.x = -Math.PI / 2; cal.position.y = -.145; P('caliper').add(cal);
-  const tags = $$('#tags .tg'), ex = { k: 0 }, spin = { a: 0, v: .6 };
+  const spin = { a: 0, v: .6 };
   const OFF = { tire: 1.25, rim: .45, disc: -.45, caliper: -1.05 };
-  const tl = gsap.timeline(); tl.to(ex, { k: 1, ease: 'power2.inOut', duration: 1 }).to({}, { duration: .35 }); tl.fromTo(tags, { opacity: 0 }, { opacity: 1, stagger: .08, duration: .25 }, .45);
-  ScrollTrigger.create({ trigger: '#serwis', refreshPriority: 1, start: 'top top', end: () => '+=' + innerHeight * 2.2, pin: true, scrub: RM ? true : 1, animation: tl, anticipatePin: 1 });
   const v3 = new THREE.Vector3(), anchor = { tire: 1.02, rim: .72, disc: .62, caliper: .7 };
   st.onResize = (w, h) => { st.camera.fov = w < 760 ? 50 : 32; if (w >= 980) st.camera.setViewOffset(w, h, -w * .2, 0, w, h); else st.camera.clearViewOffset(); st.camera.updateProjectionMatrix(); };
   st.onResize(st.canvas.parentElement.clientWidth, st.canvas.parentElement.clientHeight);
@@ -1318,100 +1436,117 @@ function buildWheel() {
   };
 }
 
-/* ---------- Tekst, liczniki, pasek marek, prędkościomierz, kursor ---------- */
+/* ---------- Nagłówki, stopka, prędkościomierz, kursor ---------- */
 async function splits() {
-  await document.fonts.ready;
-  $$('[data-split]').forEach(el => {
-    const sp = SplitText.create(el, { type: 'words,chars', mask: 'words' }); el._split = sp;
-    (sp.masks || []).forEach(m => Object.assign(m.style, { paddingTop: '.18em', marginTop: '-.18em', paddingBottom: '.05em', marginBottom: '-.05em' }));
+  try { await document.fonts.ready; } catch {}
+  $$('#hero h1, [data-split]').forEach(el => {
+    const sp = SplitText.create(el, { type: 'words', mask: 'words' }); el._split = sp;
+    (sp.masks || []).forEach(m => Object.assign(m.style, { paddingBottom: '.08em', marginBottom: '-.08em' }));
     if (RM || el.closest('#hero')) return;
-    gsap.from(sp.chars, { yPercent: 110, opacity: 0, filter: 'blur(6px)', duration: 1.1, ease: 'expo.out', stagger: .02, scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+    // jedno wejście na sekcję: słowa nagłówka wyjeżdżają spod maski, reszta treści jest od razu widoczna
+    gsap.from(sp.words, { yPercent: 105, duration: .9, ease: 'expo.out', stagger: .05, scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
   });
 }
-function counters() {
-  $$('#liczby [data-count]').forEach(b => {
-    const em = b.querySelector('em')?.outerHTML || '', o = { v: 0 }, to = +b.dataset.count;
-    if (RM || to === 0) { b.innerHTML = fmt(to) + em; return; }
-    gsap.to(o, { v: to, duration: 1.8, ease: 'power3.out', onUpdate: () => b.innerHTML = fmt(o.v) + em, scrollTrigger: { trigger: b, start: 'top 85%', once: true } });
-  });
-  if (!RM) gsap.to('.flow li', { '--s': 1, stagger: .18, duration: 1.1, ease: 'expo.inOut', scrollTrigger: { trigger: '.flow', start: 'top 80%', once: true } }); else gsap.set('.flow li', { '--s': 1 });
-  if (!RM) gsap.fromTo('#kontakt .bgimg img', { yPercent: -10 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '#kontakt', start: 'top bottom', end: 'bottom top', scrub: true } });
-}
-/* Podpisy HUD „przewijają” losowe znaki, zanim ułożą się w tekst (jak wyświetlacz w desce rozdzielczej) */
-function scramble(el) {
-  const text = el.dataset.text || (el.dataset.text = el.textContent), glyphs = 'ABCDEFGHIJKLMNOPRSTUWZ0123456789/·';
-  const o = { p: 0 };
-  gsap.to(o, { p: 1, duration: .9, ease: 'power1.out', onUpdate: () => {
-    const n = Math.floor(o.p * text.length);
-    el.textContent = text.slice(0, n) + [...text.slice(n)].map(c => c === ' ' ? ' ' : glyphs[Math.random() * glyphs.length | 0]).join('');
-  }, onComplete: () => { el.textContent = text; } });
-}
-function scrambles() {
-  if (RM) return;
-  $$('.hud.amber').forEach(el => { if (el.closest('#loader')) return; ScrollTrigger.create({ trigger: el, start: 'top 92%', onEnter: () => scramble(el), onEnterBack: () => scramble(el) }); });
-}
-function giant() { const sp = SplitText.create('#giant', { type: 'chars' }); if (RM) return; gsap.from(sp.chars, { yPercent: 60, opacity: .1, stagger: .06, ease: 'power2.out', scrollTrigger: { trigger: 'footer', start: 'top 95%', end: 'bottom bottom', scrub: 1 } }); }
-function marquee() {
-  const tr = $('#mq'); tr.innerHTML += tr.innerHTML; if (RM) return;
-  let x = 0, dir = 1, w = tr.scrollWidth / 2;
-  addEventListener('resize', () => { w = tr.scrollWidth / 2; });
-  gsap.ticker.add((t, dt) => { const v = lenis ? lenis.velocity : 0; if (Math.abs(v) > .5) dir = Math.sign(v); x -= (dt / 16) * (1.1 + Math.min(Math.abs(v) * .4, 14)) * dir; if (x <= -w) x += w; if (x > 0) x -= w; tr.style.transform = `translate3d(${x}px,0,0)`; });
-}
+function giant() { const sp = SplitText.create('#giant', { type: 'chars' }); if (RM) return; gsap.from(sp.chars, { yPercent: 45, stagger: .05, ease: 'power2.out', scrollTrigger: { trigger: 'footer', start: 'top 95%', end: 'bottom bottom', scrub: 1 } }); }
+function parallax() { if (!RM) gsap.fromTo('#kontakt .bgimg img', { yPercent: -10 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '#kontakt', start: 'top bottom', end: 'bottom top', scrub: true } }); }
 function speedo() {
   const sp = $('#sp'), arcEl = $('#sp-arc'), odo = $('#odo'); let v0 = 0;
   let lastV = -1, lastO = '';
   gsap.ticker.add(() => { const v = lenis ? Math.abs(lenis.velocity) : 0; v0 += (Math.min(v * 9, 350) - v0) * .12; const r = Math.round(v0); if (r !== lastV) { lastV = r; sp.textContent = r; arcEl.setAttribute('stroke-dasharray', `${(v0 / 350 * 89.5).toFixed(1)} 120`); } const o = (scrollY / 1000).toFixed(2).replace('.', ','); if (o !== lastO) { lastO = o; odo.textContent = o; } });
 }
+function navBar() {
+  const nav = $('#nav'); let solid = null;
+  const upd = () => { const s = scrollY > 40; if (s !== solid) { solid = s; nav.classList.toggle('solid', s); } };
+  addEventListener('scroll', upd, { passive: true }); upd();
+}
 function cursor() {
   if (matchMedia('(hover: none), (pointer: coarse)').matches) return;
   const c = $('#cursor'), lab = $('span', c);
-  const xTo = gsap.quickTo(c, 'x', { duration: .45, ease: 'power3' }), yTo = gsap.quickTo(c, 'y', { duration: .45, ease: 'power3' });
+  const xTo = gsap.quickTo(c, 'x', { duration: .2, ease: 'power3' }), yTo = gsap.quickTo(c, 'y', { duration: .2, ease: 'power3' });
   addEventListener('pointermove', e => { xTo(e.clientX); yTo(e.clientY); });
   document.addEventListener('pointerover', e => { const t = e.target.closest('[data-cursor]'); c.classList.toggle('on', !!t); if (t) lab.textContent = t.dataset.cursor; });
-  if (RM) return;
-  $$('.magnetic').forEach(m => {
-    m.addEventListener('pointermove', e => { const b = m.getBoundingClientRect(); gsap.to(m, { x: (e.clientX - b.left - b.width / 2) * .28, y: (e.clientY - b.top - b.height / 2) * .4, duration: .5, ease: 'power3.out' }); });
-    m.addEventListener('pointerleave', () => gsap.to(m, { x: 0, y: 0, duration: .9, ease: 'elastic.out(1,.4)' }));
-  });
+  document.addEventListener('pointerleave', () => c.classList.remove('on'));
 }
 
-/* ---------- Przejście: złota kurtyna z logo ---------- */
-function go(target) {
-  if (RM) return scrollToEl(target, true);
-  const w = $('#wipe'), inner = $('#wipe .inner'), mark = $('#wipe .mark');
-  // tylko yPercent (bez pikseli), żeby kurtyna zawsze wracała dokładnie poza ekran
-  gsap.killTweensOf([w, inner, mark]);
+/* ---------- Menu na węższych ekranach ---------- */
+const menuBtn = $('#menu-btn'), menu = $('#menu');
+function openMenu() {
+  menu.hidden = false; menuBtn.setAttribute('aria-expanded', 'true'); menuBtn.textContent = 'Zamknij'; $('#nav').classList.add('solid');
+  lenis && lenis.stop();
+  if (!RM) gsap.fromTo(menu, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: .22, ease: 'power2.out' });
+  $('#menu a').focus();
+}
+function closeMenu(returnFocus) {
+  if (menu.hidden) return;
+  menu.hidden = true; menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.textContent = 'Menu';
+  $('#nav').classList.toggle('solid', scrollY > 40); lenis && lenis.start();
+  if (returnFocus) menuBtn.focus();
+}
+menuBtn.addEventListener('click', () => menu.hidden ? openMenu() : closeMenu(true));
+document.addEventListener('pointerdown', e => { if (!menu.hidden && !menu.contains(e.target) && !menuBtn.contains(e.target)) closeMenu(false); });
+menu.addEventListener('keydown', e => { if (e.key === 'Tab') { const f = $$('a', menu).concat([menuBtn]); const i = f.indexOf(document.activeElement); if (!e.shiftKey && i === f.length - 2) { e.preventDefault(); menuBtn.focus(); } } });
+addEventListener('resize', () => { if (innerWidth >= 1240) closeMenu(false); });
+
+/* ---------- Skok do sekcji: krótkie przyciemnienie zamiast przewijania przez wszystkie sceny ---------- */
+function go(target, focusEl) {
+  closeMenu(false);
+  const land = () => {
+    scrollToEl(target, true); ScrollTrigger.update();
+    const f = focusEl || target; if (!focusEl) target.setAttribute('tabindex', '-1');
+    f.focus({ preventScroll: true });
+  };
+  if (RM) return land();
+  const w = $('#wipe');
+  gsap.killTweensOf(w);
   gsap.timeline()
-    .set(w, { visibility: 'visible', y: 0, yPercent: 101 }).set(inner, { y: 0, yPercent: 101 }).set(mark, { opacity: 0 })
-    .to(w, { yPercent: 0, duration: .55, ease: 'expo.in' })
-    .fromTo(mark, { scale: .6, rotate: -20, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, duration: .4, ease: 'back.out(2)' }, '-=.1')
-    .to(inner, { yPercent: 0, duration: .4, ease: 'expo.inOut' }, '+=.05')
-    .add(() => { scrollToEl(target, true); ScrollTrigger.update(); })
-    .to(mark, { opacity: 0, scale: 1.3, duration: .25 })
-    .to(w, { yPercent: -101, duration: .65, ease: 'expo.inOut' }, '-=.05')
+    .set(w, { visibility: 'visible' })
+    .to(w, { opacity: 1, duration: .18, ease: 'power2.out' })
+    .add(land)
+    .to(w, { opacity: 0, duration: .35, ease: 'power2.out' }, '+=.06')
     .set(w, { visibility: 'hidden' });
 }
 $$('[data-go]').forEach(a => a.addEventListener('click', e => { const t = $(a.getAttribute('href')); if (!t) return; e.preventDefault(); go(t); }));
 
-/* ---------- Formularz ---------- */
+/* ---------- Formularz (pokazowy: nic nie wysyła) ---------- */
 const sel = $('#f-car');
-sel.innerHTML = STOCK.map(s => `<option>Lamborghini ${s.name} (${s.tag})</option>`).join('') + '<option>Konfiguracja z konfiguratora</option>';
-$('#f-date').value = new Date(Date.now() + 3 * 864e5).toISOString().slice(0, 10);
+sel.innerHTML = STOCK.map(s => `<option>${carLabel(s)}</option>`).join('') + '<option>Konfiguracja z' + NB + 'konfiguratora</option>';
+const iso = d => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+const today = new Date(); const dMin = iso(today), dMax = iso(new Date(Date.now() + 120 * 864e5));
+$('#f-date').min = dMin; $('#f-date').max = dMax; $('#f-date').value = iso(new Date(Date.now() + 3 * 864e5));
+function fieldErr(id, msg) { const inp = $('#f-' + id); $('#e-' + id).textContent = msg ? nbsp(msg) : ''; inp.setAttribute('aria-invalid', msg ? 'true' : 'false'); return !msg; }
 $('#form').addEventListener('submit', e => {
   e.preventDefault();
-  const name = $('#f-name').value.trim(), phone = $('#f-phone').value.trim(), msg = $('#form-msg');
-  if (!name || phone.replace(/\D/g, '').length < 9) { msg.innerHTML = '<p class="ok">Podaj imię i numer telefonu (9 cyfr), żebyśmy mogli potwierdzić termin.</p>'; return; }
-  msg.innerHTML = `<p class="ok">Dziękujemy, ${name.replace(/[<>&]/g, '')}. W prawdziwym salonie zadzwonilibyśmy teraz, żeby potwierdzić jazdę: ${sel.value}, ${$('#f-date').value}. To projekt pokazowy, więc formularz niczego nie wysłał.</p>`;
-  if (!RM) gsap.from('#form-msg .ok', { y: 16, opacity: 0, duration: .6, ease: 'expo.out' });
+  const name = $('#f-name').value.replace(/\s+/g, ' ').trim(), phone = $('#f-phone').value.trim(), date = $('#f-date').value, msg = $('#form-msg');
+  const digits = phone.replace(/\D/g, '');
+  const okName = fieldErr('name', !name ? 'Wpisz imię, żebyśmy wiedzieli, jak się zwracać.' : /[<>{}]|\p{Extended_Pictographic}/u.test(name) ? 'Imię może zawierać tylko litery, spacje i myślnik.' : '');
+  const okPhone = fieldErr('phone', !phone ? 'Wpisz numer telefonu, potwierdzimy nim termin.' : /[^\d\s+()-]/.test(phone) || digits.length < 9 || digits.length > 13 ? 'Numer powinien mieć 9 cyfr, np. 600 000 000 albo +48 600 000 000.' : '');
+  const okDate = fieldErr('date', !date ? 'Wybierz dzień jazdy.' : date < dMin ? 'Ten dzień już minął. Wybierz dzień od dziś.' : date > dMax ? 'Zapisujemy na najbliższe 4 miesiące. Wybierz wcześniejszy dzień.' : '');
+  msg.textContent = '';
+  if (!(okName && okPhone && okDate)) { const bad = $('#form [aria-invalid="true"]'); bad && bad.focus(); return; }
+  const day = new Date(date + 'T12:00').toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+  const p = document.createElement('p'); p.className = 'ok';
+  p.textContent = nbsp(`Dziękujemy, ${name}. W prawdziwym salonie zadzwonilibyśmy teraz, żeby potwierdzić jazdę: ${sel.value}, ${day}. To projekt pokazowy, więc formularz niczego nie wysłał.`);
+  msg.appendChild(p);
+  if (!RM) gsap.from(p, { y: 10, opacity: 0, duration: .4, ease: 'power2.out' });
 });
+['name', 'phone', 'date'].forEach(id => $('#f-' + id).addEventListener('input', () => { if ($('#f-' + id).getAttribute('aria-invalid') === 'true') fieldErr(id, ''); }));
+
+/* ---------- Duże zdjęcia: pobieramy dopiero, gdy sekcja jest blisko (model 3D ma pierwszeństwo przy starcie) ---------- */
+function lazyImgs() {
+  $$('img[data-srcset]').forEach(img => {
+    if (img.dataset.watch) return; img.dataset.watch = 1;
+    whenNear(img.closest('section') || img, () => { img.srcset = img.dataset.srcset; img.src = img.dataset.src; });
+  });
+}
 
 /* ---------- Start ---------- */
-splits().then(() => { counters(); giant(); scrambles(); });
-marquee(); speedo(); cursor(); tilt();
-buildGallery(); railScroll(); buildOptions();
+splits().then(() => { giant(); buildGallery(); ScrollTrigger.sort(); ScrollTrigger.refresh(); if (entered) lazyImgs(); });
+speedo(); cursor(); navBar(); parallax();
+buildOptions();
 const failSafe = setTimeout(readyToEnter, 25000);
 if (!webgl) {
-  ['#gl-hero', '#gl-anat', '#gl-conf', '#gl-wheel'].forEach(s => { const c = $(s); const f = document.createElement('div'); f.className = 'fallback hud'; f.textContent = 'Ta przeglądarka nie obsługuje grafiki 3D (WebGL).'; c.replaceWith(f); });
+  ['#gl-hero', '#gl-anat', '#gl-conf', '#gl-wheel'].forEach(s => { const c = $(s); const f = document.createElement('div'); f.className = 'fallback'; f.textContent = 'Ta przeglądarka nie obsługuje grafiki 3D (WebGL).'; c.replaceWith(f); });
+  buildWheelTimelineOnly();
   clearTimeout(failSafe); readyToEnter();
 } else {
   buildWheel();
@@ -1419,10 +1554,13 @@ if (!webgl) {
     try { await document.fonts.load('900 100px "Big Shoulders Display"'); } catch {}
     svj = prepSVJ(gltf);
     applyAll(true);
-    buildHero(); buildAnatomy(); buildConfigurator(); await conf.show('svj');
+    buildHero(); buildAnatomy();
+    // konfigurator powstaje dopiero, gdy jest blisko; Centenario wczytujemy dopiero po kliknięciu
+    whenNear($('#konfigurator'), async () => { buildConfigurator(); await conf.show(cfg.model); });
     clearTimeout(failSafe); readyToEnter();
   }).catch(err => { console.error(err); clearTimeout(failSafe); $('#ld-note').textContent = 'Nie udało się wczytać modelu 3D.'; readyToEnter(); });
 }
+function buildWheelTimelineOnly() { $$('#tags .tg').forEach(t => t.style.display = 'none'); }
 </script>
 
 </body>
