@@ -139,6 +139,10 @@ button.go-btn:active { transform: translateY(1px); }
 button.go-btn:disabled { opacity: .7; cursor: progress; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .form-msg { grid-column: 1 / -1; margin: 0; font-weight: 500; }
+.privacy { grid-column: 1 / -1; font-size: 13px; color: #c9d4d2; }
+.privacy summary { cursor: pointer; font-weight: 600; }
+.privacy p { margin: 8px 0 0; max-width: 60em; }
+.privacy a, footer a { color: inherit; }
 .form-msg[data-state="err"] { color: #ffb3c8; }
 .form-msg[data-state="ok"] { color: #a8e0c2; }
 
@@ -303,9 +307,16 @@ footer p { margin: 0 0 6px; max-width: 60em; }
           </select>
         </div>
         <div class="hp" aria-hidden="true"><label for="f-www">Strona www</label><input id="f-www" name="www" tabindex="-1" autocomplete="off"></div>
-        <label class="consent"><input type="checkbox" name="zgoda" id="f-zgoda" required><span>Zgadzam się na kontakt mailowy w sprawie startu Salonowego BDO. Dane służą tylko do tego celu i usuniemy je na prośbę.</span></label>
+        <label class="consent"><input type="checkbox" name="zgoda" id="f-zgoda" required><span>Chcę dostać e-mail o starcie Salonowego BDO i ofercie dla pierwszych 100 salonów. Zgodę mogę wycofać w każdej chwili, pisząc na marcin.projekty.www@gmail.com.</span></label>
         <button class="go-btn" type="submit">Zapisz salon</button>
         <p class="form-msg" id="join-msg" role="status" aria-live="polite"></p>
+        <details class="privacy">
+          <summary>Kto przetwarza Twoje dane</summary>
+          <p>Administratorem danych jest Marcin Lipniak, kontakt: <a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a>.</p>
+          <p>Imię, e-mail, rodzaj salonu, informację o wpisie do BDO i źródło wejścia na stronę przetwarzamy na podstawie Twojej zgody (art. 6 ust. 1 lit. a RODO), żeby napisać do Ciebie o starcie usługi i ustalić kolejność na liście.</p>
+          <p>Dane trzymamy do startu usługi, najdłużej 12 miesięcy, albo do wycofania zgody. Zapisy trafiają do arkusza Google, a stronę udostępnia GitHub – dane mogą być przetwarzane w USA na podstawie programu EU-US Data Privacy Framework.</p>
+          <p>Masz prawo dostępu do danych, ich poprawienia, usunięcia, ograniczenia przetwarzania i przeniesienia, a także prawo skargi do Prezesa UODO. Podanie danych jest dobrowolne.</p>
+        </details>
       </form>
     </div>
   </section>
@@ -328,6 +339,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
 <footer>
   <div class="wrap">
     <p>Salonowe BDO nie jest powiązane z Ministerstwem Klimatu i Środowiska ani z systemem BDO. Informacje na stronie nie są poradą prawną.</p>
+    <p>Salonowe BDO prowadzi Marcin Lipniak, kontakt: <a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a></p>
   </div>
 </footer>
 
