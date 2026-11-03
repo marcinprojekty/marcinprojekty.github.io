@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Rolland – części do pługów i maszyny (projekt demonstracyjny)</title>
-<meta name="description" content="Projekt demonstracyjny nowej strony Rolland – Technika Rolnicza: wyszukiwarka części do pługów, komplety na sezon, linia PRO, przedsprzedaż i konfigurator maszyn.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<meta name="description" id="metaDesc" content="Projekt demonstracyjny nowej strony Rolland – Technika Rolnicza: wyszukiwarka części do pługów, komplety na sezon, linia PRO, przedsprzedaż i konfigurator maszyn.">
+<link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/archivo-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23167A3D'/%3E%3Cpath d='M7 20l3-9 4 5 2-7 2 7 4-5 3 9z' fill='%23fff'/%3E%3C/svg%3E">
 <style>
+/* Archivo (zmienna: grubość i szerokość) z własnego serwera – bez łączenia z Google */
+@font-face{font-family:Archivo;font-style:normal;font-weight:400 900;font-stretch:62% 125%;font-display:swap;src:url(fonts/archivo-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Archivo;font-style:normal;font-weight:400 900;font-stretch:62% 125%;font-display:swap;src:url(fonts/archivo-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 :root{
   --paper:#F1F4F1; --white:#fff; --ink:#18241C; --ink-2:#4A5A50; --line:#D3DBD5; --line-2:#BCC8C0;
   --green:#167A3D; --green-d:#0F5C2D; --forest:#0C3A20; --forest-2:#124A2A;
@@ -110,7 +112,8 @@ section.hero{padding:0}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .chip{border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-2)}
 .chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
-.chip .c{opacity:.6;margin-left:4px;font-weight:500}
+.chip .c{margin-left:4px;font-weight:500;color:var(--ink-2)}
+.chip[aria-pressed=true] .c{color:#C9D4CD}
 .resbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:var(--ink-2);font-size:15px;gap:12px;flex-wrap:wrap}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .card{background:#fff;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;overflow:hidden}
@@ -155,6 +158,8 @@ section.hero{padding:0}
 .totals{display:grid;grid-template-columns:1fr auto;gap:6px 18px;margin-top:16px;font-size:15px}
 .totals .big{font-size:26px;font-weight:850;font-variation-settings:var(--mid)}
 .totals .save{color:var(--green);font-weight:700}
+.ktable small.warnp{color:var(--red)}
+.knote{margin-top:12px}
 
 /* pro */
 .pro{background:#E6EBE7}
@@ -278,7 +283,7 @@ header.top.fit-4 .tools{margin-left:auto}
   .hero .wrap{grid-template-columns:1fr;gap:18px;padding-top:36px}
   .finder{grid-template-columns:1fr 1fr}
   .finder .btn{grid-column:1/-1}
-  .kit,.procols,.conf{grid-template-columns:1fr}
+  .kit,.procols,.conf{grid-template-columns:minmax(0,1fr)}
   .machine{position:static}
 }
 @media (max-width:760px){
@@ -300,7 +305,7 @@ header.top.fit-4 .tools{margin-left:auto}
   .addrow{flex-direction:column}
   .qty{width:100%;justify-content:space-between}
   section{padding:52px 0}
-  .timeline{grid-template-columns:1fr 1fr}
+  .timeline{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .step:nth-child(2){border-right:0}
   .step:nth-child(-n+2){border-bottom:1px solid var(--line)}
   .models{grid-template-columns:repeat(3,1fr)}
@@ -322,6 +327,18 @@ header.top.fit-4 .tools{margin-left:auto}
   .stats{gap:18px}
   .stats strong{font-size:24px}
 }
+@media (max-width:480px){
+  .sec-head>div{min-width:0}
+  .sumbox .total{flex-wrap:wrap;gap:2px 12px}
+  .sumbox .total strong{font-size:27px}
+  .verdict{grid-template-columns:minmax(0,1fr)}
+  .verdict>div:last-child{text-align:left!important}
+  h1,h2,h3{hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+  .step{padding:14px 12px}
+  .step .pct{font-size:32px}
+  .step .now-tag{position:static;display:inline-block;margin-bottom:6px}
+  .ktable td,.ktable th{padding-left:4px;padding-right:4px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -336,7 +353,7 @@ header.top.fit-4 .tools{margin-left:auto}
   <a class="brand" href="#" aria-label="Rolland – Technika Rolnicza">
     <svg viewBox="0 0 220 64" role="img" aria-hidden="true"><path d="M86 15l5-11 7 7 7-9 7 9 7-7 5 11z" fill="#167A3D"/><text x="110" y="40" text-anchor="middle" font-family="Archivo" font-weight="900" font-size="30" style="font-variation-settings:'wdth' 112" fill="#18241C">ROLLAND</text><text x="110" y="54" text-anchor="middle" font-family="Archivo" font-weight="600" font-size="10.5" letter-spacing="1.6" fill="#167A3D">TECHNIKA ROLNICZA</text><rect x="22" y="59" width="176" height="3" fill="#167A3D"/></svg>
   </a>
-  <nav class="main" aria-label="Sekcje">
+  <nav class="main" aria-label="Sekcje" data-ia="navL">
     <a href="#czesci" data-i="nav1">Części do pługów</a>
     <a href="#komplet" data-i="nav2">Komplet na sezon</a>
     <a href="#pro" data-i="nav3">Linia PRO</a>
@@ -344,12 +361,12 @@ header.top.fit-4 .tools{margin-left:auto}
     <a href="#maszyny" data-i="nav5">Maszyny</a>
   </nav>
   <div class="tools">
-    <div class="seg" role="group" aria-label="Język">
+    <div class="seg" role="group" aria-label="Język" data-ia="langL">
       <button type="button" data-lang="pl" aria-pressed="true">PL</button>
       <button type="button" data-lang="de" aria-pressed="false">DE</button>
     </div>
-    <label class="dealer"><input type="checkbox" id="dealer"><span class="switch"></span><span class="txt" data-i="dealer"><span class="long">Ceny dla dealera</span><span class="short">Dealer</span></span></label>
-    <button class="cartbtn" type="button" id="openCart" aria-label="Lista zamówienia"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl2" data-i="list">Zamówienie</span><span class="badge num" id="cartCount">0</span></button>
+    <label class="dealer"><input type="checkbox" id="dealer" aria-label="Ceny dla dealera" data-ia="dealerL"><span class="switch"></span><span class="txt" data-i="dealer" aria-hidden="true"><span class="long">Ceny dla dealera</span><span class="short">Dealer</span></span></label>
+    <button class="cartbtn" type="button" id="openCart" aria-label="Zamówienie: 0 szt."><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl2" data-i="list">Zamówienie</span><span class="badge num" id="cartCount">0</span></button>
   </div>
 </div></header>
 
@@ -359,13 +376,13 @@ header.top.fit-4 .tools{margin-left:auto}
     <h1 id="h1" data-i="h1">Części do Twojego pługa. Z ceną, od ręki.</h1>
     <p class="lead" data-i="lead">Wybierz markę pługa i kliknij część na rysunku. Pokażemy pasujące lemiesze, dłuta, odkładnie i płozy Rolland z cenami.</p>
     <div class="stats">
-      <div><strong class="num">4 346</strong><span data-i="st1">części w katalogu</span></div>
+      <div><strong class="num" id="stParts">4 346</strong><span data-i="st1">części w katalogu</span></div>
       <div><strong class="num">70</strong><span data-i="st2">marek pługów</span></div>
       <div><strong class="num">1999</strong><span data-i="st3">produkujemy od roku</span></div>
     </div>
   </div>
   <div class="diagram">
-    <svg viewBox="0 0 820 470" role="group" aria-label="Rysunek korpusu pługa – kliknij część">
+    <svg viewBox="0 0 820 470" role="group" aria-label="Rysunek korpusu pługa – kliknij część" data-ia="diagL">
       <defs>
         <pattern id="soilpat" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="4" cy="5" r="1.4" fill="#2C6743"/><circle cx="13" cy="13" r="1.1" fill="#26583A"/><circle cx="14" cy="3" r=".8" fill="#2C6743"/></pattern>
         <linearGradient id="soilfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0C3A20" stop-opacity="0"/><stop offset="1" stop-color="#0C3A20" stop-opacity=".9"/></linearGradient>
@@ -441,11 +458,11 @@ header.top.fit-4 .tools{margin-left:auto}
 
 <section id="czesci" aria-labelledby="h-parts"><div class="wrap">
   <div class="sec-head">
-    <div><h2 id="h-parts" data-i="hParts">Części do pługów</h2><p data-i="pParts">Zamienniki do pługów Lemken, Kverneland, Rabe, Vogel &amp; Noot, Överum i Unia Grudziądz. Blacha trudnościeralna, otwory i wymiary zgodne z oryginałem.</p></div>
+    <div><h2 id="h-parts" data-i="hParts">Części do pługów</h2><p data-i="pParts">Zamienniki do pługów Lemken, Kverneland, Rabe, Vogel &amp; Noot, Overum i Unia Grudziądz. Blacha trudnościeralna, otwory i wymiary zgodne z oryginałem.</p></div>
     <div class="field" style="min-width:min(320px,100%)"><label for="q" data-i="search">Szukaj po numerze katalogowym</label><input id="q" type="search" placeholder="np. 3352021, 073054, IBIS" autocomplete="off"></div>
   </div>
-  <div class="chips" id="typeChips" role="group" aria-label="Rodzaj części"></div>
-  <div class="resbar"><span id="resInfo" aria-live="polite"></span><span class="note" data-i="vatnote">Ceny netto, przykładowe. Wysyłka w 24 h.</span></div>
+  <div class="chips" id="typeChips" role="group" aria-label="Rodzaj części" data-ia="chipsL"></div>
+  <div class="resbar"><span id="resInfo" aria-live="polite"></span><span class="note" data-i="vatnote">Ceny netto, przykładowe.</span></div>
   <div class="grid" id="grid"></div>
   <div class="more"><button class="btn ghost" id="moreBtn" type="button" data-i="more">Pokaż więcej</button></div>
 </div></section>
@@ -455,7 +472,7 @@ header.top.fit-4 .tools{margin-left:auto}
   <div class="kit">
     <div class="panel stack">
       <div class="field"><label for="kBrand" data-i="fBrand">Marka pługa</label><select id="kBrand"></select></div>
-      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="bodies">Liczba korpusów (skib)</span><div class="bodies" id="kBodies" role="group"></div></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="bodies">Liczba korpusów (skib)</span><div class="bodies" id="kBodies" role="group" aria-label="Liczba korpusów" data-ia="bodiesG"></div></div>
       <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="kWhat">Co wchodzi w komplet</span>
         <div class="opts" id="kParts"></div></div>
       <label class="opt" id="kProWrap"><input type="checkbox" id="kPro"><span data-i="kPro">Wersja PRO z węglikiem (lemiesze, dłuta, płozy)</span></label>
@@ -463,6 +480,7 @@ header.top.fit-4 .tools{margin-left:auto}
     <div class="panel">
       <table class="ktable" id="kTable"><thead><tr><th data-i="thPart">Część</th><th class="r" data-i="thQty">Ilość</th><th class="r hide-s" data-i="thUnit">Cena szt.</th><th class="r" data-i="thSum">Razem</th></tr></thead><tbody></tbody></table>
       <div class="totals" id="kTotals"></div>
+      <p class="note knote" id="kNote"></p>
       <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn primary" id="kAdd" type="button" data-i="kAdd">Dodaj komplet do zamówienia</button></div>
     </div>
   </div>
@@ -474,7 +492,7 @@ header.top.fit-4 .tools{margin-left:auto}
     <div class="panel stack">
       <div class="range"><div class="rv"><label for="ha" data-i="ha">Hektary orki w roku</label><b class="num" id="haV"></b></div><input type="range" id="ha" min="20" max="1500" step="10" value="250"></div>
       <div class="range"><div class="rv"><label for="bod" data-i="bodies">Liczba korpusów (skib)</label><b class="num" id="bodV"></b></div><input type="range" id="bod" min="2" max="8" step="1" value="5"></div>
-      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="soilL">Gleba</span><div class="soil" id="soil" role="group"></div></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="soilL">Gleba</span><div class="soil" id="soil" role="group" aria-label="Gleba" data-ia="soilG"></div></div>
       <div class="sharepro" aria-hidden="true">
         <svg viewBox="0 0 420 120"><path d="M14 92 L360 86 L360 58 L120 52 L30 74 Z" fill="#2F3A35"/><path d="M14 92 L60 82 L64 92 Z" fill="#F2B500"/><g fill="#F2B500"><rect x="70" y="84" width="40" height="7" rx="1"/><rect x="116" y="83" width="40" height="7" rx="1"/><rect x="162" y="82" width="40" height="7" rx="1"/><rect x="208" y="82" width="40" height="7" rx="1"/><rect x="254" y="81" width="40" height="7" rx="1"/><rect x="300" y="80" width="40" height="7" rx="1"/></g><circle cx="180" cy="68" r="6" fill="#E6EBE7"/><circle cx="290" cy="66" r="6" fill="#E6EBE7"/><text x="210" y="116" text-anchor="middle" font-size="12.5" fill="#4A5A50" font-family="Archivo" data-i="carbide">płytki z węglika na krawędzi tnącej</text></svg>
       </div>
@@ -484,11 +502,11 @@ header.top.fit-4 .tools{margin-left:auto}
       <div class="panel compare">
         <div class="bar"><span class="t" data-i="std">Standard</span><div class="track"><div class="fillb" id="bStd" style="background:#7E8D85"></div></div><span class="v num" id="vStd"></span></div>
         <div class="bar"><span class="t">PRO</span><div class="track"><div class="fillb" id="bPro" style="background:var(--signal)"></div></div><span class="v num" id="vPro"></span></div>
-        <div class="legend"><span data-i="legend">Koszt części i przestojów na wymianę w jednym sezonie</span></div>
+        <div class="legend"><span data-i="legend">Koszt zużytych części i przestojów na wymianę w jednym sezonie</span></div>
         <div class="facts">
-          <div><b class="num" id="fStd"></b><span data-i="fStd">wymian kompletu – standard</span></div>
-          <div><b class="num" id="fPro"></b><span data-i="fPro">wymian kompletu – PRO</span></div>
-          <div><b class="num" id="fH"></b><span data-i="fH">godzin przestoju mniej</span></div>
+          <div><b class="num" id="fStd"></b><span data-i="fStd">zużyte komplety w sezonie – standard</span></div>
+          <div><b class="num" id="fPro"></b><span data-i="fPro">zużyte komplety w sezonie – PRO</span></div>
+          <div><b class="num" id="fH"></b><span data-i="fH">mniej przestoju (godziny)</span></div>
         </div>
       </div>
       <p class="note" data-i="assume">Założenia przykładowe: trwałość kompletu standardowego 22–70 ha zależnie od gleby, PRO 3,5 raza dłużej, wymiana 25 min na korpus, ciągnik z operatorem 180 zł/h. Rolland wstawia tu własne wyniki z testów.</p>
@@ -497,7 +515,7 @@ header.top.fit-4 .tools{margin-left:auto}
 </div></section>
 
 <section id="przedsprzedaz" aria-labelledby="h-pre"><div class="wrap">
-  <div class="sec-head"><div><h2 id="h-pre" data-i="hPre">Przedsprzedaż zimowa</h2><p data-i="pPre">Zamów części na wiosnę już teraz i zapłać mniej. Odbiór lub wysyłka w marcu, bez przedpłaty. My planujemy produkcję, Ty masz części przed sezonem.</p></div></div>
+  <div class="sec-head"><div><h2 id="h-pre" data-i="hPre">Przedsprzedaż zimowa</h2><p data-i="pPre">Zamów części na wiosnę już teraz i zapłać mniej. Rolland planuje produkcję, a Ty masz części przed sezonem. Terminy i rabaty poniżej to propozycja do ustalenia przez Rolland, np. odbiór lub wysyłka w marcu, bez przedpłaty.</p></div></div>
   <div class="timeline" id="timeline"></div>
   <div class="presale-cta"><p id="preText"></p><button class="btn primary" type="button" id="preBtn" data-i="preBtn">Zamów w przedsprzedaży</button></div>
 </div></section>
@@ -506,7 +524,7 @@ header.top.fit-4 .tools{margin-left:auto}
   <div class="sec-head"><div><h2 id="h-conf" data-i="hConf">Skonfiguruj agregat Grander AB</h2><p data-i="pConf">Wybierz szerokość, wał doprawiający i wyposażenie. Cena i wymagana moc ciągnika liczą się na bieżąco.</p></div></div>
   <div class="conf">
     <div class="machine">
-      <div class="ph"><img src="img/grander-ab.webp" alt="Agregat bezorkowy Rolland Grander AB" width="900" height="490"></div>
+      <div class="ph"><img src="img/grander-ab.webp" alt="Agregat bezorkowy Rolland Grander AB" data-ia-alt="granderAlt" width="900" height="490"></div>
       <div class="meta">
         <div><b class="num" id="mW"></b><span data-i="mW">szerokość robocza</span></div>
         <div><b class="num" id="mT"></b><span data-i="mT">redlic typu Horsch</span></div>
@@ -515,8 +533,8 @@ header.top.fit-4 .tools{margin-left:auto}
       </div>
     </div>
     <div class="stack">
-      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="cModel">Model</span><div class="models" id="cModels" role="group"></div></div>
-      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="cRoller">Wał doprawiający</span><div class="rollers" id="cRollers" role="radiogroup"></div></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="cModel">Model</span><div class="models" id="cModels" role="group" aria-label="Model" data-ia="modelsG"></div></div>
+      <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="cRoller">Wał doprawiający</span><div class="rollers" id="cRollers" role="radiogroup" aria-label="Wał doprawiający" data-ia="rollersG"></div></div>
       <div class="field"><span style="font-size:13px;font-weight:650;color:var(--ink-2)" data-i="cOpts">Wyposażenie dodatkowe</span><div class="opts" id="cOpts"></div></div>
       <div class="field"><label for="hp" data-i="cHp">Moc Twojego ciągnika (KM)</label><input id="hp" type="number" inputmode="numeric" min="40" max="600" value="150"><span class="warn" id="hpWarn" aria-live="polite"></span></div>
       <div class="sumbox" id="cSum"></div>
@@ -533,8 +551,8 @@ header.top.fit-4 .tools{margin-left:auto}
 </div></footer>
 
 <div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" aria-label="Zamówienie" aria-hidden="true">
-  <header><h3 data-i="dTitle">Zamówienie</h3><button class="x" id="closeCart" type="button" aria-label="Zamknij">×</button></header>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" aria-hidden="true">
+  <header><h3 id="dTitle" data-i="dTitle">Zamówienie</h3><button class="x" id="closeCart" type="button" aria-label="Zamknij" data-ia="closeL">×</button></header>
   <div class="dlist" id="dlist"></div>
   <div class="dfoot" id="dfoot"></div>
 </aside>
@@ -566,18 +584,18 @@ const T = {
     fBrand: 'Pflugmarke', fType: 'Teil', fSide: 'Seite', fGo: 'Teile anzeigen',
     hint: 'Klicken Sie auf ein Teil in der Zeichnung oder wählen Sie es aus der Liste.',
     ground: 'Bodenoberfläche', dir: 'Fahrtrichtung',
-    hParts: 'Pflugverschleißteile', pParts: 'Ersatzteile für Pflüge von Lemken, Kverneland, Rabe, Vogel & Noot, Överum und Unia Grudziądz. Verschleißfester Stahl, Bohrungen und Maße wie im Original.',
-    search: 'Suche nach Teilenummer', vatnote: 'Nettopreise, Beispielpreise. Versand innerhalb von 24 h.', more: 'Mehr anzeigen',
+    hParts: 'Pflugverschleißteile', pParts: 'Ersatzteile für Pflüge von Lemken, Kverneland, Rabe, Vogel &amp; Noot, Overum und Unia Grudziądz. Verschleißfester Stahl, Bohrungen und Maße wie im Original.',
+    search: 'Suche nach Teilenummer', vatnote: 'Nettopreise, Beispielpreise.', more: 'Mehr anzeigen',
     hKit: 'Saison-Set', pKit: 'Alle Verschleißteile in einer Bestellung – berechnet nach der Anzahl der Körper Ihres Pfluges. Das Set ist günstiger als die gleichen Teile einzeln.',
     bodies: 'Anzahl der Körper', kWhat: 'Im Set enthalten', kPro: 'PRO-Version mit Hartmetall (Scharen, Spitzen, Anlagen)',
     thPart: 'Teil', thQty: 'Menge', thUnit: 'Stückpreis', thSum: 'Summe', kAdd: 'Set zur Bestellung hinzufügen',
     hPro: 'PRO-Linie: länger im Feld, günstiger pro Hektar', pPro: 'Scharen, Spitzen und Anlagen mit Hartmetallplatten an den Arbeitskanten. Sie kosten mehr, werden aber mehrfach seltener gewechselt. Rechnen Sie nach, was das in Ihrem Betrieb bringt.',
     ha: 'Pflügen pro Jahr (ha)', soilL: 'Boden', carbide: 'Hartmetallplatten an der Schneidkante',
     saveL: 'Ersparnis pro Saison mit der PRO-Linie', perHa: 'pro Hektar', std: 'Standard',
-    legend: 'Kosten für Teile und Stillstand durch Wechsel in einer Saison',
-    fStd: 'Set-Wechsel – Standard', fPro: 'Set-Wechsel – PRO', fH: 'Stunden weniger Stillstand',
+    legend: 'Kosten für verschlissene Teile und Stillstand durch Wechsel in einer Saison',
+    fStd: 'verbrauchte Sets pro Saison – Standard', fPro: 'verbrauchte Sets pro Saison – PRO', fH: 'weniger Stillstand (Stunden)',
     assume: 'Beispielannahmen: Haltbarkeit des Standard-Sets 22–70 ha je nach Boden, PRO 3,5-mal länger, Wechsel 25 Min. pro Körper, Traktor mit Fahrer 42 €/h. Rolland setzt hier eigene Testergebnisse ein.',
-    hPre: 'Wintervorbestellung', pPre: 'Bestellen Sie die Teile für das Frühjahr jetzt und zahlen Sie weniger. Abholung oder Versand im März, ohne Vorauszahlung. Wir planen die Produktion, Sie haben die Teile vor der Saison.',
+    hPre: 'Wintervorbestellung', pPre: 'Bestellen Sie die Teile für das Frühjahr jetzt und zahlen Sie weniger. Rolland plant die Produktion, Sie haben die Teile vor der Saison. Termine und Rabatte unten sind ein Vorschlag, den Rolland selbst festlegt, z. B. Abholung oder Versand im März, ohne Vorauszahlung.',
     preBtn: 'Jetzt vorbestellen',
     hConf: 'Grubber Grander AB konfigurieren', pConf: 'Wählen Sie Arbeitsbreite, Nachlaufwalze und Ausstattung. Preis und benötigte Traktorleistung werden sofort berechnet.',
     mW: 'Arbeitsbreite', mT: 'Zinken Typ Horsch', mHp: 'benötigte Leistung', mKg: 'Gewicht mit Walze',
@@ -591,6 +609,13 @@ $$('[data-i]').forEach(el => { T.pl[el.dataset.i] = el.innerHTML; });
 const S = { // krótkie teksty używane w skrypcie
   pl: { all: 'Wszystkie', any: 'Dowolna', left: 'Lewa', right: 'Prawa', both: 'Obustronna', results: n => `${n} ${n === 1 ? 'część' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? 'części' : 'części'}`, add: 'Dodaj', added: 'Dodano', nr: 'Nr kat.', len: 'Długość', holes: 'Otwory', spacing: 'Rozstaw', side: 'Strona', none: 'Brak części dla tych filtrów. Zmień markę albo rodzaj części – albo zadzwoń: +48 504 949 564.', net: 'netto', gross: 'brutto', dealerP: 'cena dealera', toastAdd: n => `Dodano do zamówienia: ${n}`, kitSave: 'Rabat za komplet (8%)', kitTotal: 'Razem netto', kitGross: 'Brutto', kitAdded: 'Komplet dodany do zamówienia', pcs: 'szt.', proSuffix: ' – PRO z węglikiem', perSeason: '/ sezon', save: 'Oszczędzasz', soil: ['Lekka', 'Średnia', 'Ciężka', 'Kamienista'], until: 'do', from: 'od', catalog: 'cena katalogowa', nowTag: 'Teraz', stepTxt: ['Najwyższy rabat. Najlepiej na pełne komplety.', 'Wciąż sporo taniej niż w sezonie.', 'Ostatnia chwila na rabat przedsezonowy.', 'Sezon: ceny katalogowe, części z magazynu.'], preNow: (p, d) => `Teraz obowiązuje rabat <b>${p}%</b> – zamów do ${d}. Rabat naliczy się automatycznie w zamówieniu.`, preOff: 'Przedsprzedaż ruszy 1 listopada.', empty: 'Zamówienie jest puste. Dodaj części z katalogu albo komplet na sezon.', sub: 'Wartość netto', presale: 'Przedsprzedaż – odbiór w marcu', disc: 'Rabat przedsprzedaży', dealerDisc: 'Cena dealera (−22%)', vat: 'VAT 23%', total: 'Do zapłaty brutto', send: 'Wyślij zamówienie', remove: 'Usuń', sentT: 'Zamówienie wysłane', sentP: n => `To demo – w prawdziwym sklepie zamówienie (${n}) trafiłoby do biura Rolland, a klient dostałby potwierdzenie e-mailem.`, base: 'Agregat', roller: 'Wał', options: 'Wyposażenie', cNet: 'Cena netto', cGross: 'brutto', cAsk: 'Zapytaj o termin dostawy', hpLow: (need) => `Ten model potrzebuje ciągnika ${need}. Wybierz węższy model.`, hpOk: '', askedT: 'Zapytanie wysłane', askedP: 'To demo – w prawdziwej stronie konfiguracja z ceną trafiłaby do Rolland, a handlowiec oddzwoniłby z terminem dostawy.', kgUnit: 'kg', hpUnit: 'KM', teeth: n => n, presaleBtn: 'Przedsprzedaż włączona w zamówieniu', proSave: 'PRO taniej o', otherBrands: (t, b) => `${t}: w demo brak dla ${b} – pokazuję wszystkie marki`, noPay: 'Przy tym areale PRO się nie opłaca', noPayHint: 'Zostań przy częściach standardowych – PRO zwraca się od ok. ' },
   de: { all: 'Alle', any: 'Beliebig', left: 'Links', right: 'Rechts', both: 'Beidseitig', results: n => `${n} ${n === 1 ? 'Teil' : 'Teile'}`, add: 'Hinzufügen', added: 'Hinzugefügt', nr: 'Teile-Nr.', len: 'Länge', holes: 'Bohrungen', spacing: 'Abstand', side: 'Seite', none: 'Keine Teile für diese Filter. Ändern Sie Marke oder Teil – oder rufen Sie an: +48 504 949 564.', net: 'netto', gross: 'brutto', dealerP: 'Händlerpreis', toastAdd: n => `Zur Bestellung hinzugefügt: ${n}`, kitSave: 'Set-Rabatt (8 %)', kitTotal: 'Summe netto', kitGross: 'Brutto', kitAdded: 'Set zur Bestellung hinzugefügt', pcs: 'Stk.', proSuffix: ' – PRO mit Hartmetall', perSeason: '/ Saison', save: 'Sie sparen', soil: ['Leicht', 'Mittel', 'Schwer', 'Steinig'], until: 'bis', from: 'ab', catalog: 'Listenpreis', nowTag: 'Jetzt', stepTxt: ['Höchster Rabatt. Am besten für komplette Sets.', 'Immer noch deutlich günstiger als in der Saison.', 'Letzte Chance auf den Vorsaisonrabatt.', 'Saison: Listenpreise, Teile ab Lager.'], preNow: (p, d) => `Jetzt gilt ein Rabatt von <b>${p} %</b> – bestellen Sie bis ${d}. Der Rabatt wird in der Bestellung automatisch berechnet.`, preOff: 'Die Vorbestellung startet am 1. November.', empty: 'Die Bestellung ist leer. Fügen Sie Teile aus dem Katalog oder ein Saison-Set hinzu.', sub: 'Warenwert netto', presale: 'Vorbestellung – Abholung im März', disc: 'Vorbestellrabatt', dealerDisc: 'Händlerpreis (−22 %)', vat: 'MwSt. 19 %', total: 'Gesamt brutto', send: 'Bestellung senden', remove: 'Entfernen', sentT: 'Bestellung gesendet', sentP: n => `Dies ist eine Demo – im echten Shop ginge die Bestellung (${n}) an Rolland und der Kunde bekäme eine Bestätigung per E-Mail.`, base: 'Grubber', roller: 'Walze', options: 'Ausstattung', cNet: 'Nettopreis', cGross: 'brutto', cAsk: 'Liefertermin anfragen', hpLow: (need) => `Dieses Modell braucht einen Traktor mit ${need}. Wählen Sie ein schmaleres Modell.`, hpOk: '', askedT: 'Anfrage gesendet', askedP: 'Dies ist eine Demo – auf der echten Website ginge die Konfiguration mit Preis an Rolland und ein Verkäufer würde mit dem Liefertermin zurückrufen.', kgUnit: 'kg', hpUnit: 'PS', teeth: n => n, presaleBtn: 'Vorbestellung in der Bestellung aktiviert', proSave: 'PRO günstiger um', otherBrands: (t, b) => `${t}: im Demo keine für ${b} – alle Marken werden angezeigt`, noPay: 'Bei dieser Fläche lohnt sich PRO nicht', noPayHint: 'Bleiben Sie bei Standardteilen – PRO rechnet sich ab ca. ' }
+};
+const NB = ' ';
+Object.assign(S.pl, { kitTag: ' (komplet −8%)', kitNote: 'Liczymy na pług obrotowy: części na stronę lewą i prawą każdego korpusu.', kitSingle: s => `W demo jest tylko strona ${s} – drugą stronę dobierz z katalogu.`, kitBoth: 'obustronna – liczona na obie strony', sideWord: { l: 'lewa', p: 'prawa' }, maxQ: 'W zamówieniu może być najwyżej 99 sztuk jednej pozycji.', netAfter: 'Netto po rabatach', cartL: n => `Zamówienie: ${n} szt.`, qtyL: 'Ilość', decL: 'Mniej', incL: 'Więcej', pct: p => `−${p}%`, zero: '0%' });
+Object.assign(S.de, { kitTag: ` (Set −8${NB}%)`, kitNote: 'Berechnet für einen Drehpflug: Teile für die linke und rechte Seite jedes Körpers.', kitSingle: s => `Im Demo gibt es nur die ${s} Seite – die andere Seite bitte aus dem Katalog wählen.`, kitBoth: 'beidseitig – für beide Seiten gerechnet', sideWord: { l: 'linke', p: 'rechte' }, maxQ: 'Höchstens 99 Stück pro Position in einer Bestellung.', netAfter: 'Netto nach Rabatten', cartL: n => `Bestellung: ${n} Stk.`, qtyL: 'Menge', decL: 'Weniger', incL: 'Mehr', pct: p => `−${p}${NB}%`, zero: `0${NB}%`, dealerDisc: `Händlerpreis (−22${NB}%)`, kitSave: `Set-Rabatt (8${NB}%)`, vat: `MwSt. 19${NB}%` });
+const AR = { // etykiety dla czytników ekranu, alt i tytuł strony
+  pl: { navL: 'Sekcje', langL: 'Język', dealerL: 'Ceny dla dealera', diagL: 'Rysunek korpusu pługa – kliknij część', chipsL: 'Rodzaj części', bodiesG: 'Liczba korpusów', soilG: 'Gleba', modelsG: 'Model', rollersG: 'Wał doprawiający', closeL: 'Zamknij', granderAlt: 'Agregat bezorkowy Rolland Grander AB', title: 'Rolland – części do pługów i maszyny (projekt demonstracyjny)', desc: 'Projekt demonstracyjny nowej strony Rolland – Technika Rolnicza: wyszukiwarka części do pługów, komplety na sezon, linia PRO, przedsprzedaż i konfigurator maszyn.' },
+  de: { navL: 'Bereiche', langL: 'Sprache', dealerL: 'Händlerpreise', diagL: 'Zeichnung eines Pflugkörpers – klicken Sie auf ein Teil', chipsL: 'Teileart', bodiesG: 'Anzahl der Körper', soilG: 'Boden', modelsG: 'Modell', rollersG: 'Nachlaufwalze', closeL: 'Schließen', granderAlt: 'Rolland Grubber Grander AB', title: 'Rolland – Pflugteile und Maschinen (Demo-Projekt)', desc: 'Demo-Projekt einer neuen Website für Rolland – Landtechnik: Pflugteile-Suche, Saison-Sets, PRO-Linie, Vorbestellung und Maschinenkonfigurator.' }
 };
 const TYPES = [
   ['lemiesz', 'Lemiesze', 'Scharen'], ['dluto', 'Dłuta', 'Spitzen'], ['odkladnia', 'Odkładnie', 'Streichbleche'], ['piers', 'Piersi', 'Streichblechbrüste'],
@@ -628,58 +653,109 @@ const deName = s => s
   .replace(/Lemiesz/g, 'Schar').replace(/Dłuto/g, 'Spitze').replace(/Odkładnia/g, 'Streichblech').replace(/Pierś/g, 'Brust').replace(/Korpus/g, 'Körper')
   .replace(/-otworowe/g, '-Loch').replace(/ - (Lewy|Lewa|Lewe)$/, ' – links').replace(/ - (Prawy|Prawa|Prawe)$/, ' – rechts');
 const pname = p => lang === 'de' ? deName(p.name) : p.name.replace(/ - (Lewy|Lewa|Lewe|Prawy|Prawa|Prawe)$/, ' – $1');
+const pnr = p => lang === 'de' ? p.nr.replace(/-otworowe/g, '-Loch') : p.nr;
 const brands = [...new Set(parts.map(p => p.brand))];
 
-/* ---------- ceny ---------- */
-const money = (zl, opts = {}) => {
-  let v = zl; if (dealer && !opts.noDealer) v = v * (1 - DEALER);
-  if (lang === 'de') return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: opts.cents ? 2 : 0 }).format(v / EUR);
-  return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', maximumFractionDigits: opts.cents ? 2 : 0 }).format(v);
-};
+/* ---------- ceny ----------
+   Najpierw zaokrąglamy cenę jednej sztuki w walucie widoku, potem liczymy wiersze i sumy
+   z zaokrąglonych kwot – dzięki temu wszystko, co widać, sumuje się co do grosza/centa. */
+const r2 = v => Math.round(v * 100) / 100;
+const unit = (zl, opts = {}) => { let v = zl; if (dealer && !opts.noDealer) v = v * (1 - DEALER); return r2(lang === 'de' ? v / EUR : v); };
+const fmt = (v, cents) => { const d = lang === 'de' || cents || !Number.isInteger(v) ? 2 : 0; return new Intl.NumberFormat(lang === 'de' ? 'de-DE' : 'pl-PL', { style: 'currency', currency: lang === 'de' ? 'EUR' : 'PLN', minimumFractionDigits: d, maximumFractionDigits: d }).format(v); };
+const money = (zl, opts = {}) => fmt(unit(zl, opts), opts.cents);
+const MAXQ = 99, clampQ = v => Math.max(1, Math.min(MAXQ, Math.round(+v) || 1));
 
-/* ---------- toast / modal ---------- */
-let tt; const toast = msg => { const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2200); };
-const modal = (t, p) => { $('#toast').classList.remove('show'); $('#mTitle').textContent = t; $('#mText').textContent = p; $('#modal').classList.add('open'); $('#mOk').focus(); };
-$('#mOk').onclick = () => $('#modal').classList.remove('open');
-$('#modal').onclick = e => { if (e.target.id === 'modal') $('#modal').classList.remove('open'); };
+/* ---------- fokus zostaje na tym samym elemencie po przerysowaniu ---------- */
+function focusKey(el) {
+  if (!el || el === document.body || !el.closest) return null;
+  if (el.id) return '#' + CSS.escape(el.id);
+  if (el.matches('#cRollers input, #cOpts input')) return `#${el.closest('[id]').id} input[value="${CSS.escape(el.value)}"]`;
+  for (const a of ['type', 'b', 'kt', 's', 'm', 'rm', 'add', 'inc', 'dec', 'pro']) if (el.dataset && el.dataset[a] !== undefined) return `[data-${a}="${CSS.escape(el.dataset[a])}"]`;
+  return null;
+}
+function keepFocus(fn, fallback) {
+  const k = focusKey(document.activeElement); fn();
+  const el = (k && document.querySelector(k)) || (fallback && document.querySelector(fallback));
+  if (el && el !== document.activeElement && (k || fallback)) el.focus({ preventScroll: true });
+}
+
+/* ---------- toast / modal / koszyk: reszta strony jest niedostępna, gdy okno jest otwarte ---------- */
+const PAGE = ['.demobar', 'header.top', 'main', 'footer'];
+const setInert = (sels, on) => sels.forEach(s => { const el = $(s); if (el) el.inert = on; });
+const usable = el => el && document.contains(el) && !el.closest('[inert]') && el.offsetParent !== null;
+let tt; const toast = msg => { const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2400); };
+let modalBack = null;
+const modal = (t, p) => { modalBack = document.activeElement; $('#toast').classList.remove('show'); $('#mTitle').textContent = t; $('#mText').textContent = p; $('#modal').classList.add('open'); setInert([...PAGE, '#drawer'], true); $('#mOk').focus(); };
+const closeModal = () => {
+  $('#modal').classList.remove('open');
+  const dOpen = $('#drawer').classList.contains('open');
+  $('#drawer').inert = !dOpen; setInert(PAGE, dOpen);
+  (usable(modalBack) ? modalBack : dOpen ? $('#closeCart') : $('#openCart')).focus();
+};
+$('#mOk').onclick = closeModal;
+$('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
 
 /* ---------- koszyk ---------- */
-const cart = new Map(); // key -> {key,id,pro,qty,label,img,price}
+const KIT_DISC = 0.08;
+const cart = new Map(); // key -> {key,id,pro,kit,qty}
 let presale = false;
-const cartAdd = (p, qty = 1, pro = false) => {
-  const key = p.id + (pro ? 'P' : '');
-  const it = cart.get(key) || { key, id: p.id, pro, qty: 0 };
-  it.qty += qty; cart.set(key, it); renderCart();
+const cartAdd = (p, qty = 1, pro = false, kitLine = false) => {
+  const key = (kitLine ? 'K' : '') + p.id + (pro ? 'P' : '');
+  const it = cart.get(key) || { key, id: p.id, pro, kit: kitLine, qty: 0 };
+  const want = it.qty + qty; it.qty = Math.min(MAXQ, want); cart.set(key, it); renderCart();
+  return want > MAXQ; // true = ilość obcięta do 99
 };
 const itemPart = it => parts.find(p => p.id === it.id);
 const itemPrice = it => { const p = itemPart(it); return it.pro ? p.pro : p.price; };
-const itemName = it => pname(itemPart(it)) + (it.pro ? S[lang].proSuffix : '');
+const itemName = it => pname(itemPart(it)) + (it.pro ? S[lang].proSuffix : '') + (it.kit ? S[lang].kitTag : '');
+const lineVal = it => r2(unit(itemPrice(it), { noDealer: true }) * it.qty);
+function cartTotals() {
+  const items = [...cart.values()];
+  const sub = r2(items.reduce((a, it) => a + lineVal(it), 0));
+  const kitSub = r2(items.filter(it => it.kit).reduce((a, it) => a + lineVal(it), 0));
+  const dealerDisc = dealer ? r2(sub * DEALER) : 0;
+  const kitDisc = kitSub ? r2(kitSub * (dealer ? 1 - DEALER : 1) * KIT_DISC) : 0;
+  const base = r2(sub - dealerDisc - kitDisc);
+  const stg = presaleStage(), pd = presale && stg.pct ? stg.pct : 0;
+  const preDisc = pd ? r2(base * pd / 100) : 0;
+  const net = r2(base - preDisc), tax = r2(net * vat());
+  return { sub, dealerDisc, kitDisc, pd, preDisc, net, tax, gross: r2(net + tax), stg };
+}
 function renderCart() {
   const n = [...cart.values()].reduce((a, b) => a + b.qty, 0);
-  $('#cartCount').textContent = n;
   const L = S[lang], list = $('#dlist'), foot = $('#dfoot');
+  $('#cartCount').textContent = n; $('#openCart').setAttribute('aria-label', L.cartL(n));
   if (!cart.size) { list.innerHTML = `<p class="dempty">${L.empty}</p>`; foot.innerHTML = ''; return; }
-  list.innerHTML = [...cart.values()].map(it => `<div class="ditem"><img src="${itemPart(it).img}" alt="" loading="lazy"><div><div class="n">${itemName(it)}</div><small>${it.qty} ${L.pcs} × ${money(itemPrice(it), { noDealer: true })} · <button class="rm" data-rm="${it.key}" type="button">${L.remove}</button></small></div><div class="num" style="font-weight:700">${money(itemPrice(it) * it.qty, { noDealer: true })}</div></div>`).join('');
-  const sub = [...cart.values()].reduce((a, it) => a + itemPrice(it) * it.qty, 0);
-  const st = presaleStage(); const pd = presale && st.pct ? st.pct : 0;
-  const afterDealer = dealer ? sub * (1 - DEALER) : sub;
-  const disc = afterDealer * pd / 100, net = afterDealer - disc;
+  list.innerHTML = [...cart.values()].map(it => `<div class="ditem"><img src="${itemPart(it).img}" alt="" loading="lazy"><div><div class="n">${itemName(it)}</div><small>${it.qty} ${L.pcs} × ${fmt(unit(itemPrice(it), { noDealer: true }))} · <button class="rm" data-rm="${it.key}" type="button">${L.remove}</button></small></div><div class="num" style="font-weight:700">${fmt(lineVal(it))}</div></div>`).join('');
+  const t = cartTotals();
   foot.innerHTML = `
-    <label class="opt ${presale ? 'sel' : ''}"><input type="checkbox" id="preChk" ${presale ? 'checked' : ''} ${st.pct ? '' : 'disabled'}><span>${L.presale}${st.pct ? ` (−${st.pct}%)` : ''}</span></label>
-    <div class="dsum"><span>${L.sub}</span><span class="num">${money(sub, { noDealer: true })}</span></div>
-    ${dealer ? `<div class="dsum"><span>${L.dealerDisc}</span><span class="num">−${money(sub * DEALER, { noDealer: true })}</span></div>` : ''}
-    ${pd ? `<div class="dsum"><span>${L.disc} (−${pd}%)</span><span class="num">−${money(disc, { noDealer: true })}</span></div>` : ''}
-    <div class="dsum"><span>${L.vat}</span><span class="num">${money(net * vat(), { noDealer: true })}</span></div>
-    <div class="dsum big"><span>${L.total}</span><span class="num">${money(net * (1 + vat()), { noDealer: true })}</span></div>
+    <label class="opt ${presale ? 'sel' : ''}"><input type="checkbox" id="preChk" ${presale ? 'checked' : ''} ${t.stg.pct ? '' : 'disabled'}><span>${L.presale}${t.stg.pct ? ` (${L.pct(t.stg.pct)})` : ''}</span></label>
+    <div class="dsum"><span>${L.sub}</span><span class="num">${fmt(t.sub, true)}</span></div>
+    ${t.dealerDisc ? `<div class="dsum"><span>${L.dealerDisc}</span><span class="num">−${fmt(t.dealerDisc, true)}</span></div>` : ''}
+    ${t.kitDisc ? `<div class="dsum"><span>${L.kitSave}</span><span class="num">−${fmt(t.kitDisc, true)}</span></div>` : ''}
+    ${t.pd ? `<div class="dsum"><span>${L.disc} (${L.pct(t.pd)})</span><span class="num">−${fmt(t.preDisc, true)}</span></div>` : ''}
+    ${t.net !== t.sub ? `<div class="dsum"><span>${L.netAfter}</span><span class="num">${fmt(t.net, true)}</span></div>` : ''}
+    <div class="dsum"><span>${L.vat}</span><span class="num">${fmt(t.tax, true)}</span></div>
+    <div class="dsum big"><span>${L.total}</span><span class="num">${fmt(t.gross, true)}</span></div>
     <button class="btn primary" type="button" id="sendOrder">${L.send}</button>`;
-  $('#preChk').onchange = e => { presale = e.target.checked; renderCart(); };
-  $('#sendOrder').onclick = () => { closeCart(); modal(L.sentT, L.sentP(money(net * (1 + vat()), { noDealer: true }))); cart.clear(); presale = false; renderCart(); renderGrid(); };
+  $('#preChk').onchange = e => { presale = e.target.checked; keepFocus(renderCart); };
+  $('#sendOrder').onclick = () => { closeCart(false); modal(L.sentT, L.sentP(fmt(t.gross, true))); cart.clear(); presale = false; renderCart(); renderGrid(); };
 }
-$('#dlist').addEventListener('click', e => { const k = e.target.dataset.rm; if (k) { cart.delete(k); renderCart(); renderGrid(); } });
-const openCart = () => { $('#drawer').classList.add('open'); $('#scrim').classList.add('open'); $('#drawer').setAttribute('aria-hidden', 'false'); $('#closeCart').focus(); };
-const closeCart = () => { $('#drawer').classList.remove('open'); $('#scrim').classList.remove('open'); $('#drawer').setAttribute('aria-hidden', 'true'); };
-$('#openCart').onclick = openCart; $('#closeCart').onclick = closeCart; $('#scrim').onclick = closeCart;
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeCart(); $('#modal').classList.remove('open'); } });
+$('#dlist').addEventListener('click', e => {
+  const k = e.target.dataset.rm; if (!k) return;
+  const rms = $$('#dlist [data-rm]'), i = rms.findIndex(b => b.dataset.rm === k), next = rms[i + 1] || rms[i - 1];
+  cart.delete(k); renderCart(); renderGrid();
+  (next && $(`#dlist [data-rm="${CSS.escape(next.dataset.rm)}"]`) || $('#closeCart')).focus();
+});
+let cartBack = null;
+const openCart = () => { cartBack = document.activeElement; $('#drawer').classList.add('open'); $('#scrim').classList.add('open'); $('#drawer').setAttribute('aria-hidden', 'false'); $('#drawer').inert = false; setInert(PAGE, true); $('#closeCart').focus(); };
+const closeCart = (back = true) => {
+  $('#drawer').classList.remove('open'); $('#scrim').classList.remove('open'); $('#drawer').setAttribute('aria-hidden', 'true'); $('#drawer').inert = true; setInert(PAGE, false);
+  if (back) (usable(cartBack) ? cartBack : $('#openCart')).focus();
+};
+$('#drawer').inert = true;
+$('#openCart').onclick = openCart; $('#closeCart').onclick = () => closeCart(); $('#scrim').onclick = () => closeCart();
+document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; if ($('#modal').classList.contains('open')) closeModal(); else if ($('#drawer').classList.contains('open')) closeCart(); });
 
 /* ---------- wyszukiwarka ---------- */
 const st = { brand: 'Lemken', type: 'lemiesz', side: '', q: '', limit: 12 };
@@ -700,7 +776,7 @@ function renderChips() {
 function card(p) {
   const L = S[lang], inCart = cart.get(String(p.id)) || cart.get(p.id + '');
   const sideTxt = p.side === 'l' ? L.left : p.side === 'p' ? L.right : p.side === 'b' ? L.both : '';
-  const rows = [[L.nr, p.nr], p.len && [L.len, p.len], p.holes && [L.holes, p.holes], p.spacing && [L.spacing, p.spacing], sideTxt && [L.side, sideTxt]].filter(Boolean);
+  const rows = [[L.nr, pnr(p)], p.len && [L.len, p.len], p.holes && [L.holes, p.holes], p.spacing && [L.spacing, p.spacing], sideTxt && [L.side, sideTxt]].filter(Boolean);
   return `<article class="card">
     <div class="ph"><img src="${p.img}" alt="${pname(p)}" loading="lazy" width="360" height="358"><span class="tag">${p.brand}</span></div>
     <div class="body">
@@ -708,7 +784,7 @@ function card(p) {
       <dl class="specs">${rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl>
       <div class="price"><strong class="num">${money(p.price)}</strong>${dealer ? `<s class="num">${money(p.price, { noDealer: true })}</s>` : ''}<small>${dealer ? L.dealerP : L.net}</small></div>
       ${p.proAble ? `<label class="opt" style="padding:7px 10px;font-size:13px"><input type="checkbox" data-pro="${p.id}"><span>PRO</span><span class="p num">${money(p.pro)}</span></label>` : ''}
-      <div class="addrow"><div class="qty"><button type="button" data-dec="${p.id}" aria-label="−">−</button><input type="number" min="1" max="99" value="1" id="q${p.id}" aria-label="Ilość"><button type="button" data-inc="${p.id}" aria-label="+">+</button></div><button class="btn primary" type="button" data-add="${p.id}">${L.add}</button></div>
+      <div class="addrow"><div class="qty"><button type="button" data-dec="${p.id}" aria-label="${L.decL}">−</button><input type="number" inputmode="numeric" min="1" max="99" step="1" value="1" id="q${p.id}" data-qi="${p.id}" aria-label="${L.qtyL}: ${pname(p)}"><button type="button" data-inc="${p.id}" aria-label="${L.incL}">+</button></div><button class="btn primary" type="button" data-add="${p.id}">${L.add}</button></div>
     </div></article>`;
 }
 function renderGrid() {
@@ -722,11 +798,17 @@ $('#grid').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   const id = +(t.dataset.add || t.dataset.inc || t.dataset.dec); if (!id) return;
   const inp = $('#q' + id);
-  if (t.dataset.inc) inp.value = Math.min(99, +inp.value + 1);
-  else if (t.dataset.dec) inp.value = Math.max(1, +inp.value - 1);
-  else { const p = parts.find(x => x.id === id), pro = !!$(`[data-pro="${id}"]`)?.checked; cartAdd(p, Math.max(1, +inp.value || 1), pro); t.textContent = S[lang].added; t.classList.add('added'); setTimeout(() => { t.textContent = S[lang].add; t.classList.remove('added'); }, 1300); toast(S[lang].toastAdd(pname(p) + (pro ? ' PRO' : ''))); }
+  if (t.dataset.inc) { if (clampQ(inp.value) >= MAXQ) toast(S[lang].maxQ); inp.value = clampQ(clampQ(inp.value) + 1); }
+  else if (t.dataset.dec) inp.value = clampQ(clampQ(inp.value) - 1);
+  else {
+    const p = parts.find(x => x.id === id), pro = !!$(`[data-pro="${id}"]`)?.checked, raw = Math.round(+inp.value);
+    const capped = cartAdd(p, clampQ(inp.value), pro) || raw > MAXQ; inp.value = 1;
+    t.textContent = S[lang].added; t.classList.add('added'); setTimeout(() => { t.textContent = S[lang].add; t.classList.remove('added'); }, 1300);
+    toast(capped ? S[lang].maxQ : S[lang].toastAdd(pname(p) + (pro ? ' PRO' : '')));
+  }
 });
-$('#typeChips').addEventListener('click', e => { const b = e.target.closest('[data-type]'); if (!b) return; st.type = b.dataset.type; st.limit = 12; $('#fType').value = st.type; renderGrid(); });
+$('#grid').addEventListener('change', e => { const inp = e.target.closest('[data-qi]'); if (!inp) return; if (Math.round(+inp.value) > MAXQ) toast(S[lang].maxQ); inp.value = clampQ(inp.value); });
+$('#typeChips').addEventListener('click', e => { const b = e.target.closest('[data-type]'); if (!b) return; st.type = b.dataset.type; st.limit = 12; $('#fType').value = st.type; keepFocus(renderGrid); });
 $('#moreBtn').onclick = () => { st.limit += 12; renderGrid(); };
 let qt; $('#q').addEventListener('input', e => { clearTimeout(qt); qt = setTimeout(() => { st.q = e.target.value.trim(); if (st.q) { st.brand = ''; st.type = ''; $('#fBrand').value = ''; $('#fType').value = ''; } st.limit = 12; renderGrid(); }, 150); });
 $('#fBrand').onchange = e => { st.brand = e.target.value; st.limit = 12; renderGrid(); };
@@ -735,7 +817,7 @@ $('#fSide').onchange = e => { st.side = e.target.value; st.limit = 12; renderGri
 $('#fGo').onclick = () => { renderGrid(); document.getElementById('czesci').scrollIntoView(); };
 /* rysunek */
 function syncDiagram() {
-  $$('.pp').forEach(g => g.classList.toggle('on', g.dataset.t === st.type));
+  $$('.pp').forEach(g => { g.classList.toggle('on', g.dataset.t === st.type); g.setAttribute('aria-pressed', g.dataset.t === st.type); });
   $$('[data-l]').forEach(l => l.classList.toggle('on', l.dataset.l === st.type));
 }
 const pick = t => {
@@ -747,25 +829,45 @@ $$('.pp').forEach(g => {
   g.addEventListener('click', () => pick(g.dataset.t));
   g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(g.dataset.t); } });
 });
-const labelTexts = () => $$('[data-l]').forEach(l => { l.textContent = (lang === 'de' ? { kroj: 'Sech', przedpluzek: 'Vorschäler', korpus: 'Körper', odkladnia: 'Streichblech', piers: 'Brust', ploza: 'Anlage', lemiesz: 'Schar', dluto: 'Spitze' } : { kroj: 'Krój', przedpluzek: 'Przedpłużek', korpus: 'Korpus', odkladnia: 'Odkładnia', piers: 'Pierś', ploza: 'Płoza', lemiesz: 'Lemiesz', dluto: 'Dłuto' })[l.dataset.l]; });
+const PART_LBL = { de: { kroj: 'Sech', przedpluzek: 'Vorschäler', korpus: 'Körper', odkladnia: 'Streichblech', piers: 'Brust', ploza: 'Anlage', lemiesz: 'Schar', dluto: 'Spitze' }, pl: { kroj: 'Krój', przedpluzek: 'Przedpłużek', korpus: 'Korpus', odkladnia: 'Odkładnia', piers: 'Pierś', ploza: 'Płoza', lemiesz: 'Lemiesz', dluto: 'Dłuto' } };
+const labelTexts = () => { $$('[data-l]').forEach(l => { l.textContent = PART_LBL[lang][l.dataset.l]; }); $$('.pp').forEach(g => g.setAttribute('aria-label', PART_LBL[lang][g.dataset.t])); };
 
 /* ---------- komplet na sezon ---------- */
 const kit = { brand: 'Lemken', bodies: 5, types: { lemiesz: true, dluto: true, ploza: true, odkladnia: false, piers: false, przedpluzek: false }, pro: false };
 const KIT_TYPES = ['lemiesz', 'dluto', 'ploza', 'piers', 'odkladnia', 'przedpluzek'];
-function kitLines() {
-  const lines = [];
+/* para lewa–prawa z tej samej serii: najpierw ta sama nazwa bez strony, potem jedyny pasujący
+   odpowiednik (te same wymiary), na końcu sąsiednie numery katalogowe (np. 073 624 ↔ 073 625) */
+const SIDE_RE = / - (Lewy|Lewa|Lewe|Prawy|Prawa|Prawe)$/;
+const keyFull = p => p.name.replace(SIDE_RE, '').replace(/ - [LR]$/, '').replace(/\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
+const keyBare = p => keyFull(p).replace(/[\d/.\-]+/g, ' ').replace(/\s+/g, ' ').trim();
+const fits = (a, b) => ['len', 'holes', 'spacing'].every(k => !a[k] || !b[k] || a[k] === b[k]);
+const nrNum = p => parseInt(String(p.nr).replace(/\D/g, ''), 10) || 0;
+function sidePair(pool) {
+  const L = pool.filter(p => p.side === 'l'), R = pool.filter(p => p.side === 'p');
+  const cand = (x, ys) => ys.filter(y => keyBare(x) === keyBare(y) && fits(x, y));
+  for (const l of L) { const r = R.find(r => keyFull(r) === keyFull(l) && fits(l, r)); if (r) return [l, r]; }
+  for (const l of L) { const rs = cand(l, R); if (rs.length === 1 && cand(rs[0], L).length === 1) return [l, rs[0]]; }
+  for (const l of L) { const r = cand(l, R).find(r => Math.abs(nrNum(r) - nrNum(l)) === 1); if (r) return [l, r]; }
+  return null;
+}
+function kitLines() { // [część, ilość, uwaga]
+  const lines = [], L = S[lang];
   KIT_TYPES.forEach(t => {
     if (!kit.types[t]) return;
     const pool = parts.filter(p => p.brand === kit.brand && p.type === t);
     if (!pool.length) return;
-    const l = pool.find(p => p.side === 'l'), r = pool.find(p => p.side === 'p'), b = pool.find(p => p.side === 'b' || p.side === '');
-    const half = Math.ceil(kit.bodies / 2), half2 = Math.floor(kit.bodies / 2);
-    // pług obrotowy: po komplecie na stronę lewą i prawą
-    if (l && r) { lines.push([l, kit.bodies]); lines.push([r, kit.bodies]); }
-    else if (b) lines.push([b, kit.bodies]);
-    else lines.push([l || r, kit.bodies]);
+    // pług obrotowy: części na stronę lewą i prawą każdego korpusu
+    const pair = sidePair(pool), both = pool.find(p => p.side === 'b' || p.side === '');
+    if (pair) { lines.push([pair[0], kit.bodies, '']); lines.push([pair[1], kit.bodies, '']); }
+    else if (both) lines.push([both, kit.bodies * 2, L.kitBoth]);
+    else { const one = pool[0]; lines.push([one, kit.bodies, L.kitSingle(L.sideWord[one.side] || '')]); }
   });
   return lines;
+}
+function kitTotals(lines) { // te same reguły co w koszyku – suma z kompletu = suma w zamówieniu
+  const sum = r2(lines.reduce((a, [p, q]) => a + r2(unit(kit.pro && p.proAble ? p.pro : p.price, { noDealer: true }) * q), 0));
+  const dd = dealer ? r2(sum * DEALER) : 0, kd = r2(sum * (dealer ? 1 - DEALER : 1) * KIT_DISC), net = r2(sum - dd - kd), tax = r2(net * vat());
+  return { sum, dd, kd, net, gross: r2(net + tax) };
 }
 function renderKit() {
   const L = S[lang];
@@ -773,17 +875,17 @@ function renderKit() {
   $('#kParts').innerHTML = KIT_TYPES.map(t => { const has = parts.some(p => p.brand === kit.brand && p.type === t); return `<label class="opt ${kit.types[t] && has ? 'sel' : ''}" style="${has ? '' : 'opacity:.45'}"><input type="checkbox" data-kt="${t}" ${kit.types[t] && has ? 'checked' : ''} ${has ? '' : 'disabled'}><span>${typeName(t)}</span></label>`; }).join('');
   $('#kPro').checked = kit.pro; $('#kProWrap').classList.toggle('sel', kit.pro);
   const lines = kitLines();
-  let sum = 0;
-  $('#kTable tbody').innerHTML = lines.map(([p, q]) => { const pro = kit.pro && p.proAble, unit = pro ? p.pro : p.price; sum += unit * q; return `<tr><td><div class="nm"><img class="thumb" src="${p.img}" alt="" loading="lazy"><div>${pname(p)}${pro ? ' <b style="color:var(--signal-d)">PRO</b>' : ''}<small>${p.nr}</small></div></div></td><td class="r num">${q}</td><td class="r num hide-s">${money(unit)}</td><td class="r num"><b>${money(unit * q)}</b></td></tr>`; }).join('') || `<tr><td colspan="4" style="color:var(--ink-2)">${L.none}</td></tr>`;
-  const disc = sum * 0.08;
-  $('#kTotals').innerHTML = `<span>${L.kitSave}</span><span class="num save">−${money(disc)}</span><span>${L.kitTotal}</span><span class="num big">${money(sum - disc)}</span><span style="color:var(--ink-2)">${L.kitGross}</span><span class="num" style="color:var(--ink-2)">${money((sum - disc) * (1 + vat()))}</span>`;
+  $('#kTable tbody').innerHTML = lines.map(([p, q, note]) => { const pro = kit.pro && p.proAble, u = unit(pro ? p.pro : p.price, { noDealer: true }); return `<tr><td><div class="nm"><img class="thumb" src="${p.img}" alt="" loading="lazy"><div>${pname(p)}${pro ? ' <b style="color:var(--signal-d)">PRO</b>' : ''}<small>${pnr(p)}</small>${note ? `<small class="${p.side === 'b' || p.side === '' ? '' : 'warnp'}">${note}</small>` : ''}</div></div></td><td class="r num">${q}</td><td class="r num hide-s">${fmt(u)}</td><td class="r num"><b>${fmt(r2(u * q))}</b></td></tr>`; }).join('') || `<tr><td colspan="4" style="color:var(--ink-2)">${L.none}</td></tr>`;
+  const k = kitTotals(lines);
+  $('#kTotals').innerHTML = lines.length ? `${k.dd ? `<span>${L.dealerDisc}</span><span class="num save">−${fmt(k.dd, true)}</span>` : ''}<span>${L.kitSave}</span><span class="num save">−${fmt(k.kd, true)}</span><span>${L.kitTotal}</span><span class="num big">${fmt(k.net, true)}</span><span style="color:var(--ink-2)">${L.kitGross}</span><span class="num" style="color:var(--ink-2)">${fmt(k.gross, true)}</span>` : '';
+  $('#kNote').textContent = lines.length ? L.kitNote : '';
   $('#kAdd').disabled = !lines.length;
 }
 $('#kBrand').onchange = e => { kit.brand = e.target.value; renderKit(); };
-$('#kBodies').addEventListener('click', e => { const b = e.target.closest('[data-b]'); if (b) { kit.bodies = +b.dataset.b; renderKit(); } });
-$('#kParts').addEventListener('change', e => { const t = e.target.dataset.kt; if (t) { kit.types[t] = e.target.checked; renderKit(); } });
+$('#kBodies').addEventListener('click', e => { const b = e.target.closest('[data-b]'); if (b) { kit.bodies = +b.dataset.b; keepFocus(renderKit); } });
+$('#kParts').addEventListener('change', e => { const t = e.target.dataset.kt; if (t) { kit.types[t] = e.target.checked; keepFocus(renderKit); } });
 $('#kPro').onchange = e => { kit.pro = e.target.checked; renderKit(); };
-$('#kAdd').onclick = () => { kitLines().forEach(([p, q]) => cartAdd(p, q, kit.pro && p.proAble)); toast(S[lang].kitAdded); };
+$('#kAdd').onclick = () => { let capped = false; kitLines().forEach(([p, q]) => { capped = cartAdd(p, q, kit.pro && p.proAble, true) || capped; }); toast(capped ? S[lang].maxQ : S[lang].kitAdded); };
 
 /* ---------- kalkulator PRO ---------- */
 const pro = { ha: 250, bodies: 5, soil: 1 };
@@ -793,45 +895,50 @@ function renderPro() {
   const L = S[lang];
   $('#haV').textContent = pro.ha + ' ha'; $('#bodV').textContent = pro.bodies;
   $('#soil').innerHTML = L.soil.map((s, i) => `<button type="button" aria-pressed="${pro.soil === i}" data-s="${i}">${s}</button>`).join('');
+  // koszt liczony od zużycia: komplet „zużywa się” proporcjonalnie do hektarów, więc wynik
+  // rośnie liniowo z areałem i nie skacze przy pełnych wymianach (werdykt nie zmienia się z hektarami)
   const life = LIFE[pro.soil], lifePro = life * 3.5;
-  const nStd = Math.ceil(pro.ha / life), nPro = Math.ceil(pro.ha / lifePro);
+  const nStd = pro.ha / life, nPro = pro.ha / lifePro;
   const setStd = SET_STD * pro.bodies, setPro = setStd * 2.4;
   const hrs = n => n * pro.bodies * 25 / 60, rate = 180;
-  const cStd = nStd * setStd + hrs(nStd) * rate, cPro = nPro * setPro + hrs(nPro) * rate;
-  const save = cStd - cPro, max = Math.max(cStd, cPro);
+  const cStd = Math.round(nStd * setStd + hrs(nStd) * rate), cPro = Math.round(nPro * setPro + hrs(nPro) * rate);
+  const save = cStd - cPro, max = Math.max(cStd, cPro, 1);
   $('#bStd').style.width = (cStd / max * 100) + '%'; $('#bPro').style.width = (cPro / max * 100) + '%';
   $('#vStd').textContent = money(cStd, { noDealer: true }); $('#vPro').textContent = money(cPro, { noDealer: true });
   const pays = save > 0;
   $('#saveL').textContent = pays ? (T[lang].saveL || T.pl.saveL) : L.noPay;
   $('#saveV').textContent = pays ? money(save, { noDealer: true }) : '–';
   $('#saveHa').textContent = pays ? money(save / pro.ha, { noDealer: true, cents: true }) : '–';
-  let be = pro.ha; while (be < 3000) { be += 10; const a = Math.ceil(be / life), b = Math.ceil(be / lifePro); if (a * setStd + a * pro.bodies * 25 / 60 * rate > b * setPro + b * pro.bodies * 25 / 60 * rate) break; }
-  $('#beHint').textContent = pays ? '' : L.noPayHint + be + ' ha.';
-  $('#fStd').textContent = nStd; $('#fPro').textContent = nPro;
-  $('#fH').textContent = (hrs(nStd) - hrs(nPro)).toLocaleString(lang === 'de' ? 'de-DE' : 'pl-PL', { maximumFractionDigits: 1 });
+  $('#beHint').textContent = '';
+  const loc = lang === 'de' ? 'de-DE' : 'pl-PL', one = v => v.toLocaleString(loc, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  $('#fStd').textContent = one(nStd); $('#fPro').textContent = one(nPro);
+  $('#fH').textContent = one(hrs(nStd) - hrs(nPro));
 }
 $('#ha').oninput = e => { pro.ha = +e.target.value; renderPro(); };
 $('#bod').oninput = e => { pro.bodies = +e.target.value; renderPro(); };
-$('#soil').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (b) { pro.soil = +b.dataset.s; renderPro(); } });
+$('#soil').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (b) { pro.soil = +b.dataset.s; keepFocus(renderPro); } });
 
 /* ---------- przedsprzedaż ---------- */
+// każdy etap trwa od północy pierwszego dnia do północy dnia po ostatnim (koniec wyłącznie), więc nie ma luk;
+// koniec lutego to „1 marca 00:00”, więc lata przestępne liczą się same
 function presaleSteps() {
   const now = new Date(), y = now.getMonth() >= 6 ? now.getFullYear() : now.getFullYear() - 1;
   return [
-    { from: new Date(y, 10, 1), to: new Date(y, 11, 15, 23, 59), pct: 10 },
-    { from: new Date(y, 11, 16), to: new Date(y + 1, 0, 31, 23, 59), pct: 7 },
-    { from: new Date(y + 1, 1, 1), to: new Date(y + 1, 1, 28, 23, 59), pct: 5 },
-    { from: new Date(y + 1, 2, 1), to: new Date(y + 1, 5, 30, 23, 59), pct: 0 }
+    { from: new Date(y, 10, 1), end: new Date(y, 11, 16), pct: 10 },
+    { from: new Date(y, 11, 16), end: new Date(y + 1, 1, 1), pct: 7 },
+    { from: new Date(y + 1, 1, 1), end: new Date(y + 1, 2, 1), pct: 5 },
+    { from: new Date(y + 1, 2, 1), end: new Date(y + 1, 6, 1), pct: 0 }
   ];
 }
-function presaleStage() { const now = new Date(); return presaleSteps().find(s => now >= s.from && now <= s.to) || { pct: 0 }; }
+const lastDay = s => new Date(s.end.getFullYear(), s.end.getMonth(), s.end.getDate() - 1);
+function presaleStage() { const now = new Date(); return presaleSteps().find(s => now >= s.from && now < s.end) || { pct: 0 }; }
 function renderPresale() {
   const L = S[lang], now = new Date(), loc = lang === 'de' ? 'de-DE' : 'pl-PL';
   const f = d => d.toLocaleDateString(loc, { day: 'numeric', month: 'long' });
   const steps = presaleSteps();
-  $('#timeline').innerHTML = steps.map((s, i) => { const isNow = now >= s.from && now <= s.to, past = now > s.to; return `<div class="step ${isNow ? 'now' : ''} ${past ? 'past' : ''}">${isNow ? `<span class="now-tag">${L.nowTag}</span>` : ''}<div class="d">${s.pct ? `${L.until} ${f(s.to)}` : `${L.from} ${f(s.from)}`}</div><div class="pct num">${s.pct ? '−' + s.pct + '%' : '0%'}</div><p>${L.stepTxt[i]}</p></div>`; }).join('');
+  $('#timeline').innerHTML = steps.map((s, i) => { const isNow = now >= s.from && now < s.end, past = now >= s.end; return `<div class="step ${isNow ? 'now' : ''} ${past ? 'past' : ''}">${isNow ? `<span class="now-tag">${L.nowTag}</span>` : ''}<div class="d">${s.pct ? `${L.until} ${f(lastDay(s))}` : `${L.from} ${f(s.from)}`}</div><div class="pct num">${s.pct ? L.pct(s.pct) : L.zero}</div><p>${L.stepTxt[i]}</p></div>`; }).join('');
   const cur = presaleStage();
-  $('#preText').innerHTML = cur.pct ? L.preNow(cur.pct, f(cur.to)) : L.preOff;
+  $('#preText').innerHTML = cur.pct ? L.preNow(cur.pct, f(lastDay(cur))) : L.preOff;
   $('#preBtn').style.display = cur.pct ? '' : 'none';
 }
 $('#preBtn').onclick = () => { presale = true; renderCart(); openCart(); toast(S[lang].presaleBtn); };
@@ -874,25 +981,25 @@ function renderConf() {
   $('#cModels').innerHTML = MODELS.map((x, i) => `<button type="button" aria-pressed="${conf.m === i}" data-m="${i}">${x.w.toLocaleString(lang === 'de' ? 'de-DE' : 'pl-PL', { minimumFractionDigits: 1 })} m<small>${x.id}</small></button>`).join('');
   $('#cRollers').innerHTML = ROLLERS.map(x => `<label class="opt ${conf.roller === x.id ? 'sel' : ''}"><input type="radio" name="roller" value="${x.id}" ${conf.roller === x.id ? 'checked' : ''}><span>${x[lang]}</span><span class="p num">${money(x.ppm * m.w)}</span></label>`).join('');
   $('#cOpts').innerHTML = OPTS.map(o => `<label class="opt ${conf.opts.has(o.id) ? 'sel' : ''}"><input type="checkbox" value="${o.id}" ${conf.opts.has(o.id) ? 'checked' : ''}><span>${o[lang]}</span><span class="p num">${money(optPrice(o, m))}</span></label>`).join('');
-  const rollerP = r.ppm * m.w, optsP = [...conf.opts].reduce((a, id) => a + optPrice(OPTS.find(o => o.id === id), m), 0);
-  const net = m.price + rollerP + optsP;
+  const bP = unit(m.price), rP = unit(r.ppm * m.w), oP = r2([...conf.opts].reduce((a, id) => a + unit(optPrice(OPTS.find(o => o.id === id), m)), 0));
+  const net = r2(bP + rP + oP), gross = r2(net + r2(net * vat()));
   const kg = m.kg + Math.round(r.kgm * m.w) + (conf.opts.has('semi') ? 650 : 0) + (conf.opts.has('wheels') ? 120 : 0);
   const loc = lang === 'de' ? 'de-DE' : 'pl-PL';
   $('#mW').textContent = m.w.toLocaleString(loc, { minimumFractionDigits: 1 }) + ' m';
   $('#mT').textContent = m.t; $('#mHp').textContent = `${m.hp[0]}–${m.hp[1]} ${L.hpUnit}`; $('#mKg').textContent = kg.toLocaleString(loc) + ' ' + L.kgUnit;
   $('#hpWarn').textContent = conf.hp && conf.hp < m.hp[0] ? L.hpLow(`${m.hp[0]}–${m.hp[1]} ${L.hpUnit}`) : '';
   $('#cSum').innerHTML = `
-    <div class="row"><span>${L.base} Grander ${m.id}</span><b class="num">${money(m.price)}</b></div>
-    <div class="row"><span>${L.roller}: ${r[lang]}</span><b class="num">${money(rollerP)}</b></div>
-    <div class="row"><span>${L.options} (${conf.opts.size})</span><b class="num">${money(optsP)}</b></div>
-    <div class="total"><span>${L.cNet}${dealer ? ' – ' + L.dealerP : ''}</span><strong class="num">${money(net)}</strong></div>
-    <div class="row"><span>${L.cGross}</span><b class="num">${money(net * (1 + vat()))}</b></div>
+    <div class="row"><span>${L.base} Grander ${m.id}</span><b class="num">${fmt(bP)}</b></div>
+    <div class="row"><span>${L.roller}: ${r[lang]}</span><b class="num">${fmt(rP)}</b></div>
+    <div class="row"><span>${L.options} (${conf.opts.size})</span><b class="num">${fmt(oP)}</b></div>
+    <div class="total"><span>${L.cNet}${dealer ? ' – ' + L.dealerP : ''}</span><strong class="num">${fmt(net)}</strong></div>
+    <div class="row"><span>${L.cGross}</span><b class="num">${fmt(gross, true)}</b></div>
     <button class="btn signal" type="button" id="askBtn">${L.cAsk}</button>`;
   $('#askBtn').onclick = () => modal(L.askedT, L.askedP);
 }
-$('#cModels').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (b) { conf.m = +b.dataset.m; renderConf(); } });
-$('#cRollers').addEventListener('change', e => { conf.roller = e.target.value; renderConf(); });
-$('#cOpts').addEventListener('change', e => { const id = e.target.value; if (e.target.checked) { conf.opts.add(id); if (id === 'hydfold') conf.opts.delete('hyd'); if (id === 'hyd') conf.opts.delete('hydfold'); } else conf.opts.delete(id); renderConf(); });
+$('#cModels').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (b) { conf.m = +b.dataset.m; keepFocus(renderConf); } });
+$('#cRollers').addEventListener('change', e => { conf.roller = e.target.value; keepFocus(renderConf); });
+$('#cOpts').addEventListener('change', e => { const id = e.target.value; if (e.target.checked) { conf.opts.add(id); if (id === 'hydfold') conf.opts.delete('hyd'); if (id === 'hyd') conf.opts.delete('hydfold'); } else conf.opts.delete(id); keepFocus(renderConf); });
 $('#hp').oninput = e => { conf.hp = +e.target.value; renderConf(); };
 
 /* ---------- język i dealer ---------- */
@@ -901,6 +1008,10 @@ function applyLang() {
   $$('[data-i]').forEach(el => { const v = T[lang][el.dataset.i]; if (v !== undefined) el.innerHTML = v; });
   $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
   $('#q').placeholder = lang === 'de' ? 'z. B. 3352021, 073054, IBIS' : 'np. 3352021, 073054, IBIS';
+  $$('[data-ia]').forEach(el => el.setAttribute('aria-label', AR[lang][el.dataset.ia]));
+  $$('[data-ia-alt]').forEach(el => { el.alt = AR[lang][el.dataset.iaAlt]; });
+  document.title = AR[lang].title; $('#metaDesc').setAttribute('content', AR[lang].desc);
+  $('#stParts').textContent = lang === 'de' ? '4.346' : '4' + NB + '346';
   labelTexts(); fillSelects(); renderAll(); fitHeader();
 }
 /* polska typografia: jednoliterowe wyrazy nie zostają na końcu wiersza */
@@ -910,7 +1021,7 @@ function nbsp(root = document.body) {
   let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(^|[\s(„])([aiouwzAIOUWZ]) /g, '$1$2 '); if (v !== n.nodeValue) n.nodeValue = v; }
 }
 function renderAll() { renderGrid(); renderKit(); renderPro(); renderPresale(); renderConf(); renderCart(); nbsp(); }
-$$('[data-lang]').forEach(b => b.onclick = () => { lang = b.dataset.lang; applyLang(); });
+$$('[data-lang]').forEach(b => b.onclick = () => { lang = b.dataset.lang; clearTimeout(tt); $('#toast').classList.remove('show'); $('#toast').textContent = ''; applyLang(); });
 $('#dealer').onchange = e => { dealer = e.target.checked; renderAll(); };
 
 /* nagłówek: zagęszczamy krokami tylko wtedy, gdy zakładki naprawdę się nie mieszczą */
