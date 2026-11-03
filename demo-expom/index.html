@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>EXPOM – części zamienne z ceną (projekt demonstracyjny)</title>
+<meta name="description" content="Projekt demonstracyjny sklepu z częściami EXPOM: wybór maszyny i rocznika, części z ceną i zamówienie online.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='7' fill='none' stroke='%23D6003D' stroke-width='3'/%3E%3Cpath d='M10 10l12 12M22 10L10 22' stroke='%23D6003D' stroke-width='4.2'/%3E%3C/svg%3E">
+<style>
+@font-face{font-family:"Audiowide";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/audiowide-400-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Audiowide";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/audiowide-400-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Poppins";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/poppins-400-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Poppins";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/poppins-400-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Poppins";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/poppins-500-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Poppins";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/poppins-500-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Poppins";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/poppins-600-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Poppins";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/poppins-600-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --bg:#F3F4F5; --surface:#fff; --steel:#E6E9EC; --steel-2:#DADEE2;
+  --graphite:#2E3135; --graphite-2:#3D4146; --ink:#1E2023; --ink-2:#4F555B; --muted:#5F656C;
+  --line:#DDE0E3; --line-2:#C3C8CE; --field:#80868D;
+  --red:#D6003D; --red-d:#B00033; --ok:#21703A; --err:#B3261E;
+  --r:8px; --display:"Audiowide",Poppins,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Poppins,system-ui,sans-serif;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.demobar :focus-visible,footer :focus-visible{outline-color:#fff}
+[tabindex="-1"]:focus{outline:none}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+h1,h2,h3{margin:0;font-weight:400}
+p{margin:0;text-wrap:pretty}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+
+/* pasek demo */
+.demobar{background:var(--graphite);color:#C9CDD1;font-size:13.5px;line-height:1.45}
+.demobar .wrap{display:flex;justify-content:space-between;gap:6px 20px;align-items:center;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+.demobar b{color:#fff;font-weight:600}
+.demobar a{color:#fff;text-underline-offset:3px}
+
+/* nagłówek */
+header.site{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--line)}
+header.site .wrap{display:flex;align-items:center;gap:24px;min-height:72px}
+.logo{flex:none;display:block}
+.logo img{height:34px;width:auto}
+nav.mnav{display:flex;gap:4px;flex:1 1 auto;min-width:0}
+nav.mnav a{text-decoration:none;font-weight:500;font-size:15.5px;padding:8px 12px;border-radius:6px;white-space:nowrap;color:var(--ink-2)}
+nav.mnav a:hover{color:var(--ink);background:var(--bg)}
+.htools{display:flex;align-items:center;gap:10px;flex:none;margin-left:auto}
+.langs{display:inline-flex;border:1px solid var(--line-2);border-radius:6px;overflow:hidden}
+.langs button{border:0;background:var(--surface);padding:7px 10px;font-weight:600;font-size:13.5px;cursor:pointer;color:var(--ink-2);min-width:40px}
+.langs button+button{border-left:1px solid var(--line-2)}
+.langs button[aria-pressed=true]{background:var(--graphite);color:#fff}
+.cartbtn{display:flex;align-items:center;gap:8px;border:0;background:var(--red);color:#fff;font-weight:600;padding:10px 15px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.cartbtn:hover{background:var(--red-d)}
+.cartbtn .cnt{min-width:24px;height:24px;border-radius:12px;background:#fff;color:var(--red-d);font-size:13px;font-weight:600;display:grid;place-items:center;padding:0 6px}
+header.site.fit-1 .cartbtn .lbl{display:none}
+header.site.fit-2 nav.mnav a{padding:8px 7px;font-size:14.5px}
+header.site.fit-3 .wrap{flex-wrap:wrap;gap:6px 12px;padding-top:10px;padding-bottom:6px}
+header.site.fit-3 nav.mnav{order:3;flex-basis:100%;margin:0 -8px}
+
+/* hero – jedyny mocny moment */
+.hero{background:linear-gradient(165deg,#DFE3E7 0%,#EEF0F2 46%,#F8F9FA 100%);overflow:hidden;position:relative}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center;padding-top:72px;padding-bottom:56px}
+.hero h1{font-family:var(--display);font-size:clamp(38px,6.4vw,92px);line-height:1;letter-spacing:-.015em;color:var(--graphite);overflow-wrap:break-word;hyphens:manual}
+.hero .lead{margin-top:22px;font-size:clamp(17px,1.5vw,19px);color:var(--ink-2);max-width:31em}
+.search{margin-top:30px;display:flex;gap:8px;max-width:560px}
+.search input{flex:1;min-width:0;height:54px;border:1px solid var(--field);border-radius:var(--r);padding:0 18px;font-size:17px;background:var(--surface);color:var(--ink)}
+.search input::placeholder{color:#6A7077}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:54px;padding:0 24px;border:0;border-radius:var(--r);background:var(--red);color:#fff;font-weight:600;font-size:16px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--red-d)}
+.btn.dark{background:var(--graphite)}
+.btn.dark:hover{background:#1F2226}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2);height:42px;padding:0 16px;font-weight:500}
+.btn.ghost:hover{background:var(--bg)}
+.hint{margin-top:12px;font-size:14.5px;color:var(--ink-2)}
+.hint button{background:none;border:0;padding:2px 0;color:var(--ink);font-weight:500;text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px;cursor:pointer;font-size:14.5px}
+.hint button:hover{text-decoration-color:var(--ink)}
+.hero figure{margin:0 -140px 0 0;align-self:end}
+.hero figure img{width:100%;filter:drop-shadow(0 26px 22px rgba(30,32,35,.16))}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 34px;grid-column:1/-1;margin-top:8px;padding-top:22px;border-top:1px solid var(--steel-2)}
+.steps li{display:flex;align-items:baseline;gap:10px;font-weight:500;color:var(--graphite)}
+.steps .n{font-family:var(--display);color:var(--red-d);font-size:19px}
+
+/* sekcje */
+section.block{padding:88px 0 0;scroll-margin-top:calc(var(--hh,72px) + 8px)}
+.shead{display:flex;align-items:baseline;gap:16px;margin-bottom:28px}
+.shead .n{font-family:var(--display);font-size:clamp(28px,3vw,38px);color:var(--red);line-height:1;flex:none}
+.shead h2{font-family:var(--display);font-size:clamp(26px,3vw,38px);line-height:1.1;color:var(--graphite)}
+.shead p{color:var(--ink-2);margin-top:6px;max-width:44em}
+
+/* maszyny */
+.mgroup+.mgroup{margin-top:30px}
+.mgroup h3{font-size:15px;font-weight:600;color:var(--ink-2);margin-bottom:12px}
+.machines{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.mcard{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;text-align:left;padding:0;cursor:pointer;position:relative}
+.mcard:hover{border-color:var(--line-2)}
+.mcard[aria-pressed=true]{border-color:var(--red);box-shadow:0 0 0 1px var(--red)}
+.mcard .im{aspect-ratio:16/10;background:var(--steel);display:block}
+.mcard .im img{width:100%;height:100%;object-fit:contain}
+.mcard .im.ph img{object-fit:cover}
+.mcard .t{padding:12px 14px 14px;display:flex;flex-direction:column;gap:2px;flex:1}
+.mcard .n{font-family:var(--display);font-size:19px;line-height:1.15;color:var(--graphite)}
+.mcard .d{font-size:14px;line-height:1.35;color:var(--ink-2);hyphens:auto;overflow-wrap:break-word}
+.mcard .w{font-size:13.5px;color:var(--muted);margin-top:auto;padding-top:6px}
+.mcard .tag{position:absolute;top:8px;left:8px;background:var(--surface);color:var(--graphite);font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;border:1px solid var(--line-2)}
+
+/* konfiguracja */
+.cfg{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 32px;align-items:center}
+.cfg .who{display:flex;align-items:center;gap:16px;min-width:0}
+.cfg .who img{width:120px;height:75px;object-fit:contain;background:var(--steel);border-radius:6px;flex:none}
+.cfg .who img.ph{object-fit:cover}
+.cfg .who b{font-family:var(--display);font-weight:400;font-size:clamp(22px,2.4vw,30px);line-height:1.1;display:block;color:var(--graphite)}
+.cfg .who span{color:var(--ink-2);font-size:14.5px}
+.cfg .who a{font-size:14px;color:var(--ink-2);text-underline-offset:3px}
+.fields{display:flex;gap:12px;flex-wrap:wrap}
+.field{display:grid;gap:4px;align-content:end;font-size:13.5px;font-weight:500;color:var(--ink-2);min-width:150px}
+.field select,.field .static{height:44px;border:1px solid var(--field);border-radius:6px;padding:0 36px 0 12px;font-size:15.5px;color:var(--ink);background:var(--surface);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%232E3135' stroke-width='1.8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;cursor:pointer;max-width:100%}
+.field .static{display:flex;align-items:center;background-image:none;background:var(--bg);border-color:var(--line);cursor:default;padding-right:12px}
+.cfg .info{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 28px;border-top:1px solid var(--line);padding-top:14px;font-size:14.5px;color:var(--ink-2)}
+.cfg .info a{color:var(--ink);text-underline-offset:3px}
+.info .yr{display:flex;gap:8px;align-items:baseline}
+.info .yr::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--line-2);flex:none;transform:translateY(-1px)}
+.info .yr.ok::before{background:var(--ok)}
+.info .yr.ask::before{background:#C77700}
+
+/* lista części */
+.toolbar{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-start;margin:28px 0 14px;scroll-margin-top:calc(var(--hh,72px) + 16px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 420px}
+.chip{border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:14.5px;font-weight:500;cursor:pointer;color:var(--ink-2)}
+.chip:hover{border-color:var(--graphite)}
+.chip[aria-pressed=true]{background:var(--graphite);border-color:var(--graphite);color:#fff}
+.qfield{flex:0 0 300px;display:flex;align-items:center;gap:8px;border:1px solid var(--field);border-radius:6px;background:var(--surface);padding:0 10px 0 12px;height:44px;width:300px;max-width:100%}
+.qfield input{border:0;outline:0;flex:1;min-width:0;font-size:15.5px;background:transparent}
+.qfield:focus-within{outline:3px solid var(--red);outline-offset:1px}
+.qclear{border:0;background:none;cursor:pointer;color:var(--ink-2);font-size:22px;line-height:1;padding:0 4px;width:32px;height:32px}
+.notice{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;margin-bottom:12px;font-size:15px}
+.plist{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+table.parts{width:100%;border-collapse:collapse}
+table.parts th{font-size:13px;font-weight:500;color:var(--muted);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.parts td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.parts tr:last-child td{border-bottom:0}
+.pn{font-weight:600;font-size:14.5px;white-space:nowrap;color:var(--graphite)}
+.pn.ex{font-weight:500;color:var(--muted);font-size:13.5px}
+.pname{font-weight:500;line-height:1.35}
+.pmeta{font-size:13.5px;color:var(--muted);margin-top:3px}
+.mtag{display:inline-block;font-size:12.5px;font-weight:600;background:var(--steel);border-radius:4px;padding:1px 7px;margin:2px 4px 0 0;color:var(--graphite)}
+th.price,td.price{text-align:right;white-space:nowrap}
+.price strong{font-size:20px;font-weight:600;display:block;line-height:1.2;color:var(--ink)}
+.price small{color:var(--muted);font-size:13px}
+.buy{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--field);border-radius:6px;height:42px;background:var(--surface)}
+.qty button{width:36px;height:40px;border:0;background:none;cursor:pointer;font-size:19px;color:var(--ink-2);border-radius:6px}
+.qty button:hover{background:var(--bg)}
+.qty input{width:44px;border:0;text-align:center;font-weight:600;font-size:15px;-moz-appearance:textfield;appearance:textfield;background:transparent;padding:0}
+.qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.add{height:42px;padding:0 16px;border:0;border-radius:6px;background:var(--graphite);color:#fff;font-weight:600;font-size:15px;cursor:pointer;white-space:nowrap;min-width:104px}
+.add:hover{background:#1F2226}
+.add.ok{background:var(--ok)}
+.empty{padding:32px 20px;color:var(--ink-2)}
+.empty p+p{margin-top:6px}
+
+/* jak zamówić */
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;border-top:1px solid var(--line-2);padding-top:28px}
+.how b{display:block;font-weight:600;font-size:17px;margin-bottom:6px;color:var(--graphite)}
+.how p{color:var(--ink-2)}
+.go{margin-top:32px}
+
+/* stopka */
+footer{background:var(--graphite);color:#C9CDD1;padding:56px 0 48px;margin-top:104px;font-size:15px}
+footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+footer h3{color:#fff;font-size:16px;font-weight:600;margin-bottom:8px}
+footer a{color:#fff;text-underline-offset:3px}
+footer p+p{margin-top:4px}
+footer .fnote{grid-column:1/-1;border-top:1px solid #4A4F55;padding-top:20px;font-size:13.5px;color:#B5BABF}
+
+/* koszyk */
+.shade{position:fixed;inset:0;background:rgba(30,32,35,.45);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.shade.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:var(--surface);z-index:61;transform:translateX(100%);transition:transform .25s cubic-bezier(.2,.8,.2,1),visibility 0s linear .25s;display:flex;flex-direction:column;visibility:hidden}
+.drawer.open{transform:none;visibility:visible;transition:transform .25s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.drawer .dh{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--line)}
+.drawer .dh h2{font-family:var(--display);font-size:24px;color:var(--graphite)}
+.x{border:0;background:none;font-size:30px;line-height:1;cursor:pointer;color:var(--ink-2);width:44px;height:44px;border-radius:6px}
+.x:hover{background:var(--bg)}
+.dbody{flex:1;overflow:auto;padding:6px 22px 24px;overscroll-behavior:contain}
+.citem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.citem .n{font-weight:500;line-height:1.35}
+.citem .m{font-size:13px;color:var(--muted)}
+.citem .r{display:flex;gap:10px;align-items:center;grid-column:1/-1;justify-content:space-between}
+.citem .qty{height:36px}
+.citem .qty button{height:34px;width:32px}
+.rm{border:0;background:none;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:13.5px;padding:6px 0}
+.citem .lt{font-weight:600}
+.sums{margin-top:14px;font-size:15px}
+.sums div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.sums .tot{font-weight:600;font-size:18px;border-top:1px solid var(--line);margin-top:6px;padding-top:10px}
+.cempty{padding:28px 0;color:var(--ink-2)}
+.oform{margin-top:24px;border-top:1px solid var(--line);padding-top:18px;display:grid;gap:12px}
+.oform h3{font-size:17px;font-weight:600;color:var(--graphite)}
+.oform h3+p{font-size:13.5px;color:var(--muted);margin-top:-8px}
+.oform .sub{margin-top:8px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line-2);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:9px 4px;hyphens:auto;overflow-wrap:break-word;min-width:0;font-weight:500;font-size:14px;cursor:pointer;color:var(--ink-2);line-height:1.25}
+.seg button+button{border-left:1px solid var(--line-2)}
+.seg button[aria-pressed=true]{background:var(--graphite);color:#fff}
+.oform label,.oform .lbl{display:grid;gap:4px;font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.oform input,.oform textarea,.oform select{border:1px solid var(--field);border-radius:6px;padding:10px 12px;font-size:15.5px;font-weight:400;color:var(--ink);width:100%;background:var(--surface);min-width:0}
+.oform select{height:46px}
+.oform textarea{min-height:66px;resize:vertical}
+.oform .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}
+.oform .opt{font-weight:400;color:var(--muted)}
+.oform .err{color:var(--err);font-size:14px;font-weight:500}
+.oform .err:empty{display:none}
+.oform .btn{width:100%}
+.oform input[aria-invalid=true],.oform select[aria-invalid=true],.oform textarea[aria-invalid=true]{border-color:var(--err);box-shadow:0 0 0 1px var(--err)}
+.dfoot{font-size:13px;color:var(--muted)}
+.sums .vnote{margin-top:8px;line-height:1.45}
+
+/* toast, modal */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--graphite);color:#fff;padding:12px 18px;border-radius:var(--r);font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;width:max-content;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;background:rgba(30,32,35,.55);display:none;place-items:center;z-index:90;padding:16px}
+.modal.open{display:grid}
+.modal .box{background:var(--surface);border-radius:12px;max-width:480px;width:100%;padding:28px}
+.modal h3{font-family:var(--display);font-size:26px;margin-bottom:12px;color:var(--graphite)}
+.modal p{color:var(--ink-2);margin-bottom:20px}
+
+/* responsywność */
+@media (max-width:1180px){ .machines{grid-template-columns:repeat(4,minmax(0,1fr))} }
+@media (max-width:1000px){
+  .hero .wrap{grid-template-columns:1fr;padding-top:48px;gap:8px}
+  .hero figure{margin:0 -60px 0 auto;max-width:640px;width:100%}
+  .machines{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cfg{grid-template-columns:1fr}
+  .qfield{flex:1 1 100%;width:auto;order:-1}
+  .how{grid-template-columns:1fr;gap:20px}
+}
+@media (max-width:900px){
+  table.parts thead{display:none}
+  table.parts,table.parts tbody,table.parts tr,table.parts td{display:block;width:100%}
+  table.parts tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:14px 16px;border-bottom:1px solid var(--line)}
+  table.parts tr:last-child{border-bottom:0}
+  table.parts td{padding:0;border:0}
+  td.c-nr{grid-column:1;grid-row:1}
+  td.c-name{grid-column:1/-1;grid-row:2}
+  td.price{grid-column:2;grid-row:1/3;align-self:start}
+  td.c-name{grid-column:1;grid-row:2}
+  td.c-buy{grid-column:1/-1;grid-row:3;margin-top:8px}
+  .buy{justify-content:flex-end}
+}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .demobar .wrap{flex-direction:column;align-items:flex-start;gap:2px}
+  .logo img{height:28px}
+  .langs button{padding:6px 7px;font-size:13px;min-width:34px}
+  .cartbtn{padding:9px 11px}
+  .hero .wrap{padding-top:36px;padding-bottom:36px}
+  .hero figure{margin:4px 0 0;max-width:420px}
+  .demobar{font-size:13px}
+  .steps{gap:8px 22px}
+  section.block{padding-top:60px}
+  .shead{gap:12px;margin-bottom:20px}
+  .machines{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .mcard .t{padding:10px 11px 12px}
+  .mcard .n{font-size:16.5px}
+  .mcard .d{font-size:13px}
+  .mcard .w{font-size:12.5px}
+  .cfg{padding:16px}
+  .cfg .who img{width:88px;height:55px}
+  .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .field{min-width:0}
+  .field select,.field .static{width:100%}
+  .field.ring{grid-column:1/-1;order:3}
+  .buy{justify-content:space-between}
+  .add{flex:1;min-width:0}
+  .search{flex-direction:column}
+  .search input{flex:none;width:100%}
+  .search .btn{width:100%}
+  .chip{padding:5px 11px;font-size:14px}
+  footer{margin-top:72px}
+  footer .wrap{grid-template-columns:1fr;gap:22px}
+  .oform .two{grid-template-columns:1fr}
+}
+@media (max-width:400px){
+  .logo img{height:24px}
+  header.site .wrap{gap:10px}
+  .langs button{padding:5px 5px;min-width:30px;font-size:12.5px}
+  .cartbtn{padding:8px 9px;gap:6px}
+  .seg button{font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <span data-i="demo"></span>
+  <span><span data-i="madeBy">Przygotował:</span> <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></span>
+</div></div>
+
+<header class="site"><div class="wrap">
+  <a class="logo" href="#top" data-i-aria="logoLabel" aria-label="EXPOM – części zamienne"><img src="img/logo.webp" width="301" height="75" alt="EXPOM"></a>
+  <nav class="mnav" aria-label="Sekcje" data-i-aria="navLabel">
+    <a href="#maszyny" data-i="nav1">Maszyny</a>
+    <a href="#czesci" data-i="nav2">Części</a>
+    <a href="#zamawianie" data-i="nav3">Zamawianie</a>
+  </nav>
+  <div class="htools">
+    <div class="langs" role="group" aria-label="Język / Sprache / Language">
+      <button type="button" data-lang="pl" aria-pressed="true" lang="pl" title="Polski">PL</button>
+      <button type="button" data-lang="de" aria-pressed="false" lang="de" title="Deutsch">DE</button>
+      <button type="button" data-lang="en" aria-pressed="false" lang="en" title="English">EN</button>
+    </div>
+    <button class="cartbtn" type="button" id="openCart" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl" data-i="cart">Koszyk</span><span class="cnt num" id="cartCount">0</span><span class="sr" data-i="cartSr">szt. w koszyku</span></button>
+  </div>
+</div></header>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div>
+    <h1 data-i="h1">Części zamienne EXPOM</h1>
+    <p class="lead" data-i="lead"></p>
+    <form class="search" id="heroSearch" role="search">
+      <label class="sr" for="hq" data-i="qLabel">Numer lub nazwa części</label>
+      <input id="hq" type="search" autocomplete="off" enterkeyhint="search">
+      <button class="btn" type="submit" data-i="find">Szukaj części</button>
+    </form>
+    <p class="hint"><span data-i="tryTxt">Na przykład:</span> <button type="button" data-try="PEM-002">PEM-002</button>, <button type="button" data-try="UCF 212">UCF 212</button>, <button type="button" data-try="sprężyna włóki" data-try-de="Schleppzinken" data-try-en="levelling board tine">sprężyna włóki</button></p>
+  </div>
+  <figure><img src="img/hero.webp" width="1099" height="548" alt="" data-i-alt="heroAlt" fetchpriority="high"></figure>
+  <ol class="steps">
+    <li><span class="n">1</span><span data-i="st1">Wybierz maszynę</span></li>
+    <li><span class="n">2</span><span data-i="st2">Dodaj części</span></li>
+    <li><span class="n">3</span><span data-i="st3">Wyślij zamówienie</span></li>
+  </ol>
+</div></section>
+
+<section class="block" id="maszyny"><div class="wrap">
+  <div class="shead"><span class="n" aria-hidden="true">1</span><div><h2 data-i="s1">Wybierz maszynę</h2><p data-i="s1p"></p></div></div>
+  <div id="machines"></div>
+</div></section>
+
+<section class="block" id="czesci"><div class="wrap">
+  <div class="shead"><span class="n" aria-hidden="true">2</span><div><h2 data-i="s2" id="s2h" tabindex="-1">Dodaj części</h2><p data-i="s2p"></p></div></div>
+  <div class="cfg" id="cfg"></div>
+  <div class="toolbar">
+    <div class="chips" id="chips" role="group" data-i-aria="catLabel" aria-label="Rodzaj części"></div>
+    <div class="qfield"><label class="sr" for="q" data-i="qLabel">Numer lub nazwa części</label><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5F656C" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" autocomplete="off"><button class="qclear" type="button" id="qClear" hidden aria-label="Wyczyść">×</button></div>
+  </div>
+  <div class="notice" id="notice" hidden></div>
+  <p class="sr" id="liveCount" aria-live="polite"></p>
+  <div class="plist">
+    <table class="parts" id="partsTable">
+      <caption class="sr" id="pcap"></caption>
+      <thead><tr><th scope="col" data-i="thNr">Nr katalogowy</th><th scope="col" data-i="thName">Część</th><th scope="col" class="price" data-i="thPrice">Cena netto</th><th scope="col" style="text-align:right" data-i="thBuy">Ilość</th></tr></thead>
+      <tbody id="partsBody"></tbody>
+    </table>
+    <div class="empty" id="empty" hidden></div>
+  </div>
+</div></section>
+
+<section class="block" id="zamawianie"><div class="wrap">
+  <div class="shead"><span class="n" aria-hidden="true">3</span><div><h2 data-i="s3">Wyślij zamówienie</h2></div></div>
+  <div class="how">
+    <div><b data-i="h1t"></b><p data-i="h1p"></p></div>
+    <div><b data-i="h2t"></b><p data-i="h2p"></p></div>
+    <div><b data-i="h3t"></b><p data-i="h3p"></p></div>
+  </div>
+  <p class="go"><button class="btn" type="button" id="goCart" aria-haspopup="dialog"><span data-i="goCart">Przejdź do koszyka</span> <span class="num" id="goCnt"></span></button></p>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><h3>EXPOM Sp. z o.o.</h3><p>ul. Parkowa 2</p><p>99-340 Krośniewice</p></div>
+  <div><h3 data-i="fPhone">Telefon</h3><p><a href="tel:+48242523003">+48 24 252 30 03</a></p></div>
+  <div><h3 data-i="fMail">E-mail</h3><p><a href="mailto:expom@expom.eu">expom@expom.eu</a></p><p><a href="https://expom.com.pl/" target="_blank" rel="noopener">expom.com.pl</a></p></div>
+  <p class="fnote" data-i="fnote"></p>
+</div></footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+  <div class="dh"><h2 id="cartTitle" data-i="cartTitle">Koszyk</h2><button class="x" type="button" id="closeCart" aria-label="Zamknij">×</button></div>
+  <div class="dbody" id="dbody"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-describedby="mText"><div class="box"><h3 id="mTitle"></h3><p id="mText"></p><button class="btn" type="button" id="mOk">OK</button></div></div>
+
+<script>
+(() => {
+'use strict';
+const DATA = {"eur":4.25,"site":"https://expom.com.pl/","groups":[{"id":"rollers","pl":"Wały uprawowe i łąkowe","de":"Ackerwalzen und Wiesenwalzen","en":"Field and grassland rollers"},{"id":"tillage","pl":"Uprawa bezorkowa","de":"Pfluglose Bodenbearbeitung","en":"Min-till cultivation"},{"id":"care","pl":"Pielęgnacja","de":"Pflege","en":"Crop care"}],"rings":{"c500":"Cambridge Ø500","c530":"Cambridge Ø530","c600":"Cambridge Ø600","zz530":"Zig-Zag Ø530","sp600":"Steel-Pack Ø600","vt600":"V-Ring / T-Ring Ø600"},"machines":[{"id":"tytan","name":"TYTAN PLUS","group":"rollers","pl":"Wał uprawowy składany hydraulicznie","de":"Ackerwalze, hydraulisch klappbar","en":"Hydraulic folding field roller","v":[6.3,8.3,9.3],"rings":["c500","c530","c600","zz530"],"url":"wal-uprawowy-tytan-plus/","cat":{"pdf":"wp-content/uploads/2025/08/TYTAN-SPL-01-2024-ver-II.pdf","pl":"Katalog części TYTAN PLUS, wyd. II (2024)","de":"Ersatzteilliste TYTAN PLUS, Ausgabe II (2024)","en":"TYTAN PLUS spare parts list, 2nd ed. (2024)"}},{"id":"maximus","name":"MAXIMUS","group":"rollers","pl":"Wał uprawowy składany hydraulicznie","de":"Ackerwalze, hydraulisch klappbar","en":"Hydraulic folding field roller","v":[15.3],"vAll":[9.3,12.3,15.3],"rings":["c500","c530","c600","zz530"],"url":"wal-uprawowy-maximus/","cat":{"pdf":"wp-content/uploads/2024/01/SPL-MAXIMUS-15m-2023.pdf","pl":"Katalog części MAXIMUS 15,3 m (2023)","de":"Ersatzteilliste MAXIMUS 15,3 m (2023)","en":"MAXIMUS 15.3 m spare parts list (2023)"}},{"id":"jacek","name":"JACEK","group":"rollers","pl":"Wał uprawowy składany hydraulicznie","de":"Ackerwalze, hydraulisch klappbar","en":"Hydraulic folding field roller","v":[5.3,6.3,8,9],"rings":["c500","c530","c600","zz530"],"url":"wal-uprawowy-jacek/"},{"id":"gladio","name":"GLADIO","group":"rollers","pl":"Wał nożowy składany hydraulicznie","de":"Messerwalze, hydraulisch klappbar","en":"Hydraulic folding knife roller","v":[6.3],"url":"wal-uprawowy-gladio/"},{"id":"mors","name":"MORS","group":"rollers","pl":"Wał łąkowy napełniany wodą","de":"Wiesenwalze, mit Wasser befüllbar","en":"Water-ballast grassland roller","v":[2.5,2.75],"url":"wal-lakowy-mors/"},{"id":"ox","name":"OX","group":"tillage","pl":"Agregat talerzowy","de":"Kurzscheibenegge","en":"Disc harrow","v":[4.2,6.2],"rings":["c500","c530","c600","sp600","zz530"],"url":"agregat-talerzowy-ox/"},{"id":"ajax","name":"AJAX TRIO","group":"tillage","pl":"Gruber trzyrzędowy","de":"Dreibalkiger Grubber","en":"Three-row cultivator","v":[3,4],"rings":["vt600"],"url":"gruber-ajax-trio/"},{"id":"wicher","name":"WICHER","group":"tillage","pl":"Agregat uprawowy, rama sztywna","de":"Saatbettkombination, starrer Rahmen","en":"Seedbed cultivator, rigid frame","v":[3,4],"url":"agregat-uprawowy-wicher/"},{"id":"wicherskl","name":"WICHER","group":"tillage","pl":"Agregat uprawowy składany","de":"Saatbettkombination, klappbar","en":"Seedbed cultivator, folding","v":[4,4.5,6],"url":"agregat-uprawowy-wicher-skladany/"},{"id":"wektor","name":"WEKTOR","group":"tillage","pl":"Agregat uprawowy ciągany","de":"Gezogene Saatbettkombination","en":"Trailed seedbed cultivator","v":[6,7,8,10],"url":"agregat-uprawowy-wektor/"},{"id":"foxl","name":"FOX L","group":"care","pl":"Brona mulczowa","de":"Striegel","en":"Tine weeder","v":[6,7.5,9,12],"url":"brona-mulczowa-fox-l/"},{"id":"foxxl","name":"FOX XL","group":"care","pl":"Brona mulczowa z sekcją talerzową","de":"Striegel mit Scheibensektion","en":"Tine weeder with disc section","v":[4.8,6,7.2],"url":"brona-mulczowa-fox-xl/"},{"id":"astra","name":"ASTRA","group":"care","pl":"Brona wirnikowa","de":"Rollstriegel","en":"Rotary harrow","v":[6.2],"url":"brona-wirnikowa-astra/"},{"id":"flex","name":"FLEX","group":"care","pl":"Pielnik międzyrzędowy","de":"Hackgerät","en":"Inter-row hoe","v":[6,10,12],"vk":"rows","url":"pielnik-miedzyrzedowy-flex/"}],"parts":[["PEM-001","PEM-001","ring","Pierścień Cambridge szeroki Ø500","Cambridge ring, wide, Ø500","Cambridge-Ring breit Ø500",98,[["tytan",null,["c500"]]],"oś Φ60"],["PEM-005","PEM-005","ring","Pierścień Cambridge wąski Ø500","Cambridge ring, narrow, Ø500","Cambridge-Ring schmal Ø500",72,[["tytan",null,["c500"]]],"oś Φ60"],["PEM-002","PEM-002","ring","Pierścień Cambridge szeroki Ø530","Cambridge ring, wide, Ø530","Cambridge-Ring breit Ø530",108,[["tytan",null,["c530"]]],"oś Φ60"],["PEM-004","PEM-004","ring","Pierścień Cambridge wąski Ø530","Cambridge ring, narrow, Ø530","Cambridge-Ring schmal Ø530",79,[["tytan",null,["c530"]]],"oś Φ60"],["PEM-007","PEM-007","ring","Pierścień Cambridge szeroki Ø530","Cambridge ring, wide, Ø530","Cambridge-Ring breit Ø530",118,[["tytan",null,["c530"]]],"oś Φ70"],["PEM-008","PEM-008","ring","Pierścień Cambridge wąski Ø530","Cambridge ring, narrow, Ø530","Cambridge-Ring schmal Ø530",86,[["tytan",null,["c530"]]],"oś Φ70"],["PEM-003","PEM-003","ring","Pierścień Cambridge szeroki Ø600","Cambridge ring, wide, Ø600","Cambridge-Ring breit Ø600",139,[["tytan",null,["c600"]]],"oś Φ65"],["PEM-006","PEM-006","ring","Pierścień Cambridge wąski Ø600","Cambridge ring, narrow, Ø600","Cambridge-Ring schmal Ø600",99,[["tytan",null,["c600"]]],"oś Φ65"],["ZIG-009","ZIG-009","ring","Pierścień Zig-Zag szeroki Ø530","Zig-Zag ring, wide, Ø530","Zig-Zag-Ring breit Ø530",128,[["tytan",null,["zz530"]]]],["ZIG-010","ZIG-010","ring","Pierścień Zig-Zag wąski Ø530","Zig-Zag ring, narrow, Ø530","Zig-Zag-Ring schmal Ø530",94,[["tytan",null,["zz530"]]]],["UCF212","UCF 212","bearing","Łożysko z oprawą UCF 212","Flange bearing UCF 212","Flanschlager UCF 212",249,[["tytan",[6.3,8.3],null]]],["GE-ES-60","GE-ES-60","bearing","Łożysko ślizgowe GE 60 ES","Plain bearing GE 60 ES","Gelenklager GE 60 ES",168,[["tytan",[8.3],null]]],["WTL63-05.00.00.00","WTL63-05.00.00.00","bearing","Obsada łożyska","Bearing housing","Lagergehäuse",189,[["tytan",null,null]]],["PN-81/M-85111","PN-81/M-85111","small","Pierścień osadczy W75","Retaining ring W75","Sicherungsring W75",12,[["tytan",null,null]]],["WCJOS-01.00.00.01.1","WCJOŚ-01.00.00.01.1","bearing","Oś środkowa Φ60","Central axle Φ60","Mittelachse Φ60",890,[["tytan",[6.3,8.3],["c500","c530"]]],"L=2252 mm"],["WCJOS-01.00.00.01.2","WCJOŚ-01.00.00.01.2","bearing","Oś środkowa Φ65","Central axle Φ65","Mittelachse Φ65",960,[["tytan",[6.3,8.3],["c600"]]],"L=2252 mm"],["WCJOS-01.00.00.01.3","WCJOŚ-01.00.00.01.3","bearing","Oś środkowa Φ70","Central axle Φ70","Mittelachse Φ70",1040,[["tytan",[6.3,8.3],["c530","zz530"]]],"L=2252 mm"],["WCJOS-01.00.00.02.1","WCJOŚ-01.00.00.02.1","bearing","Oś boczna","Side axle","Seitenachse",940,[["tytan",[6.3],null]],"L=2412 mm"],["WCJOS-01.00.00.02.2","WCJOŚ-01.00.00.02.2","bearing","Oś boczna","Side axle","Seitenachse",1260,[["tytan",[8.3],null]],"L=3361 mm"],["WCT63-01.00.05.01","WCT63-01.00.05.01","small","Zacisk sekcji wału","Roller section clamp","Walzensektionsklemme",78,[["tytan",null,null]]],["WTC63-05.00.01.00","WTC63-05.00.01.00","small","Korytko (osłona przed kamieniami)","Stone box","Steinschutz",165,[["tytan",null,null]]],["SPR-80x10","","wear","Sprężyna włóki","Levelling board tine","Schleppzinken",46,[["tytan",null,null]],"80×10"],["UCH-80x10","","wear","Uchwyt sprężyny włóki","Tine clamp","Zinkenhalter",29,[["tytan",null,null]],"80×10"],["PLY-150x10","","wear","Płytka zęba włóki","Tine wear plate","Verschleißplatte",19,[["tytan",null,null]],"150×10"],["WCT63-07.00.00.00","WCT63-07.00.00.00","wear","Włóka środkowa kpl., 10 zębów","Central levelling board, complete, 10 tines","Planierschiene Mitte kpl., 10 Zinken",1890,[["tytan",[6.3],null]]],["WCT83-07.00.00.00","WCT83-07.00.00.00","wear","Włóka środkowa kpl., 10 zębów","Central levelling board, complete, 10 tines","Planierschiene Mitte kpl., 10 Zinken",1990,[["tytan",[8.3],null]]],["WCT93-10.00.00.00","WCT93-10.00.00.00","wear","Włóka środkowa kpl., 10 zębów","Central levelling board, complete, 10 tines","Planierschiene Mitte kpl., 10 Zinken",2090,[["tytan",[9.3],null]]],["WCT93-10.00.00.01","WCT93-10.00.00.01","wear","Łącznik zębów włóki","Tine connector","Zinkenverbinder",34,[["tytan",[9.3],null]]],["400/60-15.5","400/60-15.5","chassis","Koło jezdne 400/60-15.5","Wheel 400/60-15.5","Laufrad 400/60-15.5",1190,[["tytan",null,null]]],["ADR-TPSE","ADR TPSE","chassis","Piasta koła","Wheel hub","Radnabe",820,[["tytan",null,null]]],["G-46-383x160","G-46-383x160","chassis","Klin blokady koła","Wheel chock","Unterlegkeil",89,[["tytan",null,null]]],["WCT93-07.00.01.00","WCT93-07.00.01.00","chassis","Oś hamowana","Braked axle","Gebremste Achse",2790,[["tytan",[8.3,9.3],null]]],["ACO-A-64x35","ACO-A 64x35","chassis","Dystans gumowy","Rubber stop","Gummipuffer",34,[["tytan",null,null]]],["CJ2F-63/36/320z","CJ2F-63/36/320z","hydr","Siłownik hydrauliczny 63/36/320","Hydraulic cylinder 63/36/320","Hydraulikzylinder 63/36/320",690,[["tytan",null,null]]],["CD-3626-50/28/200z","CD-3626 50/28/200z","hydr","Siłownik hydrauliczny 50/28/200","Hydraulic cylinder 50/28/200","Hydraulikzylinder 50/28/200",520,[["tytan",null,null]]],["CJ2F-100/56/800z","CJ2F-100/56/800z","hydr","Siłownik hydrauliczny 100/56/800","Hydraulic cylinder 100/56/800","Hydraulikzylinder 100/56/800",1490,[["tytan",[6.3],null],["maximus",null,null]]],["CJ2F-125/70/800z","CJ2F-125/70/800z","hydr","Siłownik hydrauliczny 125/70/800","Hydraulic cylinder 125/70/800","Hydraulikzylinder 125/70/800",1980,[["tytan",[8.3,9.3],null]]],["IOW-1.0","IOW - 1,0l","hydr","Hydroakumulator 1,0 l","Hydraulic accumulator 1.0 l","Hydrospeicher 1,0 l",640,[["tytan",null,null]]],["AA-06B-800-06K/06","AA-06B-800-06K/06","hydr","Przewód hydrauliczny","Hydraulic hose","Hydraulikschlauch",79,[["tytan",[6.3,8.3],null],["maximus",null,null]]],["VRFB-90","VRFB 90 1/4\" BSP","hydr","Zawór dławiący","Throttle valve","Drosselventil",78,[["tytan",[9.3],null]]],["WCT-SET-63","WCT SET 63","light","Zestaw oświetleniowy","Warning light set","Warntafelsatz",430,[["tytan",null,null]]],["WCT-SET1","WCT SET1","light","Kierunkowskaz","Indicator lamp","Blinkleuchte",95,[["tytan",null,null]]],["WCT-SET2","WCT SET2","light","Trójkąt odblaskowy","Reflective triangle","Rückstrahler-Dreieck",36,[["tytan",null,null]]],["WCT63-32.03.00.00","WCT63-32.03.00.00","light","Uchwyt tablicy ostrzegawczej lewy","Warning board bracket, left","Warntafelhalter links",115,[["tytan",null,null]]],["WCT63-32.04.00.00","WCT63-32.04.00.00","light","Uchwyt tablicy ostrzegawczej prawy","Warning board bracket, right","Warntafelhalter rechts",115,[["tytan",null,null]]],["WTL63-06.00.00.00","WTL63-06.00.00.00","small","Sworzeń zawiasowy","Hinge pin","Gelenkbolzen",145,[["tytan",null,null]]],["WTL63-08.00.00.00","WTL63-08.00.00.00","small","Sworzeń górny","Upper pin","Oberer Bolzen",120,[["tytan",null,null]]],["WTL63-09.00.00.00","WTL63-09.00.00.00","small","Sworzeń dolny","Lower pin","Unterer Bolzen",120,[["tytan",null,null]]],["WTL63-22.00.00.00","WTL63-22.00.00.00","small","Uchwyt siłownika","Cylinder holder","Zylinderhalter",98,[["tytan",null,null]]],["AGT30-09.00.00.03","AGT30-09.00.00.03","small","Przetyczka","Linch pin","Sicherungsbolzen",26,[["tytan",null,null]]],["WCT63-01.00.08.01","WCT63-01.00.08.01","small","Jarzmo M16×150","U-bolt M16×150","Bügelschraube M16×150",21,[["tytan",null,null]]],["ODL2-530-02","ODL2-530-02","ring","Pierścień ząbkowany Ø530","Toothed ring Ø530","Nelkenring Ø530",112,[["maximus",null,["c530"]]]],["ODL2-530-01","ODL2-530-01","ring","Koło gładkie Ø530","Smooth ring Ø530","Glatter Ring Ø530",88,[["maximus",null,["c530"]]]],["ODL8-60-01","ODL8-60-01","ring","Pierścień kontrujący 61","Lock ring 61","Gegenring 61",36,[["maximus",null,["c530","c600"]]]],["MAX15-03-05-00-04","MAX15-03-05-00-04","ring","Pierścień dystansowy","Spacer ring","Distanzring",32,[["maximus",null,["c530","c600"]]]],["ZIG-4461","ZIG-4461","ring","Pierścień Zig-Zag szeroki Ø530","Zig-Zag ring, wide, Ø530","Zig-Zag-Ring breit Ø530",132,[["maximus",null,["zz530"]]]],["ZIG-4460","ZIG-4460","ring","Pierścień Zig-Zag wąski Ø530","Zig-Zag ring, narrow, Ø530","Zig-Zag-Ring schmal Ø530",96,[["maximus",null,["zz530"]]]],["WCT63-02-10-00-04","WCT63-02-10-00-04","ring","Pierścień kontrujący 65","Lock ring 65","Gegenring 65",38,[["maximus",null,["zz530"]]]],["NOR00-00.00.00.20","NOR00-00.00.00.20","bearing","Łożysko UCF 212","Bearing UCF 212","Lager UCF 212",249,[["maximus",null,null]]],["NOR00-00.00.00.21","NOR00-00.00.00.21","bearing","Łożysko UCF 213","Bearing UCF 213","Lager UCF 213",289,[["maximus",null,null]]],["MAX15-03-05-00-02","MAX15-03-05-00-02","bearing","Blacha łożyskowa wewnętrzna","Inner bearing plate","Inneres Lagerblech",145,[["maximus",null,null]]],["MAX15-07-01-02-01","MAX15-07-01-02-01","bearing","Blacha łożyskowa zewnętrzna","Outer bearing plate","Äußeres Lagerblech",145,[["maximus",null,null]]],["MAX15-02-00-03-01","MAX15-02-00-03-01","bearing","Oś wału środkowego Φ60","Central roller axle Φ60","Mittelwalzenachse Φ60",990,[["maximus",null,["c530"]]],"L=2519 mm"],["MAX15-15-00-01-00","MAX15-15-00-01-00","bearing","Oś wału bocznego Φ60","Side roller axle Φ60","Seitenwalzenachse Φ60",1390,[["maximus",null,["c530"]]],"L=3566 mm"],["MAX15-02-01-00-01","MAX15-02-01-00-01","bearing","Oś wału środkowego Φ65","Central roller axle Φ65","Mittelwalzenachse Φ65",1060,[["maximus",null,["c600","zz530"]]],"L=2519 mm"],["MAX15-03-05-00-01","MAX15-03-05-00-01","bearing","Oś wału bocznego Φ65","Side roller axle Φ65","Seitenwalzenachse Φ65",1460,[["maximus",null,["c600","zz530"]]],"L=3566 mm"],["CJ2F-140/80/1250z","CJ2F-140/80/1250z","hydr","Siłownik hydrauliczny 140/80/1250","Hydraulic cylinder 140/80/1250","Hydraulikzylinder 140/80/1250",2950,[["maximus",null,null]]],["CJ2F-80/45/800z","CJ2F-80/45/800z","hydr","Siłownik hydrauliczny 80/45/800","Hydraulic cylinder 80/45/800","Hydraulikzylinder 80/45/800",1180,[["maximus",null,null]]],["CJ2F-80/45/630z","CJ2F-80/45/630z","hydr","Siłownik hydrauliczny 80/45/630","Hydraulic cylinder 80/45/630","Hydraulikzylinder 80/45/630",1090,[["maximus",null,null]]],["MAX15-14-00-01-00","MAX15-14-00-01-00","hydr","Akumulator hydrauliczny","Hydraulic accumulator","Hydrospeicher",890,[["maximus",null,null]],"IOW C250-LA3"],["MAX/70-00.00.08.00","MAX/70-00.00.08.00","hydr","Dzielnik strumienia","Flow divider","Stromteiler",460,[["maximus",null,null]],"DFL 10 l/min"],["HK-31132","HK 31132 ISO 12.5","hydr","Szybkozłącze hydrauliczne ISO 12,5","Quick coupling ISO 12.5","Kupplungsstecker ISO 12,5",48,[["maximus",null,null]],"M14×1,5"],["x-jc1","","ring","Pierścień Cambridge Ø500","Cambridge ring Ø500","Cambridge-Ring Ø500",95,[["jacek",null,["c500"]]]],["x-jc2","","ring","Pierścień Cambridge Ø530","Cambridge ring Ø530","Cambridge-Ring Ø530",105,[["jacek",null,["c530"]]]],["x-jc3","","ring","Pierścień Cambridge Ø600","Cambridge ring Ø600","Cambridge-Ring Ø600",135,[["jacek",null,["c600"]]]],["x-jc4","","ring","Pierścień Zig-Zag Ø530","Zig-Zag ring Ø530","Zig-Zag-Ring Ø530",125,[["jacek",null,["zz530"]]]],["x-jc5","","bearing","Łożysko wału z oprawą żeliwną","Roller bearing with cast housing","Walzenlager mit Gussgehäuse",235,[["jacek",null,null]]],["x-jc6","","small","Sworzeń ramy","Frame pin","Rahmenbolzen",130,[["jacek",null,null]]],["x-jc7","","chassis","Koło jezdne z piastą","Wheel with hub","Laufrad mit Nabe",1290,[["jacek",null,null]]],["x-jc8","","hydr","Siłownik składania ramy","Frame folding cylinder","Klappzylinder Rahmen",1390,[["jacek",null,null],["gladio",null,null]]],["x-gl1","","wear","Nóż wału nożowego Ø840","Knife roller blade Ø840","Messer der Messerwalze Ø840",185,[["gladio",null,null]],"Hardox"],["x-gl2","","small","Śruba noża z nakrętką, kpl.","Blade bolt with nut, set","Messerschraube mit Mutter, Satz",9,[["gladio",null,null]]],["x-gl3","","bearing","Łożysko wału nożowego z oprawą","Knife roller bearing with housing","Messerwalzenlager mit Gehäuse",265,[["gladio",null,null]]],["x-mo1","","wear","Skrobak wału z regulacją","Adjustable roller scraper","Verstellbarer Walzenabstreifer",210,[["mors",null,null]]],["x-mo2","","small","Korek zalewowo-spustowy","Fill and drain plug","Füll- und Ablassstopfen",38,[["mors",null,null]]],["x-mo3","","bearing","Łożysko wału z oprawą","Roller bearing with housing","Walzenlager mit Gehäuse",230,[["mors",null,null]]],["x-mo4","","chassis","Stopa podporowa","Parking stand","Abstellstütze",260,[["mors",null,null]]],["x-ox1","","wear","Talerz zębaty Ø460","Notched disc Ø460","Gezahnte Scheibe Ø460",165,[["ox",null,null]]],["x-ox2","","bearing","Piasta talerza z łożyskiem, kpl.","Disc hub with bearing, complete","Scheibennabe mit Lager, kpl.",340,[["ox",null,null]]],["x-ox3","","small","Amortyzator gumowy sekcji talerzowej","Rubber disc arm suspension","Gummifederung Scheibenarm",58,[["ox",null,null]]],["x-ox4","","ring","Pierścień Cambridge Ø500","Cambridge ring Ø500","Cambridge-Ring Ø500",95,[["ox",null,["c500"]]]],["x-ox5","","ring","Pierścień Cambridge Ø530","Cambridge ring Ø530","Cambridge-Ring Ø530",105,[["ox",null,["c530"]]]],["x-ox6","","ring","Para talerzy Steel-Pack Ø600","Steel-Pack disc pair Ø600","Steel-Pack-Scheibenpaar Ø600",210,[["ox",null,["sp600"]]]],["x-kn1","","wear","Nóż wału nożowego","Knife roller blade","Messer der Messerwalze",175,[["ox",null,null],["foxxl",null,null]],"Hardox"],["x-aj1","","wear","Dłuto zęba","Tine point","Scharspitze",89,[["ajax",null,null]]],["x-aj2","","wear","Skrzydełka zęba, para","Tine wings, pair","Flügelschare, Paar",145,[["ajax",null,null]]],["x-aj3","","small","Sprężyna zabezpieczenia zęba","Tine overload spring","Überlastfeder",120,[["ajax",null,null]]],["x-aj4","","small","Śruba zabezpieczenia bolcowego","Shear bolt","Abscherschraube",6,[["ajax",null,null]]],["x-aj5","","wear","Talerz belki wyrównującej","Levelling disc","Einebnungsscheibe",158,[["ajax",null,null]]],["x-aj6","","ring","Pierścień V-Ring Ø600","V-Ring Ø600","V-Ring Ø600",148,[["ajax",null,["vt600"]]]],["x-wi1","","wear","Ząb sprężynowy JACKPOT 32×12","Spring tine JACKPOT 32×12","Federzinken JACKPOT 32×12",64,[["wicher",null,null],["wicherskl",null,null]]],["x-wi2","","wear","Gęsiostópka do zęba 32×12","Duckfoot share for 32×12 tine","Gänsefußschar für Zinken 32×12",28,[["wicher",null,null],["wicherskl",null,null]]],["x-wi3","","ring","Pręt wału strunowego Ø335","Bar for bar roller Ø335","Stab für Stabwalze Ø335",52,[["wicher",null,null],["wicherskl",null,null]]],["x-wi4","","bearing","Łożysko wału strunowego","Bar roller bearing","Stabwalzenlager",145,[["wicher",null,null],["wicherskl",null,null]]],["x-wi5","","wear","Skrobak wału kołeczkowego Ø370","Scraper for peg roller Ø370","Abstreifer für Zahnpackerwalze Ø370",22,[["wicher",null,null],["wicherskl",null,null]]],["x-sp1","","wear","Spulchniacz spiralny śladów kół","Spiral wheel-track loosener","Spurlockerer, spiralförmig",420,[["wicher",null,null],["wicherskl",null,null],["wektor",null,null]]],["x-we1","","wear","Ząb sprężynowy 45×12","Spring tine 45×12","Federzinken 45×12",78,[["wektor",null,null]]],["x-we2","","wear","Gęsiostópka do zęba 45×12","Duckfoot share for 45×12 tine","Gänsefußschar für Zinken 45×12",32,[["wektor",null,null]]],["x-we3","","ring","Pręt wału rurowego","Tube roller bar","Rohrstab der Rohrstabwalze",38,[["wektor",null,null]]],["x-we4","","bearing","Łożysko wału rurowego","Tube roller bearing","Rohrstabwalzenlager",150,[["wektor",null,null]]],["x-fl1","","wear","Ząb sprężynowy brony mulczowej","Weeder spring tine","Striegelzinken",24,[["foxl",null,null],["foxxl",null,null]]],["x-fl2","","small","Obejma zęba","Tine clamp","Zinkenhalter",12,[["foxl",null,null],["foxxl",null,null]]],["x-fl3","","chassis","Koło podporowe","Depth wheel","Stützrad",390,[["foxl",null,null]]],["x-fl4","","small","Sprężyna dociskowa sekcji","Section pressure spring","Sektionsdruckfeder",48,[["foxl",null,null]]],["x-fx1","","wear","Talerz falisty Ø460","Wavy disc Ø460","Gewellte Scheibe Ø460",158,[["foxxl",null,null]]],["x-fx2","","bearing","Łożysko talerza","Disc bearing","Scheibenlager",98,[["foxxl",null,null]]],["x-as1","","wear","Gwiazda obrotowa, kpl.","Rotary star, complete","Rollstern, kpl.",245,[["astra",null,null]]],["x-as2","","wear","Ząb sprężynowy 25×25","Spring tine 25×25","Federzinken 25×25",89,[["astra",null,null]]],["x-as3","","bearing","Łożysko gwiazdy","Star bearing","Sternlager",58,[["astra",null,null]]],["x-fe1","","wear","Lemiesz sekcji (gęsiostópka)","Hoe share (duckfoot)","Hackschar (Gänsefuß)",39,[["flex",null,null]]],["x-fe2","","wear","Dłuto sekcji","Chisel point","Meißelschar",45,[["flex",null,null]]],["x-fe3","","wear","Palec zagrabiający","Finger tine","Nachlaufzinken",22,[["flex",null,null]],"8 mm"],["x-fe4","","chassis","Koło podporowe sekcji","Section depth wheel","Sektionsstützrad",220,[["flex",null,null]]]]};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const NOW = new Date().getFullYear(), MIN_YEAR = NOW - 10, QMAX = 999;
+const PHOTO = new Set(['maximus', 'gladio', 'wicherskl', 'foxxl', 'flex']);
+const CAT_ORDER = ['ring', 'wear', 'bearing', 'chassis', 'hydr', 'light', 'small'];
+const COUNTRIES = ['PL', 'DE', 'AT', 'CZ', 'SK', 'LT', 'LV', 'EE', 'NL', 'BE', 'FR', 'DK', 'SE', 'HU', 'RO'];
+
+const T = {
+  pl: {
+    demo: '<b>Projekt demonstracyjny</b> dla EXPOM. Numery części TYTAN PLUS i MAXIMUS są z katalogów EXPOM, reszta części i wszystkie ceny – przykładowe.',
+    madeBy: 'Przygotował:', logoLabel: 'EXPOM – części zamienne, początek strony', navLabel: 'Sekcje', nav1: 'Maszyny', nav2: 'Części', nav3: 'Zamawianie',
+    cart: 'Koszyk', cartSr: 'szt. w koszyku', cartTitle: 'Koszyk',
+    h1: 'Części zamienne EXPOM',
+    lead: 'Wybierz swoją maszynę i rok produkcji. Zobaczysz pasujące części z ceną i zamówisz je od razu – bez maili i telefonów. Części sprzedajemy do maszyn do 10 lat wstecz.',
+    qLabel: 'Numer lub nazwa części', find: 'Szukaj części', tryTxt: 'Na przykład:', ph: 'Numer lub nazwa części', phQ: 'Szukaj w częściach',
+    heroAlt: 'Wał uprawowy EXPOM TYTAN PLUS z pierścieniami Cambridge i włóką sprężynową',
+    st1: 'Wybierz maszynę', st2: 'Dodaj części', st3: 'Wyślij zamówienie',
+    s1: 'Wybierz maszynę', s1p: 'Części pokazujemy dla konkretnego modelu, szerokości i rodzaju wału.',
+    s2: 'Dodaj części', s2p: 'Ustaw szerokość i rodzaj wału – lista pokaże tylko pasujące części. Rok produkcji jest potrzebny do zamówienia.',
+    s3: 'Wyślij zamówienie',
+    h1t: 'Koszyk z numerami katalogowymi', h1p: 'Każda pozycja ma numer z katalogu EXPOM, więc dział części nie musi niczego dopytywać.',
+    h2t: 'Dane maszyny i do faktury', h2p: 'Model, szerokość, rok i numer fabryczny trafiają do zamówienia. Osoba prywatna, gospodarstwo albo firma z NIP.',
+    h3t: 'Potwierdzenie z Krośniewic', h3p: 'Dział części potwierdza dostępność, koszt wysyłki i termin – mailem albo telefonicznie.',
+    fPhone: 'Telefon', fMail: 'E-mail',
+    fnote: 'Projekt demonstracyjny – zamówienia nie są nigdzie wysyłane. Ceny są przykładowe; w euro przeliczone po przykładowym kursie 4,25 zł/EUR.', goCart: 'Przejdź do koszyka',
+    catLabel: 'Rodzaj części',
+    cats: { all: 'Wszystkie', ring: 'Wał i pierścienie', wear: 'Części robocze', bearing: 'Łożyska i osie', chassis: 'Koła i podwozie', hydr: 'Hydraulika', light: 'Oświetlenie', small: 'Sworznie i mocowania' },
+    width: 'Szerokość robocza', rowsLbl: 'Liczba rzędów', rows: 'rzędów', ring: 'Rodzaj wału', year: 'Rok produkcji', anyW: 'Wszystkie szerokości', anyR: 'Wszystkie wały', pickYear: 'Wybierz', older: (y) => `${y} lub starsza`,
+    yrNone: 'Podaj rok produkcji – części sprzedajemy do maszyn do 10 lat wstecz.',
+    yrOk: y => `Rocznik ${y}: maszyna mieści się w 10 latach – części są dostępne.`,
+    yrAsk: 'Maszyna starsza niż 10 lat – dostępność potwierdzi dział części. Zamówienie możesz wysłać normalnie.',
+    srcCat: 'Numery z:', srcEx: 'Lista przykładowa – w prawdziwym sklepie numery z katalogu EXPOM.', priceEx: 'Ceny przykładowe.', machinePage: 'Strona maszyny',
+    m15: 'W demo: katalog dla wersji 15,3 m',
+    catTag: 'katalog części', exTag: 'przykład', noNr: 'bez numeru w katalogu', axle: 'oś',
+    thNr: 'Nr katalogowy', thName: 'Część', thPrice: 'Cena netto', thBuy: 'Ilość',
+    net: 'netto', gross: 'brutto', add: 'Dodaj', added: 'Dodano', qtyFor: n => `Ilość: ${n}`, dec: n => `Mniej: ${n}`, inc: n => `Więcej: ${n}`,
+    parts: n => `${n} ${n === 1 ? 'część' : 'części'}`,
+    pcs: n => `${n} szt.`,
+    cap: (m, n) => `Części do maszyny ${m}: ${n}`,
+    allHits: (n, q) => `Wyniki dla „${q}” we wszystkich maszynach: ${n}`, back: 'Wróć do listy maszyny',
+    none: q => `Nie mamy części pasującej do „${q}”.`, none2: 'Sprawdź numer na tabliczce lub w katalogu albo zadzwoń: +48 24 252 30 03.',
+    noneCfg: 'Brak części tego rodzaju dla wybranej konfiguracji.', showAll: 'Pokaż wszystkie części maszyny',
+    toastAdd: n => `Dodano do koszyka: ${n}`, qtyMsg: `Ilość: od 1 do ${QMAX} sztuk.`, maxMsg: `W koszyku może być najwyżej ${QMAX} sztuk jednej części.`,
+    cempty: 'Koszyk jest pusty. Wybierz maszynę i dodaj części z listy.',
+    sub: 'Wartość netto', vat: 'VAT 23%', vat0: 'VAT 0% – dostawa wewnątrzwspólnotowa (WDT)', vatNote: 'W demo bez numeru VAT UE liczymy polski VAT 23%. Przy sprzedaży osobom prywatnym w innych krajach UE stawka może zależeć od kraju odbiorcy (OSS).', vatNoteX: 'W demo liczymy VAT 23%. Przy wysyłce poza UE (eksport) stawka może wynosić 0% – potwierdzi to dział części.', tot: 'Razem brutto', remove: 'Usuń', ship: 'Koszt wysyłki dział części poda w potwierdzeniu.',
+    form: 'Twoja maszyna', formP: 'Uzupełniliśmy dane z wyboru powyżej – sprawdź je.',
+    fModel: 'Model', fVar: 'Szerokość / wersja', fYear: 'Rok produkcji', fSerial: 'Numer fabryczny', fSerialHint: '(z tabliczki znamionowej)', optional: '(opcjonalnie)',
+    buyerT: 'Dane do zamówienia', who: 'Kto zamawia?', priv: 'Osoba prywatna', farm: 'Gospodarstwo rolne', firm: 'Firma',
+    fName: 'Imię i nazwisko', fFarm: 'Gospodarstwo (imię i nazwisko lub nazwa)', fFirm: 'Nazwa firmy', fNip: 'NIP', fVatId: 'Numer VAT UE', fTaxId: 'Numer identyfikacji podatkowej', fCountry: 'Kraj',
+    fTel: 'Telefon', fMail: 'E-mail', fAddr: 'Adres dostawy (ulica, kod, miejscowość)', fDel: 'Dostawa', delC: 'Kurier', delP: 'Odbiór osobisty w Krośniewicach', fNote: 'Uwagi',
+    send: 'Wyślij zamówienie',
+    errName: 'Wpisz imię i nazwisko albo nazwę.', errYear: 'Wybierz rok produkcji maszyny – dział części sprawdzi po nim dopasowanie części.', errNip: 'NIP powinien mieć 10 cyfr.', errNipSum: 'Ten NIP ma błędną cyfrę kontrolną – sprawdź go.', errVatId: c => `Numer VAT UE powinien zaczynać się od kodu wybranego kraju (${c}), np. ${c}123456789.`, errTaxId: 'Wpisz numer identyfikacji podatkowej firmy.',
+    errContact: 'Podaj telefon albo e-mail, żeby dział części mógł potwierdzić zamówienie.', errTel: 'Numer telefonu powinien mieć co najmniej 9 cyfr.', errMail: 'Sprawdź adres e-mail – brakuje w nim „@” albo domeny.', errAddr: 'Wpisz adres dostawy.',
+    dfoot: 'To projekt demonstracyjny: po kliknięciu nic nie zostanie wysłane.',
+    sentT: 'Gotowe – to tylko demo', sentP: n => `W prawdziwym sklepie zamówienie (${n}) trafiłoby do działu części EXPOM razem z numerami katalogowymi i danymi maszyny, a klient dostałby potwierdzenie e-mailem. Tutaj żadne dane nie zostały wysłane.`,
+    close: 'Zamknij', clear: 'Wyczyść', otherCountry: 'Inny kraj',
+    title: 'EXPOM – części zamienne z ceną (projekt demonstracyjny)', desc: 'Projekt demonstracyjny sklepu z częściami EXPOM: wybór maszyny i rocznika, części z ceną i zamówienie online.'
+  },
+  de: {
+    demo: '<b>Demo-Projekt</b> für EXPOM. Teilenummern für TYTAN PLUS und MAXIMUS aus den EXPOM-Ersatzteillisten, übrige Teile und alle Preise sind Beispiele.',
+    madeBy: 'Erstellt von:', logoLabel: 'EXPOM – Ersatzteile, zum Seitenanfang', navLabel: 'Bereiche', nav1: 'Maschinen', nav2: 'Ersatzteile', nav3: 'Bestellung',
+    cart: 'Warenkorb', cartSr: 'Stk. im Warenkorb', cartTitle: 'Warenkorb',
+    h1: 'EXPOM-Ersatz­teile',
+    lead: 'Wählen Sie Ihre Maschine und das Baujahr. Sie sehen sofort die passenden Teile mit Preis und bestellen direkt – ohne E-Mails und Telefonate. Ersatzteile liefern wir für Maschinen, die bis zu 10 Jahre alt sind.',
+    qLabel: 'Teilenummer oder Bezeichnung', find: 'Teil suchen', tryTxt: 'Zum Beispiel:', ph: 'Teilenummer oder Name', phQ: 'In den Teilen suchen',
+    heroAlt: 'EXPOM Ackerwalze TYTAN PLUS mit Cambridge-Ringen und Schleppzinken',
+    st1: 'Maschine wählen', st2: 'Teile hinzufügen', st3: 'Bestellung absenden',
+    s1: 'Maschine wählen', s1p: 'Die Teile werden für das jeweilige Modell, die Arbeitsbreite und den Walzentyp angezeigt.',
+    s2: 'Teile hinzufügen', s2p: 'Arbeitsbreite und Walzentyp einstellen – die Liste zeigt nur passende Teile. Das Baujahr wird für die Bestellung benötigt.',
+    s3: 'Bestellung absenden',
+    h1t: 'Warenkorb mit Teilenummern', h1p: 'Jede Position hat die Nummer aus der EXPOM-Ersatzteilliste – keine Rückfragen nötig.',
+    h2t: 'Maschinen- und Rechnungsdaten', h2p: 'Modell, Breite, Baujahr und Seriennummer gehen mit der Bestellung mit. Privatperson, landwirtschaftlicher Betrieb oder Firma mit USt-IdNr.',
+    h3t: 'Bestätigung aus Krośniewice', h3p: 'Die Ersatzteilabteilung bestätigt Verfügbarkeit, Versandkosten und Liefertermin – per E-Mail oder Telefon.',
+    fPhone: 'Telefon', fMail: 'E-Mail',
+    fnote: 'Demo-Projekt – Bestellungen werden nirgendwohin gesendet. Die Preise sind Beispiele, umgerechnet zum Beispielkurs 4,25 PLN/EUR.', goCart: 'Zum Warenkorb',
+    catLabel: 'Teileart',
+    cats: { all: 'Alle', ring: 'Walze und Ringe', wear: 'Verschleißteile', bearing: 'Lager und Achsen', chassis: 'Räder und Fahrwerk', hydr: 'Hydraulik', light: 'Beleuchtung', small: 'Bolzen und Befestigung' },
+    width: 'Arbeitsbreite', rowsLbl: 'Reihenzahl', rows: 'Reihen', ring: 'Walzentyp', year: 'Baujahr', anyW: 'Alle Breiten', anyR: 'Alle Walzen', pickYear: 'Wählen', older: (y) => `${y} oder älter`,
+    yrNone: 'Bitte Baujahr angeben – Ersatzteile gibt es für Maschinen, die bis zu 10 Jahre alt sind.',
+    yrOk: y => `Baujahr ${y}: innerhalb von 10 Jahren – Ersatzteile sind lieferbar.`,
+    yrAsk: 'Maschine älter als 10 Jahre – die Verfügbarkeit bestätigt die Ersatzteilabteilung. Sie können trotzdem bestellen.',
+    srcCat: 'Nummern aus:', srcEx: 'Beispielliste – im echten Shop mit Nummern aus der EXPOM-Ersatzteilliste.', priceEx: 'Die Preise sind Beispiele.', machinePage: 'Zur Maschine',
+    m15: 'In der Demo: Ersatzteilliste für 15,3 m',
+    catTag: 'Ersatzteilliste', exTag: 'Beispiel', noNr: 'ohne Nummer in der Liste', axle: 'Achse',
+    thNr: 'Teile-Nr.', thName: 'Teil', thPrice: 'Nettopreis', thBuy: 'Menge',
+    net: 'netto', gross: 'brutto', add: 'Hinzufügen', added: 'Hinzugefügt', qtyFor: n => `Menge: ${n}`, dec: n => `Weniger: ${n}`, inc: n => `Mehr: ${n}`,
+    parts: n => `${n} ${n === 1 ? 'Teil' : 'Teile'}`, pcs: n => `${n} Stk.`,
+    cap: (m, n) => `Ersatzteile für ${m}: ${n}`,
+    allHits: (n, q) => `Treffer für „${q}“ in allen Maschinen: ${n}`, back: 'Zurück zur Maschine',
+    none: q => `Kein Teil passt zu „${q}“.`, none2: 'Prüfen Sie die Nummer auf dem Typenschild oder in der Ersatzteilliste, oder rufen Sie an: +48 24 252 30 03.',
+    noneCfg: 'Keine Teile dieser Art für die gewählte Ausführung.', showAll: 'Alle Teile der Maschine zeigen',
+    toastAdd: n => `In den Warenkorb gelegt: ${n}`, qtyMsg: `Menge: 1 bis ${QMAX} Stück.`, maxMsg: `Pro Teil sind höchstens ${QMAX} Stück möglich.`,
+    cempty: 'Der Warenkorb ist leer. Wählen Sie eine Maschine und fügen Sie Teile hinzu.',
+    sub: 'Warenwert netto', vat: 'MwSt. 23 %', vat0: 'MwSt. 0 % – steuerfreie innergemeinschaftliche Lieferung', vatNote: 'In der Demo wird ohne USt-IdNr. die polnische MwSt. von 23 % berechnet. Bei Verkäufen an Privatpersonen in anderen EU-Ländern kann der Steuersatz des Empfängerlandes gelten (OSS).', vatNoteX: 'In der Demo werden 23 % MwSt. berechnet. Bei Versand außerhalb der EU (Ausfuhr) kann der Satz 0 % betragen – das bestätigt die Ersatzteilabteilung.', tot: 'Gesamt brutto', remove: 'Entfernen', ship: 'Die Versandkosten nennt die Ersatzteilabteilung in der Bestätigung.',
+    form: 'Ihre Maschine', formP: 'Aus Ihrer Auswahl oben übernommen – bitte prüfen.',
+    fModel: 'Modell', fVar: 'Breite / Ausführung', fYear: 'Baujahr', fSerial: 'Seriennummer', fSerialHint: '(vom Typenschild)', optional: '(optional)',
+    buyerT: 'Bestelldaten', who: 'Wer bestellt?', priv: 'Privatperson', farm: 'Landwirt', firm: 'Firma',
+    fName: 'Vor- und Nachname', fFarm: 'Betrieb (Name)', fFirm: 'Firmenname', fNip: 'NIP (polnische Steuernummer)', fVatId: 'USt-IdNr.', fTaxId: 'Steuernummer', fCountry: 'Land',
+    fTel: 'Telefon', fMail: 'E-Mail', fAddr: 'Lieferadresse (Straße, PLZ, Ort)', fDel: 'Lieferung', delC: 'Paketdienst', delP: 'Abholung in Krośniewice', fNote: 'Bemerkungen',
+    send: 'Bestellung absenden',
+    errName: 'Bitte Namen oder Firmennamen eingeben.', errYear: 'Bitte das Baujahr wählen – damit prüft die Ersatzteilabteilung, ob die Teile passen.', errNip: 'Die NIP hat 10 Ziffern.', errNipSum: 'Diese NIP hat eine falsche Prüfziffer – bitte prüfen.', errVatId: c => `Die USt-IdNr. muss mit dem Code des gewählten Landes beginnen (${c}), z. B. ${c}123456789.`, errTaxId: 'Bitte die Steuernummer der Firma eingeben.',
+    errContact: 'Bitte Telefon oder E-Mail angeben, damit die Bestellung bestätigt werden kann.', errTel: 'Die Telefonnummer sollte mindestens 9 Ziffern haben.', errMail: 'Bitte E-Mail-Adresse prüfen – es fehlt „@“ oder die Domain.', errAddr: 'Bitte Lieferadresse eingeben.',
+    dfoot: 'Dies ist ein Demo-Projekt: Beim Klick wird nichts gesendet.',
+    sentT: 'Fertig – nur eine Demo', sentP: n => `Im echten Shop ginge die Bestellung (${n}) mit allen Teilenummern und Maschinendaten an die EXPOM-Ersatzteilabteilung, und der Kunde bekäme eine Bestätigung per E-Mail. Hier wurden keine Daten gesendet.`,
+    close: 'Schließen', clear: 'Löschen', otherCountry: 'Anderes Land',
+    title: 'EXPOM – Ersatzteile mit Preis (Demo-Projekt)', desc: 'Demo-Projekt: EXPOM-Ersatzteilshop mit Maschinenauswahl, Preisen und Online-Bestellung.'
+  },
+  en: {
+    demo: '<b>Demo project</b> for EXPOM. TYTAN PLUS and MAXIMUS part numbers are from EXPOM parts lists; other parts and all prices are examples.',
+    madeBy: 'Prepared by:', logoLabel: 'EXPOM – spare parts, back to top', navLabel: 'Sections', nav1: 'Machines', nav2: 'Parts', nav3: 'Ordering',
+    cart: 'Cart', cartSr: 'pcs in cart', cartTitle: 'Cart',
+    h1: 'EXPOM spare parts',
+    lead: 'Choose your machine and year of manufacture. You will see matching parts with prices and can order right away – no emails or phone calls. We supply parts for machines up to 10 years old.',
+    qLabel: 'Part number or name', find: 'Find parts', tryTxt: 'For example:', ph: 'Part number or name', phQ: 'Search parts',
+    heroAlt: 'EXPOM TYTAN PLUS field roller with Cambridge rings and levelling board',
+    st1: 'Choose a machine', st2: 'Add parts', st3: 'Send the order',
+    s1: 'Choose a machine', s1p: 'Parts are shown for the exact model, working width and roller type.',
+    s2: 'Add parts', s2p: 'Set the width and roller type – the list shows only parts that fit. The year of manufacture is needed for the order.',
+    s3: 'Send the order',
+    h1t: 'A cart with part numbers', h1p: 'Every item carries its EXPOM catalogue number, so the parts department has nothing to ask.',
+    h2t: 'Machine and invoice details', h2p: 'Model, width, year and serial number go with the order. Private customer, farm or company with VAT number.',
+    h3t: 'Confirmation from Krośniewice', h3p: 'The parts department confirms availability, shipping cost and delivery date – by email or phone.',
+    fPhone: 'Phone', fMail: 'Email',
+    fnote: 'Demo project – orders are not sent anywhere. Prices are examples, converted to euro at a sample rate of 4.25 PLN/EUR.', goCart: 'Go to cart',
+    catLabel: 'Part type',
+    cats: { all: 'All', ring: 'Roller and rings', wear: 'Wear parts', bearing: 'Bearings and axles', chassis: 'Wheels and chassis', hydr: 'Hydraulics', light: 'Lighting', small: 'Pins and fixings' },
+    width: 'Working width', rowsLbl: 'Number of rows', rows: 'rows', ring: 'Roller type', year: 'Year of manufacture', anyW: 'All widths', anyR: 'All rollers', pickYear: 'Choose', older: (y) => `${y} or older`,
+    yrNone: 'Enter the year of manufacture – we supply parts for machines up to 10 years old.',
+    yrOk: y => `Year ${y}: within 10 years – parts are available.`,
+    yrAsk: 'Machine older than 10 years – the parts department will confirm availability. You can still place the order.',
+    srcCat: 'Numbers from:', srcEx: 'Sample list – the real shop would use numbers from the EXPOM catalogue.', priceEx: 'Prices are examples.', machinePage: 'Machine page',
+    m15: 'In this demo: parts list for the 15.3 m version',
+    catTag: 'parts list', exTag: 'example', noNr: 'no number in the list', axle: 'axle',
+    thNr: 'Part no.', thName: 'Part', thPrice: 'Net price', thBuy: 'Quantity',
+    net: 'net', gross: 'gross', add: 'Add', added: 'Added', qtyFor: n => `Quantity: ${n}`, dec: n => `Fewer: ${n}`, inc: n => `More: ${n}`,
+    parts: n => `${n} ${n === 1 ? 'part' : 'parts'}`, pcs: n => `${n} pcs`,
+    cap: (m, n) => `Parts for ${m}: ${n}`,
+    allHits: (n, q) => `Results for “${q}” across all machines: ${n}`, back: 'Back to machine list',
+    none: q => `No part matches “${q}”.`, none2: 'Check the number on the rating plate or in the catalogue, or call +48 24 252 30 03.',
+    noneCfg: 'No parts of this type for the selected configuration.', showAll: 'Show all parts for this machine',
+    toastAdd: n => `Added to cart: ${n}`, qtyMsg: `Quantity: 1 to ${QMAX} pieces.`, maxMsg: `The cart can hold at most ${QMAX} pieces of one part.`,
+    cempty: 'Your cart is empty. Choose a machine and add parts from the list.',
+    sub: 'Net value', vat: 'VAT 23%', vat0: 'VAT 0% – intra-Community supply', vatNote: 'In this demo, Polish VAT of 23% is charged without an EU VAT number. For private customers in other EU countries the rate of the destination country may apply (OSS).', vatNoteX: 'This demo charges 23% VAT. For shipments outside the EU (export) the rate may be 0% – the parts department will confirm.', tot: 'Total gross', remove: 'Remove', ship: 'The parts department will quote shipping in the confirmation.',
+    form: 'Your machine', formP: 'Filled in from your selection above – please check.',
+    fModel: 'Model', fVar: 'Width / version', fYear: 'Year of manufacture', fSerial: 'Serial number', fSerialHint: '(from the rating plate)', optional: '(optional)',
+    buyerT: 'Order details', who: 'Who is ordering?', priv: 'Private customer', farm: 'Farm', firm: 'Company',
+    fName: 'Full name', fFarm: 'Farm (name)', fFirm: 'Company name', fNip: 'NIP (Polish tax number)', fVatId: 'EU VAT number', fTaxId: 'Tax ID', fCountry: 'Country',
+    fTel: 'Phone', fMail: 'Email', fAddr: 'Delivery address (street, postcode, town)', fDel: 'Delivery', delC: 'Courier', delP: 'Pick-up in Krośniewice', fNote: 'Notes',
+    send: 'Send the order',
+    errName: 'Enter your name or company name.', errYear: 'Choose the year of manufacture – the parts department uses it to check the fit.', errNip: 'The NIP has 10 digits.', errNipSum: 'This NIP has an invalid check digit – please check it.', errVatId: c => `The EU VAT number must start with the code of the selected country (${c}), e.g. ${c}123456789.`, errTaxId: 'Enter the company tax ID.',
+    errContact: 'Enter a phone number or email so the parts department can confirm the order.', errTel: 'The phone number should have at least 9 digits.', errMail: 'Check the email address – the “@” or the domain is missing.', errAddr: 'Enter the delivery address.',
+    dfoot: 'This is a demo: nothing is sent when you click.',
+    sentT: 'Done – this is only a demo', sentP: n => `In the real shop the order (${n}) would go to the EXPOM parts department with all part numbers and machine details, and the customer would get an email confirmation. No data was sent here.`,
+    close: 'Close', clear: 'Clear', otherCountry: 'Other country',
+    title: 'EXPOM – spare parts with prices (demo project)', desc: 'Demo project: EXPOM spare parts shop with machine selection, prices and online ordering.'
+  }
+};
+
+/* stan */
+const qs = new URLSearchParams(location.search);
+let lang = ['pl', 'de', 'en'].includes(qs.get('lang')) ? qs.get('lang') : 'pl';
+let current = 'tytan', type = 'all', query = '', buyer = 'priv';
+const cfgs = new Map();            // ustawienia per maszyna: { v, ring, year }
+const cart = new Map();            // id -> qty
+const qtyDraft = new Map();
+const form = { m: null, v: '', year: '', serial: '', name: '', nip: '', country: lang === 'de' ? 'DE' : 'PL', tel: '', mail: '', addr: '', del: 'c', note: '' };
+let formMachineTouched = false;
+
+/* pomocnicze */
+const L = () => T[lang];
+const LOC = () => ({ pl: 'pl-PL', de: 'de-DE', en: 'en-IE' })[lang];
+const M = id => DATA.machines.find(m => m.id === id);
+const P = DATA.parts.map(([id, nr, cat, pl, en, de, price, refs, spec]) => ({ id, nr, cat, pl, en, de, price, refs, spec }));
+const byId = new Map(P.map(p => [p.id, p]));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').replace(/ß/g, 'ss').replace(/[×*]/g, 'x').replace(/φ|ø/g, 'o').replace(/[‐-―−]/g, '-');
+const pname = p => p[lang];
+const pfull = p => p.nr ? `${p[lang]} (${p.nr})` : p[lang];   // nazwa z numerem do etykiet czytników ekranu
+const mtype = m => m[lang];
+const r2 = v => Math.round(v * 100) / 100;
+const isEur = () => lang !== 'pl';
+const unit = zl => r2(isEur() ? zl / DATA.eur : zl);   // cena sztuki w walucie – zaokrąglona przed sumowaniem
+const fmt = v => { const o = { style: 'currency', currency: isEur() ? 'EUR' : 'PLN', minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: 'always' }; try { return v.toLocaleString(LOC(), o); } catch (e) { o.useGrouping = true; return v.toLocaleString(LOC(), o); } };
+const isExample = p => p.refs.every(r => !M(r[0]).cat);
+const grossUnit = zl => r2(unit(zl) * 1.23);
+const nfmt = v => v.toLocaleString(LOC(), { maximumFractionDigits: 2 });
+const vLabel = (m, v) => m.vk === 'rows' ? `${v} ${L().rows}` : `${nfmt(v)} m`;
+const vRange = m => { const a = m.vAll || m.v; return m.vk === 'rows' ? `${a.join(' / ')} ${L().rows}` : (a.length > 1 ? `${nfmt(a[0])}–${nfmt(a[a.length - 1])} m` : `${nfmt(a[0])} m`); };
+const ringName = k => DATA.rings[k] || k;
+const specTxt = s => !s ? '' : s.startsWith('oś ') ? `${L().axle} ${s.slice(3)}` : (lang === 'en' ? s.replace(/(\d),(\d)/g, '$1.$2') : s);
+const cfgOf = id => { if (!cfgs.has(id)) { const m = M(id); cfgs.set(id, { v: m.v[0], ring: m.rings ? (m.rings.includes('c530') ? 'c530' : m.rings[0]) : '', year: '' }); } return cfgs.get(id); };
+const fits = (p, mid, c) => p.refs.some(([rm, vs, rs]) => rm === mid && (!vs || c.v === '' || vs.includes(+c.v)) && (!rs || !c.ring || rs.includes(c.ring)));
+const machinePartCount = mid => P.filter(p => p.refs.some(r => r[0] === mid)).length;
+const yearOptions = sel => `<option value="">${L().pickYear}</option>` + Array.from({ length: 11 }, (_, i) => NOW - i).map(y => `<option value="${y}"${String(sel) === String(y) ? ' selected' : ''}>${y}</option>`).join('') + `<option value="old"${sel === 'old' ? ' selected' : ''}>${L().older(MIN_YEAR - 1)}</option>`;
+
+/* fokus zostaje na tym samym elemencie po przerysowaniu */
+function focusKey(el) {
+  if (!el || el === document.body) return null;
+  if (el.id) return '#' + CSS.escape(el.id);
+  for (const a of ['m', 't', 'dec', 'inc', 'q', 'add', 'cdec', 'cinc', 'cq', 'rm', 'buyer']) if (el.dataset && el.dataset[a] !== undefined) return `[data-${a}="${CSS.escape(el.dataset[a])}"]`;
+  return null;
+}
+function keepFocus(fn, fallback) {
+  const k = focusKey(document.activeElement); fn();
+  const el = (k && document.querySelector(k)) || (fallback && document.querySelector(fallback));
+  if (el && el !== document.activeElement && !el.closest('[inert]')) el.focus({ preventScroll: true });
+}
+
+/* 1. maszyny */
+function renderMachines() {
+  $('#machines').innerHTML = DATA.groups.map(g => `<div class="mgroup"><h3>${esc(g[lang])}</h3><div class="machines">` +
+    DATA.machines.filter(m => m.group === g.id).map(m => `<button type="button" class="mcard" data-m="${esc(m.id)}" aria-pressed="${m.id === current}">
+      <span class="im${PHOTO.has(m.id) ? ' ph' : ''}"><img src="img/${esc(m.id)}.webp" width="720" height="450" alt="" loading="lazy" decoding="async"></span>
+      ${m.cat ? `<span class="tag">${esc(L().catTag)}</span>` : ''}
+      <span class="t"><span class="n">${esc(m.name)}</span><span class="d">${esc(mtype(m))}</span><span class="w num">${esc(vRange(m))}, ${esc(L().parts(machinePartCount(m.id)))}</span></span></button>`).join('') +
+    `</div></div>`).join('');
+}
+$('#machines').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  current = b.dataset.m; type = 'all'; setQuery('');
+  if (!formMachineTouched) syncFormMachine();
+  renderMachines(); renderCfg(); renderParts(); if (cart.size) renderCart();
+  focusParts();
+});
+// fokus przechodzi do sekcji części, żeby kolejny Tab nie wracał do kart maszyn
+function focusParts(el = '#s2h', to = '#czesci') { $(el).focus({ preventScroll: true }); scrollToEl(to); }
+function scrollToEl(sel) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelector(sel).scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+}
+
+/* 2a. konfiguracja maszyny */
+function renderCfg() {
+  const m = M(current), c = cfgOf(current), l = L();
+  const vField = m.v.length > 1
+    ? `<label class="field">${m.vk === 'rows' ? l.rowsLbl : l.width}<select data-c="v"><option value="">${l.anyW}</option>${m.v.map(v => `<option value="${v}"${String(c.v) === String(v) ? ' selected' : ''}>${esc(vLabel(m, v))}</option>`).join('')}</select></label>`
+    : `<div class="field"><span>${m.vk === 'rows' ? l.rowsLbl : l.width}</span><span class="static">${esc(vLabel(m, m.v[0]))}</span></div>`;
+  const rField = !m.rings ? '' : m.rings.length > 1
+    ? `<label class="field ring">${l.ring}<select data-c="ring"><option value="">${l.anyR}</option>${m.rings.map(r => `<option value="${r}"${c.ring === r ? ' selected' : ''}>${esc(ringName(r))}</option>`).join('')}</select></label>`
+    : `<div class="field ring"><span>${l.ring}</span><span class="static">${esc(ringName(m.rings[0]))}</span></div>`;
+  const yField = `<label class="field yr">${l.year}<select data-c="year">${yearOptions(c.year)}</select></label>`;
+  let yr = `<span class="yr">${esc(l.yrNone)}</span>`;
+  if (c.year === 'old') yr = `<span class="yr ask">${esc(l.yrAsk)}</span>`;
+  else if (c.year) yr = `<span class="yr ok">${esc(l.yrOk(c.year))}</span>`;
+  const src = m.cat
+    ? `<span>${esc(l.srcCat)} <a href="${esc(DATA.site + m.cat.pdf)}" target="_blank" rel="noopener">${esc(m.cat[lang])} (PDF)</a>${m.vAll ? '. ' + esc(l.m15) : ''}. ${esc(l.priceEx)}</span>`
+    : `<span>${esc(l.srcEx)} ${esc(l.priceEx)}</span>`;
+  $('#cfg').innerHTML = `<div class="who"><img src="img/${esc(m.id)}.webp" alt=""${PHOTO.has(m.id) ? ' class="ph"' : ''} width="120" height="75"><div><b>${esc(m.name)}</b><span>${esc(mtype(m))}</span><br><a href="${esc(DATA.site + m.url)}" target="_blank" rel="noopener">${esc(l.machinePage)}<span class="sr"> ${esc(m.name)} (expom.com.pl)</span></a></div></div>
+    <div class="fields">${vField}${rField}${yField}</div>
+    <div class="info" aria-live="polite">${yr}${src}</div>`;
+  nbsp($('#cfg'));
+}
+$('#cfg').addEventListener('change', e => {
+  const s = e.target.closest('[data-c]'); if (!s) return;
+  const c = cfgOf(current); c[s.dataset.c] = s.value;
+  if (!formMachineTouched) syncFormMachine();
+  keepFocus(() => { renderCfg(); renderParts(); if (cart.size) renderCart(); });
+});
+
+/* 2b. lista części */
+function visibleParts() {
+  if (query) {
+    const words = norm(query).split(/\s+/).filter(Boolean);
+    return P.filter(p => {
+      const hay = [p.nr, p.pl, p.de, p.en, p.spec || ''].map(norm).join(' '), flat = hay.replace(/[-\s./]/g, '');
+      return words.every(w => hay.includes(w) || flat.includes(w.replace(/[-./]/g, '')));
+    });
+  }
+  const c = cfgOf(current);
+  return P.filter(p => fits(p, current, c) && (type === 'all' || p.cat === type))
+    .sort((a, b) => CAT_ORDER.indexOf(a.cat) - CAT_ORDER.indexOf(b.cat));
+}
+function renderParts() {
+  const m = M(current), list = visibleParts(), l = L(), c = cfgOf(current);
+  // kategorie dostępne w bieżącej konfiguracji
+  const inCfg = P.filter(p => fits(p, current, c));
+  const cats = ['all', ...CAT_ORDER.filter(t => inCfg.some(p => p.cat === t))];
+  if (!cats.includes(type)) type = 'all';
+  $('#chips').hidden = !!query;
+  $('#chips').innerHTML = cats.map(t => `<button type="button" class="chip" data-t="${t}" aria-pressed="${t === type}">${esc(l.cats[t])}</button>`).join('');
+  const nt = $('#notice');
+  nt.hidden = !query;
+  if (query) nt.innerHTML = `<span>${esc(l.allHits(list.length, query))}</span><button class="btn ghost" type="button" id="backBtn">${esc(l.back)} ${esc(m.name)}</button>`;
+  $('#partsBody').innerHTML = list.map(p => {
+    const q = qtyDraft.get(p.id) || 1, nm = esc(pname(p));
+    const tags = query ? [...new Set(p.refs.map(r => M(r[0]).name))].map(n => `<span class="mtag">${esc(n)}</span>`).join('') : '';
+    const spec = specTxt(p.spec);
+    return `<tr>
+      <td class="c-nr">${p.nr ? `<span class="pn">${esc(p.nr)}</span>` : isExample(p) ? `<span class="pn ex">${esc(l.exTag)}</span>` : `<span class="pn ex"><span aria-hidden="true">—</span><span class="sr">${esc(l.noNr)}</span></span>`}</td>
+      <td class="c-name"><div class="pname">${nm}</div>${spec || tags ? `<div class="pmeta">${tags}${esc(spec)}</div>` : ''}</td>
+      <td class="price"><strong class="num">${fmt(unit(p.price))}</strong><small class="num">${fmt(grossUnit(p.price))} ${l.gross}</small></td>
+      <td class="c-buy"><div class="buy"><span class="qty"><button type="button" data-dec="${esc(p.id)}" aria-label="${esc(l.dec(pfull(p)))}">−</button><input class="num" type="number" inputmode="numeric" min="1" max="${QMAX}" value="${q}" data-q="${esc(p.id)}" aria-label="${esc(l.qtyFor(pfull(p)))}"><button type="button" data-inc="${esc(p.id)}" aria-label="${esc(l.inc(pfull(p)))}">+</button></span><button type="button" class="add" data-add="${esc(p.id)}">${esc(l.add)}<span class="sr">: ${esc(pfull(p))}</span></button></div></td>
+    </tr>`;
+  }).join('');
+  $('#pcap').textContent = query ? l.allHits(list.length, query) : l.cap(m.name, list.length);
+  $('#liveCount').textContent = query ? l.allHits(list.length, query) : l.parts(list.length);
+  $('#partsTable').hidden = list.length === 0;
+  const em = $('#empty'); em.hidden = list.length > 0;
+  em.innerHTML = query ? `<p>${esc(l.none(query))}</p><p>${esc(l.none2)}</p>` : `<p>${esc(l.noneCfg)}</p><p><button class="btn ghost" type="button" id="showAll">${esc(l.showAll)}</button></p>`;
+  const back = $('#backBtn'); if (back) back.onclick = () => { setQuery(''); renderParts(); $('#q').focus(); };
+  const sa = $('#showAll'); if (sa) sa.onclick = () => { c.v = ''; c.ring = ''; type = 'all'; renderCfg(); renderParts(); $('#q').focus(); };
+  nbsp($('#czesci'));
+}
+$('#chips').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (!b) return; type = b.dataset.t; keepFocus(renderParts); });
+
+const clampQ = v => { const n = Math.round(Number(v)); return Number.isNaN(n) ? 1 : Math.max(1, Math.min(QMAX, n)); };
+const outOfRange = v => { const n = Number(v); return !Number.isFinite(n) || n < 1 || n > QMAX || Math.round(n) !== n; };
+$('#partsBody').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.dec || t.dataset.inc) {
+    const id = t.dataset.dec || t.dataset.inc, inp = $(`[data-q="${CSS.escape(id)}"]`);
+    const next = clampQ(inp.value) + (t.dataset.inc ? 1 : -1);
+    if (next < 1 || next > QMAX) toast(L().qtyMsg);
+    inp.value = clampQ(next); qtyDraft.set(id, +inp.value);
+  }
+  if (t.dataset.add) {
+    const id = t.dataset.add, inp = $(`[data-q="${CSS.escape(id)}"]`);
+    if (outOfRange(inp.value)) { inp.value = clampQ(inp.value); toast(L().qtyMsg); return; }
+    const q = clampQ(inp.value), had = cart.get(id) || 0;
+    if (had >= QMAX) { toast(L().maxMsg); return; }
+    cart.set(id, Math.min(QMAX, had + q));
+    renderCart(); toast(had + q > QMAX ? L().maxMsg : L().toastAdd(`${pname(byId.get(id))} (${L().pcs(q)})`));
+    inp.value = 1; qtyDraft.delete(id);
+    t.firstChild.textContent = L().added; t.classList.add('ok');
+    setTimeout(() => { if (t.isConnected) { t.firstChild.textContent = L().add; t.classList.remove('ok'); } }, 1400);
+  }
+});
+$('#partsBody').addEventListener('change', e => {
+  const inp = e.target.closest('[data-q]'); if (!inp) return;
+  if (outOfRange(inp.value)) toast(L().qtyMsg);
+  inp.value = clampQ(inp.value); qtyDraft.set(inp.dataset.q, +inp.value);
+});
+
+/* wyszukiwanie */
+function setQuery(v) { query = v.trim(); $('#q').value = query; $('#hq').value = query; $('#qClear').hidden = !query; }
+$('#q').addEventListener('input', e => { query = e.target.value.trim(); $('#hq').value = query; $('#qClear').hidden = !query; renderParts(); });
+$('#qClear').onclick = () => { setQuery(''); renderParts(); $('#q').focus(); };
+$('#heroSearch').addEventListener('submit', e => { e.preventDefault(); setQuery($('#hq').value); renderParts(); focusParts('#q', '.toolbar'); });
+$$('[data-try]').forEach(b => b.onclick = () => { setQuery(b.textContent); renderParts(); focusParts('#q', '.toolbar'); });
+
+/* koszyk */
+function totals() {
+  const items = [...cart.entries()];
+  const sub = r2(items.reduce((a, [id, q]) => a + unit(byId.get(id).price) * q, 0));
+  const rc = reverseCharge(), tax = rc ? 0 : r2(sub * 0.23);
+  return { sub, tax, tot: r2(sub + tax), rc, n: items.reduce((a, [, q]) => a + q, 0) };
+}
+// numer VAT UE: kod wybranego kraju + 2–12 znaków (jak w VIES)
+const isEU = c => c !== 'XX';
+const vatId = () => { const id = (form.nip || '').replace(/[\s.-]/g, '').toUpperCase(); return id; };
+const vatIdOk = () => { const id = vatId(); return /^[A-Z]{2}[0-9A-Z]{2,12}$/.test(id) && id.slice(0, 2) === form.country; };
+// VAT 0% tylko przy WDT: kupujący z innego kraju UE z numerem VAT UE tego kraju
+function reverseCharge() { return buyer !== 'priv' && form.country !== 'PL' && isEU(form.country) && vatIdOk(); }
+const nipOk = n => { const d = n.replace(/^PL/, ''); if (!/^\d{10}$/.test(d)) return false; const w = [6, 5, 7, 2, 3, 4, 5, 6, 7]; return w.reduce((a, x, i) => a + x * d[i], 0) % 11 === +d[9]; };
+function sumsHtml() {
+  const t = totals(), l = L();
+  const note = t.rc || form.country === 'PL' ? '' : `<p class="dfoot vnote">${esc(isEU(form.country) ? l.vatNote : l.vatNoteX)}</p>`;
+  return `<div><span>${l.sub}</span><span class="num">${fmt(t.sub)}</span></div><div><span>${t.rc ? l.vat0 : l.vat}</span><span class="num">${fmt(t.tax)}</span></div><div class="tot"><span>${l.tot}</span><span class="num">${fmt(t.tot)}</span></div>${note}`;
+}
+const countryName = code => { try { return new Intl.DisplayNames([lang], { type: 'region' }).of(code); } catch (e) { return code; } };
+function syncFormMachine() { const c = cfgOf(current); form.m = current; form.v = c.v === '' ? '' : String(c.v); form.year = c.year; }
+function renderCart() {
+  const l = L(), items = [...cart.entries()];
+  const n = totals().n; $('#cartCount').textContent = n; $('#goCnt').textContent = n ? `(${n})` : '';
+  if (!items.length) { $('#dbody').innerHTML = `<p class="cempty">${esc(l.cempty)}</p>`; nbsp($('#drawer')); return; }
+  if (!form.m) syncFormMachine();
+  const fm = M(form.m) || M(current);
+  const nameLbl = buyer === 'firm' ? l.fFirm : buyer === 'farm' ? l.fFarm : l.fName;
+  const idLbl = form.country === 'PL' ? l.fNip : isEU(form.country) ? l.fVatId : l.fTaxId;
+  $('#dbody').innerHTML = items.map(([id, q]) => { const p = byId.get(id); const ms = [...new Set(p.refs.map(r => M(r[0]).name))].join(', '); return `<div class="citem">
+      <div><div class="n">${esc(pname(p))}</div><div class="m num">${p.nr ? esc(p.nr) + ', ' : ''}${esc(ms)}, ${fmt(unit(p.price))} ${l.net}</div></div>
+      <div class="lt num">${fmt(r2(unit(p.price) * q))}</div>
+      <div class="r"><span class="qty"><button type="button" data-cdec="${esc(id)}" aria-label="${esc(l.dec(pfull(p)))}">−</button><input class="num" type="number" inputmode="numeric" min="1" max="${QMAX}" value="${q}" data-cq="${esc(id)}" aria-label="${esc(l.qtyFor(pfull(p)))}"><button type="button" data-cinc="${esc(id)}" aria-label="${esc(l.inc(pfull(p)))}">+</button></span><button class="rm" type="button" data-rm="${esc(id)}">${esc(l.remove)}<span class="sr">: ${esc(pfull(p))}</span></button></div>
+    </div>`; }).join('') +
+    `<div class="sums" id="sums">${sumsHtml()}</div>
+    <p class="dfoot" style="margin-top:8px">${esc(l.ship)}</p>
+    <form class="oform" id="oform" novalidate>
+      <h3>${esc(l.form)}</h3><p>${esc(l.formP)}</p>
+      <label>${esc(l.fModel)}<select id="fModel" data-fm="1">${DATA.machines.map(m => `<option value="${m.id}"${m.id === fm.id ? ' selected' : ''}>${esc(m.name)} – ${esc(mtype(m))}</option>`).join('')}</select></label>
+      <div class="two">
+        <label>${esc(fm.vk === 'rows' ? l.rowsLbl : l.fVar)}<select id="fVar" data-fm="1"><option value="">–</option>${(fm.vAll || fm.v).map(v => `<option value="${v}"${String(form.v) === String(v) ? ' selected' : ''}>${esc(vLabel(fm, v))}</option>`).join('')}</select></label>
+        <label>${esc(l.fYear)}<select id="fYear" data-fm="1">${yearOptions(form.year)}</select></label>
+      </div>
+      <label><span>${esc(l.fSerial)} <span class="opt">${esc(l.fSerialHint)}</span></span><input id="fSerial" autocomplete="off" maxlength="40" value="${esc(form.serial)}"></label>
+      <h3 class="sub">${esc(l.buyerT)}</h3>
+      <div class="lbl"><span id="whoLbl">${esc(l.who)}</span>
+      <div class="seg" role="group" aria-labelledby="whoLbl"><button type="button" data-buyer="priv" aria-pressed="${buyer === 'priv'}">${esc(l.priv)}</button><button type="button" data-buyer="farm" aria-pressed="${buyer === 'farm'}">${esc(l.farm)}</button><button type="button" data-buyer="firm" aria-pressed="${buyer === 'firm'}">${esc(l.firm)}</button></div></div>
+      <label>${esc(nameLbl)}<input id="fName" autocomplete="${buyer === 'firm' ? 'organization' : 'name'}" maxlength="120" value="${esc(form.name)}"></label>
+      <div class="${buyer !== 'priv' ? 'two' : ''}">
+        <label>${esc(l.fCountry)}<select id="fCountry" autocomplete="country">${COUNTRIES.map(c => `<option value="${c}"${form.country === c ? ' selected' : ''}>${esc(countryName(c))}</option>`).join('')}<option value="XX"${form.country === 'XX' ? ' selected' : ''}>${esc(l.otherCountry)}</option></select></label>
+        ${buyer !== 'priv' ? `<label><span>${esc(idLbl)}${buyer === 'farm' ? ` <span class="opt">${esc(l.optional)}</span>` : ''}</span><input id="fNip" autocomplete="off" maxlength="20" value="${esc(form.nip)}"${form.country === 'PL' ? ' inputmode="numeric"' : ''}></label>` : ''}
+      </div>
+      <div class="two">
+        <label>${esc(l.fTel)}<input id="fTel" type="tel" autocomplete="tel" maxlength="30" value="${esc(form.tel)}"></label>
+        <label>${esc(l.fMail)}<input id="fMail" type="email" autocomplete="email" maxlength="120" value="${esc(form.mail)}"></label>
+      </div>
+      <label>${esc(l.fAddr)}<textarea id="fAddr" autocomplete="street-address" rows="2" maxlength="300">${esc(form.addr)}</textarea></label>
+      <label>${esc(l.fDel)}<select id="fDel"><option value="c"${form.del === 'c' ? ' selected' : ''}>${esc(l.delC)}</option><option value="p"${form.del === 'p' ? ' selected' : ''}>${esc(l.delP)}</option></select></label>
+      <label><span>${esc(l.fNote)} <span class="opt">${esc(l.optional)}</span></span><textarea id="fNote" maxlength="1000">${esc(form.note)}</textarea></label>
+      <p class="err" id="ferr" role="alert"></p>
+      <button class="btn" type="submit">${esc(l.send)}</button>
+      <p class="dfoot">${esc(l.dfoot)}</p>
+    </form>`;
+  nbsp($('#drawer'));
+}
+const FIELDS = { fSerial: 'serial', fName: 'name', fNip: 'nip', fCountry: 'country', fTel: 'tel', fMail: 'mail', fAddr: 'addr', fDel: 'del', fNote: 'note', fYear: 'year', fVar: 'v' };
+function keepForm() { for (const [id, k] of Object.entries(FIELDS)) { const el = document.getElementById(id); if (el) form[k] = el.value; } const fmEl = $('#fModel'); if (fmEl) form.m = fmEl.value; }
+$('#dbody').addEventListener('input', e => {
+  keepForm();
+  const el = e.target; if (el.getAttribute('aria-invalid') === 'true') el.removeAttribute('aria-invalid');
+  if (el.id === 'fNip') { const s = $('#sums'); if (s) s.innerHTML = sumsHtml(); }
+});
+$('#dbody').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.buyer) { keepForm(); buyer = t.dataset.buyer; keepFocus(renderCart); return; }
+  const id = t.dataset.cdec || t.dataset.cinc || t.dataset.rm; if (!id) return;
+  keepForm();
+  if (t.dataset.rm) { cart.delete(id); keepFocus(renderCart, '#closeCart'); return; }
+  const next = cart.get(id) + (t.dataset.cinc ? 1 : -1);
+  if (next < 1 || next > QMAX) toast(L().qtyMsg);
+  cart.set(id, clampQ(next)); keepFocus(renderCart);
+});
+$('#dbody').addEventListener('change', e => {
+  const el = e.target;
+  if (el.dataset.cq) { keepForm(); if (outOfRange(el.value)) toast(L().qtyMsg); cart.set(el.dataset.cq, clampQ(el.value)); keepFocus(renderCart); return; }
+  if (el.dataset.fm) { formMachineTouched = true; }
+  if (el.id === 'fModel') { keepForm(); form.v = ''; keepFocus(renderCart); return; }
+  if (el.id === 'fCountry') { keepForm(); keepFocus(renderCart); }
+});
+$('#dbody').addEventListener('submit', e => {
+  e.preventDefault(); keepForm();
+  const l = L(), err = $('#ferr');
+  $$('#oform [aria-invalid]').forEach(x => x.removeAttribute('aria-invalid'));
+  $$('#oform [aria-describedby="ferr"]').forEach(x => x.removeAttribute('aria-describedby'));
+  const bad = (msg, sel) => { err.textContent = msg; const el = $(sel); el.setAttribute('aria-invalid', 'true'); el.setAttribute('aria-describedby', 'ferr'); el.focus(); };
+  if (!form.year) return bad(l.errYear, '#fYear');
+  if (!form.name.trim()) return bad(l.errName, '#fName');
+  const nip = form.nip.replace(/[\s.-]/g, '').toUpperCase();
+  if (buyer === 'firm' || (buyer === 'farm' && nip)) {
+    if (form.country === 'PL') { if (!/^(PL)?\d{10}$/.test(nip)) return bad(l.errNip, '#fNip'); if (!nipOk(nip)) return bad(l.errNipSum, '#fNip'); }
+    else if (!isEU(form.country)) { if (nip.length < 4) return bad(l.errTaxId, '#fNip'); }
+    else if (!vatIdOk()) return bad(l.errVatId(form.country), '#fNip');
+  }
+  if (!form.tel.trim() && !form.mail.trim()) return bad(l.errContact, '#fTel');
+  if (form.tel.trim() && form.tel.replace(/\D/g, '').length < 9) return bad(l.errTel, '#fTel');
+  if (form.mail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.mail.trim())) return bad(l.errMail, '#fMail');
+  if (form.del === 'c' && !form.addr.trim()) return bad(l.errAddr, '#fAddr');
+  err.textContent = '';
+  openModal(l.sentT, l.sentP(l.pcs(totals().n)));   // demo: nic nie jest wysyłane
+});
+
+/* szuflada i okno – reszta strony jest „inert”, więc fokus nie ucieka */
+const PAGE = ['.demobar', 'header.site', 'main', 'footer'];
+const setInert = (sels, on) => sels.forEach(s => { const el = $(s); if (el) el.inert = on; });
+let cartBack = null;
+function openCart() {
+  cartBack = document.activeElement;
+  $('#drawer').classList.add('open'); $('#shade').classList.add('open'); $('#drawer').inert = false; setInert(PAGE, true);
+  document.body.style.overflow = 'hidden';
+  $('#closeCart').focus();
+}
+function closeCart() {
+  $('#drawer').classList.remove('open'); $('#shade').classList.remove('open'); $('#drawer').inert = true; setInert(PAGE, false);
+  document.body.style.overflow = '';
+  const b = cartBack && cartBack !== document.body && document.contains(cartBack) && !cartBack.closest('[inert]') ? cartBack : $('#openCart'); b.focus();
+}
+$('#drawer').inert = true;
+$('#openCart').onclick = openCart; $('#goCart').onclick = openCart; $('#closeCart').onclick = closeCart; $('#shade').onclick = closeCart;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('#modal').classList.contains('open')) closeModal(); else if ($('#drawer').classList.contains('open')) closeCart(); } });
+let modalBack = null;
+function openModal(t, p) { modalBack = document.activeElement; $('#mTitle').textContent = t; $('#mText').textContent = p; $('#modal').classList.add('open'); setInert([...PAGE, '#drawer'], true); $('#mOk').focus(); }
+function closeModal() {
+  $('#modal').classList.remove('open');
+  const cartOpen = $('#drawer').classList.contains('open');
+  $('#drawer').inert = !cartOpen; if (!cartOpen) setInert(PAGE, false);
+  const b = modalBack && document.contains(modalBack) && !modalBack.closest('[inert]') ? modalBack : (cartOpen ? $('#closeCart') : $('#openCart'));
+  b.focus();
+}
+$('#mOk').onclick = closeModal; $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
+let toastT = 0;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+
+/* polska typografia: jednoliterowe wyrazy nie zostają na końcu wiersza */
+function nbsp(root = document.body) {
+  if (lang !== 'pl') return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style,svg,input,textarea,select,option') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(^|[\s(„])([aiouwzAIOUWZ]) /g, '$1$2 '); if (v !== n.nodeValue) n.nodeValue = v; }
+}
+
+/* nagłówek: zagęszczamy krokami tylko wtedy, gdy elementy się nie mieszczą */
+function fitHeader() {
+  const h = $('header.site'), w = h.querySelector('.wrap'), nav = $('nav.mnav');
+  const over = () => nav.scrollWidth > nav.clientWidth + 1 || w.scrollWidth > w.clientWidth + 1;
+  h.classList.remove('fit-1', 'fit-2', 'fit-3');
+  for (const c of ['fit-1', 'fit-2', 'fit-3']) { if (!over()) break; h.classList.add(c); }
+  document.documentElement.style.setProperty('--hh', h.offsetHeight + 'px');
+}
+let fitRaf = 0;
+addEventListener('resize', () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitHeader); });
+if (document.fonts) document.fonts.ready.then(fitHeader);
+
+/* język */
+function applyLang() {
+  const l = L();
+  document.documentElement.lang = lang;
+  $$('[data-i]').forEach(el => { const v = l[el.dataset.i]; if (typeof v === 'string') el.innerHTML = v; });
+  $$('[data-i-alt]').forEach(el => { el.alt = l[el.dataset.iAlt]; });
+  $$('[data-i-aria]').forEach(el => el.setAttribute('aria-label', l[el.dataset.iAria]));
+  $$('[data-try]').forEach(b => { b.textContent = (lang === 'de' && b.dataset.tryDe) || (lang === 'en' && b.dataset.tryEn) || b.dataset.try; });
+  document.title = l.title; const md = document.querySelector('meta[name=description]'); if (md) md.content = l.desc;
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  $('#hq').placeholder = l.ph; $('#q').placeholder = l.phQ;
+  $('#qClear').setAttribute('aria-label', l.clear); $('#closeCart').setAttribute('aria-label', l.close);
+  renderMachines(); renderCfg(); renderParts(); renderCart(); nbsp(); fitHeader();
+}
+$$('[data-lang]').forEach(b => b.onclick = () => {
+  keepForm(); lang = b.dataset.lang;
+  try { const u = new URL(location.href); if (lang === 'pl') u.searchParams.delete('lang'); else u.searchParams.set('lang', lang); history.replaceState(null, '', u); } catch (e) { /* plik lokalny */ }
+  keepFocus(applyLang);
+});
+
+applyLang();
+})();
+</script>
+</body>
+</html>

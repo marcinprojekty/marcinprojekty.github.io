@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>Bomet – części zamienne online (projekt demonstracyjny)</title>
+<meta name="description" content="Projekt demonstracyjny: części zamienne do maszyn Bomet z ceną i zamówieniem online.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 3 9.5v15L16 32l13-7.5v-15z' fill='%230E963E'/%3E%3Cpath d='M9 12.5 20 19M9 18.5l11 6.4' stroke='%23fff' stroke-width='2.6'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/rajdhani-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* czcionki lokalnie – bez łączenia z Google */
+@font-face{font-family:'Rajdhani';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/rajdhani-600-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Rajdhani';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/rajdhani-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Rajdhani';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/rajdhani-700-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Rajdhani';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/rajdhani-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/archivo-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/archivo-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* paleta: biel + mgła (spokojne), zieleń Bomet (mocny akcent) */
+:root{
+  --paper:#FFFFFF; --mist:#EEF2EF; --mist-2:#E3E9E5;
+  --ink:#1E2622; --ink-2:#4C5751; --ink-3:#5A665F; --line:#D6DED9; --line-2:#B9C4BD;
+  --green:#149747; --green-d:#0B7A34; --green-dd:#086329;
+  --err:#B42318;
+  --disp:"Rajdhani","Arial Narrow",system-ui,sans-serif;
+  --r:6px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--hh,64px) + 12px)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 Archivo,system-ui,sans-serif;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+[tabindex="-1"]:focus{outline:0}
+h1,h2,h3{font-family:var(--disp);font-weight:700;margin:0;line-height:1;letter-spacing:0}
+p{margin:0;text-wrap:pretty}
+h2,h3{text-wrap:balance}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+.hy{hyphens:auto;-webkit-hyphens:auto;overflow-wrap:anywhere}
+
+/* pasek demo */
+.demobar{background:var(--mist);color:var(--ink-2);font-size:14px}
+.demobar .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 16px;padding-top:8px;padding-bottom:8px}
+.demobar b{color:var(--ink);font-weight:600}
+.demobar a{color:var(--ink);text-underline-offset:3px}
+
+/* nagłówek */
+header.site{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:saturate(1.2) blur(6px)}
+header.site .wrap{display:flex;align-items:center;gap:16px;min-height:64px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;min-width:0}
+.brand img{height:28px;width:auto;flex:none}
+.brand span{font-family:var(--disp);font-weight:600;font-size:21px;color:var(--ink-2);border-left:1px solid var(--line-2);padding-left:14px;line-height:1.1;white-space:nowrap}
+.tools{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
+.langs{display:flex}
+.langs button{border:0;background:none;padding:8px 9px;font-family:var(--disp);font-weight:700;font-size:18px;color:var(--ink-3);border-radius:4px;min-width:40px;min-height:40px}
+.langs button[aria-pressed=true]{color:var(--ink);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;text-decoration-color:var(--green)}
+.langs button:hover{color:var(--ink)}
+.cartbtn{display:flex;align-items:center;gap:10px;border:0;background:var(--green-d);color:#fff;border-radius:var(--r);padding:0 14px;height:44px;font-weight:600;white-space:nowrap}
+.cartbtn:hover{background:var(--green-dd)}
+.cartbtn .cnt{min-width:24px;height:24px;border-radius:12px;background:#fff;color:var(--green-d);font-size:13.5px;font-weight:700;display:grid;place-items:center;padding:0 7px}
+.cartbtn .tot{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:.01em}
+.cartbtn svg{flex:none}
+
+/* hero – jedyny mocny moment */
+.hero{background:linear-gradient(160deg,var(--paper) 38%,var(--mist) 100%);border-bottom:1px solid var(--line);padding:clamp(40px,5vw,72px) 0}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 48px;align-items:center}
+.hero h1{font-size:clamp(46px,7.6vw,124px);line-height:.86;text-transform:uppercase;letter-spacing:-.005em;max-width:9.5em}
+.hero h1 .l{display:block}
+.hero .lead{margin-top:clamp(18px,2vw,28px);font-size:clamp(17px,1.4vw,20px);color:var(--ink-2);max-width:33em}
+.steps{list-style:none;margin:clamp(24px,2.6vw,36px) 0 0;padding:0;display:flex;flex-wrap:wrap;gap:12px 36px}
+.steps li{display:flex;align-items:baseline;gap:10px;font-weight:600}
+.steps b{font-family:var(--disp);font-size:30px;line-height:1;color:var(--green-d);min-width:.75em}
+.cta{margin-top:clamp(26px,2.6vw,36px);display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 22px;border:0;border-radius:var(--r);background:var(--green-d);color:#fff;font-weight:600;font-size:16.5px;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--green-dd)}
+.link{background:none;border:0;padding:6px 0;font-weight:600;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line-2);text-decoration-thickness:2px;text-underline-offset:5px}
+.link:hover{text-decoration-color:var(--green)}
+.hero figure{margin:0;width:clamp(200px,27vw,380px)}
+.hero figure img{width:100%;filter:drop-shadow(0 24px 30px rgba(30,38,34,.16))}
+
+/* sekcje */
+.block{padding:clamp(56px,7vw,104px) 0 0}
+.shead{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;align-items:baseline;margin-bottom:28px}
+.shead .no{font-family:var(--disp);font-weight:700;font-size:clamp(34px,3.4vw,48px);color:var(--green-d);line-height:1}
+.shead h2{font-size:clamp(34px,3.4vw,48px);text-transform:uppercase}
+.shead p{grid-column:1/-1;margin-top:12px;color:var(--ink-2);max-width:40em}
+
+/* maszyny */
+.machines{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+.mcard{position:relative;display:flex;flex-direction:column;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:0 0 16px;overflow:hidden;min-width:0}
+.mcard:hover{border-color:var(--line-2)}
+.mcard img{width:100%;aspect-ratio:4/3;object-fit:contain;padding:4px}
+.mcard .n{font-family:var(--disp);font-weight:700;font-size:27px;line-height:1;padding:4px 16px 0}
+.mcard .d{padding:4px 16px 0;color:var(--ink-2);font-size:15px;line-height:1.35}
+.mcard .s{padding:6px 16px 0;color:var(--ink-3);font-size:13.5px}
+.mcard .tick{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:var(--green-d);display:none;place-items:center}
+.mcard[aria-pressed=true]{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+.mcard[aria-pressed=true] .tick{display:grid}
+
+/* części */
+.pbar{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;padding-bottom:20px}
+.pbar img{width:96px;height:72px;object-fit:contain;flex:none;border:1px solid var(--line);border-radius:4px}
+.pbar .who{display:flex;align-items:center;gap:16px;min-width:0;flex:1 1 320px}
+.pbar .who b{display:block;font-family:var(--disp);font-size:28px;line-height:1.05}
+.pbar .who span{display:block;color:var(--ink-2);font-size:14.5px;margin-top:3px}
+.search{display:flex;align-items:center;gap:10px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--paper);height:54px;padding:0 8px 0 16px}
+.search:focus-within{outline:3px solid var(--green);outline-offset:1px;border-color:var(--green)}
+.search input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:17px;height:100%}
+.search input::placeholder{color:var(--ink-3)}
+.search input::-webkit-search-cancel-button{display:none}
+.qclear{border:0;background:none;width:40px;height:40px;border-radius:4px;font-size:24px;line-height:1;color:var(--ink-2)}
+.qclear:hover{background:var(--mist)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{border:1px solid var(--line-2);background:var(--paper);border-radius:999px;padding:7px 14px;font-size:14.5px;font-weight:600;color:var(--ink-2);min-height:38px}
+.chip:hover{border-color:var(--ink-3);color:var(--ink)}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.notice{margin-top:14px;padding:12px 16px;background:var(--mist);border-radius:var(--r);color:var(--ink);font-size:15px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
+.notice .link{padding:0;font-size:15px}
+.plist{list-style:none;margin:0;padding:0}
+.phead[hidden]+.plist,.plist:first-child{border-top:1px solid var(--ink)}
+.phead,.prow{display:grid;grid-template-columns:150px minmax(0,1fr) 190px 250px;gap:8px 24px;align-items:center}
+.phead{margin-top:18px;padding:10px 0;font-size:13.5px;color:var(--ink-3);border-bottom:1px solid var(--ink)}
+.phead .r,.prow .price{text-align:right}
+.prow{padding:16px 0;border-bottom:1px solid var(--line)}
+.pn{font-family:var(--disp);font-weight:600;font-size:18px;color:var(--ink-2);white-space:nowrap}
+.pname{font-weight:600;line-height:1.35}
+.pmeta{font-size:13.5px;color:var(--ink-3);margin-top:3px}
+.mtag{display:inline-block;font-family:var(--disp);font-weight:700;font-size:15px;background:var(--mist-2);color:var(--ink);border-radius:3px;padding:0 6px;margin:2px 4px 0 0}
+.price strong{display:block;font-family:var(--disp);font-weight:700;font-size:28px;line-height:1;white-space:nowrap}
+.price small{display:block;font-size:13.5px;color:var(--ink-3);margin-top:4px;white-space:nowrap}
+.buy{display:flex;gap:8px;justify-content:flex-end;align-items:center}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:var(--r);height:44px;background:var(--paper);flex:none}
+.qty button{width:38px;height:42px;border:0;background:none;font-size:20px;color:var(--ink-2);border-radius:var(--r)}
+.qty button:hover{background:var(--mist);color:var(--ink)}
+.qty input{width:48px;height:42px;border:0;text-align:center;font-weight:600;font-size:16px;background:transparent;-moz-appearance:textfield;appearance:textfield}
+.qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.add{height:44px;min-width:112px;padding:0 16px;border:1px solid var(--green-d);border-radius:var(--r);background:var(--paper);color:var(--green-d);font-weight:600;white-space:nowrap}
+.add:hover{background:var(--green-d);color:#fff}
+.add.ok{background:var(--green-d);color:#fff}
+.empty{padding:28px 0;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.vatnote{margin-top:14px;font-size:14px;color:var(--ink-3)}
+
+/* po zamówieniu */
+.after{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 48px}
+.after h3{font-size:24px;margin-bottom:8px}
+.after p{color:var(--ink-2);max-width:30em}
+
+/* stopka */
+footer{margin-top:clamp(64px,8vw,120px);border-top:1px solid var(--line);background:var(--mist);padding:40px 0 48px;font-size:15px;color:var(--ink-2)}
+footer .wrap{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:24px 40px}
+footer h2{font-size:22px;color:var(--ink);margin-bottom:8px}
+footer a{color:var(--ink);text-underline-offset:3px}
+footer p+p{margin-top:3px}
+
+/* koszyk */
+.shade{position:fixed;inset:0;background:rgba(30,38,34,.42);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.shade.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:var(--paper);z-index:61;transform:translateX(100%);visibility:hidden;transition:transform .26s cubic-bezier(.2,.8,.2,1),visibility 0s .26s;display:flex;flex-direction:column}
+.drawer.open{transform:none;visibility:visible;transition:transform .26s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 14px 24px;border-bottom:1px solid var(--line)}
+.dh h2{font-size:30px;text-transform:uppercase}
+.x{border:0;background:none;width:44px;height:44px;border-radius:var(--r);font-size:30px;line-height:1;color:var(--ink-2)}
+.x:hover{background:var(--mist)}
+.dbody{flex:1;overflow:auto;padding:4px 24px 28px;overscroll-behavior:contain}
+.citem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.citem .n{font-weight:600;line-height:1.35}
+.citem .m{font-size:13.5px;color:var(--ink-3)}
+.citem .lt{font-family:var(--disp);font-weight:700;font-size:21px;line-height:1.2;white-space:nowrap;text-align:right}
+.citem .lt small{display:block;font:400 13px/1.3 Archivo,system-ui,sans-serif;color:var(--ink-3)}
+.citem .r{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.citem .qty{height:38px}.citem .qty button{height:36px;width:34px}.citem .qty input{height:36px}
+.rm{border:0;background:none;padding:8px 0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;font-size:14px}
+.rm:hover{color:var(--err)}
+.sums{margin-top:16px;font-size:15px}
+.sums div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.sums .tot{margin-top:6px;padding-top:10px;border-top:1px solid var(--ink);font-weight:600;align-items:baseline}
+.sums .tot span:last-child{font-family:var(--disp);font-weight:700;font-size:30px}
+.cempty{padding:32px 0;color:var(--ink-2)}
+.cempty .btn{margin-top:18px}
+.oform{margin-top:28px;display:grid;gap:14px}
+.oform h3{font-size:26px;text-transform:uppercase}
+.oform fieldset{border:0;margin:0;padding:0;display:grid;gap:10px;min-width:0}
+.oform legend{padding:0;margin-bottom:8px;font-weight:600;font-size:15px}
+.mset{background:var(--mist);border-radius:var(--r);padding:14px 16px 16px!important}
+.mset legend{float:left;width:100%;margin-bottom:10px}
+.mset legend b{font-family:var(--disp);font-size:22px}
+.mset legend span{color:var(--ink-2);font-weight:400}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+.oform label{display:grid;gap:4px;font-size:14px;font-weight:600;color:var(--ink-2);min-width:0}
+.oform label i{font-style:normal;font-weight:400;color:var(--ink-3)}
+.oform input,.oform select,.oform textarea{width:100%;min-width:0;border:1px solid var(--line-2);border-radius:var(--r);padding:10px 12px;font-size:16px;font-weight:400;color:var(--ink);background:var(--paper);min-height:46px}
+.oform textarea{min-height:70px;resize:vertical}
+.oform [aria-invalid=true]{border-color:var(--err);box-shadow:inset 0 0 0 1px var(--err)}
+.seg{display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden}
+.seg button{border:0;border-left:1px solid var(--line-2);background:var(--paper);padding:10px 6px;font-weight:600;font-size:14.5px;color:var(--ink-2);min-height:46px;line-height:1.2}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.err{color:var(--err);font-weight:600;font-size:15px}
+.err:empty{display:none}
+.oform .btn{width:100%;min-height:54px;font-size:17px}
+.dfoot{font-size:13.5px;color:var(--ink-3)}
+
+/* toast i okno potwierdzenia */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r);font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:calc(100% - 32px);width:max-content}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;background:rgba(30,38,34,.55);display:none;place-items:center;z-index:90;padding:16px;overflow:auto}
+.modal.open{display:grid}
+.modal .box{background:var(--paper);border-radius:8px;max-width:520px;width:100%;padding:28px}
+.modal h2{font-size:32px;text-transform:uppercase;margin-bottom:10px}
+.modal p{color:var(--ink-2)}
+.modal pre{margin:16px 0 20px;padding:14px 16px;background:var(--mist);border-radius:var(--r);font:400 14px/1.55 Archivo,system-ui,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;max-height:40vh;overflow:auto;color:var(--ink)}
+
+/* responsywność */
+@media (max-width:1180px){
+  .machines{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .phead,.prow{grid-template-columns:130px minmax(0,1fr) 170px 236px;gap:8px 18px}
+}
+@media (max-width:980px){
+  .machines{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .phead{display:none}
+  .plist{margin-top:18px;border-top:1px solid var(--ink)}
+  .prow{grid-template-columns:minmax(0,1fr) auto;gap:10px 16px;align-items:start}
+  .prow .c-nr{grid-column:1;grid-row:1}
+  .prow .c-name{grid-column:1;grid-row:2}
+  .prow .price{grid-column:2;grid-row:1/3}
+  .prow .c-buy{grid-column:1/-1;grid-row:3}
+  .after{grid-template-columns:1fr}
+  footer .wrap{grid-template-columns:1fr 1fr}
+  .cartbtn .tot{display:none}
+}
+@media (max-width:720px){
+  .wrap{padding:0 20px}
+  .hero .wrap{grid-template-columns:1fr}
+  .hero figure{display:none}
+  .machines{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .mcard .n{font-size:23px;padding:2px 12px 0}
+  .mcard .d{padding:3px 12px 0;font-size:14px}
+  .mcard .s{padding:4px 12px 0}
+  .mcard{padding-bottom:12px}
+  .brand span{display:none}
+  .buy .add{flex:1}
+  .buy{justify-content:stretch}
+  footer .wrap{grid-template-columns:1fr}
+  .steps{flex-direction:column;gap:8px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;margin-left:-20px;margin-right:-20px;padding:2px 20px 6px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none}
+}
+@media (max-width:420px){
+  .wrap{padding:0 16px}
+  .chips{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}
+  .brand img{height:24px}
+  .cartbtn{padding:0 11px;gap:8px}
+  .cartbtn .lbl{display:none}
+  .langs button{min-width:36px;padding:8px 6px}
+  .grid2{grid-template-columns:1fr}
+  .dbody{padding:4px 16px 24px}
+  .dh{padding-left:16px}
+  .pbar img{width:72px;height:54px}
+  .pbar .who b{font-size:24px}
+  .price strong{font-size:25px}
+  .seg{grid-auto-flow:row}
+  .seg button{border-left:0;border-top:1px solid var(--line-2)}
+  .seg button:first-child{border-top:0}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <span data-i="demo"></span>
+  <span><span data-i="madeBy"></span> <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></span>
+</div></div>
+
+<header class="site"><div class="wrap">
+  <a class="brand" href="#top" data-i-aria="homeAria"><img src="img/logo.svg" width="140" height="30" alt="Bomet"><span data-i="partsShop"></span></a>
+  <div class="tools">
+    <div class="langs" role="group" data-i-aria="langAria">
+      <button type="button" data-lang="pl" aria-pressed="true" lang="pl" title="Polski">PL</button>
+      <button type="button" data-lang="de" aria-pressed="false" lang="de" title="Deutsch">DE</button>
+    </div>
+    <button class="cartbtn" type="button" id="openCart" aria-haspopup="dialog" aria-controls="drawer">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h3l2.2 12h12L21 7H6"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+      <span class="lbl" data-i="cart"></span><span class="cnt num" id="cartCount">0</span><span class="tot num" id="cartTot" hidden></span>
+    </button>
+  </div>
+</div></header>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div>
+    <h1 id="h1"></h1>
+    <p class="lead" data-i="lead"></p>
+    <ol class="steps">
+      <li><b>1</b><span data-i="st1"></span></li>
+      <li><b>2</b><span data-i="st2"></span></li>
+      <li><b>3</b><span data-i="st3"></span></li>
+    </ol>
+    <div class="cta">
+      <a class="btn" href="#maszyny" data-i="ctaMachine"></a>
+      <button type="button" class="link" id="haveNr" data-i="ctaNr"></button>
+    </div>
+  </div>
+  <figure><img src="img/czesc.webp" width="400" height="387" alt="" data-i-alt="heroAlt"></figure>
+</div></section>
+
+<section class="block" id="maszyny" aria-labelledby="s1h"><div class="wrap">
+  <div class="shead"><span class="no" aria-hidden="true">1</span><h2 id="s1h" data-i="s1"></h2><p data-i="s1p"></p></div>
+  <div class="machines" id="machines"></div>
+</div></section>
+
+<section class="block" id="czesci" aria-labelledby="s2h"><div class="wrap">
+  <div class="shead"><span class="no" aria-hidden="true">2</span><h2 id="s2h" tabindex="-1" data-i="s2"></h2></div>
+  <div class="pbar" id="pbar"></div>
+  <div class="search" role="search">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--ink-3);flex:none"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+    <label class="sr" for="q" data-i="qLabel"></label>
+    <input id="q" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search">
+    <button class="qclear" type="button" id="qClear" hidden>×</button>
+  </div>
+  <div class="chips" id="chips" role="group"></div>
+  <div class="notice" id="notice" hidden></div>
+  <p class="sr" id="liveCount" role="status" aria-live="polite"></p>
+  <div class="phead" id="phead" aria-hidden="true"><span data-i="thNr"></span><span data-i="thName"></span><span class="r" data-i="thPrice"></span><span class="r" data-i="thBuy"></span></div>
+  <ul class="plist" id="plist"></ul>
+  <p class="empty" id="empty" hidden></p>
+  <p class="vatnote" id="vatnote"></p>
+</div></section>
+
+<section class="block" id="zamowienie" aria-labelledby="s3h"><div class="wrap">
+  <div class="shead"><span class="no" aria-hidden="true">3</span><h2 id="s3h" data-i="s3"></h2><p data-i="s3p"></p></div>
+  <div class="after">
+    <div><h3 data-i="a1t"></h3><p data-i="a1p"></p></div>
+    <div><h3 data-i="a2t"></h3><p data-i="a2p"></p></div>
+    <div><h3 data-i="a3t"></h3><p data-i="a3p"></p></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><h2>Bomet Sp. z o.o. Sp. K.</h2><p>ul. Berka Joselewicza 2</p><p>07-100 Węgrów</p></div>
+  <div><h2 data-i="fContact"></h2><p><a href="tel:+48257923888">+48 25 792 38 88</a></p><p><a href="mailto:bomet@bomet.pl">bomet@bomet.pl</a></p><p><a href="https://bomet.pl/" target="_blank" rel="noopener">bomet.pl</a></p></div>
+  <div><h2 data-i="fDemo"></h2><p data-i="fDemoP"></p></div>
+</div></footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+  <div class="dh"><h2 id="cartTitle" data-i="cartTitle"></h2><button class="x" type="button" id="closeCart">×</button></div>
+  <div class="dbody" id="dbody"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-describedby="mText"><div class="box"><h2 id="mTitle"></h2><p id="mText"></p><pre id="mPre"></pre><button class="btn" type="button" id="mOk"></button></div></div>
+
+<script>
+(() => {
+'use strict';
+const DATA = {"source":"Maszyny, symbole i dane techniczne: bomet.pl (3.11.2026). Numery części i ceny: przykładowe.","machines":[{"id":"leo","name":"Leo","pl":"Pług obracalny","de":"Drehpflug","symbols":["U064","U064/1","U064/2","U064/3"],"specPl":"3–5 korpusów, 30/38/45 cm","specDe":"3–5 Pflugkörper, 30/38/45 cm"},{"id":"libra","name":"Libra","pl":"Pług jednobelkowy","de":"Einbalken­pflug","symbols":["U068","U068/1","U068/2","U068/3"],"specPl":"3–5 korpusów, 30–50 cm","specDe":"3–5 Pflugkörper, 30–50 cm"},{"id":"pegasus","name":"Pegasus","pl":"Brona talerzowa kompaktowa","de":"Kompakt­scheiben­egge","symbols":["U223/3","U223/4","U223/5","U223/6","U223/7"],"specPl":"2,0–4,0 m, talerze 510/560 mm","specDe":"2,0–4,0 m, Scheiben 510/560 mm"},{"id":"u724","name":"Kultywator","nameDe":"Grubber","pl":"Zęby sprężynowe","de":"Feder­zinken","symbols":["U724/1","U724/3","U724/5","U724/7","U725","U725/1","U757R","U7571R"],"specPl":"1,8–3,6 m, 18–36 zębów","specDe":"1,8–3,6 m, 18–36 Zinken"},{"id":"scorpius","name":"Scorpius","pl":"Siewnik rzędowy","de":"Drill­maschine","symbols":["S004","S004/1","S004/2","S004/3"],"specPl":"2,5–4,0 m, 19–31 redlic","specDe":"2,5–4,0 m, 19–31 Säschare"},{"id":"gemini","name":"Gemini","pl":"Sadzarka do ziemniaków","de":"Kartoffel­lege­maschine","symbols":["S239","S239/1"],"specPl":"2 rzędy, 62,5–75 cm","specDe":"2 Reihen, 62,5–75 cm"},{"id":"norma","name":"Norma","pl":"Pielniko-obsypnik","de":"Hack- und Häufel­gerät","symbols":["P475","P475/1"],"specPl":"2–4 rzędy, 62,5–75 cm","specDe":"2–4 Reihen, 62,5–75 cm"},{"id":"nembus","name":"Nembus","pl":"Pielnik międzyrzędowy","de":"Reihen­hack­gerät","symbols":["P470 W","P470/1 W","P470/2 W"],"specPl":"2–4 rzędy, 45–55 cm","specDe":"2–4 Reihen, 45–55 cm"},{"id":"mensa","name":"Mensa","pl":"Głębosz","de":"Tiefen­lockerer","symbols":["U486","U486/1","U486/2","U486/3"],"specPl":"3–9 zębów, do 65 cm","specDe":"3–9 Zinken, bis 65 cm"},{"id":"indus","name":"Indus","pl":"Kosiarka bijakowa","de":"Schlegel­mulcher","symbols":["Z317/4","Z317","Z317/1","Z317/2","Z317/3"],"specPl":"1,2–2,0 m, młotki lub noże Y","specDe":"1,2–2,0 m, Hämmer oder Y-Messer"}],"parts":[["U06-10-001","work","lemiesz korpusu 30–45 cm, stal borowa","Schar für Pflugkörper 30–45 cm, Borstahl",168,["leo","libra"]],["U06-10-002","work","dłuto lemiesza, wymienne","Wechselspitze für Schar",64,["leo","libra"]],["U06-10-003","work","odkładnica półśrubowa lewa","Streichblech halbwendelförmig, links",742,["leo"]],["U06-10-004","work","odkładnica półśrubowa prawa","Streichblech halbwendelförmig, rechts",742,["leo","libra"]],["U06-10-005","work","listwa odkładnicy ażurowej","Streifen für Streifenstreichblech",58,["leo","libra"]],["U06-10-006","work","płóz korpusu","Anlageschiene",46,["leo","libra"]],["U06-10-007","work","lemiesz przedpłużka","Vorschälerschar",49,["leo","libra"]],["U06-20-001","safety","śruba ścinana M12×70 kl. 8.8 z nakrętką","Scherschraube M12×70 Kl. 8.8 mit Mutter",6.5,["leo","libra"]],["U068-20-002","safety","pióro resoru zabezpieczenia","Blattfeder der Überlastsicherung",289,["libra"]],["U06-30-001","disc","talerz kroju tarczowego Ø410 mm","Scheibe für Scheibensech Ø410 mm",228,["leo","libra"]],["U06-30-002","bearing","piasta kroju tarczowego z łożyskiem","Nabe für Scheibensech mit Lager",312,["leo","libra"]],["U06-40-001","wheel","koło podporowe 10.0/75-15.3, kompletne","Stützrad 10.0/75-15.3, komplett",1180,["leo","libra"]],["U064-50-001","drive","siłownik obrotu pługa","Wendezylinder",1640,["leo"]],["U064-50-002","drive","siłownik liniowania","Hydraulikzylinder für Zugpunktverstellung",1290,["leo"]],["U06-60-001","fix","śruba lemieszowa M12×40 z nakrętką","Pflugschraube M12×40 mit Mutter",2.4,["leo","libra"]],["U06-60-002","fix","śruba regulacyjna siodła korpusu","Einstellschraube für Körpersattel",34,["leo","libra"]],["U064-60-003","fix","śruba rzymska liniowania","Spannschloss für Zugpunktverstellung",145,["leo"]],["U223-30-001","disc","talerz uzębiony Ø510 mm","gezahnte Scheibe Ø510 mm",172,["pegasus"]],["U223-30-002","disc","talerz uzębiony Ø560 mm","gezahnte Scheibe Ø560 mm",205,["pegasus"]],["U223-30-003","bearing","piasta talerza z łożyskiem dwurzędowym","Scheibennabe mit zweireihigem Lager",335,["pegasus"]],["U223-20-001","safety","element gumowy zabezpieczenia","Gummielement der Überlastsicherung",92,["pegasus"]],["U223-20-002","safety","sprężyna zabezpieczenia talerza","Feder der Scheibensicherung",78,["pegasus"]],["U223-70-001","body","ekran boczny, kompletny","Seitenblech, komplett",486,["pegasus"]],["U223-40-001","wheel","pierścień wału rurowo-pierścieniowego Ø400 mm","Ring für Rohr-Ring-Walze Ø400 mm",64,["pegasus"]],["U223-40-002","wheel","zgarniacz wału packera","Abstreifer für Packerwalze",31,["pegasus"]],["U223-40-003","bearing","łożysko wału UCFL 208 z obudową","Walzenlager UCFL 208 mit Gehäuse",138,["pegasus"]],["U223-50-001","drive","siłownik regulacji wału","Hydraulikzylinder für Walzenverstellung",980,["pegasus"]],["U223-60-001","fix","śruba talerza M12×35 kl. 10.9","Scheibenschraube M12×35 Kl. 10.9",3.8,["pegasus"]],["U724-10-001","work","ząb sprężynowy 32×10 mm","Federzinken 32×10 mm",39,["u724"]],["U724-10-002","work","redliczka zęba 50 mm","Schar für Federzinken 50 mm",14,["u724"]],["U724-10-003","work","gęsiostópka 160 mm","Gänsefußschar 160 mm",26,["u724"]],["U724-40-001","wheel","koło kopiujące z regulacją wysokości","Tastrad mit Höhenverstellung",286,["u724"]],["U724-60-001","fix","uchwyt zęba z obejmą","Zinkenhalter mit Klemme",32,["u724"]],["U724-60-002","fix","śruba redliczki M10×35 z nakrętką","Scharschraube M10×35 mit Mutter",1.9,["u724"]],["U724-60-003","fix","sworzeń dolnego zaczepu TUZ kat. II","Unterlenkerbolzen Kat. II",38,["u724","gemini","norma","nembus"]],["S004-10-001","work","redlica stopkowa","Schleppschar",118,["scorpius"]],["S004-10-002","work","redlica dwutalerzowa, kompletna","Doppelscheibenschar, komplett",640,["scorpius"]],["S004-10-003","work","przewód nasienny","Saatleitung",19,["scorpius"]],["S004-10-004","work","palec zagrzebła","Striegelzinken",21,["scorpius"]],["S004-30-001","disc","talerz redlicy jednotalerzowej Ø325 mm","Säscheibe für Einscheibenschar Ø325 mm",146,["scorpius"]],["S004-30-002","disc","talerz znacznika","Spuranreißerscheibe",155,["scorpius"]],["S004-50-001","drive","aparat wysiewający","Dosiereinheit mit Särad",96,["scorpius"]],["S004-50-002","drive","wałek wysiewający 2,5 m","Säwelle 2,5 m",238,["scorpius"]],["S004-50-003","drive","łańcuch napędowy 1/2″ ze spinką","Antriebskette 1/2″ mit Kettenschloss",84,["scorpius"]],["S004-50-004","drive","siłownik znacznika","Hydraulikzylinder für Spuranreißer",520,["scorpius"]],["S239-10-001","work","czerpak sadzarki","Pflanzbecher",9.5,["gemini"]],["S239-10-002","work","nakładka czerpaka do małych sadzeniaków","Bechereinsatz für kleine Pflanzkartoffeln",6.8,["gemini"]],["S239-10-003","work","redlica bruzdująca","Furchenschar",158,["gemini"]],["S239-30-001","disc","talerz obsypujący","Zudeckscheibe",214,["gemini"]],["S239-20-001","safety","sprężyna napinacza taśmy","Spannfeder für Becherband",24,["gemini"]],["S239-50-001","drive","taśma czerpakowa","Becherband",445,["gemini"]],["S239-40-001","wheel","koło metalowe napędowe","Antriebsrad aus Stahl",395,["gemini"]],["S239-40-002","wheel","koło gumowe napędowe","Antriebsrad mit Gummibereifung",430,["gemini"]],["S239-40-003","bearing","łożysko UCP 205 z oprawą","Stehlager UCP 205",82,["gemini"]],["S239-70-001","body","przesłona gumowa dna kosza","Gummiabdeckung für Behälterboden",68,["gemini"]],["P475-10-001","work","spulchniacz","Lockerungszinken",47,["norma"]],["P475-10-002","work","gęsiostópka 250 mm","Gänsefußschar 250 mm",58,["norma"]],["P475-10-003","work","redlica obsypująca","Häufelkörper",168,["norma"]],["P475-10-004","work","nóż kątowy","Winkelmesser",64,["norma"]],["P475-40-001","wheel","koło kopiujące 4.00-8","Tastrad 4.00-8",238,["norma"]],["P475-60-001","fix","obejma sekcji 60×60 mm","Klemmhalter 60×60 mm",36,["norma"]],["P475-70-001","body","zgrzebło","Striegel",142,["norma"]],["P470-10-001","work","ząb sprężynowy pielnika","Federzinken für Hackgerät",33,["nembus"]],["P470-30-001","disc","gwiazda pieląca","Hackstern",148,["nembus"]],["P470-30-002","disc","talerz osłaniający","Schutzscheibe",176,["nembus"]],["P470-40-001","wheel","wałek strunowy sekcji","Federstabwalze der Sektion",364,["nembus"]],["P470-40-002","wheel","koło kopiujące sekcji","Tastrad der Sektion",226,["nembus"]],["P470-40-003","bearing","łożysko 6204-2RS","Kugellager 6204-2RS",21,["nembus"]],["P470-70-001","body","ekran boczny","Seitenschutzblech",208,["nembus"]],["P470-70-002","body","zgrzebło sekcji","Striegel der Sektion",118,["nembus"]],["U486-10-001","work","dłuto głębosza","Meißelspitze",186,["mensa"]],["U486-10-002","work","redlica z kretem drenującym","Schar mit Dränkörper",438,["mensa"]],["U486-20-001","safety","śruba ścinana M16×90 kl. 8.8","Scherschraube M16×90 Kl. 8.8",9.2,["mensa"]],["U486-40-001","wheel","pierścień wału kolczatkowego Ø550 mm","Ring für Stachelwalze Ø550 mm",98,["mensa"]],["U486-40-002","bearing","łożysko wału UCFL 210 z obudową","Walzenlager UCFL 210 mit Gehäuse",168,["mensa"]],["U486-70-001","body","osłona słupicy","Grindelschutz",214,["mensa"]],["U486-70-002","body","słupica zęba","Zinkengrindel",1160,["mensa"]],["Z317-10-001","work","młotek bijakowy","Mulchhammer",39,["indus"]],["Z317-10-002","work","nóż typu Y","Y-Messer",12.5,["indus"]],["Z317-60-001","fix","śruba noża z tuleją","Messerschraube mit Buchse",7.4,["indus"]],["Z317-50-001","drive","pas klinowy SPB","Keilriemen SPB",96,["indus"]],["Z317-50-002","drive","wał przegubowo-teleskopowy","Gelenkwelle",720,["indus"]],["Z317-50-003","drive","przekładnia kątowa","Winkelgetriebe",1890,["indus"]],["Z317-40-001","bearing","łożysko wirnika 2207","Rotorlager 2207",112,["indus"]],["Z317-40-002","wheel","koło podporowe 16×6.50-8","Stützrad 16×6.50-8",152,["indus"]],["Z317-40-003","wheel","wałek dogniatający","Nachlaufwalze",980,["indus"]],["Z317-70-001","body","fartuch łańcuchowy osłony","Kettenvorhang",186,["indus"]]]};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const EUR = 4.3, MAXQ = 999, YEAR = new Date().getFullYear();
+let lang = new URLSearchParams(location.search).get('lang') === 'de' ? 'de' : 'pl';
+let current = 'leo', type = 'all', query = '', scope = 'machine', buyer = 'private', delivery = 'courier';
+const cart = new Map();          // nr -> { nr, qty, m }
+const draft = new Map();         // ilość wpisana w wierszu, zanim trafi do koszyka
+const mform = {};                // dane maszyn do zamówienia: id -> { sym, year, serial }
+const form = { name: '', nip: '', tel: '', mail: '', addr: '', note: '' };
+
+const T = {
+  pl: {
+    demo: '<b>Projekt demonstracyjny</b> dla Bomet. Maszyny i symbole pochodzą z bomet.pl, numery części i ceny są przykładowe.',
+    madeBy: 'Przygotował:', homeAria: 'Bomet – części zamienne, początek strony', partsShop: 'Części zamienne', langAria: 'Język strony',
+    cart: 'Koszyk', cartTitle: 'Koszyk', close: 'Zamknij koszyk', clear: 'Wyczyść wyszukiwanie',
+    h1: ['Części', 'zamienne', 'Bomet'],
+    lead: 'Wybierz swoją maszynę, sprawdź cenę i zamów części online. Z numerem części i danymi maszyny – bez dzwonienia.',
+    st1: 'Wybierz maszynę', st2: 'Dodaj części do koszyka', st3: 'Wyślij zamówienie',
+    ctaMachine: 'Wybierz maszynę', ctaNr: 'Znam numer części', heroAlt: 'Talerz brony z ramieniem i sprężyną – część zamienna Bomet',
+    s1: 'Wybierz maszynę', s1p: 'Pokażemy części pasujące do tej maszyny. Symbol znajdziesz na tabliczce znamionowej.',
+    s2: 'Znajdź część', s3: 'Wyślij zamówienie', s3p: 'Zamówienie wysyłasz z koszyka. Dział części Bomet dostaje je z kompletem danych.',
+    a1t: 'Wszystkie dane od razu', a1p: 'Numery części, symbol, rok produkcji i numer fabryczny maszyny trafiają do działu części w jednym zamówieniu.',
+    a2t: 'Potwierdzenie', a2p: 'Dział części potwierdza dostępność i koszt wysyłki telefonicznie albo e-mailem.',
+    a3t: 'Wysyłka do 5 dni roboczych', a3p: 'Jak dotychczas w Bomet – gdy części są w magazynie. Zwroty i reklamacje na obecnych zasadach.',
+    fContact: 'Kontakt', fDemo: 'Projekt demonstracyjny', fDemoP: 'Strona pokazuje, jak mógłby działać sklep z częściami Bomet. Zamówienia nie są nigdzie wysyłane.',
+    qLabel: 'Szukaj części po nazwie lub numerze', ph: 'Nazwa lub numer części',
+    thNr: 'Numer części', thName: 'Część', thPrice: 'Cena', thBuy: 'Ilość',
+    types: { all: 'Wszystkie', work: 'Elementy robocze', disc: 'Talerze', safety: 'Zabezpieczenia i sprężyny', bearing: 'Łożyska i piasty', wheel: 'Koła i wały', drive: 'Napęd i hydraulika', fix: 'Śruby i sworznie', body: 'Osłony i konstrukcja' },
+    typesAria: 'Rodzaj części', symbols: 'Symbole', change: 'Zmień maszynę', pressedTick: 'wybrana',
+    gross: 'brutto', net: 'netto', add: 'Dodaj', added: 'Dodano', addAria: n => `Dodaj do koszyka: ${n}`, qtyAria: n => `Ilość: ${n}`, dec: 'Odejmij jedną sztukę', inc: 'Dodaj jedną sztukę',
+    parts: n => `${n} ${n === 1 ? 'część' : 'części'}`, perPc: 'szt.',
+    pcs: n => `${n} szt.`,
+    fits: 'Pasuje do:',
+    hitsHere: (n, m) => `Wyniki dla maszyny ${m}: ${n}.`,
+    hitsOther: n => `Dla innych maszyn: ${n}.`, showAll: 'Pokaż wszystkie',
+    hitsAll: n => `Wyniki dla wszystkich maszyn: ${n}.`, onlyM: m => `Tylko ${m}`,
+    none: q => `Nie znaleźliśmy części „${q}”. Sprawdź pisownię albo zadzwoń do działu części: +48 25 792 38 88.`,
+    noneType: 'Dla tej maszyny nie ma części tego rodzaju.',
+    live: n => `Lista części: ${n}`,
+    vatnote: 'Ceny przykładowe. Brutto zawiera 23% VAT, liczony od ceny netto.',
+    toastAdd: (n, q) => `W koszyku: ${n} (${q} szt.)`, qtyMsg: 'Ilość: od 1 do 999 sztuk. Poprawiliśmy wartość.', maxMsg: 'Jednej części możesz zamówić najwyżej 999 sztuk.',
+    cempty: 'Koszyk jest pusty. Wybierz maszynę i dodaj części z listy.', cemptyBtn: 'Przejdź do części',
+    sub: 'Wartość netto', vat: 'VAT 23%', tot: 'Razem brutto', remove: 'Usuń', removeAria: n => `Usuń z koszyka: ${n}`, shipNote: 'Koszt wysyłki dział części potwierdzi po zamówieniu.',
+    form: 'Dane do zamówienia', mdata: 'Dane maszyny',
+    fSym: 'Model (symbol)', fSymPick: 'Wybierz symbol', fSymUnknown: 'Nie wiem', fYear: 'Rok produkcji', fSerial: 'Numer fabryczny', fSerialHint: 'z tabliczki znamionowej',
+    who: 'Kto zamawia?', priv: 'Osoba prywatna', farm: 'Gospodarstwo rolne', firm: 'Firma',
+    fName: 'Imię i nazwisko', fFarm: 'Imię i nazwisko lub nazwa gospodarstwa', fFirm: 'Nazwa firmy', fNip: 'NIP', optional: 'nieobowiązkowo',
+    fTel: 'Telefon', fMail: 'E-mail', contactHint: 'Podaj telefon lub e-mail.',
+    del: 'Dostawa', courier: 'Kurier', pickup: 'Odbiór osobisty w Węgrowie', fAddr: 'Adres dostawy (ulica, kod, miejscowość)', fNote: 'Uwagi',
+    send: 'Wyślij zamówienie', dfoot: 'To wersja demonstracyjna – formularz niczego nie wysyła.',
+    errSym: m => `Wybierz symbol maszyny ${m} z tabliczki znamionowej albo „Nie wiem”.`,
+    errUnknown: m => `Maszyna ${m}: podaj rok produkcji albo numer fabryczny, żeby dział części dobrał właściwe części.`,
+    errYear: `Rok produkcji wpisz jako 4 cyfry, od 1985 do ${YEAR}.`,
+    errName: 'Wpisz imię i nazwisko albo nazwę.', errNip: 'NIP powinien mieć 10 cyfr.', errContact: 'Podaj telefon albo e-mail, żeby dział części mógł potwierdzić zamówienie.',
+    errTel: 'Numer telefonu powinien mieć co najmniej 9 cyfr.', errMail: 'Sprawdź adres e-mail – brakuje w nim „@” albo domeny.', errAddr: 'Wpisz adres dostawy albo wybierz odbiór osobisty.',
+    sentT: 'Wersja demonstracyjna', sentP: 'Nic nie zostało wysłane. W prawdziwym sklepie dział części Bomet dostałby takie zamówienie:', ok: 'Rozumiem',
+    oLines: 'Części', oMachine: 'Maszyna', oMachines: 'Maszyny', oAddr: 'Adres dostawy', oNote: 'Uwagi', oYear: 'rok', oSerial: 'nr fabr.', oBuyer: 'Zamawiający', oDel: 'Dostawa', oSum: 'Razem brutto', oUnknown: 'symbol nieznany',
+    title: 'Bomet – części zamienne online (projekt demonstracyjny)', desc: 'Projekt demonstracyjny: części zamienne do maszyn Bomet z ceną i zamówieniem online.'
+  },
+  de: {
+    demo: '<b>Demo-Projekt</b> für Bomet. Maschinen und Typbezeichnungen stammen von bomet.pl, Teilenummern und Preise sind Beispiele.',
+    madeBy: 'Erstellt von:', homeAria: 'Bomet – Ersatzteile, zum Seitenanfang', partsShop: 'Ersatzteile', langAria: 'Sprache der Seite',
+    cart: 'Warenkorb', cartTitle: 'Warenkorb', close: 'Warenkorb schließen', clear: 'Suche löschen',
+    h1: ['Bomet', 'Ersatz­teile'],
+    lead: 'Maschine wählen, Preis sehen und Ersatzteile online bestellen. Mit Teilenummer und Maschinendaten – ohne Telefonat.',
+    st1: 'Maschine wählen', st2: 'Teile in den Warenkorb', st3: 'Bestellung absenden',
+    ctaMachine: 'Maschine wählen', ctaNr: 'Ich kenne die Teilenummer', heroAlt: 'Eggenscheibe mit Arm und Feder – Bomet-Ersatzteil',
+    s1: 'Maschine wählen', s1p: 'Sie sehen die Teile für genau diese Maschine. Die Typbezeichnung steht auf dem Typenschild.',
+    s2: 'Teil finden', s3: 'Bestellung absenden', s3p: 'Die Bestellung senden Sie aus dem Warenkorb. Die Bomet-Ersatzteilabteilung erhält alle Angaben auf einmal.',
+    a1t: 'Alle Angaben auf einmal', a1p: 'Teilenummern, Typ, Baujahr und Seriennummer der Maschine kommen in einer Bestellung an.',
+    a2t: 'Bestätigung', a2p: 'Die Ersatzteilabteilung bestätigt Verfügbarkeit und Versandkosten telefonisch oder per E-Mail.',
+    a3t: 'Versand in bis zu 5 Werktagen', a3p: 'Wie bisher bei Bomet – wenn die Teile auf Lager sind. Rückgabe und Reklamation zu den bestehenden Bedingungen.',
+    fContact: 'Kontakt', fDemo: 'Demo-Projekt', fDemoP: 'Die Seite zeigt, wie ein Bomet-Ersatzteilshop funktionieren könnte. Bestellungen werden nicht versendet.',
+    qLabel: 'Teil nach Name oder Nummer suchen', ph: 'Name oder Teilenummer',
+    thNr: 'Teilenummer', thName: 'Teil', thPrice: 'Preis', thBuy: 'Menge',
+    types: { all: 'Alle', work: 'Arbeitswerkzeuge', disc: 'Scheiben', safety: 'Sicherungen und Federn', bearing: 'Lager und Naben', wheel: 'Räder und Walzen', drive: 'Antrieb und Hydraulik', fix: 'Schrauben und Bolzen', body: 'Schutz und Rahmen' },
+    typesAria: 'Teileart', symbols: 'Typen', change: 'Maschine ändern', pressedTick: 'ausgewählt',
+    gross: 'brutto', net: 'netto', add: 'Hinzufügen', added: 'Hinzugefügt', addAria: n => `In den Warenkorb: ${n}`, qtyAria: n => `Menge: ${n}`, dec: 'Ein Stück weniger', inc: 'Ein Stück mehr',
+    parts: n => `${n} ${n === 1 ? 'Teil' : 'Teile'}`, perPc: 'Stk.',
+    pcs: n => `${n} Stk.`,
+    fits: 'Passend für:',
+    hitsHere: (n, m) => `Treffer für ${m}: ${n}.`,
+    hitsOther: n => `Für andere Maschinen: ${n}.`, showAll: 'Alle zeigen',
+    hitsAll: n => `Treffer in allen Maschinen: ${n}.`, onlyM: m => `Nur ${m}`,
+    none: q => `Kein Teil gefunden für „${q}“. Prüfen Sie die Schreibweise oder rufen Sie die Ersatzteilabteilung an: +48 25 792 38 88.`,
+    noneType: 'Für diese Maschine gibt es keine Teile dieser Art.',
+    live: n => `Teileliste: ${n}`,
+    vatnote: 'Beispielpreise. Brutto inkl. 19 % MwSt., berechnet vom Nettopreis. Beispielkurs 1 € = 4,30 zł.',
+    toastAdd: (n, q) => `Im Warenkorb: ${n} (${q} Stk.)`, qtyMsg: 'Menge: 1 bis 999 Stück. Der Wert wurde korrigiert.', maxMsg: 'Pro Teil sind höchstens 999 Stück möglich.',
+    cempty: 'Der Warenkorb ist leer. Wählen Sie eine Maschine und fügen Sie Teile hinzu.', cemptyBtn: 'Zu den Ersatzteilen',
+    sub: 'Warenwert netto', vat: 'MwSt. 19 %', tot: 'Gesamt brutto', remove: 'Entfernen', removeAria: n => `Aus dem Warenkorb entfernen: ${n}`, shipNote: 'Die Versandkosten bestätigt die Ersatzteilabteilung nach der Bestellung.',
+    form: 'Bestelldaten', mdata: 'Maschinendaten',
+    fSym: 'Modell (Typ)', fSymPick: 'Typ wählen', fSymUnknown: 'Weiß ich nicht', fYear: 'Baujahr', fSerial: 'Seriennummer', fSerialHint: 'vom Typenschild',
+    who: 'Wer bestellt?', priv: 'Privatperson', farm: 'Landwirt', firm: 'Firma',
+    fName: 'Vor- und Nachname', fFarm: 'Name oder Betriebsname', fFirm: 'Firmenname', fNip: 'USt-IdNr.', optional: 'optional',
+    fTel: 'Telefon', fMail: 'E-Mail', contactHint: 'Telefon oder E-Mail angeben.',
+    del: 'Lieferung', courier: 'Paketdienst', pickup: 'Abholung in Węgrów', fAddr: 'Lieferadresse (Straße, PLZ, Ort)', fNote: 'Bemerkungen',
+    send: 'Bestellung absenden', dfoot: 'Dies ist eine Demo – das Formular sendet nichts.',
+    errSym: m => `Bitte den Typ der Maschine ${m} vom Typenschild wählen oder „Weiß ich nicht“.`,
+    errUnknown: m => `Maschine ${m}: bitte Baujahr oder Seriennummer angeben, damit die passenden Teile gefunden werden.`,
+    errYear: `Baujahr bitte vierstellig angeben, von 1985 bis ${YEAR}.`,
+    errName: 'Bitte Namen angeben.', errNip: 'Bitte eine gültige USt-IdNr. angeben (z. B. DE123456789).', errContact: 'Bitte Telefon oder E-Mail angeben, damit die Bestellung bestätigt werden kann.',
+    errTel: 'Die Telefonnummer sollte mindestens 9 Ziffern haben.', errMail: 'Bitte E-Mail-Adresse prüfen – es fehlt „@“ oder die Domain.', errAddr: 'Bitte Lieferadresse angeben oder Abholung wählen.',
+    sentT: 'Demo-Version', sentP: 'Es wurde nichts gesendet. Im echten Shop bekäme die Bomet-Ersatzteilabteilung diese Bestellung:', ok: 'Verstanden',
+    oLines: 'Teile', oMachine: 'Maschine', oMachines: 'Maschinen', oAddr: 'Lieferadresse', oNote: 'Bemerkungen', oYear: 'Baujahr', oSerial: 'Ser.-Nr.', oBuyer: 'Besteller', oDel: 'Lieferung', oSum: 'Gesamt brutto', oUnknown: 'Typ unbekannt',
+    title: 'Bomet – Ersatzteile online (Demo-Projekt)', desc: 'Demo-Projekt: Ersatzteile für Bomet-Landmaschinen mit Preis und Online-Bestellung.'
+  }
+};
+const L = () => T[lang];
+const M = id => DATA.machines.find(m => m.id === id);
+const P = DATA.parts.map(([nr, t, pl, de, price, refs]) => ({ nr, t, pl, de, price, refs }));
+const byNr = new Map(P.map(p => [p.nr, p]));
+const ORDER = ['work', 'disc', 'safety', 'bearing', 'wheel', 'drive', 'body', 'fix'];
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const pname = p => cap(lang === 'de' ? p.de : p.pl);
+const mname = m => lang === 'de' && m.nameDe ? m.nameDe : m.name;
+const mtype = m => lang === 'de' ? m.de : m.pl;
+const mspec = m => lang === 'de' ? m.specDe : m.specPl;
+const vat = () => lang === 'de' ? 0.19 : 0.23;
+const r2 = v => Math.round((v + Number.EPSILON) * 100) / 100;
+const unit = zl => r2(lang === 'de' ? zl / EUR : zl);               // cena sztuki netto w walucie, zaokrąglona
+const unitGross = zl => r2(unit(zl) * (1 + vat()));
+const fmt = v => lang === 'de'
+  ? v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'
+  : v.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true }).replace(/(\d)\s(\d{3})(?=,)/, '$1 $2') + ' zł';
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').replace(/ß/g, 'ss').replace(/×/g, 'x').replace(/[‐-―−]/g, '-');
+const fitsCur = p => p.refs.includes(current);
+
+/* fokus wraca na ten sam element po przerysowaniu */
+function focusKey(el) {
+  if (!el || el === document.body) return null;
+  if (el.id) return '#' + CSS.escape(el.id);
+  for (const a of ['m', 't', 'dec', 'inc', 'q', 'add', 'cdec', 'cinc', 'cq', 'rm', 'buyer', 'del', 'msym', 'myear', 'mserial', 'scope'])
+    if (el.dataset && el.dataset[a] !== undefined) return `[data-${a}="${CSS.escape(el.dataset[a])}"]`;
+  return null;
+}
+function keepFocus(fn, fallback) {
+  const k = focusKey(document.activeElement); fn();
+  const el = (k && document.querySelector(k)) || (fallback && document.querySelector(fallback));
+  if (el && el !== document.activeElement) el.focus({ preventScroll: true });
+}
+
+/* ilość: liczba całkowita 1–999 */
+function readQty(v) {
+  const s = String(v).trim(), n = Number(s);
+  if (/^\d+$/.test(s) && n >= 1 && n <= MAXQ) return { v: n, fixed: false };
+  const f = Number.isFinite(n) ? Math.round(n) : 1;
+  return { v: Math.max(1, Math.min(MAXQ, f || 1)), fixed: true };
+}
+
+/* 1. maszyny */
+function renderMachines() {
+  $('#machines').innerHTML = DATA.machines.map(m => {
+    const n = P.filter(p => p.refs.includes(m.id)).length;
+    return `<button type="button" class="mcard" data-m="${esc(m.id)}" aria-pressed="${m.id === current}">
+      <img src="img/${esc(m.id)}.webp" width="720" height="540" alt="" loading="lazy" decoding="async">
+      <span class="n hy">${esc(mname(m))}</span><span class="d hy">${esc(mtype(m))}</span><span class="s">${esc(L().parts(n))}</span>
+      <span class="tick" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="m5 12 5 5 9-10"/></svg></span></button>`;
+  }).join('');
+  nbsp($('#machines'));
+}
+$('#machines').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  current = b.dataset.m; type = 'all'; scope = 'machine'; setQuery('');
+  renderMachines(); renderParts();
+  const h = $('#s2h'); h.focus({ preventScroll: true });
+  document.getElementById('czesci').scrollIntoView({ block: 'start' });
+});
+
+/* 2. części */
+function matches(p) {
+  // proste ucinanie końcówek: „łożysko” znajdzie też „łożyskiem”, „sprężyna” – „sprężyny”
+  const words = norm(query).split(/\s+/).filter(Boolean).map(w => w.length >= 5 ? w.replace(/[aeiouy]+$/, '') : w);
+  const hay = norm(p.nr) + ' ' + norm(p.pl) + ' ' + norm(p.de), flat = hay.replace(/[-\s.]/g, '');
+  return words.every(w => hay.includes(w) || flat.includes(w.replace(/[-.]/g, '')));
+}
+const sortParts = list => list.sort((a, b) => ORDER.indexOf(a.t) - ORDER.indexOf(b.t) || a.nr.localeCompare(b.nr));
+function visibleParts() {
+  if (query) return sortParts(P.filter(p => matches(p) && (scope === 'all' || fitsCur(p))));
+  return sortParts(P.filter(p => fitsCur(p) && (type === 'all' || p.t === type)));
+}
+function rowHTML(p) {
+  const q = draft.get(p.nr) || 1, name = esc(pname(p));
+  const tags = scope === 'all' && query ? `<div class="pmeta">${esc(L().fits)} ${p.refs.map(id => `<span class="mtag">${esc(mname(M(id)))}</span>`).join('')}</div>` : `<div class="pmeta">${esc(L().types[p.t])}</div>`;
+  return `<li class="prow">
+    <div class="c-nr"><span class="pn num">${esc(p.nr)}</span></div>
+    <div class="c-name"><div class="pname hy">${name}</div>${tags}</div>
+    <div class="price"><strong class="num">${fmt(unitGross(p.price))}</strong><small class="num">${fmt(unit(p.price))} ${esc(L().net)}</small></div>
+    <div class="c-buy"><div class="buy">
+      <span class="qty"><button type="button" data-dec="${esc(p.nr)}" aria-label="${esc(L().dec)}">−</button><input class="num" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" value="${q}" data-q="${esc(p.nr)}" aria-label="${esc(L().qtyAria(pname(p)))}"><button type="button" data-inc="${esc(p.nr)}" aria-label="${esc(L().inc)}">+</button></span>
+      <button type="button" class="add" data-add="${esc(p.nr)}" aria-label="${esc(L().addAria(pname(p)))}">${esc(L().add)}</button>
+    </div></div>
+  </li>`;
+}
+function renderParts() {
+  const m = M(current), list = visibleParts();
+  $('#pbar').innerHTML = `<div class="who"><img src="img/${esc(m.id)}.webp" width="96" height="72" alt=""><div><b class="hy">${esc(mname(m))} – ${esc(lang === 'pl' ? mtype(m).toLowerCase() : mtype(m))}</b><span>${esc(mspec(m))}. ${esc(L().symbols)}: ${m.symbols.map(esc).join(', ')}</span></div></div><button type="button" class="link" id="changeM">${esc(L().change)}</button>`;
+  // filtry rodzajów tylko bez wyszukiwania
+  const inM = P.filter(fitsCur);
+  const types = ['all', ...ORDER.filter(t => inM.some(p => p.t === t))];
+  $('#chips').hidden = !!query;
+  $('#chips').setAttribute('aria-label', L().typesAria);
+  $('#chips').innerHTML = types.map(t => `<button type="button" class="chip" data-t="${t}" aria-pressed="${t === type}">${esc(L().types[t])}</button>`).join('');
+  // komunikat o wynikach w innych maszynach
+  const nt = $('#notice');
+  let other = 0;
+  if (query) {
+    other = P.filter(p => matches(p) && !fitsCur(p)).length;
+    if (scope === 'all') nt.innerHTML = `<span>${esc(L().hitsAll(list.length))}</span><button type="button" class="link" data-scope="machine">${esc(L().onlyM(mname(m)))}</button>`;
+    else nt.innerHTML = `<span>${esc(L().hitsHere(list.length, mname(m)))}</span>` + (other ? `<span>${esc(L().hitsOther(other))}</span><button type="button" class="link" data-scope="all">${esc(L().showAll)}</button>` : '');
+    nt.hidden = false;
+  } else nt.hidden = true;
+  $('#plist').innerHTML = list.map(rowHTML).join('');
+  $('#plist').hidden = $('#phead').hidden = list.length === 0;
+  // „nie znaleźliśmy” tylko gdy części nie ma nigdzie; wyniki w innych maszynach pokazuje komunikat wyżej
+  $('#empty').hidden = list.length > 0 || (scope !== 'all' && other > 0);
+  $('#empty').textContent = query ? L().none(query) : L().noneType;
+  $('#liveCount').textContent = L().live(list.length);
+  $('#vatnote').textContent = L().vatnote;
+  nbsp($('#czesci'));
+}
+$('#pbar').addEventListener('click', e => {
+  if (!e.target.closest('#changeM')) return;
+  const b = $(`[data-m="${CSS.escape(current)}"]`);
+  document.getElementById('maszyny').scrollIntoView({ block: 'start' });
+  if (b) b.focus({ preventScroll: true });
+});
+$('#chips').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (!b) return; type = b.dataset.t; keepFocus(renderParts); });
+$('#notice').addEventListener('click', e => {
+  const b = e.target.closest('[data-scope]'); if (!b) return;
+  scope = b.dataset.scope; renderParts();
+  const nb = $('#notice [data-scope]'); (nb || $('#q')).focus();
+});
+$('#plist').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.dec || t.dataset.inc) {
+    const nr = t.dataset.dec || t.dataset.inc, inp = $(`[data-q="${CSS.escape(nr)}"]`);
+    const cur = readQty(inp.value).v, next = cur + (t.dataset.inc ? 1 : -1);
+    if (next > MAXQ) toast(L().maxMsg);
+    const v = Math.max(1, Math.min(MAXQ, next));
+    inp.value = v; draft.set(nr, v);
+    return;
+  }
+  if (t.dataset.add) addToCart(t.dataset.add, t);
+});
+$('#plist').addEventListener('change', e => {
+  const inp = e.target.closest('[data-q]'); if (!inp) return;
+  const r = readQty(inp.value); inp.value = r.v; draft.set(inp.dataset.q, r.v);
+  if (r.fixed) toast(L().qtyMsg);
+});
+$('#plist').addEventListener('keydown', e => {
+  const inp = e.target.closest('[data-q]'); if (!inp || e.key !== 'Enter') return;
+  e.preventDefault(); const b = $(`[data-add="${CSS.escape(inp.dataset.q)}"]`); if (b) b.click();
+});
+function addToCart(nr, btn) {
+  const inp = $(`[data-q="${CSS.escape(nr)}"]`), r = readQty(inp ? inp.value : 1), p = byNr.get(nr);
+  if (r.fixed) { if (inp) inp.value = r.v; toast(L().qtyMsg); return; }
+  const it = cart.get(nr), had = it ? it.qty : 0;
+  if (had >= MAXQ) { toast(L().maxMsg); return; }
+  const qty = Math.min(MAXQ, had + r.v);
+  cart.set(nr, { nr, qty, m: it ? it.m : (fitsCur(p) ? current : p.refs[0]) });
+  renderCart();
+  toast(had + r.v > MAXQ ? L().maxMsg : L().toastAdd(pname(p), qty));
+  if (inp) inp.value = 1; draft.delete(nr);
+  if (btn) { btn.textContent = L().added; btn.classList.add('ok'); clearTimeout(btn._t); btn._t = setTimeout(() => { btn.textContent = L().add; btn.classList.remove('ok'); }, 1400); }
+  bump();
+}
+
+/* wyszukiwanie */
+function setQuery(v) { query = v.trim(); $('#q').value = v; $('#qClear').hidden = !query; }
+$('#q').addEventListener('input', e => { query = e.target.value.trim(); if (!query) scope = 'machine'; $('#qClear').hidden = !query; renderParts(); });
+$('#q').addEventListener('keydown', e => { if (e.key === 'Escape' && query) { e.stopPropagation(); setQuery(''); scope = 'machine'; renderParts(); } });
+$('#qClear').onclick = () => { setQuery(''); scope = 'machine'; renderParts(); $('#q').focus(); };
+$('#haveNr').onclick = () => { document.getElementById('czesci').scrollIntoView({ block: 'start' }); $('#q').focus({ preventScroll: true }); };
+
+/* koszyk */
+const items = () => [...cart.values()];
+function totals() {
+  const sub = r2(items().reduce((a, it) => a + unit(byNr.get(it.nr).price) * it.qty, 0));
+  const tax = r2(sub * vat());
+  return { sub, tax, gross: r2(sub + tax), n: items().reduce((a, b) => a + b.qty, 0) };
+}
+function bump() {
+  const t = totals();
+  $('#cartCount').textContent = t.n;
+  $('#cartTot').hidden = !t.n; $('#cartTot').textContent = t.n ? fmt(t.gross) : '';
+  $('#openCart').setAttribute('aria-label', `${L().cart}: ${L().pcs(t.n)}${t.n ? ', ' + fmt(t.gross) : ''}`);
+}
+function cartMachines() { return [...new Set(items().map(it => it.m))].map(M); }
+function mfield(id) { return mform[id] || (mform[id] = { sym: '', year: '', serial: '' }); }
+function renderCart() {
+  bump();
+  const list = items();
+  if (!list.length) { $('#dbody').innerHTML = `<div class="cempty"><p>${esc(L().cempty)}</p><button type="button" class="btn" id="toParts">${esc(L().cemptyBtn)}</button></div>`; nbsp($('#drawer')); return; }
+  const t = totals();
+  const nameLabel = buyer === 'firm' ? L().fFirm : buyer === 'farm' ? L().fFarm : L().fName;
+  $('#dbody').innerHTML = list.map(it => { const p = byNr.get(it.nr), nm = esc(pname(p)); return `<div class="citem">
+      <div><div class="n hy">${nm}</div><div class="m"><span class="num">${esc(p.nr)}</span>, ${esc(mname(M(it.m)))}, ${fmt(unit(p.price))} ${esc(L().net)} / ${esc(L().perPc)}</div></div>
+      <div class="lt num">${fmt(r2(unit(p.price) * it.qty))}<small>${esc(L().net)}</small></div>
+      <div class="r"><span class="qty"><button type="button" data-cdec="${esc(p.nr)}" aria-label="${esc(L().dec)}">−</button><input class="num" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" value="${it.qty}" data-cq="${esc(p.nr)}" aria-label="${esc(L().qtyAria(pname(p)))}"><button type="button" data-cinc="${esc(p.nr)}" aria-label="${esc(L().inc)}">+</button></span><button class="rm" type="button" data-rm="${esc(p.nr)}" aria-label="${esc(L().removeAria(pname(p)))}">${esc(L().remove)}</button></div>
+    </div>`; }).join('') +
+    `<div class="sums"><div><span>${esc(L().sub)}</span><span class="num">${fmt(t.sub)}</span></div><div><span>${esc(L().vat)}</span><span class="num">${fmt(t.tax)}</span></div><div class="tot"><span>${esc(L().tot)}</span><span class="num">${fmt(t.gross)}</span></div><p class="dfoot" style="margin-top:6px">${esc(L().shipNote)}</p></div>
+    <form class="oform" id="oform" novalidate>
+      <h3>${esc(L().form)}</h3>
+      ${cartMachines().map(m => { const f = mfield(m.id), id = esc(m.id); return `<fieldset class="mset"><legend><b>${esc(mname(m))}</b> <span>${esc(mtype(m))}</span></legend>
+        <label>${esc(L().fSym)}<select data-msym="${id}" id="sym-${id}"><option value="">${esc(L().fSymPick)}</option>${m.symbols.map(s => `<option value="${esc(s)}"${f.sym === s ? ' selected' : ''}>${esc(s)}</option>`).join('')}<option value="?"${f.sym === '?' ? ' selected' : ''}>${esc(L().fSymUnknown)}</option></select></label>
+        <div class="grid2"><label>${esc(L().fYear)}<input data-myear="${id}" id="year-${id}" inputmode="numeric" maxlength="4" autocomplete="off" value="${esc(f.year)}"></label>
+        <label><span>${esc(L().fSerial)} <i>${esc(L().fSerialHint)}</i></span><input data-mserial="${id}" id="serial-${id}" maxlength="30" autocomplete="off" value="${esc(f.serial)}"></label></div>
+      </fieldset>`; }).join('')}
+      <fieldset><legend>${esc(L().who)}</legend>
+        <div class="seg">${['private', 'farm', 'firm'].map(b => `<button type="button" data-buyer="${b}" aria-pressed="${buyer === b}">${esc(L()[b === 'private' ? 'priv' : b])}</button>`).join('')}</div>
+      </fieldset>
+      <label>${esc(nameLabel)}<input id="fName" autocomplete="${buyer === 'firm' ? 'organization' : 'name'}" maxlength="120" value="${esc(form.name)}"></label>
+      ${buyer !== 'private' ? `<label><span>${esc(L().fNip)}${buyer === 'farm' ? ` <i>${esc(L().optional)}</i>` : ''}</span><input id="fNip" ${lang === 'pl' ? 'inputmode="numeric"' : ''} maxlength="20" autocomplete="off" value="${esc(form.nip)}"></label>` : ''}
+      <div class="grid2"><label>${esc(L().fTel)}<input id="fTel" type="tel" autocomplete="tel" maxlength="20" value="${esc(form.tel)}"></label>
+      <label>${esc(L().fMail)}<input id="fMail" type="email" autocomplete="email" maxlength="120" value="${esc(form.mail)}"></label></div>
+      <fieldset><legend>${esc(L().del)}</legend>
+        <div class="seg">${['courier', 'pickup'].map(d => `<button type="button" data-del="${d}" aria-pressed="${delivery === d}">${esc(L()[d])}</button>`).join('')}</div>
+      </fieldset>
+      ${delivery === 'courier' ? `<label>${esc(L().fAddr)}<textarea id="fAddr" autocomplete="street-address" rows="2" maxlength="300">${esc(form.addr)}</textarea></label>` : ''}
+      <label><span>${esc(L().fNote)} <i>${esc(L().optional)}</i></span><textarea id="fNote" rows="2" maxlength="600">${esc(form.note)}</textarea></label>
+      <p class="err" id="ferr" role="alert"></p>
+      <button class="btn" type="submit">${esc(L().send)}</button>
+      <p class="dfoot">${esc(L().dfoot)}</p>
+    </form>`;
+  nbsp($('#drawer'));
+}
+function keepForm() {
+  const g = id => { const el = document.getElementById(id); return el ? el.value : undefined; };
+  const v = { name: g('fName'), nip: g('fNip'), tel: g('fTel'), mail: g('fMail'), addr: g('fAddr'), note: g('fNote') };
+  for (const k in v) if (v[k] !== undefined) form[k] = v[k];
+  $$('[data-msym]').forEach(el => { mfield(el.dataset.msym).sym = el.value; });
+  $$('[data-myear]').forEach(el => { mfield(el.dataset.myear).year = el.value; });
+  $$('[data-mserial]').forEach(el => { mfield(el.dataset.mserial).serial = el.value; });
+}
+$('#dbody').addEventListener('input', e => { keepForm(); if (e.target.getAttribute('aria-invalid')) { e.target.removeAttribute('aria-invalid'); e.target.removeAttribute('aria-describedby'); } });
+$('#dbody').addEventListener('change', e => {
+  keepForm();
+  const inp = e.target.closest('[data-cq]'); if (!inp) return;
+  const r = readQty(inp.value); cart.get(inp.dataset.cq).qty = r.v;
+  if (r.fixed) toast(L().qtyMsg);
+  keepFocus(renderCart);
+});
+$('#dbody').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.closest('[data-cq]')) { e.preventDefault(); e.target.blur(); e.target.focus(); } });
+$('#dbody').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'toParts') { closeCart(false); document.getElementById('czesci').scrollIntoView({ block: 'start' }); $('#q').focus({ preventScroll: true }); return; }
+  if (t.dataset.buyer) { keepForm(); buyer = t.dataset.buyer; keepFocus(renderCart); return; }
+  if (t.dataset.del) { keepForm(); delivery = t.dataset.del; keepFocus(renderCart); return; }
+  const nr = t.dataset.cdec || t.dataset.cinc || t.dataset.rm; if (!nr) return;
+  keepForm();
+  if (t.dataset.rm) cart.delete(nr);
+  else {
+    const it = cart.get(nr), next = it.qty + (t.dataset.cinc ? 1 : -1);
+    if (next > MAXQ) toast(L().maxMsg);
+    it.qty = Math.max(1, Math.min(MAXQ, next));
+  }
+  keepFocus(renderCart, '#closeCart');
+});
+$('#dbody').addEventListener('submit', e => {
+  e.preventDefault(); keepForm();
+  $$('#oform [aria-invalid]').forEach(el => { el.removeAttribute('aria-invalid'); el.removeAttribute('aria-describedby'); });
+  const err = $('#ferr');
+  const bad = (msg, sel) => { err.textContent = msg; const el = $(sel); if (el) { el.setAttribute('aria-invalid', 'true'); el.setAttribute('aria-describedby', 'ferr'); el.focus(); } return false; };
+  for (const m of cartMachines()) {
+    const f = mfield(m.id), id = CSS.escape(m.id);
+    if (!f.sym) return bad(L().errSym(mname(m)), `#sym-${id}`);
+    const y = f.year.trim();
+    if (y && !(/^\d{4}$/.test(y) && +y >= 1985 && +y <= YEAR)) return bad(L().errYear, `#year-${id}`);
+    if (f.sym === '?' && !y && !f.serial.trim()) return bad(L().errUnknown(mname(m)), `#year-${id}`);
+  }
+  if (!form.name.trim()) return bad(L().errName, '#fName');
+  if (buyer !== 'private') {
+    const nip = form.nip.replace(/[\s-]/g, '').toUpperCase();
+    const okNip = lang === 'de' ? /^[A-Z]{2}[0-9A-Z]{8,12}$/.test(nip) : /^(PL)?\d{10}$/.test(nip);
+    if ((buyer === 'firm' || nip) && !okNip) return bad(L().errNip, '#fNip');
+  }
+  const tel = form.tel.trim(), mail = form.mail.trim();
+  if (!tel && !mail) return bad(L().errContact, '#fTel');
+  if (tel && tel.replace(/\D/g, '').length < 9) return bad(L().errTel, '#fTel');
+  if (mail && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) return bad(L().errMail, '#fMail');
+  if (delivery === 'courier' && !form.addr.trim()) return bad(L().errAddr, '#fAddr');
+  err.textContent = '';
+  openModal(summary());
+});
+function summary() {
+  const t = totals(), l = L();
+  const lines = items().map(it => { const p = byNr.get(it.nr); return `${p.nr} – ${pname(p)} – ${l.pcs(it.qty)}`; });
+  const ms = cartMachines().map(m => { const f = mfield(m.id); return `${mname(m)} (${mtype(m)}), ${f.sym === '?' ? l.oUnknown : f.sym}${f.year.trim() ? `, ${l.oYear} ${f.year.trim()}` : ''}${f.serial.trim() ? `, ${l.oSerial} ${f.serial.trim()}` : ''}`; });
+  const who = [form.name.trim(), buyer !== 'private' && form.nip.trim() ? `${l.fNip} ${form.nip.trim()}` : '', form.tel.trim(), form.mail.trim()].filter(Boolean).join(', ');
+  const kind = l[buyer === 'private' ? 'priv' : buyer], note = form.note.trim().replace(/\s*\n\s*/g, ' ');
+  const del = delivery === 'pickup' ? l.pickup : `${l.courier}\n${l.oAddr}: ${form.addr.trim().replace(/\s*\n\s*/g, ', ')}`;
+  // w podsumowaniu zwykłe spacje i bez miękkich dywizów (łatwe kopiowanie)
+  return `${ms.length > 1 ? l.oMachines : l.oMachine}:\n${ms.join('\n')}\n\n${l.oLines}:\n${lines.join('\n')}\n\n${l.oBuyer} (${kind}): ${who}\n${l.oDel}: ${del}${note ? `\n${l.oNote}: ${note}` : ''}\n${l.oSum}: ${fmt(t.gross)}`.replace(/[  ]/g, ' ').replace(/­/g, '');
+}
+
+/* okna: koszyk i potwierdzenie (reszta strony nieaktywna, fokus wraca) */
+const PAGE = ['.demobar', 'header.site', 'main', 'footer'];
+const setInert = (sels, on) => sels.forEach(s => { const el = $(s); if (el) el.inert = on; });
+let cartBack = null;
+function openCart() {
+  cartBack = document.activeElement;
+  keepForm(); renderCart();
+  $('#drawer').classList.add('open'); $('#shade').classList.add('open');
+  $('#drawer').inert = false; setInert(PAGE, true);
+  document.body.style.overflow = 'hidden';
+  $('#closeCart').focus();
+}
+function closeCart(restore = true) {
+  keepForm();
+  $('#drawer').classList.remove('open'); $('#shade').classList.remove('open');
+  $('#drawer').inert = true; setInert(PAGE, false);
+  document.body.style.overflow = '';
+  if (restore) (cartBack && document.contains(cartBack) ? cartBack : $('#openCart')).focus();
+}
+$('#drawer').inert = true;
+$('#openCart').onclick = openCart; $('#closeCart').onclick = () => closeCart(); $('#shade').onclick = () => closeCart();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if ($('#modal').classList.contains('open')) closeModal(); else if ($('#drawer').classList.contains('open')) closeCart(); }
+  if (e.key === 'Tab') {   // pętla fokusu w otwartym oknie
+    const box = $('#modal').classList.contains('open') ? $('#modal') : $('#drawer').classList.contains('open') ? $('#drawer') : null;
+    if (!box) return;
+    const f = [...box.querySelectorAll('button,input,select,textarea,a[href]')].filter(el => !el.disabled && el.offsetParent !== null);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+});
+let modalBack = null;
+function openModal(text) {
+  modalBack = document.activeElement;
+  $('#mTitle').textContent = L().sentT; $('#mText').textContent = L().sentP; $('#mPre').textContent = text; $('#mOk').textContent = L().ok;
+  $('#modal').classList.add('open'); setInert([...PAGE, '#drawer'], true); $('#mOk').focus();
+}
+function closeModal() {
+  $('#modal').classList.remove('open');
+  const open = $('#drawer').classList.contains('open');
+  $('#drawer').inert = !open; if (!open) setInert(PAGE, false);
+  (modalBack && document.contains(modalBack) && !modalBack.closest('[inert]') ? modalBack : (open ? $('#closeCart') : $('#openCart'))).focus();
+}
+$('#mOk').onclick = closeModal; $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
+let toastT = 0;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
+
+/* typografia: liczba nie zostaje bez jednostki, myślnik nie zaczyna wiersza; po polsku także jednoliterowe wyrazy nie kończą wiersza */
+function nbsp(root = document.body) {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style,svg,textarea,pre') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  let n; while ((n = w.nextNode())) {
+    let v = n.nodeValue.replace(/(\d) (?=[%a-zA-Z\u00c0-\u017e])/g, '$1\u00a0').replace(/ \u2013/g, '\u00a0\u2013');
+    if (lang === 'pl') v = v.replace(/(^|[\s(\u201e])([aiouwzAIOUWZ]) /g, '$1$2\u00a0');
+    if (v !== n.nodeValue) n.nodeValue = v;
+  }
+}
+const setHH = () => document.documentElement.style.setProperty('--hh', $('header.site').offsetHeight + 'px');
+addEventListener('resize', setHH);
+
+/* język */
+function applyLang() {
+  document.documentElement.lang = lang;
+  clearTimeout(toastT); $('#toast').classList.remove('show'); $('#toast').textContent = '';
+  $$('[data-i]').forEach(el => { const v = L()[el.dataset.i]; if (typeof v === 'string') el.innerHTML = v; });
+  $$('[data-i-alt]').forEach(el => { el.alt = L()[el.dataset.iAlt]; });
+  $$('[data-i-aria]').forEach(el => el.setAttribute('aria-label', L()[el.dataset.iAria]));
+  $('#h1').innerHTML = L().h1.map(s => `<span class="l">${s}</span>`).join('');
+  document.title = L().title; $('meta[name=description]').content = L().desc;
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  $('#q').placeholder = L().ph;
+  $('#qClear').setAttribute('aria-label', L().clear); $('#closeCart').setAttribute('aria-label', L().close);
+  renderMachines(); renderParts(); renderCart(); nbsp(); setHH();
+}
+$$('[data-lang]').forEach(b => b.onclick = () => {
+  keepForm(); lang = b.dataset.lang; applyLang();
+  const u = new URL(location.href); if (lang === 'de') u.searchParams.set('lang', 'de'); else u.searchParams.delete('lang');
+  try { history.replaceState(null, '', u); } catch (_) {}
+  b.focus();
+});
+
+applyLang();
+if (document.fonts) document.fonts.ready.then(setHH);
+})();
+</script>
+</body>
+</html>

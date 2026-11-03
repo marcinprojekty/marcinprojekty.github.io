@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AKPIL – części zamienne z ceną (projekt demonstracyjny)</title>
+<meta name="description" content="Projekt demonstracyjny: katalog części zamiennych AKPIL z ceną i zamówieniem online, w czterech językach.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ED1B2F'/%3E%3Cpath d='M9 24l7-16 7 16M11.6 18h8.8' fill='none' stroke='%23fff' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+/* krój lokalnie – bez łączenia z Google */
+@font-face{font-family:'Hanken Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url(fonts/hanken-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Hanken Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url(fonts/hanken-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+:root{
+  --paper:#FFFFFF; --mist:#ECEFF1; --mist-2:#DFE4E7;
+  --ink:#1E2226; --ink-2:#535A61; --line:#D3D9DD; --line-2:#868F96;
+  --red:#ED1B2F; --red-ink:#C8102E; --red-ink-h:#A30C25; --ok:#1F6B3A;
+  --r:6px; --wrap:1320px; --gut:clamp(16px,4vw,40px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.55 'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+p,.pname{text-wrap:pretty}
+h2,h3{text-wrap:balance}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+[tabindex="-1"]:focus{outline:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+
+/* pasek demo */
+.demobar{background:var(--ink);color:#D5DADE;font-size:14px;line-height:1.45}
+.demobar .wrap{display:flex;justify-content:space-between;gap:6px 20px;align-items:center;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+.demobar b{color:#fff;font-weight:600}
+.demobar a{color:#fff;text-underline-offset:3px}
+.demobar :focus-visible{outline-color:#fff}
+
+/* nagłówek */
+header.site{position:sticky;top:0;z-index:40;background:var(--paper);border-bottom:1px solid var(--line)}
+header.site .wrap{display:flex;align-items:center;gap:16px;min-height:68px}
+.logo{flex:none;display:block;margin-right:auto}
+.logo img{height:40px;width:auto}
+.langs{display:inline-flex;gap:2px}
+.langs button{border:0;background:none;padding:8px 9px;font-weight:600;font-size:15px;cursor:pointer;color:var(--ink-2);border-radius:4px;min-width:40px;min-height:40px}
+.langs button:hover{color:var(--ink);background:var(--mist)}
+.langs button[aria-pressed=true]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--red)}
+.langsel{display:none;height:40px;border:1px solid var(--line-2);border-radius:4px;background:#fff;padding:0 6px;font-weight:600;font-size:15px}
+.cartbtn{display:flex;align-items:center;gap:9px;border:0;background:var(--red-ink);color:#fff;font-weight:600;padding:0 16px;height:44px;border-radius:var(--r);cursor:pointer;white-space:nowrap}
+.cartbtn:hover{background:var(--red-ink-h)}
+.cartbtn .cnt{min-width:24px;height:24px;border-radius:12px;background:#fff;color:var(--red-ink);font-size:14px;font-weight:700;display:grid;place-items:center;padding:0 6px}
+
+/* hero – jedyny mocny moment */
+.hero{background:linear-gradient(180deg,var(--paper) 0%,var(--mist) 100%)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,4vw,64px);align-items:end;padding-top:clamp(40px,6vw,88px);padding-bottom:clamp(40px,5vw,72px)}
+.hero h1{font-weight:300;font-size:clamp(40px,7.4vw,108px);line-height:.94;letter-spacing:-.035em;overflow-wrap:break-word;hyphens:auto}
+.hero .lead{margin-top:22px;font-size:clamp(17px,1.5vw,20px);color:var(--ink-2);max-width:30em}
+.search{margin-top:30px;display:flex;gap:8px;max-width:560px}
+.search input{flex:1;min-width:0;height:56px;border:1px solid var(--line-2);border-radius:var(--r);padding:0 18px;font-size:18px;background:#fff}
+.search input::placeholder{color:#6A7178}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border:0;border-radius:var(--r);background:var(--ink);color:#fff;font-weight:600;font-size:17px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{background:#000}
+.search .btn{height:56px}
+.btn.red{background:var(--red-ink)}
+.btn.red:hover{background:var(--red-ink-h)}
+.steps{list-style:none;margin:34px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px 28px}
+.steps a{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-size:17px}
+.steps a:hover span:last-child{text-decoration:underline;text-underline-offset:4px}
+.steps .n{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-size:15px;flex:none}
+.hero figure{margin:0;border-radius:var(--r);overflow:hidden;aspect-ratio:1/1;max-height:620px;background:var(--mist-2)}
+.hero figure img{width:100%;height:100%;object-fit:cover;object-position:84% 50%}
+
+/* sekcje */
+section.block{padding:clamp(56px,7vw,104px) 0;scroll-margin-top:calc(var(--hh,68px) + 8px)}
+.machines-sec{background:var(--mist)}
+.head{display:flex;align-items:baseline;gap:16px;margin-bottom:clamp(24px,3vw,40px);flex-wrap:wrap}
+.head .n{width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:600;font-size:18px;flex:none;transform:translateY(-4px)}
+.head h2{font-weight:300;font-size:clamp(34px,4.4vw,60px);line-height:1;letter-spacing:-.025em}
+.head p{flex-basis:100%;color:var(--ink-2);margin-left:56px;max-width:40em}
+
+/* wybór maszyny */
+.machines{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,1.4vw,18px)}
+.mtile{display:flex;flex-direction:column;text-align:left;background:var(--paper);border:0;border-radius:var(--r);padding:0 0 18px;cursor:pointer;position:relative;overflow:hidden}
+.mtile::before{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px var(--line);pointer-events:none;z-index:1}
+.mtile:hover::before{box-shadow:inset 0 0 0 1px var(--ink-2)}
+.mtile[aria-pressed=true]::before{box-shadow:inset 0 0 0 2px var(--ink)}
+.mtile[aria-pressed=true]::after{content:"";position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;z-index:2;background:var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath d='M8 14.5l4 4 8-9' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.nw{white-space:nowrap}
+.mtile img{width:100%;aspect-ratio:3/2;object-fit:contain}
+.mtile .nm{font-size:clamp(22px,2.2vw,30px);font-weight:600;letter-spacing:-.015em;line-height:1.1;padding:0 20px}
+.mtile .ty{color:var(--ink-2);font-size:15.5px;padding:4px 20px 0;line-height:1.35}
+
+/* części */
+.parts-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(24px,3.5vw,56px);align-items:start}
+.mpanel{position:sticky;top:calc(var(--hh,68px) + 20px)}
+.mfig{position:relative;margin:0;border:1px solid var(--line);border-radius:var(--r);background:#fff;overflow:hidden}
+.mfig img{width:100%;aspect-ratio:3/2;object-fit:contain;border-radius:var(--r)}
+.hs{position:absolute;width:40px;height:40px;margin:-20px 0 0 -20px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center;font-weight:600;font-size:14px;color:var(--ink)}
+.hs .dot{width:26px;height:26px;border-radius:50%;background:var(--red);border:3px solid #fff;box-shadow:0 0 0 1px rgba(30,34,38,.3),0 2px 6px rgba(30,34,38,.18);display:grid;place-items:center;transition:transform .15s}
+.hs .dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.hs .lbl{position:absolute;left:38px;top:50%;transform:translateY(-50%);background:#fff;border:1px solid var(--ink);border-radius:999px;padding:3px 10px;line-height:1.3;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+.hs.flip .lbl{left:auto;right:38px}
+.hs.below .lbl{left:50%;top:calc(100% + 2px);transform:translateX(-50%)}
+.hs:hover .dot{transform:scale(1.12)}
+.hs:hover .lbl,.hs:focus-visible .lbl,.hs[aria-pressed=true] .lbl{opacity:1}
+.hs[aria-pressed=true] .dot{background:var(--ink)}
+.hs[aria-pressed=true] .lbl{background:var(--ink);color:#fff}
+.hs:focus-visible{outline:0}
+.hs:focus-visible .dot{outline:3px solid var(--ink);outline-offset:2px}
+.minfo{margin-top:18px}
+.minfo h3{font-size:clamp(28px,3vw,40px);font-weight:600;letter-spacing:-.02em;line-height:1.05}
+.minfo p{color:var(--ink-2);margin-top:4px}
+.minfo .hint{margin-top:12px;font-size:15.5px}
+.minfo a{display:inline-block;margin-top:10px;font-weight:600;color:var(--red-ink);text-underline-offset:3px;font-size:15.5px}
+
+.tools{display:grid;gap:14px}
+.qfield{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:var(--r);background:#fff;padding:0 6px 0 14px;height:52px}
+.qfield:focus-within{outline:3px solid var(--ink);outline-offset:1px}
+.qfield input{border:0;outline:0;flex:1;min-width:0;font-size:17px;background:transparent;height:100%}
+.qfield svg{flex:none}
+.qclear{border:0;background:none;cursor:pointer;color:var(--ink-2);font-size:24px;line-height:1;width:40px;height:40px;border-radius:4px}
+.qclear:hover{background:var(--mist)}
+.row2{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:7px 14px;font-size:15px;font-weight:500;cursor:pointer;color:var(--ink);min-height:38px}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.who{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:15px;color:var(--ink-2)}
+.seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:auto;max-width:100%;border:1px solid var(--line-2);border-radius:var(--r);background:#fff}
+.seg button{border:0;background:none;padding:8px 16px;font-weight:600;font-size:15px;cursor:pointer;color:var(--ink-2);min-height:40px;white-space:nowrap}
+.seg button:first-child{border-radius:5px 0 0 5px}
+.seg button:last-child{border-radius:0 5px 5px 0}
+.seg button:focus-visible{position:relative;z-index:1}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.note{font-size:14.5px;color:var(--ink-2)}
+.notice{background:var(--mist);border-radius:var(--r);padding:12px 16px;font-size:15.5px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:space-between}
+.linkbtn{background:none;border:0;padding:0;font-weight:600;color:var(--red-ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:15.5px;text-align:left}
+
+ul.plist{list-style:none;margin:6px 0 0;padding:0;border-top:1px solid var(--line)}
+.part{display:grid;grid-template-columns:48px minmax(0,1fr) auto auto;gap:6px 16px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+.pic{width:48px;height:48px;border-radius:var(--r);background:var(--mist);display:grid;place-items:center}
+.pic svg{width:36px;height:36px}
+.pname{font-weight:600;line-height:1.3;font-size:17px}
+.pmeta{font-size:14.5px;color:var(--ink-2);margin-top:3px;display:flex;flex-wrap:wrap;gap:2px 12px}
+.pmeta .nr{font-weight:600;color:var(--ink);letter-spacing:.01em}
+.price{text-align:right;white-space:nowrap;line-height:1.2}
+.price strong{font-size:23px;font-weight:600;letter-spacing:-.01em;display:block}
+.price small{display:block;font-size:14px;color:var(--ink-2);margin-top:2px}
+.price s{color:var(--ink-2)}
+.buy{display:flex;gap:8px;align-items:center}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:var(--r);height:44px;background:#fff}
+.qty button{width:38px;height:42px;border:0;background:none;cursor:pointer;font-size:20px;color:var(--ink);border-radius:var(--r)}
+.qty button:hover{background:var(--mist)}
+.qty input{width:46px;border:0;text-align:center;font-weight:600;font-size:16px;-moz-appearance:textfield;appearance:textfield;background:transparent;height:100%}
+.qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.add{height:44px;padding:0 18px;border:1px solid var(--ink);border-radius:var(--r);background:#fff;color:var(--ink);font-weight:600;cursor:pointer;white-space:nowrap;min-width:96px}
+.add:hover{background:var(--ink);color:#fff}
+.add.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.empty{padding:28px 0;color:var(--ink-2);border-bottom:1px solid var(--line)}
+
+/* jak zamówić */
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,48px);border-top:1px solid var(--line);padding-top:28px}
+.how b{display:block;font-size:20px;font-weight:600;margin-bottom:8px;letter-spacing:-.01em}
+.how p{color:var(--ink-2);max-width:28em}
+.howcta{margin-top:36px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center}
+
+/* stopka */
+footer{background:var(--ink);color:#D5DADE;padding:56px 0 48px;font-size:16px}
+footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:28px}
+footer h2{color:#fff;font-size:20px;font-weight:600;margin-bottom:10px}
+footer a{color:#fff;text-underline-offset:3px}
+footer p+p{margin-top:4px}
+footer .small{grid-column:1/-1;border-top:1px solid #3A4046;padding-top:20px;margin-top:8px;font-size:14.5px;color:#B9C0C6}
+footer :focus-visible{outline-color:#fff}
+
+/* koszyk */
+.shade{position:fixed;inset:0;background:rgba(30,34,38,.45);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.shade.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:#fff;z-index:61;transform:translateX(100%);transition:transform .25s cubic-bezier(.2,.8,.2,1),visibility 0s .25s;visibility:hidden;display:flex;flex-direction:column}
+.drawer.open{transform:none;visibility:visible;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.dh h2{font-size:28px;font-weight:600;letter-spacing:-.02em}
+.x{border:0;background:none;font-size:30px;line-height:1;cursor:pointer;color:var(--ink);width:44px;height:44px;border-radius:4px}
+.x:hover{background:var(--mist)}
+.dbody{flex:1;overflow:auto;padding:4px 20px 28px;overscroll-behavior:contain}
+.citem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;padding:16px 0;border-bottom:1px solid var(--line)}
+.citem .n{font-weight:600;line-height:1.3}
+.citem .m{font-size:14px;color:var(--ink-2)}
+.citem .lt{font-weight:600;font-size:18px;text-align:right;white-space:nowrap}
+.citem .r{display:flex;gap:10px;align-items:center;grid-column:1/-1;justify-content:space-between}
+.citem .qty{height:40px}
+.citem .qty button{height:38px;width:36px}
+.rm{border:0;background:none;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14.5px;padding:8px 0}
+.sums{margin-top:16px;font-size:16px}
+.sums div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.sums .tot{font-weight:700;font-size:20px;border-top:1px solid var(--line);margin-top:8px;padding-top:10px}
+.sums .vn{font-size:14px;color:var(--ink-2);display:block}
+.cempty{padding:32px 0;color:var(--ink-2)}
+.oform{margin-top:28px;display:grid;gap:14px}
+.oform h3{font-size:22px;font-weight:600;letter-spacing:-.01em}
+.oform fieldset{border:0;margin:0;padding:0;display:grid;gap:12px;min-width:0}
+.oform legend{font-weight:600;font-size:16px;padding:0;margin-bottom:8px}
+.oform label{display:grid;gap:4px;font-size:15px;font-weight:600;color:var(--ink)}
+.oform label .opt{font-weight:400;color:var(--ink-2)}
+.oform input,.oform select,.oform textarea{border:1px solid var(--line-2);border-radius:var(--r);padding:10px 12px;font-size:16px;font-weight:400;width:100%;background:#fff;min-height:46px}
+.oform textarea{min-height:72px;resize:vertical}
+.oform .hintx{font-size:14px;color:var(--ink-2);font-weight:400}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:10px;align-items:end}
+.oform .err{color:#B3261E;font-size:15px;font-weight:600}
+.oform .btn{width:100%;min-height:54px}
+.oform [aria-invalid=true]{border-color:#B3261E;box-shadow:0 0 0 1px #B3261E}
+.dfoot{font-size:14px;color:var(--ink-2)}
+
+/* toast, okno */
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r);font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;background:rgba(30,34,38,.55);display:none;place-items:center;z-index:90;padding:16px}
+.modal.open{display:grid}
+.modal .box{background:#fff;border-radius:8px;max-width:500px;width:100%;padding:clamp(22px,4vw,32px);max-height:calc(100vh - 32px);overflow:auto}
+.modal h2{font-size:30px;font-weight:600;letter-spacing:-.02em;margin-bottom:12px;line-height:1.1}
+.modal p{color:var(--ink-2);margin-bottom:20px}
+
+/* responsywność */
+@media (max-width:1060px){
+  .parts-grid{grid-template-columns:minmax(0,1fr)}
+  .mpanel{position:static;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:center}
+  .minfo{margin-top:0}
+}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:minmax(0,1fr)}
+  .hero figure{aspect-ratio:16/9;max-height:none}
+  .machines{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .how{grid-template-columns:minmax(0,1fr);gap:20px}
+  footer .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  footer .wrap>div:first-child{grid-column:1/-1}
+}
+@media (max-width:760px){
+  .part{grid-template-columns:48px minmax(0,1fr);gap:10px 14px}
+  .part .price{grid-column:2;text-align:left;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+  .part .price small{margin-top:0}
+  .part .buy{grid-column:1/-1;justify-content:flex-end}
+  .mpanel{grid-template-columns:minmax(0,1fr);gap:16px}
+  .hs .dot{width:30px;height:30px}
+  .hs .lbl{display:none}
+}
+@media (max-width:620px){
+  .langs{display:none}
+  .langsel{display:block}
+  .cartbtn .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .cartbtn{padding:0 12px}
+  .head p{margin-left:0}
+  .search{flex-direction:column}
+  .search input{flex:none;width:100%}
+  .search .btn{width:100%}
+  .part .buy .add{flex:1}
+  footer .wrap{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:420px){
+  .machines{gap:8px}
+  .mtile{padding-bottom:12px}
+  .mtile .nm{font-size:19px;padding:0 12px}
+  .mtile .ty{font-size:14px;padding:2px 12px 0}
+  .logo img{height:28px}
+  header.site .wrap{gap:10px}
+  .seg button{padding:8px 12px}
+  .two{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:359px){ .logo img{height:24px} .qty button{width:34px} .qty input{width:40px} }
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <span data-i="demo"><b>Projekt demonstracyjny</b> dla AKPIL. Maszyny i ich parametry pochodzą z katalogów AKPIL, lista części, numery i ceny są przykładowe.</span>
+  <span><span data-i="madeBy">Przygotował:</span> <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></span>
+</div></div>
+
+<header class="site"><div class="wrap">
+  <a class="logo" href="#top" data-i-aria="home" aria-label="AKPIL – strona główna sklepu z częściami"><img src="img/logo.webp" width="480" height="156" alt="AKPIL 1975"></a>
+  <div class="langs" role="group" aria-label="Język / Language / Sprache / Langue">
+    <button type="button" data-lang="pl" lang="pl" aria-pressed="true" aria-label="Polski">PL</button>
+    <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+    <button type="button" data-lang="de" lang="de" aria-pressed="false" aria-label="Deutsch">DE</button>
+    <button type="button" data-lang="fr" lang="fr" aria-pressed="false" aria-label="Français">FR</button>
+  </div>
+  <select class="langsel" id="langSel" aria-label="Język / Language / Sprache / Langue">
+    <option value="pl" lang="pl">PL</option><option value="en" lang="en">EN</option><option value="de" lang="de">DE</option><option value="fr" lang="fr">FR</option>
+  </select>
+  <button class="cartbtn" type="button" id="openCart" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl" data-i="cart">Koszyk</span><span class="cnt num" id="cartCount" aria-hidden="true">0</span><span class="sr" id="cartSr"></span></button>
+</div></header>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div>
+    <h1 data-i="h1">Części do maszyn AKPIL</h1>
+    <p class="lead" data-i="lead">Wybierz maszynę, znajdź część, zobacz cenę i zamów. O każdej porze, po polsku, angielsku, niemiecku i francusku.</p>
+    <form class="search" id="heroSearch" role="search">
+      <label class="sr" for="hq" data-i="qLabel">Nazwa lub numer części</label>
+      <input id="hq" type="search" maxlength="60" autocomplete="off" enterkeyhint="search" placeholder="np. talerz 610 albo GS-310">
+      <button class="btn" type="submit" data-i="find">Szukaj części</button>
+    </form>
+    <ol class="steps">
+      <li><a href="#maszyny"><span class="n" aria-hidden="true">1</span><span data-i="st1">Wybierz maszynę</span></a></li>
+      <li><a href="#czesci"><span class="n" aria-hidden="true">2</span><span data-i="st2">Znajdź część</span></a></li>
+      <li><a href="#zamawianie"><span class="n" aria-hidden="true">3</span><span data-i="st3">Zamów</span></a></li>
+    </ol>
+  </div>
+  <figure><img src="img/hero.webp" width="2000" height="1079" alt="Agregat talerzowy AKPIL Tigre XL w pracy, widok z drona" data-i-alt="heroAlt" fetchpriority="high"></figure>
+</div></section>
+
+<section class="block machines-sec" id="maszyny"><div class="wrap">
+  <div class="head"><span class="n" aria-hidden="true">1</span><h2 data-i="s1">Wybierz maszynę</h2><p data-i="s1p">Części pokazujemy dla konkretnego modelu. W pełnej wersji – dla każdej maszyny z oferty AKPIL.</p></div>
+  <div class="machines" id="machines"></div>
+</div></section>
+
+<section class="block" id="czesci"><div class="wrap">
+  <div class="head"><span class="n" aria-hidden="true">2</span><h2 data-i="s2">Znajdź część</h2></div>
+  <div class="parts-grid">
+    <div class="mpanel" id="mpanel"></div>
+    <div>
+      <div class="tools">
+        <label class="qfield"><span class="sr" data-i="qLabel">Nazwa lub numer części</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#535A61" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" maxlength="60" autocomplete="off" enterkeyhint="search"><button class="qclear" type="button" id="qClear" hidden aria-label="Wyczyść wyszukiwanie">×</button></label>
+        <div class="row2">
+          <div class="who"><span id="whoLbl" data-i="priceFor">Ceny dla</span><div class="seg" role="group" aria-labelledby="whoLbl" id="buyerSeg"></div></div>
+          <p class="note" id="priceNote"></p>
+        </div>
+        <div class="chips" id="chips" role="group" data-i-aria="catsLabel" aria-label="Rodzaj części"></div>
+        <div class="notice" id="notice" hidden role="status" tabindex="-1"></div>
+      </div>
+      <ul class="plist" id="plist"></ul>
+      <p class="empty" id="empty" hidden></p>
+      <p class="note" style="margin-top:14px" data-i="exampleNote">Lista części, numery i ceny są przykładowe – w pełnej wersji pochodzą z systemu magazynowego AKPIL.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="block" id="zamawianie" style="padding-top:0"><div class="wrap">
+  <div class="head"><span class="n" aria-hidden="true">3</span><h2 data-i="s3">Zamów</h2></div>
+  <div class="how">
+    <div><b data-i="h1t">Numery zamiast opisów</b><p data-i="h1p">Każda pozycja w koszyku ma numer części i model maszyny. Dział części nie musi niczego dopytywać.</p></div>
+    <div><b data-i="h2t">Numer fabryczny maszyny</b><p data-i="h2p">Klient podaje model, rok produkcji i numer z tabliczki – łatwo sprawdzić wersję części.</p></div>
+    <div><b data-i="h3t">Rolnik albo dealer</b><p data-i="h3p">Dealer po zalogowaniu widzi swoje ceny. Dział części potwierdza dostępność, wysyłkę i termin.</p></div>
+  </div>
+  <div class="howcta"><button class="btn red" type="button" id="openCart2" data-i="openCart" aria-haspopup="dialog">Przejdź do koszyka</button></div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><h2>AKPIL Sp. z o.o.</h2><p>ul. W. Witosa 21, 39-220 Pilzno</p><p data-i="fCountry">Polska</p><p><a href="tel:+48146722551">+48 14 672 25 51</a></p></div>
+  <div><h2 data-i="fParts">Dział części</h2><p><a href="mailto:zamowienia@akpil.pl">zamowienia@akpil.pl</a></p></div>
+  <div><h2 data-i="fWeb">Strona firmy</h2><p><a href="https://www.akpil.pl/" target="_blank" rel="noopener">akpil.pl</a></p></div>
+  <p class="small" data-i="footNote">Projekt demonstracyjny przygotowany dla AKPIL. Zdjęcia i parametry maszyn z katalogów AKPIL. Lista części, numery, ceny i rabat dealerski są przykładowe. Formularz niczego nie wysyła.</p>
+</div></footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="cartH">
+  <div class="dh"><h2 id="cartH" data-i="cartTitle">Koszyk</h2><button class="x" type="button" id="closeCart" aria-label="Zamknij koszyk">×</button></div>
+  <div class="dbody" id="dbody"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal"><div class="box" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-describedby="mText"><h2 id="mTitle"></h2><p id="mText"></p><button class="btn" type="button" id="mOk">OK</button></div></div>
+
+<script>
+(() => {
+'use strict';
+const DATA = {"eurRate":4.3,"dealerDiscount":0.25,"pdf":{"disc":"https://akpil.pl/wp-content/uploads/2025/12/Akpil-Maszyny-rolnicze-Agregaty-talerzowe.pdf","cult":"https://akpil.pl/wp-content/uploads/2025/12/Akpil-Maszyny-rolnicze-Agregaty-uprawowe-v2.pdf"},"types":{"disc":{"pl":"Agregat talerzowy","en":"Disc harrow","de":"Kurzscheibenegge","fr":"Déchaumeur à disques"},"cult":{"pl":"Agregat podorywkowy","en":"Stubble cultivator","de":"Grubber","fr":"Déchaumeur à dents"},"chisel":{"pl":"Pług dłutowy","en":"Chisel plough","de":"Meißelpflug","fr":"Chisel"}},"machines":[{"id":"bison-xl","name":"Bison XL","type":"disc","pdf":"disc","page":6,"w":[4,6],"n2":{"pl":"32–48 talerzy ø610 mm","en":"32–48 discs, ø610 mm","de":"32–48 Scheiben, ø610 mm","fr":"32 à 48 disques, ø610 mm"},"hot":[["disc",12,64],["hub",30,74],["roller",52,66],["hydr",31,25],["frame",78,56]]},{"id":"tigre-xl","name":"Tigre XL","type":"disc","pdf":"disc","page":37,"w":[4,6],"n2":{"pl":"32–48 talerzy ø660 mm","en":"32–48 discs, ø660 mm","de":"32–48 Scheiben, ø660 mm","fr":"32 à 48 disques, ø660 mm"},"hot":[["disc",50,70],["roller",89,61],["frame",58,48],["hydr",10,51]]},{"id":"gepard","name":"Gepard","type":"disc","pdf":"disc","page":67,"w":[1.75,4],"n2":{"pl":"14–32 talerze ø560 mm","en":"14–32 discs, ø560 mm","de":"14–32 Scheiben, ø560 mm","fr":"14 à 32 disques, ø560 mm"},"hot":[["disc",24,58],["hub",48,65],["roller",87,62],["frame",37,15]]},{"id":"scorpio-s","name":"Scorpio S","type":"cult","pdf":"cult","page":19,"w":[2.5,3.6],"n2":{"pl":"8–12 zębów, wał rurowy ø530 mm","en":"8–12 tines, tube roller ø530 mm","de":"8–12 Zinken, Rohrstabwalze ø530 mm","fr":"8 à 12 dents, rouleau à barres ø530 mm"},"hot":[["tine",46,71],["guard",55,37],["disc",33,56],["roller",10,57],["frame",89,40]]},{"id":"grizzly","name":"Grizzly","type":"cult","pdf":"cult","page":62,"w":[2.5,3.5],"n2":{"pl":"11–15 zębów sprężynowych 40×40 mm","en":"11–15 spring tines, 40×40 mm","de":"11–15 Federzinken, 40×40 mm","fr":"11 à 15 dents à ressort, 40×40 mm"},"hot":[["tine",41,80],["guard",40,50],["roller",88,68],["hydr",28,30]]},{"id":"humero","name":"Humero","type":"chisel","pdf":"cult","page":73,"w":[1.6,3],"n2":{"pl":"3–7 zębów z redlicami obracalnymi","en":"3–7 tines with reversible points","de":"3–7 Zinken mit Wendescharen","fr":"3 à 7 dents à socs réversibles"},"hot":[["tine",27,83],["guard",47,56],["roller",74,50],["frame",34,9]]}],"parts":[{"nr":"TU-560-4-1","c":"disc","zl":178,"ico":1,"fit":["gepard"],"n":{"pl":"Talerz uzębiony ø560×4 mm, typ I","en":"Notched disc ø560×4 mm, type I","de":"Gezackte Scheibe ø560×4 mm, Typ I","fr":"Disque crénelé ø560×4 mm, type I"}},{"nr":"TU-560-4-2","c":"disc","zl":184,"ico":2,"fit":["gepard"],"n":{"pl":"Talerz uzębiony ø560×4 mm, typ II","en":"Notched disc ø560×4 mm, type II","de":"Gezackte Scheibe ø560×4 mm, Typ II","fr":"Disque crénelé ø560×4 mm, type II"}},{"nr":"TU-610-5-2","c":"disc","zl":238,"ico":2,"fit":["bison-xl"],"n":{"pl":"Talerz uzębiony ø610×5 mm, typ II","en":"Notched disc ø610×5 mm, type II","de":"Gezackte Scheibe ø610×5 mm, Typ II","fr":"Disque crénelé ø610×5 mm, type II"}},{"nr":"TU-610-5-1","c":"disc","zl":246,"ico":1,"fit":["bison-xl"],"n":{"pl":"Talerz uzębiony ø610×5 mm, typ I","en":"Notched disc ø610×5 mm, type I","de":"Gezackte Scheibe ø610×5 mm, Typ I","fr":"Disque crénelé ø610×5 mm, type I"}},{"nr":"TU-660-6-1","c":"disc","zl":318,"ico":1,"fit":["tigre-xl"],"n":{"pl":"Talerz uzębiony ø660×6 mm, typ I","en":"Notched disc ø660×6 mm, type I","de":"Gezackte Scheibe ø660×6 mm, Typ I","fr":"Disque crénelé ø660×6 mm, type I"}},{"nr":"TG-660-6","c":"disc","zl":345,"ico":4,"fit":["tigre-xl"],"n":{"pl":"Talerz skrajny „gwiazda” ø660 mm","en":"Outer star disc ø660 mm","de":"Randscheibe „Stern“ ø660 mm","fr":"Disque d’extrémité étoile ø660 mm"}},{"nr":"TW-455","c":"disc","zl":142,"ico":3,"fit":["scorpio-s"],"n":{"pl":"Talerz wyrównujący ø455 mm","en":"Levelling disc ø455 mm","de":"Einebnungsscheibe ø455 mm","fr":"Disque niveleur ø455 mm"}},{"nr":"PK-25","c":"hub","zl":386,"fit":["bison-xl","gepard"],"n":{"pl":"Piasta talerza z łożyskiem kasetowym, bezobsługowa","en":"Disc hub with cassette bearing, maintenance-free","de":"Scheibennabe mit Kassettenlager, wartungsfrei","fr":"Moyeu de disque à roulement cassette, sans entretien"}},{"nr":"PL-30","c":"hub","zl":428,"fit":["tigre-xl"],"n":{"pl":"Piasta talerza z uszczelnieniem labiryntowym","en":"Disc hub with labyrinth seal","de":"Scheibennabe mit Labyrinthdichtung","fr":"Moyeu de disque à joint labyrinthe"}},{"nr":"LB-22","c":"hub","zl":274,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Łożysko baryłkowe wału doprawiającego, w obudowie przeciwpyłowej","en":"Packer roller spherical bearing in dust-proof housing","de":"Pendelrollenlager der Nachläuferwalze im staubdichten Gehäuse","fr":"Roulement à rotule du rouleau arrière, en carter étanche"}},{"nr":"LW-530","c":"hub","zl":189,"fit":["scorpio-s","grizzly","humero"],"n":{"pl":"Łożysko wału w obudowie","en":"Roller bearing unit with housing","de":"Walzenlager mit Gehäuse","fr":"Palier de rouleau avec carter"}},{"nr":"OM-10","c":"hub","zl":46,"fit":["gepard"],"n":{"pl":"Osłona metalowa łożyskowania","en":"Metal bearing guard","de":"Lagerschutz aus Stahl","fr":"Protection métallique de roulement"}},{"nr":"GZ-40210","c":"guard","zl":58,"fit":["bison-xl"],"n":{"pl":"Gumowe zabezpieczenie talerza 40×210 mm","en":"Rubber disc protection 40×210 mm","de":"Gummi-Überlastsicherung der Scheibe 40×210 mm","fr":"Sécurité caoutchouc de disque 40×210 mm"}},{"nr":"GZ-35160","c":"guard","zl":47,"fit":["gepard"],"n":{"pl":"Gumowe zabezpieczenie talerza 35×160 mm","en":"Rubber disc protection 35×160 mm","de":"Gummi-Überlastsicherung der Scheibe 35×160 mm","fr":"Sécurité caoutchouc de disque 35×160 mm"}},{"nr":"AP-40","c":"guard","zl":94,"fit":["bison-xl","gepard"],"n":{"pl":"Amortyzator poliuretanowy talerza","en":"Polyurethane disc shock absorber","de":"Polyurethan-Dämpfer der Scheibe","fr":"Amortisseur polyuréthane de disque"}},{"nr":"SZ-660","c":"guard","zl":118,"fit":["tigre-xl"],"n":{"pl":"Sprężyna zabezpieczenia talerza","en":"Disc safety spring","de":"Sicherungsfeder der Scheibe","fr":"Ressort de sécurité de disque"}},{"nr":"SP-2","c":"guard","zl":162,"fit":["scorpio-s"],"n":{"pl":"Podwójna sprężyna zabezpieczenia zęba, komplet","en":"Double tine safety spring, set","de":"Doppelfeder der Zinkensicherung, Satz","fr":"Double ressort de sécurité de dent, jeu"}},{"nr":"OS-3D","c":"guard","zl":74,"fit":["grizzly"],"n":{"pl":"Ogranicznik zabezpieczenia 3D NON-STOP","en":"3D NON-STOP protection stop","de":"Anschlag der 3D-NON-STOP-Sicherung","fr":"Butée de sécurité 3D NON-STOP"}},{"nr":"SR-12","c":"guard","zl":6.4,"fit":["humero"],"n":{"pl":"Śruba zrywalna zabezpieczenia zęba M12","en":"Tine shear bolt M12","de":"Abscherschraube der Zinkensicherung M12","fr":"Boulon de cisaillement de dent M12"}},{"nr":"GS-310","c":"tine","zl":112,"fit":["scorpio-s","grizzly"],"n":{"pl":"Gęsiostopa 310 mm","en":"Duck-foot share 310 mm","de":"Gänsefußschar 310 mm","fr":"Soc patte d’oie 310 mm"}},{"nr":"RP-490","c":"tine","zl":86,"fit":["scorpio-s","grizzly"],"n":{"pl":"Redlica prosta 490×60×16 mm","en":"Straight point 490×60×16 mm","de":"Gerade Schar 490×60×16 mm","fr":"Soc droit 490×60×16 mm"}},{"nr":"RW-50","c":"tine","zl":58,"fit":["scorpio-s"],"n":{"pl":"Redliczka wąska 50 mm","en":"Narrow point 50 mm","de":"Schmalschar 50 mm","fr":"Soc étroit 50 mm"}},{"nr":"ZR-S","c":"tine","zl":520,"fit":["scorpio-s"],"n":{"pl":"Ząb roboczy z zabezpieczeniem sprężynowym","en":"Tine with spring protection","de":"Zinken mit Federsicherung","fr":"Dent avec sécurité à ressort"}},{"nr":"ZS-4040","c":"tine","zl":468,"fit":["grizzly"],"n":{"pl":"Ząb sprężynowy ślimakowy 40×40 mm","en":"Spiral spring tine 40×40 mm","de":"Spiralfederzinken 40×40 mm","fr":"Dent à ressort spiralé 40×40 mm"}},{"nr":"RO-80","c":"tine","zl":72,"fit":["humero"],"n":{"pl":"Redlica obracalna dwustronna, szer. 8 cm","en":"Reversible double-sided point, 8 cm","de":"Beidseitige Wendeschar, 8 cm breit","fr":"Soc réversible double face, 8 cm"}},{"nr":"SB-150","c":"tine","zl":136,"fit":["humero"],"n":{"pl":"Skrzydełka boczne redlicy, para","en":"Point side wings, pair","de":"Seitenflügel der Schar, Paar","fr":"Ailettes latérales de soc, la paire"}},{"nr":"ZR-H","c":"tine","zl":610,"fit":["humero"],"n":{"pl":"Ząb roboczy z zabezpieczeniem śrubowym","en":"Tine with shear-bolt protection","de":"Zinken mit Scherbolzensicherung","fr":"Dent avec sécurité à boulon"}},{"nr":"SW-SEG","c":"roller","zl":54,"fit":["bison-xl","tigre-xl","gepard"],"n":{"pl":"Skrobak wzmocniony wału segmentowego","en":"Reinforced scraper for segment roller","de":"Verstärkter Abstreifer der Segmentwalze","fr":"Racleur renforcé pour rouleau à segments"}},{"nr":"PS-01","c":"roller","zl":41,"fit":["bison-xl","gepard"],"n":{"pl":"Płozo-skrobak wału daszkowego","en":"Skid scraper for V-profile roller","de":"Kufenabstreifer der Dachprofilwalze","fr":"Patin-racleur pour rouleau à profil en V"}},{"nr":"NP-01","c":"roller","zl":28,"fit":["bison-xl","tigre-xl","gepard"],"n":{"pl":"Nakładka płozy wału sprężynowego","en":"Skid wear plate for spring roller","de":"Kufenauflage der Federwalze","fr":"Plaque d’usure de patin, rouleau à ressorts"}},{"nr":"SK-530","c":"roller","zl":37,"fit":["scorpio-s","grizzly"],"n":{"pl":"Skrobak wału rurowego ø530 mm","en":"Scraper for tube roller ø530 mm","de":"Abstreifer der Rohrstabwalze ø530 mm","fr":"Racleur de rouleau à barres ø530 mm"}},{"nr":"KW-01","c":"roller","zl":24,"fit":["humero"],"n":{"pl":"Kolec wału kolczastego, wymienny","en":"Replaceable spike for spiked roller","de":"Ersatzzinke der Stachelwalze","fr":"Pointe de rechange du rouleau à pointes"}},{"nr":"PH-330","c":"hydr","zl":94,"fit":["bison-xl","tigre-xl","grizzly"],"n":{"pl":"Przewód hydrauliczny dwuoplotowy 330 bar, 1,5 m","en":"Two-wire braided hydraulic hose 330 bar, 1.5 m","de":"Hydraulikschlauch, zweifach geflochten, 330 bar, 1,5 m","fr":"Flexible hydraulique double tresse 330 bar, 1,5 m"}},{"nr":"ZH-01","c":"hydr","zl":212,"fit":["bison-xl","grizzly"],"n":{"pl":"Zamek hydrauliczny siłownika","en":"Hydraulic cylinder lock valve","de":"Hydraulisches Sperrventil für Zylinder","fr":"Clapet de verrouillage hydraulique de vérin"}},{"nr":"AH-075","c":"hydr","zl":685,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Akumulator hydrauliczny 0,75 l","en":"Hydraulic accumulator 0.75 l","de":"Hydraulikspeicher 0,75 l","fr":"Accumulateur hydraulique 0,75 l"}},{"nr":"BD-AL","c":"hydr","zl":148,"fit":["bison-xl","grizzly"],"n":{"pl":"Aluminiowe blachy dystansowe siłownika, komplet","en":"Aluminium cylinder spacer clips, set","de":"Aluminium-Distanzclips für Zylinder, Satz","fr":"Cales d’écartement aluminium pour vérin, jeu"}},{"nr":"SW-K3","c":"frame","zl":126,"fit":["bison-xl","tigre-xl","scorpio-s"],"n":{"pl":"Sworzeń zaczepowy kat. III","en":"Hitch pin, cat. III","de":"Anbaubolzen Kat. III","fr":"Axe d’attelage cat. III"}},{"nr":"SW-K2","c":"frame","zl":96,"fit":["gepard","grizzly","humero"],"n":{"pl":"Sworzeń zaczepowy kat. II","en":"Hitch pin, cat. II","de":"Anbaubolzen Kat. II","fr":"Axe d’attelage cat. II"}},{"nr":"LED-01","c":"frame","zl":164,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Lampa tylna zespolona LED","en":"LED rear combination lamp","de":"LED-Rückleuchte","fr":"Feu arrière combiné LED"}},{"nr":"DB-01","c":"frame","zl":308,"fit":["gepard"],"n":{"pl":"Deflektor boczny płytowy z gumowym zabezpieczeniem","en":"Side deflector plate with rubber protection","de":"Seitenblech mit Gummisicherung","fr":"Déflecteur latéral à plaque avec sécurité caoutchouc"}},{"nr":"KT-500","c":"frame","zl":2460,"fit":["bison-xl"],"n":{"pl":"Koło transportowe 500/50-17, kompletne","en":"Transport wheel 500/50-17, complete","de":"Transportrad 500/50-17, komplett","fr":"Roue de transport 500/50-17, complète"}}]};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const LOC = { pl: 'pl-PL', en: 'en-GB', de: 'de-DE', fr: 'fr-FR' };
+const MAXQ = 999, VAT = 0.23;
+const CATS = ['disc', 'hub', 'guard', 'tine', 'roller', 'hydr', 'frame'];
+let lang = 'pl', current = DATA.machines[0].id, cat = 'all', query = '', buyer = 'farmer';
+const cart = new Map();   // nr -> ilość
+const draft = new Map();  // ilości wpisane przy częściach, jeszcze nie w koszyku
+
+const T = {
+  pl: {
+    title: 'AKPIL – części zamienne z ceną (projekt demonstracyjny)', desc: 'Projekt demonstracyjny: katalog części zamiennych AKPIL z ceną i zamówieniem online, w czterech językach.',
+    demo: '<b>Projekt demonstracyjny</b> dla AKPIL. Maszyny i ich parametry pochodzą z katalogów AKPIL, lista części, numery i ceny są przykładowe.',
+    madeBy: 'Przygotował:', home: 'AKPIL – początek strony', cart: 'Koszyk', cartTitle: 'Koszyk', closeCart: 'Zamknij koszyk', openCart: 'Przejdź do koszyka',
+    cartSr: n => `, sztuk w koszyku: ${n}`,
+    h1: 'Części do maszyn AKPIL', lead: 'Wybierz maszynę, znajdź część, zobacz cenę i zamów. O każdej porze, po polsku, angielsku, niemiecku i francusku.',
+    qLabel: 'Nazwa lub numer części', ph: 'np. talerz 610 albo GS-310', phQ: 'Szukaj we wszystkich maszynach', find: 'Szukaj części', clear: 'Wyczyść wyszukiwanie',
+    st1: 'Wybierz maszynę', st2: 'Znajdź część', st3: 'Zamów', heroAlt: 'Agregat talerzowy AKPIL Tigre XL w pracy, widok z drona',
+    s1: 'Wybierz maszynę', s1p: 'Części pokazujemy dla konkretnego modelu. W pełnej wersji – dla każdej maszyny z oferty AKPIL.',
+    s2: 'Znajdź część', s3: 'Zamów',
+    width: 'szerokość', mAlt: n => `${n} – zdjęcie maszyny`, hint: 'Kliknij punkt na zdjęciu, żeby zobaczyć części tego zespołu.', pdf: 'Zobacz maszynę w katalogu PDF',
+    priceFor: 'Ceny dla', farmer: 'Rolnik', dealer: 'Dealer',
+    noteFarmer: 'Ceny netto i brutto (VAT 23%).', noteDealer: 'Ceny dealera netto – przykładowy rabat 25%.',
+    catsLabel: 'Rodzaj części', all: 'Wszystkie',
+    cats: { disc: 'Talerze', hub: 'Piasty i łożyska', guard: 'Zabezpieczenia', tine: 'Zęby i redlice', roller: 'Wały i skrobaki', hydr: 'Hydraulika', frame: 'Rama, koła, światła' },
+    parts: n => `${n} ${n === 1 ? 'część' : 'części'}`, fits: 'Pasuje do:', nr: 'Nr',
+    net: 'netto', gross: 'brutto', listPrice: 'cena katalogowa', dealerPrice: 'cena dealera',
+    add: 'Dodaj', added: 'Dodano', qty: 'Ilość', dec: 'Zmniejsz ilość', inc: 'Zwiększ ilość', qtyOf: n => `Ilość: ${n}`,
+    toastAdd: n => `Dodano do koszyka: ${n}`, maxMsg: 'W koszyku może być najwyżej 999 sztuk jednej części.', qtyErr: 'Ilość to liczba całkowita od 1 do 999.',
+    results: (n, q) => `Wyniki dla „${q}” we wszystkich maszynach: ${n}.`, back: n => `Wróć do części maszyny ${n}`,
+    none: q => `Nie ma części pasującej do „${q}”. Sprawdź pisownię albo napisz do działu części: zamowienia@akpil.pl.`, noneCat: 'Ta maszyna nie ma części tego rodzaju.',
+    exampleNote: 'Lista części, numery i ceny są przykładowe – w pełnej wersji pochodzą z systemu magazynowego AKPIL.',
+    h1t: 'Numery zamiast opisów', h1p: 'Każda pozycja w koszyku ma numer części i model maszyny. Dział części nie musi niczego dopytywać.',
+    h2t: 'Numer fabryczny maszyny', h2p: 'Klient podaje model, rok produkcji i numer z tabliczki – łatwo sprawdzić wersję części.',
+    h3t: 'Rolnik albo dealer', h3p: 'Dealer po zalogowaniu widzi swoje ceny. Dział części potwierdza dostępność, wysyłkę i termin.',
+    fCountry: 'Polska', fParts: 'Dział części', fWeb: 'Strona firmy',
+    footNote: 'Projekt demonstracyjny przygotowany dla AKPIL. Zdjęcia i parametry maszyn z katalogów AKPIL. Lista części, numery, ceny i rabat dealerski są przykładowe. Formularz niczego nie wysyła.',
+    cempty: 'Koszyk jest pusty. Wybierz maszynę i dodaj części z listy.', toParts: 'Wybierz części',
+    sub: 'Wartość netto', vat: 'VAT 23%', tot: 'Razem brutto', totNet: 'Razem netto', vatNote: '', dealerSum: 'Ceny dealera (rabat 25%)', remove: 'Usuń', rmOf: n => `Usuń: ${n}`,
+    form: 'Dane do zamówienia', machineLeg: 'Maszyna, do której zamawiasz', fMachine: 'Model', other: 'Inna maszyna AKPIL', choose: 'Wybierz model',
+    fYear: 'Rok produkcji', fSerial: 'Numer fabryczny', serialHint: 'Z tabliczki znamionowej. Pomaga dobrać właściwą wersję części.', optional: '(opcjonalnie)',
+    buyerLeg: 'Kupujący', buyerQ: 'Kupuję jako', fName: 'Imię i nazwisko', fFirm: 'Nazwa firmy', fVat: 'NIP', fVatX: 'Numer VAT firmy', fCountryL: 'Kraj dostawy', fStreet: 'Ulica i numer', fZip: 'Kod pocztowy', fCity: 'Miejscowość', fTel: 'Telefon', fMail: 'E-mail', fNote: 'Uwagi',
+    send: 'Wyślij zamówienie',
+    errMachine: 'Wybierz model maszyny.', errYear: y => `Rok produkcji to liczba od 1975 do ${y}.`, errName: 'Wpisz imię i nazwisko.', errFirm: 'Wpisz nazwę firmy dealera.', errVat: 'NIP powinien mieć 10 cyfr.', errVatSum: 'Sprawdź NIP – cyfra kontrolna się nie zgadza.', errVatX: 'Wpisz numer VAT firmy (litery i cyfry).',
+    errContact: 'Podaj telefon albo e-mail, żeby dział części mógł potwierdzić zamówienie.', errMail: 'Sprawdź adres e-mail – brakuje „@” albo domeny.', errTel: 'Numer telefonu powinien mieć co najmniej 9 cyfr.', errAddr: 'Wpisz ulicę, kod pocztowy i miejscowość.',
+    dfoot: 'Ceny przykładowe. Koszt i termin wysyłki potwierdza dział części.',
+    sentT: 'Gotowe – to wersja demonstracyjna', sentP: n => `Dane nie zostały nigdzie wysłane. W prawdziwym sklepie zamówienie (${n}) trafiłoby do działu części AKPIL razem z numerami części i numerem fabrycznym maszyny, a klient dostałby potwierdzenie e-mailem.`
+  },
+  en: {
+    title: 'AKPIL – spare parts with prices (demo project)', desc: 'Demo project: AKPIL spare parts catalogue with prices and online ordering, in four languages.',
+    demo: '<b>Demo project</b> for AKPIL. Machines and their specifications come from AKPIL catalogues; the parts list, part numbers and prices are examples.',
+    madeBy: 'Made by:', home: 'AKPIL – top of the page', cart: 'Basket', cartTitle: 'Basket', closeCart: 'Close basket', openCart: 'Go to basket',
+    cartSr: n => `, items in basket: ${n}`,
+    h1: 'Parts for AKPIL machines', lead: 'Choose your machine, find the part, see the price and order. Any time, in English, Polish, German and French.',
+    qLabel: 'Part name or number', ph: 'e.g. disc 610 or GS-310', phQ: 'Search all machines', find: 'Find parts', clear: 'Clear search',
+    st1: 'Choose machine', st2: 'Find part', st3: 'Order', heroAlt: 'AKPIL Tigre XL disc harrow at work, drone view',
+    s1: 'Choose your machine', s1p: 'Parts are shown for each specific model. The full version covers every machine in the AKPIL range.',
+    s2: 'Find the part', s3: 'Order',
+    width: 'working width', mAlt: n => `${n} – machine photo`, hint: 'Click a point on the photo to see the parts of that assembly.', pdf: 'See the machine in the PDF catalogue',
+    priceFor: 'Prices for', farmer: 'Farmer', dealer: 'Dealer',
+    noteFarmer: 'Net prices in EUR, excluding VAT.', noteDealer: 'Dealer net prices in EUR, excluding VAT – sample 25% discount.',
+    catsLabel: 'Part type', all: 'All',
+    cats: { disc: 'Discs', hub: 'Hubs and bearings', guard: 'Overload protection', tine: 'Tines and points', roller: 'Rollers and scrapers', hydr: 'Hydraulics', frame: 'Frame, wheels, lights' },
+    parts: n => `${n} ${n === 1 ? 'part' : 'parts'}`, fits: 'Fits:', nr: 'No.',
+    net: 'net', gross: 'gross', listPrice: 'list price', dealerPrice: 'dealer price',
+    add: 'Add', added: 'Added', qty: 'Quantity', dec: 'Decrease quantity', inc: 'Increase quantity', qtyOf: n => `Quantity: ${n}`,
+    toastAdd: n => `Added to basket: ${n}`, maxMsg: 'The basket holds at most 999 pieces of one part.', qtyErr: 'Quantity must be a whole number from 1 to 999.',
+    results: (n, q) => `Results for “${q}” across all machines: ${n}.`, back: n => `Back to ${n} parts`,
+    none: q => `No part matches “${q}”. Check the spelling or write to the parts department: zamowienia@akpil.pl.`, noneCat: 'This machine has no parts of this type.',
+    exampleNote: 'The parts list, part numbers and prices are examples – in the full version they come from AKPIL’s stock system.',
+    h1t: 'Numbers, not descriptions', h1p: 'Every basket line carries the part number and machine model. The parts department has nothing to ask.',
+    h2t: 'Machine serial number', h2p: 'The customer enters model, year and the number from the type plate, so the right part version is easy to check.',
+    h3t: 'Farmer or dealer', h3p: 'Dealers see their own prices after logging in. The parts department confirms stock, shipping and delivery date.',
+    fCountry: 'Poland', fParts: 'Parts department', fWeb: 'Company website',
+    footNote: 'Demo project prepared for AKPIL. Machine photos and specifications from AKPIL catalogues. The parts list, part numbers, prices and the dealer discount are examples. The form sends nothing.',
+    cempty: 'Your basket is empty. Choose a machine and add parts from the list.', toParts: 'Choose parts',
+    sub: 'Net total', vat: '', tot: 'Total gross', totNet: 'Total (net)', vatNote: 'VAT depends on the delivery country and is added in the order confirmation.', dealerSum: 'Dealer prices (25% discount)', remove: 'Remove', rmOf: n => `Remove: ${n}`,
+    form: 'Order details', machineLeg: 'Machine you are ordering for', fMachine: 'Model', other: 'Other AKPIL machine', choose: 'Choose model',
+    fYear: 'Year of manufacture', fSerial: 'Serial number', serialHint: 'From the type plate. Helps match the right part version.', optional: '(optional)',
+    buyerLeg: 'Buyer', buyerQ: 'Buying as', fName: 'Full name', fFirm: 'Company name', fVat: 'Polish tax number (NIP)', fVatX: 'VAT number', fCountryL: 'Delivery country', fStreet: 'Street and number', fZip: 'Postcode', fCity: 'Town or city', fTel: 'Phone', fMail: 'Email', fNote: 'Notes',
+    send: 'Send order',
+    errMachine: 'Choose the machine model.', errYear: y => `Year of manufacture must be between 1975 and ${y}.`, errName: 'Enter your full name.', errFirm: 'Enter the dealer’s company name.', errVat: 'A Polish tax number (NIP) has 10 digits.', errVatSum: 'Check the NIP – the check digit does not match.', errVatX: 'Enter the company VAT number (letters and digits).',
+    errContact: 'Enter a phone number or email so the parts department can confirm the order.', errMail: 'Check the email address – the “@” or domain is missing.', errTel: 'The phone number should have at least 9 digits.', errAddr: 'Enter street, postcode and town.',
+    dfoot: 'Sample prices. The parts department confirms shipping cost and date.',
+    sentT: 'Done – this is a demo', sentP: n => `No data was sent anywhere. In the real shop the order (${n}) would go to the AKPIL parts department with part numbers and the machine’s serial number, and the customer would get an email confirmation.`
+  },
+  de: {
+    title: 'AKPIL – Ersatzteile mit Preis (Demo-Projekt)', desc: 'Demo-Projekt: AKPIL-Ersatzteilkatalog mit Preisen und Online-Bestellung in vier Sprachen.',
+    demo: '<b>Demo-Projekt</b> für AKPIL. Maschinen und technische Daten stammen aus den AKPIL-Katalogen, Teileliste, Teilenummern und Preise sind Beispiele.',
+    madeBy: 'Erstellt von:', home: 'AKPIL – Seitenanfang', cart: 'Warenkorb', cartTitle: 'Warenkorb', closeCart: 'Warenkorb schließen', openCart: 'Zum Warenkorb',
+    cartSr: n => `, Artikel im Warenkorb: ${n}`,
+    h1: 'Ersatzteile für AKPIL-Maschinen', lead: 'Maschine wählen, Teil finden, Preis sehen und bestellen. Rund um die Uhr, auf Deutsch, Englisch, Französisch und Polnisch.',
+    qLabel: 'Teilename oder Teilenummer', ph: 'z. B. Scheibe 610, GS-310', phQ: 'In allen Maschinen suchen', find: 'Teile suchen', clear: 'Suche löschen',
+    st1: 'Maschine wählen', st2: 'Teil finden', st3: 'Bestellen', heroAlt: 'AKPIL-Kurzscheibenegge Tigre XL im Einsatz, Drohnenaufnahme',
+    s1: 'Maschine wählen', s1p: 'Die Teile werden für das jeweilige Modell angezeigt. Die Vollversion umfasst alle Maschinen von AKPIL.',
+    s2: 'Teil finden', s3: 'Bestellen',
+    width: 'Arbeitsbreite', mAlt: n => `${n} – Maschinenfoto`, hint: 'Klicken Sie auf einen Punkt im Foto, um die Teile dieser Baugruppe zu sehen.', pdf: 'Maschine im PDF-Katalog ansehen',
+    priceFor: 'Preise für', farmer: 'Landwirt', dealer: 'Händler',
+    noteFarmer: 'Nettopreise in EUR, ohne MwSt.', noteDealer: 'Händler-Nettopreise in EUR, ohne MwSt. – Beispielrabatt 25 %.',
+    catsLabel: 'Teileart', all: 'Alle',
+    cats: { disc: 'Scheiben', hub: 'Naben und Lager', guard: 'Überlastsicherung', tine: 'Zinken und Schare', roller: 'Walzen und Abstreifer', hydr: 'Hydraulik', frame: 'Rahmen, Räder, Licht' },
+    parts: n => `${n} ${n === 1 ? 'Teil' : 'Teile'}`, fits: 'Passend für:', nr: 'Nr.',
+    net: 'netto', gross: 'brutto', listPrice: 'Listenpreis', dealerPrice: 'Händlerpreis',
+    add: 'Hinzufügen', added: 'Hinzugefügt', qty: 'Menge', dec: 'Menge verringern', inc: 'Menge erhöhen', qtyOf: n => `Menge: ${n}`,
+    toastAdd: n => `In den Warenkorb gelegt: ${n}`, maxMsg: 'Pro Teil sind höchstens 999 Stück im Warenkorb möglich.', qtyErr: 'Die Menge ist eine ganze Zahl von 1 bis 999.',
+    results: (n, q) => `Treffer für „${q}“ in allen Maschinen: ${n}.`, back: n => `Zurück zu den Teilen der ${n}`,
+    none: q => `Kein Teil passt zu „${q}“. Prüfen Sie die Schreibweise oder schreiben Sie an die Ersatzteilabteilung: zamowienia@akpil.pl.`, noneCat: 'Für diese Maschine gibt es keine Teile dieser Art.',
+    exampleNote: 'Teileliste, Teilenummern und Preise sind Beispiele – in der Vollversion kommen sie aus dem Lagersystem von AKPIL.',
+    h1t: 'Nummern statt Beschreibungen', h1p: 'Jede Position im Warenkorb hat Teilenummer und Maschinenmodell. Keine Rückfragen nötig.',
+    h2t: 'Seriennummer der Maschine', h2p: 'Der Kunde gibt Modell, Baujahr und die Nummer vom Typenschild an – so ist die richtige Teileversion leicht zu prüfen.',
+    h3t: 'Landwirt oder Händler', h3p: 'Händler sehen nach der Anmeldung ihre eigenen Preise. Die Ersatzteilabteilung bestätigt Verfügbarkeit, Versand und Termin.',
+    fCountry: 'Polen', fParts: 'Ersatzteilabteilung', fWeb: 'Website des Herstellers',
+    footNote: 'Demo-Projekt für AKPIL. Maschinenfotos und technische Daten aus den AKPIL-Katalogen. Teileliste, Teilenummern, Preise und Händlerrabatt sind Beispiele. Das Formular sendet nichts.',
+    cempty: 'Der Warenkorb ist leer. Wählen Sie eine Maschine und fügen Sie Teile hinzu.', toParts: 'Teile auswählen',
+    sub: 'Warenwert netto', vat: '', tot: 'Gesamt brutto', totNet: 'Gesamt netto', vatNote: 'Die MwSt. richtet sich nach dem Lieferland und wird in der Auftragsbestätigung ausgewiesen.', dealerSum: 'Händlerpreise (Rabatt 25 %)', remove: 'Entfernen', rmOf: n => `Entfernen: ${n}`,
+    form: 'Bestelldaten', machineLeg: 'Maschine, für die Sie bestellen', fMachine: 'Modell', other: 'Andere AKPIL-Maschine', choose: 'Modell wählen',
+    fYear: 'Baujahr', fSerial: 'Seriennummer', serialHint: 'Vom Typenschild. Hilft, die richtige Teileversion zu finden.', optional: '(optional)',
+    buyerLeg: 'Käufer', buyerQ: 'Ich kaufe als', fName: 'Vor- und Nachname', fFirm: 'Firmenname', fVat: 'Polnische Steuernummer (NIP)', fVatX: 'USt-IdNr.', fCountryL: 'Lieferland', fStreet: 'Straße und Hausnummer', fZip: 'PLZ', fCity: 'Ort', fTel: 'Telefon', fMail: 'E-Mail', fNote: 'Bemerkungen',
+    send: 'Bestellung absenden',
+    errMachine: 'Bitte das Maschinenmodell wählen.', errYear: y => `Das Baujahr liegt zwischen 1975 und ${y}.`, errName: 'Bitte Vor- und Nachnamen eingeben.', errFirm: 'Bitte den Firmennamen des Händlers eingeben.', errVat: 'Eine polnische Steuernummer (NIP) hat 10 Ziffern.', errVatSum: 'Bitte NIP prüfen – die Prüfziffer stimmt nicht.', errVatX: 'Bitte die USt-IdNr. eingeben (Buchstaben und Ziffern).',
+    errContact: 'Bitte Telefon oder E-Mail angeben, damit die Bestellung bestätigt werden kann.', errMail: 'Bitte E-Mail-Adresse prüfen – es fehlt „@“ oder die Domain.', errTel: 'Die Telefonnummer sollte mindestens 9 Ziffern haben.', errAddr: 'Bitte Straße, PLZ und Ort eingeben.',
+    dfoot: 'Beispielpreise. Versandkosten und Termin bestätigt die Ersatzteilabteilung.',
+    sentT: 'Fertig – dies ist eine Demo', sentP: n => `Es wurden keine Daten gesendet. Im echten Shop ginge die Bestellung (${n}) mit Teilenummern und Seriennummer der Maschine an die AKPIL-Ersatzteilabteilung, und der Kunde bekäme eine Bestätigung per E-Mail.`
+  },
+  fr: {
+    title: 'AKPIL – pièces détachées avec prix (projet de démonstration)', desc: 'Projet de démonstration : catalogue de pièces AKPIL avec prix et commande en ligne, en quatre langues.',
+    demo: '<b>Projet de démonstration</b> pour AKPIL. Les machines et leurs caractéristiques proviennent des catalogues AKPIL ; la liste des pièces, les références et les prix sont des exemples.',
+    madeBy: 'Réalisé par :', home: 'AKPIL – haut de page', cart: 'Panier', cartTitle: 'Panier', closeCart: 'Fermer le panier', openCart: 'Aller au panier',
+    cartSr: n => `, articles dans le panier : ${n}`,
+    h1: 'Pièces pour machines AKPIL', lead: 'Choisissez la machine, trouvez la pièce, voyez le prix et commandez. À toute heure, en français, anglais, allemand et polonais.',
+    qLabel: 'Nom ou référence de la pièce', ph: 'ex. disque 610 ou GS-310', phQ: 'Chercher dans toutes les machines', find: 'Chercher', clear: 'Effacer la recherche',
+    st1: 'Choisir la machine', st2: 'Trouver la pièce', st3: 'Commander', heroAlt: 'Déchaumeur à disques AKPIL Tigre XL au travail, vue de drone',
+    s1: 'Choisissez la machine', s1p: 'Les pièces sont présentées pour chaque modèle. La version complète couvre toute la gamme AKPIL.',
+    s2: 'Trouvez la pièce', s3: 'Commandez',
+    width: 'largeur de travail', mAlt: n => `${n} – photo de la machine`, hint: 'Cliquez sur un point de la photo pour voir les pièces de cet ensemble.', pdf: 'Voir la machine dans le catalogue PDF',
+    priceFor: 'Prix pour', farmer: 'Agriculteur', dealer: 'Concessionnaire',
+    noteFarmer: 'Prix nets en EUR, hors TVA.', noteDealer: 'Prix concessionnaire HT en EUR – remise de 25 % à titre d’exemple.',
+    catsLabel: 'Type de pièce', all: 'Toutes',
+    cats: { disc: 'Disques', hub: 'Moyeux et roulements', guard: 'Sécurités', tine: 'Dents et socs', roller: 'Rouleaux et racleurs', hydr: 'Hydraulique', frame: 'Châssis, roues, éclairage' },
+    parts: n => `${n} ${n === 1 ? 'pièce' : 'pièces'}`, fits: 'Compatible :', nr: 'Réf.',
+    net: 'HT', gross: 'TTC', listPrice: 'prix catalogue', dealerPrice: 'prix concessionnaire',
+    add: 'Ajouter', added: 'Ajouté', qty: 'Quantité', dec: 'Diminuer la quantité', inc: 'Augmenter la quantité', qtyOf: n => `Quantité : ${n}`,
+    toastAdd: n => `Ajouté au panier : ${n}`, maxMsg: 'Le panier accepte au plus 999 exemplaires d’une même pièce.', qtyErr: 'La quantité est un nombre entier de 1 à 999.',
+    results: (n, q) => `Résultats pour « ${q} » dans toutes les machines : ${n}.`, back: n => `Retour aux pièces de la ${n}`,
+    none: q => `Aucune pièce ne correspond à « ${q} ». Vérifiez l’orthographe ou écrivez au service pièces : zamowienia@akpil.pl.`, noneCat: 'Cette machine n’a pas de pièces de ce type.',
+    exampleNote: 'La liste des pièces, les références et les prix sont des exemples – dans la version complète, ils viennent du système de stock AKPIL.',
+    h1t: 'Des références, pas des descriptions', h1p: 'Chaque ligne du panier porte la référence et le modèle de la machine. Le service pièces n’a rien à redemander.',
+    h2t: 'Numéro de série de la machine', h2p: 'Le client indique le modèle, l’année et le numéro de la plaque : la bonne version de la pièce est facile à vérifier.',
+    h3t: 'Agriculteur ou concessionnaire', h3p: 'Une fois connecté, le concessionnaire voit ses propres prix. Le service pièces confirme la disponibilité, l’envoi et le délai.',
+    fCountry: 'Pologne', fParts: 'Service pièces', fWeb: 'Site du fabricant',
+    footNote: 'Projet de démonstration préparé pour AKPIL. Photos et caractéristiques des machines issues des catalogues AKPIL. Liste des pièces, références, prix et remise concessionnaire sont des exemples. Le formulaire n’envoie rien.',
+    cempty: 'Votre panier est vide. Choisissez une machine et ajoutez des pièces.', toParts: 'Choisir des pièces',
+    sub: 'Total HT', vat: '', tot: 'Total TTC', totNet: 'Total HT', vatNote: 'La TVA dépend du pays de livraison ; elle figure sur la confirmation de commande.', dealerSum: 'Prix concessionnaire (remise 25 %)', remove: 'Retirer', rmOf: n => `Retirer : ${n}`,
+    form: 'Informations de commande', machineLeg: 'Machine concernée', fMachine: 'Modèle', other: 'Autre machine AKPIL', choose: 'Choisir le modèle',
+    fYear: 'Année de fabrication', fSerial: 'Numéro de série', serialHint: 'Sur la plaque signalétique. Aide à choisir la bonne version de la pièce.', optional: '(facultatif)',
+    buyerLeg: 'Acheteur', buyerQ: 'J’achète en tant que', fName: 'Nom et prénom', fFirm: 'Raison sociale', fVat: 'Numéro fiscal polonais (NIP)', fVatX: 'N° de TVA', fCountryL: 'Pays de livraison', fStreet: 'Rue et numéro', fZip: 'Code postal', fCity: 'Ville', fTel: 'Téléphone', fMail: 'E-mail', fNote: 'Remarques',
+    send: 'Envoyer la commande',
+    errMachine: 'Choisissez le modèle de la machine.', errYear: y => `L’année de fabrication est comprise entre 1975 et ${y}.`, errName: 'Indiquez votre nom et prénom.', errFirm: 'Indiquez la raison sociale du concessionnaire.', errVat: 'Un numéro fiscal polonais (NIP) comporte 10 chiffres.', errVatSum: 'Vérifiez le NIP : le chiffre de contrôle ne correspond pas.', errVatX: 'Indiquez le numéro de TVA (lettres et chiffres).',
+    errContact: 'Indiquez un téléphone ou un e-mail pour que le service pièces confirme la commande.', errMail: 'Vérifiez l’adresse e-mail : il manque « @ » ou le domaine.', errTel: 'Le numéro de téléphone doit comporter au moins 9 chiffres.', errAddr: 'Indiquez la rue, le code postal et la ville.',
+    dfoot: 'Prix d’exemple. Le service pièces confirme les frais et le délai d’envoi.',
+    sentT: 'Terminé – ceci est une démonstration', sentP: n => `Aucune donnée n’a été envoyée. Dans la vraie boutique, la commande (${n}) partirait au service pièces AKPIL avec les références et le numéro de série de la machine, et le client recevrait une confirmation par e-mail.`
+  }
+};
+const L = () => T[lang];
+
+/* dane */
+const M = id => DATA.machines.find(m => m.id === id);
+const byNr = new Map(DATA.parts.map(p => [p.nr, p]));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const nbU = s => String(s).replace(/(\d) (?=(?:mm|cm|m|l|bar|kg)\b)/g, '$1\u00a0');
+const pn = p => nbU(p.n[lang] || p.n.pl);
+const mtype = m => DATA.types[m.type][lang];
+const nf = (n, o) => new Intl.NumberFormat(LOC[lang], o).format(n);
+const widthTxt = m => `${nf(m.w[0], { minimumFractionDigits: 1, maximumFractionDigits: 2 })}–${nf(m.w[1], { minimumFractionDigits: 1, maximumFractionDigits: 2 })} m`;
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').replace(/ß/g, 'ss').replace(/ø/g, 'o').replace(/×/g, 'x').replace(/[‐-―−]/g, '-');
+
+/* ceny: wszystko w groszach / centach; cena sztuki zaokrąglona w walucie przed sumowaniem, VAT od sumy netto */
+const isPL = () => lang === 'pl';
+const baseCents = p => isPL() ? Math.round(p.zl * 100) : Math.round(p.zl * 100 / DATA.eurRate);
+const unitCents = (p, b = buyer) => b === 'dealer' ? Math.round(baseCents(p) * (1 - DATA.dealerDiscount)) : baseCents(p);
+const money = c => new Intl.NumberFormat(LOC[lang], { style: 'currency', currency: isPL() ? 'PLN' : 'EUR' }).format(c / 100);
+
+/* piktogramy części */
+function discPath(n, depth) {
+  const R = 14, cx = 18, cy = 18, d = Math.PI / n * 0.42, r = depth;
+  let s = '';
+  for (let i = 0; i < n; i++) {
+    const a = i * 2 * Math.PI / n, a1 = a + d, a2 = a + 2 * Math.PI / n - d;
+    const p = t => `${(cx + R * Math.cos(t)).toFixed(2)} ${(cy + R * Math.sin(t)).toFixed(2)}`;
+    if (i === 0) s += `M${p(a1)}`;
+    s += `A${R} ${R} 0 0 1 ${p(a2)}A${r} ${r} 0 0 0 ${p(a2 + 2 * d)}`;
+  }
+  return s + 'Z';
+}
+const DISC = { 1: discPath(6, 4.4), 2: discPath(9, 2.8), 3: discPath(16, 1.4) };
+const STAR = (() => { let s = ''; for (let i = 0; i < 16; i++) { const a = i * Math.PI / 8, r = i % 2 ? 9 : 14.5; s += (i ? 'L' : 'M') + (18 + r * Math.cos(a)).toFixed(2) + ' ' + (18 + r * Math.sin(a)).toFixed(2); } return s + 'Z'; })();
+const svg = b => `<svg viewBox="0 0 36 36" fill="none" stroke="#1E2226" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${b}</svg>`;
+const ICON = {
+  disc: v => svg(`<path d="${v === 4 ? STAR : DISC[v || 2]}"/><circle cx="18" cy="18" r="3" fill="#ED1B2F" stroke="none"/>`),
+  hub: () => svg(`<circle cx="18" cy="18" r="13"/><circle cx="18" cy="18" r="6.5"/><g fill="#ED1B2F" stroke="none"><circle cx="18" cy="8.2" r="1.7"/><circle cx="18" cy="27.8" r="1.7"/><circle cx="8.2" cy="18" r="1.7"/><circle cx="27.8" cy="18" r="1.7"/></g>`),
+  guard: () => svg(`<path d="M9 6h18M9 30h18"/><path d="M11 9l14 3.5-14 3.5 14 3.5-14 3.5 14 3.5" stroke="#ED1B2F"/>`),
+  tine: () => svg(`<path d="M12 4h6v14c0 4 3 6.5 7 8l-2.5 5C15 28.5 12 24 12 17z"/><path d="M20.5 26.5l5 3.5" stroke="#ED1B2F" stroke-width="2.8"/>`),
+  roller: () => svg(`<circle cx="18" cy="18" r="12.5"/><circle cx="18" cy="18" r="2.6" fill="#ED1B2F" stroke="none"/><path d="M18 5.5v8M18 22.5v8M5.5 18h8M22.5 18h8"/>`),
+  hydr: () => svg(`<rect x="3" y="13" width="18" height="10" rx="1.5"/><path d="M21 18h9" stroke="#ED1B2F" stroke-width="2.8"/><circle cx="31.5" cy="18" r="1.8"/><path d="M8 13V9h7v4"/>`),
+  frame: () => svg(`<circle cx="18" cy="18" r="12.5"/><circle cx="18" cy="18" r="5"/><path d="M18 5.5v7.5M18 23v7.5M5.5 18H13M23 18h7.5" stroke="#ED1B2F"/>`)
+};
+
+/* fokus zostaje na tym samym elemencie po przerysowaniu */
+function focusKey(el) {
+  if (!el || el === document.body) return null;
+  if (el.id) return '#' + CSS.escape(el.id);
+  for (const a of ['m', 'c', 'hs', 'dec', 'inc', 'q', 'add', 'cdec', 'cinc', 'cq', 'rm', 'buyer', 'fbuyer']) if (el.dataset && el.dataset[a] !== undefined) return `[data-${a}="${CSS.escape(el.dataset[a])}"]`;
+  return null;
+}
+function keepFocus(fn, fallback) {
+  const k = focusKey(document.activeElement); fn();
+  const el = (k && document.querySelector(k)) || (fallback && document.querySelector(fallback));
+  if (el && el !== document.activeElement) el.focus({ preventScroll: true });
+}
+const smooth = () => matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+const goTo = id => document.getElementById(id).scrollIntoView({ behavior: smooth(), block: 'start' });
+
+/* 1. maszyny */
+const partsOf = id => DATA.parts.filter(p => p.fit.includes(id));
+function renderMachines() {
+  $('#machines').innerHTML = DATA.machines.map(m => `<button type="button" class="mtile" data-m="${esc(m.id)}" aria-pressed="${m.id === current}">
+    <img src="img/m-${esc(m.id)}.webp" width="960" height="640" alt="" loading="lazy" decoding="async">
+    <span class="nm">${esc(m.name)}</span><span class="ty">${esc(mtype(m))}, <span class="nw">${esc(widthTxt(m))}</span></span></button>`).join('');
+}
+$('#machines').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  current = b.dataset.m; cat = 'all'; setQuery('');
+  renderMachines(); renderPanel(); renderParts();
+  goTo('czesci'); $('#mpanel .mfig').focus({ preventScroll: true });
+});
+
+/* 2. panel maszyny z punktami na zdjęciu */
+function renderPanel() {
+  const m = M(current);
+  $('#mpanel').innerHTML = `<figure class="mfig" tabindex="-1"><img src="img/m-${esc(m.id)}.webp" width="960" height="640" alt="${esc(L().mAlt(m.name))}">
+    ${m.hot.map(([c, x, y]) => `<button type="button" class="hs${x > 55 ? ' flip' : ''}" data-hs="${esc(c)}" style="left:${+x}%;top:${+y}%" aria-pressed="${cat === c && !query}" aria-label="${esc(L().cats[c])}"><span class="dot" aria-hidden="true"></span><span class="lbl" aria-hidden="true">${esc(L().cats[c])}</span></button>`).join('')}</figure>
+    <div class="minfo"><h3>${esc(m.name)}</h3><p>${esc(mtype(m))}, ${esc(L().width)} <span class="nw">${esc(widthTxt(m))}</span>. ${esc(nbU(m.n2[lang]))}.</p>
+    <p class="hint">${esc(L().hint)}</p>
+    <a href="${esc(DATA.pdf[m.pdf])}#page=${+m.page}" target="_blank" rel="noopener">${esc(L().pdf)}</a></div>`;
+  placeLabels();
+}
+/* etykieta punktu nie może wyjść poza zdjęcie: najpierw strona bliższa środkowi, potem druga, na końcu pod punktem */
+function placeLabels() {
+  const fig = $('.mfig'); if (!fig) return;
+  const fr = fig.getBoundingClientRect();
+  fig.querySelectorAll('.hs').forEach(h => {
+    const lb = h.querySelector('.lbl');
+    h.classList.remove('flip', 'below');
+    if (getComputedStyle(lb).display === 'none') return;
+    const fits = () => { const r = lb.getBoundingClientRect(); return r.left >= fr.left + 4 && r.right <= fr.right - 4; };
+    const pref = parseFloat(h.style.left) > 55;
+    h.classList.toggle('flip', pref); if (fits()) return;
+    h.classList.toggle('flip', !pref); if (fits()) return;
+    h.classList.remove('flip'); h.classList.add('below');
+  });
+}
+$('#mpanel').addEventListener('click', e => {
+  const b = e.target.closest('[data-hs]'); if (!b) return;
+  setQuery(''); cat = cat === b.dataset.hs ? 'all' : b.dataset.hs;
+  keepFocus(() => { renderPanel(); renderParts(); });
+  const list = $('#plist'), r = list.getBoundingClientRect();
+  if (r.top > innerHeight - 120) $('#chips').scrollIntoView({ behavior: smooth(), block: 'center' });
+});
+
+/* lista części */
+function visibleParts() {
+  if (query) {
+    const words = norm(query).split(/\s+/).filter(Boolean);
+    return DATA.parts.filter(p => {
+      const hay = norm(p.nr + ' ' + Object.values(p.n).join(' ')), flat = hay.replace(/[-\s]/g, '');
+      const hit = w => hay.includes(w) || flat.includes(w.replace(/-/g, ''));
+      // prosta odmiana: „łożysko” znajdzie też „łożyskiem”, „talerze” – „talerz”
+      return words.every(w => hit(w) || (w.length >= 6 && hit(w.slice(0, -1))));
+    });
+  }
+  return partsOf(current).filter(p => cat === 'all' || p.c === cat).sort((a, b) => CATS.indexOf(a.c) - CATS.indexOf(b.c));
+}
+function priceHTML(p) {
+  const u = unitCents(p);
+  if (buyer === 'dealer') return `<strong class="num">${money(u)}</strong><small class="num">${esc(L().dealerPrice)}${isPL() ? ' ' + esc(L().net) : ''}, <s>${money(baseCents(p))}</s></small>`;
+  return isPL()
+    ? `<strong class="num">${money(u)}</strong><small class="num">${esc(L().net)}, ${money(Math.round(u * (1 + VAT)))} ${esc(L().gross)}</small>`
+    : `<strong class="num">${money(u)}</strong><small>${esc(L().net)}</small>`;
+}
+function renderParts() {
+  const list = visibleParts();
+  const inM = partsOf(current);
+  const cats = ['all', ...CATS.filter(c => inM.some(p => p.c === c))];
+  $('#chips').hidden = !!query;
+  $('#chips').innerHTML = cats.map(c => `<button type="button" class="chip" data-c="${c}" aria-pressed="${!query && c === cat}">${esc(c === 'all' ? L().all : L().cats[c])}</button>`).join('');
+  const nt = $('#notice');
+  nt.hidden = !query;
+  nt.innerHTML = !query ? '' : `<span>${esc(L().results(list.length, query))}</span><button type="button" class="linkbtn" id="backBtn">${esc(L().back(M(current).name))}</button>`;
+  $('#plist').innerHTML = list.map(p => {
+    const q = draft.get(p.nr) || 1, name = pn(p);
+    const fits = p.fit.map(id => M(id).name).join(', ');
+    return `<li class="part">
+      <div class="pic" aria-hidden="true">${ICON[p.c](p.ico)}</div>
+      <div><p class="pname">${esc(name)}</p><p class="pmeta"><span>${esc(L().nr)} <span class="nr">${esc(p.nr)}</span></span><span>${esc(L().fits)} ${esc(fits)}</span></p></div>
+      <div class="price">${priceHTML(p)}</div>
+      <div class="buy"><span class="qty"><button type="button" data-dec="${esc(p.nr)}" aria-label="${esc(L().dec)}: ${esc(name)}">−</button><input class="num" type="number" inputmode="numeric" min="1" max="${MAXQ}" step="1" value="${q}" data-q="${esc(p.nr)}" aria-label="${esc(L().qty)}: ${esc(name)}"><button type="button" data-inc="${esc(p.nr)}" aria-label="${esc(L().inc)}: ${esc(name)}">+</button></span><button type="button" class="add" data-add="${esc(p.nr)}" aria-label="${esc(L().add)}: ${esc(name)}">${esc(L().add)}</button></div>
+    </li>`;
+  }).join('');
+  $('#plist').hidden = list.length === 0;
+  $('#empty').hidden = list.length > 0;
+  $('#empty').textContent = query ? L().none(query) : L().noneCat;
+  const back = $('#backBtn'); if (back) back.onclick = () => { setQuery(''); renderParts(); renderPanel(); $('#q').focus(); };
+  $('#priceNote').textContent = buyer === 'dealer' ? L().noteDealer : L().noteFarmer;
+  $('#buyerSeg').innerHTML = ['farmer', 'dealer'].map(b => `<button type="button" data-buyer="${b}" aria-pressed="${buyer === b}">${esc(L()[b])}</button>`).join('');
+  nbsp($('#czesci'));
+}
+$('#chips').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (!b) return; cat = b.dataset.c; keepFocus(() => { renderParts(); renderPanel(); }); });
+$('#buyerSeg').addEventListener('click', e => { const b = e.target.closest('[data-buyer]'); if (!b) return; keepForm(); buyer = b.dataset.buyer; keepFocus(() => { renderParts(); renderCart(); }); });
+
+/* ilości: liczby całkowite 1–999 z komunikatem */
+function parseQty(v) {
+  const s = String(v).trim();
+  if (!/^\d+$/.test(s)) return { q: 1, bad: true };
+  const n = parseInt(s, 10);
+  if (n < 1) return { q: 1, bad: true };
+  if (n > MAXQ) return { q: MAXQ, bad: true, max: true };
+  return { q: n, bad: false };
+}
+$('#plist').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.dec || t.dataset.inc) {
+    const nr = t.dataset.dec || t.dataset.inc, inp = document.querySelector(`[data-q="${CSS.escape(nr)}"]`);
+    const cur = parseQty(inp.value).q, nx = cur + (t.dataset.inc ? 1 : -1);
+    if (nx > MAXQ) toast(L().maxMsg);
+    inp.value = Math.max(1, Math.min(MAXQ, nx)); draft.set(nr, +inp.value);
+  }
+  if (t.dataset.add) {
+    const nr = t.dataset.add, inp = document.querySelector(`[data-q="${CSS.escape(nr)}"]`);
+    const pq = parseQty(inp.value);
+    if (pq.bad && !pq.max) { inp.value = 1; toast(L().qtyErr); inp.focus(); return; }
+    const had = cart.get(nr) || 0;
+    if (had >= MAXQ) { toast(L().maxMsg); return; }
+    const total = Math.min(MAXQ, had + pq.q);
+    cart.set(nr, total);
+    renderCart();
+    toast(had + pq.q > MAXQ || pq.max ? L().maxMsg : L().toastAdd(pn(byNr.get(nr))));
+    inp.value = 1; draft.delete(nr);
+    t.textContent = L().added; t.classList.add('ok');
+    setTimeout(() => { if (t.isConnected) { t.textContent = L().add; t.classList.remove('ok'); } }, 1400);
+  }
+});
+$('#plist').addEventListener('change', e => {
+  const inp = e.target.closest('[data-q]'); if (!inp) return;
+  const r = parseQty(inp.value); if (r.bad) toast(r.max ? L().maxMsg : L().qtyErr);
+  inp.value = r.q; draft.set(inp.dataset.q, r.q);
+});
+
+/* wyszukiwanie */
+function setQuery(v) { query = String(v).trim().slice(0, 60); $('#q').value = query; $('#hq').value = query; $('#qClear').hidden = !query; }
+$('#q').addEventListener('input', e => { query = e.target.value.trim().slice(0, 60); $('#hq').value = query; $('#qClear').hidden = !query; renderParts(); renderPanel(); });
+$('#q').addEventListener('keydown', e => { if (e.key === 'Escape' && query) { e.stopPropagation(); setQuery(''); renderParts(); renderPanel(); } });
+$('#qClear').onclick = () => { setQuery(''); renderParts(); renderPanel(); $('#q').focus(); };
+$('#heroSearch').addEventListener('submit', e => { e.preventDefault(); setQuery($('#hq').value); renderParts(); renderPanel(); goTo('czesci'); (query ? $('#notice') : $('#mpanel .mfig')).focus({ preventScroll: true }); });
+
+/* koszyk */
+const form = { machine: '', year: '', serial: '', name: '', firm: '', vat: '', country: '', street: '', zip: '', city: '', tel: '', mail: '', note: '' };
+const COUNTRIES = ['PL', 'DE', 'FR', 'AT', 'BE', 'NL', 'CZ', 'SK', 'LT', 'LV', 'EE', 'HU', 'RO', 'IT', 'ES', 'IE', 'GB', 'UA', 'US', 'OTHER'];
+const ctryName = c => { if (c === 'OTHER') return ({ pl: 'Inny kraj', en: 'Other country', de: 'Anderes Land', fr: 'Autre pays' })[lang]; try { return new Intl.DisplayNames([LOC[lang]], { type: 'region' }).of(c); } catch (_) { return c; } };
+const defCountry = () => ({ pl: 'PL', en: 'GB', de: 'DE', fr: 'FR' })[lang];
+function cartCount() { let n = 0; cart.forEach(q => { n += q; }); return n; }
+function renderCart() {
+  const n = cartCount();
+  $('#cartCount').textContent = n; $('#cartSr').textContent = L().cartSr(n);
+  if (!cart.size) { $('#dbody').innerHTML = `<p class="cempty">${esc(L().cempty)}</p><button class="btn" type="button" id="toParts">${esc(L().toParts)}</button>`; return; }
+  let sub = 0;
+  const rows = [...cart.entries()].map(([nr, qty]) => {
+    const p = byNr.get(nr), line = unitCents(p) * qty; sub += line;
+    return `<div class="citem">
+      <div><div class="n">${esc(pn(p))}</div><div class="m num">${esc(p.nr)}, ${esc(p.fit.map(id => M(id).name).join(', '))}</div></div>
+      <div class="lt num">${money(line)}</div>
+      <div class="r"><span class="qty"><button type="button" data-cdec="${esc(nr)}" aria-label="${esc(L().dec)}: ${esc(pn(p))}">−</button><input class="num" type="number" inputmode="numeric" min="1" max="${MAXQ}" step="1" value="${qty}" data-cq="${esc(nr)}" aria-label="${esc(L().qty)}: ${esc(pn(p))}"><button type="button" data-cinc="${esc(nr)}" aria-label="${esc(L().inc)}: ${esc(pn(p))}">+</button></span><span class="m num">${money(unitCents(p))} × ${qty}</span><button class="rm" type="button" data-rm="${esc(nr)}" aria-label="${esc(L().rmOf(pn(p)))}">${esc(L().remove)}</button></div>
+    </div>`;
+  }).join('');
+  const tax = Math.round(sub * VAT);
+  const sums = isPL()
+    ? `<div><span>${esc(L().sub)}</span><span class="num">${money(sub)}</span></div><div><span>${esc(L().vat)}</span><span class="num">${money(tax)}</span></div><div class="tot"><span>${esc(L().tot)}</span><span class="num">${money(sub + tax)}</span></div>`
+    : `<div class="tot"><span>${esc(L().totNet)}</span><span class="num">${money(sub)}</span></div><span class="vn">${esc(L().vatNote)}</span>`;
+  if (!form.country) form.country = defCountry();
+  if (!form.machine) { const fits = [...cart.keys()].flatMap(nr => byNr.get(nr).fit); form.machine = fits.includes(current) ? current : (fits[0] || ''); }
+  const y = new Date().getFullYear();
+  const opt = (v, t, sel) => `<option value="${esc(v)}"${sel ? ' selected' : ''}>${esc(t)}</option>`;
+  const dealer = buyer === 'dealer';
+  $('#dbody').innerHTML = rows + `<div class="sums">${dealer ? `<div class="vn" style="display:block">${esc(L().dealerSum)}</div>` : ''}${sums}</div>
+    <form class="oform" id="oform" novalidate>
+      <h3>${esc(L().form)}</h3>
+      <fieldset><legend>${esc(L().machineLeg)}</legend>
+        <label>${esc(L().fMachine)}<select id="fMachine" required>${opt('', L().choose, !form.machine)}${DATA.machines.map(m => opt(m.id, m.name, form.machine === m.id)).join('')}${opt('other', L().other, form.machine === 'other')}</select></label>
+        <div class="two">
+          <label><span>${esc(L().fYear)} <span class="opt">${esc(L().optional)}</span></span><input id="fYear" inputmode="numeric" maxlength="4" autocomplete="off" value="${esc(form.year)}"></label>
+          <label><span>${esc(L().fSerial)} <span class="opt">${esc(L().optional)}</span></span><input id="fSerial" maxlength="30" autocomplete="off" value="${esc(form.serial)}" aria-describedby="serialHint"></label>
+        </div>
+        <span class="hintx" id="serialHint">${esc(L().serialHint)}</span>
+      </fieldset>
+      <fieldset><legend>${esc(L().buyerLeg)}</legend>
+        <div class="who"><span id="fWho">${esc(L().buyerQ)}</span><div class="seg" role="group" aria-labelledby="fWho">${['farmer', 'dealer'].map(b => `<button type="button" data-fbuyer="${b}" aria-pressed="${buyer === b}">${esc(L()[b])}</button>`).join('')}</div></div>
+        ${dealer ? `<label>${esc(L().fFirm)}<input id="fFirm" autocomplete="organization" maxlength="120" value="${esc(form.firm)}"></label>
+        <label>${esc(form.country === 'PL' ? L().fVat : L().fVatX)}<input id="fVat" autocomplete="off" maxlength="20" value="${esc(form.vat)}"></label>` : ''}
+        <label>${esc(L().fName)}<input id="fName" autocomplete="name" maxlength="120" value="${esc(form.name)}"></label>
+        <label>${esc(L().fCountryL)}<select id="fCountry" autocomplete="country">${COUNTRIES.map(c => opt(c, ctryName(c), form.country === c)).join('')}</select></label>
+        <label>${esc(L().fStreet)}<input id="fStreet" autocomplete="address-line1" maxlength="120" value="${esc(form.street)}"></label>
+        <div class="two">
+          <label>${esc(L().fZip)}<input id="fZip" autocomplete="postal-code" maxlength="12" value="${esc(form.zip)}"></label>
+          <label>${esc(L().fCity)}<input id="fCity" autocomplete="address-level2" maxlength="80" value="${esc(form.city)}"></label>
+        </div>
+        <label>${esc(L().fTel)}<input id="fTel" type="tel" autocomplete="tel" maxlength="30" value="${esc(form.tel)}"></label>
+        <label>${esc(L().fMail)}<input id="fMail" type="email" autocomplete="email" maxlength="120" value="${esc(form.mail)}"></label>
+        <label><span>${esc(L().fNote)} <span class="opt">${esc(L().optional)}</span></span><textarea id="fNote" maxlength="1000">${esc(form.note)}</textarea></label>
+      </fieldset>
+      <p class="err" id="ferr" role="alert"></p>
+      <button class="btn red" type="submit">${esc(L().send)}</button>
+      <p class="dfoot">${esc(L().dfoot)}</p>
+    </form>`;
+  nbsp($('#drawer'));
+}
+const FIELDS = { machine: 'fMachine', year: 'fYear', serial: 'fSerial', name: 'fName', firm: 'fFirm', vat: 'fVat', country: 'fCountry', street: 'fStreet', zip: 'fZip', city: 'fCity', tel: 'fTel', mail: 'fMail', note: 'fNote' };
+function keepForm() { for (const k in FIELDS) { const el = document.getElementById(FIELDS[k]); if (el) form[k] = el.value; } }
+$('#dbody').addEventListener('input', e => { keepForm(); if (e.target.getAttribute('aria-invalid')) e.target.removeAttribute('aria-invalid'); });
+$('#dbody').addEventListener('change', e => {
+  if (e.target.matches('select')) keepForm();
+  if (e.target.id === 'fCountry' && buyer === 'dealer') { keepFocus(renderCart); return; }
+  const inp = e.target.closest('[data-cq]'); if (!inp) return;
+  keepForm();
+  const r = parseQty(inp.value); if (r.bad) toast(r.max ? L().maxMsg : L().qtyErr);
+  cart.set(inp.dataset.cq, r.q); keepFocus(renderCart);
+});
+$('#dbody').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'toParts') { closeCart(); goTo('maszyny'); $('.mtile[aria-pressed="true"]').focus({ preventScroll: true }); return; }
+  if (t.dataset.fbuyer) { keepForm(); buyer = t.dataset.fbuyer; keepFocus(() => { renderCart(); renderParts(); }); return; }
+  const nr = t.dataset.cdec || t.dataset.cinc || t.dataset.rm; if (!nr) return;
+  keepForm();
+  if (t.dataset.rm) { cart.delete(nr); keepFocus(renderCart, '#closeCart'); return; }
+  const q = cart.get(nr) + (t.dataset.cinc ? 1 : -1);
+  if (q > MAXQ) toast(L().maxMsg);
+  cart.set(nr, Math.max(1, Math.min(MAXQ, q)));
+  keepFocus(renderCart, '#closeCart');
+});
+$('#dbody').addEventListener('submit', e => {
+  e.preventDefault(); keepForm();
+  const err = $('#ferr'), y = new Date().getFullYear();
+  $$('#oform [aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+  const bad = (msg, id) => { err.textContent = msg; const el = document.getElementById(id); el.setAttribute('aria-invalid', 'true'); el.setAttribute('aria-describedby', ((el.getAttribute('aria-describedby') || '').replace('ferr', '') + ' ferr').trim()); el.focus(); };
+  if (!form.machine) return bad(L().errMachine, 'fMachine');
+  if (form.year.trim()) { const yy = form.year.trim(); if (!/^\d{4}$/.test(yy) || +yy < 1975 || +yy > y) return bad(L().errYear(y), 'fYear'); }
+  if (buyer === 'dealer') {
+    if (!form.firm.trim()) return bad(L().errFirm, 'fFirm');
+    const v = form.vat.replace(/[\s.-]/g, '').toUpperCase();
+    if (form.country === 'PL' ? !/^(PL)?\d{10}$/.test(v) : !/^[A-Z0-9]{5,15}$/.test(v)) return bad(form.country === 'PL' ? L().errVat : L().errVatX, 'fVat');
+    if (form.country === 'PL') { const d = v.slice(-10).split('').map(Number), sum = [6, 5, 7, 2, 3, 4, 5, 6, 7].reduce((a, w, i) => a + w * d[i], 0) % 11; if (sum !== d[9]) return bad(L().errVatSum, 'fVat'); }
+  }
+  if (form.name.trim().length < 3) return bad(L().errName, 'fName');
+  if (!form.street.trim()) return bad(L().errAddr, 'fStreet');
+  if (!form.zip.trim()) return bad(L().errAddr, 'fZip');
+  if (!form.city.trim()) return bad(L().errAddr, 'fCity');
+  if (!form.tel.trim() && !form.mail.trim()) return bad(L().errContact, 'fTel');
+  if (form.tel.trim() && form.tel.replace(/\D/g, '').length < 9) return bad(L().errTel, 'fTel');
+  if (form.mail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.mail.trim())) return bad(L().errMail, 'fMail');
+  err.textContent = '';
+  openModal(L().sentT, L().sentP(L().parts(cartCount())));
+});
+
+/* szuflada i okno: inert reszty strony = pułapka fokusu, powrót fokusu */
+const PAGE = ['.demobar', 'header.site', 'main', 'footer'];
+const setInert = (sels, on) => sels.forEach(s => { const el = $(s); if (el) el.inert = on; });
+let cartBack = null;
+function openCart(e) {
+  cartBack = e && e.currentTarget ? e.currentTarget : $('#openCart');
+  const d = $('#drawer'); d.inert = false; d.classList.add('open'); $('#shade').classList.add('open');
+  setInert(PAGE, true); document.body.style.overflow = 'hidden'; $('#closeCart').focus();
+}
+function closeCart() {
+  const d = $('#drawer'); d.classList.remove('open'); d.inert = true; $('#shade').classList.remove('open');
+  setInert(PAGE, false); document.body.style.overflow = '';
+  (cartBack && document.contains(cartBack) ? cartBack : $('#openCart')).focus();
+}
+$('#drawer').inert = true;
+$('#openCart').onclick = openCart; $('#openCart2').onclick = openCart; $('#closeCart').onclick = closeCart; $('#shade').onclick = closeCart;
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if ($('#modal').classList.contains('open')) closeModal(); else if ($('#drawer').classList.contains('open')) closeCart();
+});
+let modalBack = null;
+function openModal(t, p) {
+  modalBack = document.activeElement; $('#mTitle').textContent = t; $('#mText').textContent = p;
+  $('#modal').classList.add('open'); setInert([...PAGE, '#drawer'], true); $('#mOk').focus();
+}
+function closeModal() {
+  $('#modal').classList.remove('open');
+  const open = $('#drawer').classList.contains('open');
+  $('#drawer').inert = !open; if (!open) setInert(PAGE, false);
+  const b = modalBack && document.contains(modalBack) && !modalBack.closest('[inert]') ? modalBack : (open ? $('#closeCart') : $('#openCart'));
+  b.focus();
+}
+$('#mOk').onclick = closeModal; $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+let toastT = 0;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => { t.classList.remove('show'); toastT = setTimeout(() => { t.textContent = ''; }, 300); }, 2600); }
+const clearToast = () => { clearTimeout(toastT); const t = $('#toast'); t.classList.remove('show'); t.textContent = ''; };
+
+/* polska typografia: jednoliterowe spójniki nie zostają na końcu wiersza */
+function nbsp(root = document.body) {
+  if (lang !== 'pl') return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style,svg,input,textarea,select,option') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(^|[\s(„])([aiouwzAIOUWZ]) /g, '$1$2 '); if (v !== n.nodeValue) n.nodeValue = v; }
+}
+
+const setHH = () => document.documentElement.style.setProperty('--hh', $('header.site').offsetHeight + 'px');
+addEventListener('resize', () => { setHH(); placeLabels(); });
+
+/* język */
+function applyLang() {
+  document.documentElement.lang = lang;
+  $$('[data-i]').forEach(el => { const v = L()[el.dataset.i]; if (typeof v === 'string') el.innerHTML = v; });
+  $$('[data-i-alt]').forEach(el => { el.alt = L()[el.dataset.iAlt]; });
+  $$('[data-i-aria]').forEach(el => el.setAttribute('aria-label', L()[el.dataset.iAria]));
+  document.title = L().title; $('meta[name=description]').content = L().desc;
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  $('#langSel').value = lang;
+  $('#hq').placeholder = L().ph; $('#q').placeholder = L().phQ;
+  $('#qClear').setAttribute('aria-label', L().clear); $('#closeCart').setAttribute('aria-label', L().closeCart);
+  renderMachines(); renderPanel(); renderParts(); renderCart(); nbsp(); setHH();
+}
+const switchLang = l => { if (!T[l]) return; keepForm(); clearToast(); if (form.country === defCountry()) form.country = ''; lang = l; applyLang(); };
+$$('[data-lang]').forEach(b => b.onclick = () => switchLang(b.dataset.lang));
+$('#langSel').addEventListener('change', e => switchLang(e.target.value));
+
+applyLang();
+})();
+</script>
+</body>
+</html>
