@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>MANDAM – części zamienne z ceną (projekt demonstracyjny)</title>
+<meta name="description" content="Projekt demonstracyjny sklepu z częściami MANDAM: wybór maszyny, części z numerami z katalogu, ceny i zamówienie online.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23E25303'/%3E%3Cpath d='M9 22V12h3l4 6 4-6h3v10' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+/* czcionki lokalnie – bez łączenia z Google */
+@font-face {font-family: 'Barlow'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/Barlow-latin-ext-0.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Barlow'; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/Barlow-latin-1.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'Barlow'; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/Barlow-latin-ext-2.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Barlow'; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/Barlow-latin-3.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'Barlow'; font-style: normal; font-weight: 600; font-display: swap; src: url(fonts/Barlow-latin-ext-4.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Barlow'; font-style: normal; font-weight: 600; font-display: swap; src: url(fonts/Barlow-latin-5.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'Barlow'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/Barlow-latin-ext-6.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Barlow'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/Barlow-latin-7.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'Barlow Condensed'; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/BarlowCondensed-latin-ext-8.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Barlow Condensed'; font-style: normal; font-weight: 500; font-display: swap; src: url(fonts/BarlowCondensed-latin-9.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'Barlow Condensed'; font-style: normal; font-weight: 600; font-display: swap; src: url(fonts/BarlowCondensed-latin-ext-10.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Barlow Condensed'; font-style: normal; font-weight: 600; font-display: swap; src: url(fonts/BarlowCondensed-latin-11.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family: 'Barlow Condensed'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/BarlowCondensed-latin-ext-12.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family: 'Barlow Condensed'; font-style: normal; font-weight: 700; font-display: swap; src: url(fonts/BarlowCondensed-latin-13.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+
+:root{
+  --orange:#E25303; --orange-d:#B84300; --graphite:#3A3E43; --graphite-2:#4F5358; --steel:#6B7177;
+  --bg:#EDEFF1; --white:#fff; --ink:#1D2023; --ink-2:#50565C; --line:#D7DBDF; --line-2:#C2C7CC;
+  --r:4px; --cond:"Barlow Condensed",Barlow,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Barlow,system-ui,sans-serif}
+img{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--cond);margin:0;line-height:1.05;font-weight:700;letter-spacing:.005em}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* pasek demo */
+.demobar{background:#2B2E32;color:#C9CDD1;font-size:13.5px}
+.demobar .wrap{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-top:7px;padding-bottom:7px}
+.demobar b{color:#fff;font-weight:600}
+.demobar a{color:#fff;text-underline-offset:3px}
+
+/* nagłówek */
+header.site{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--line)}
+header.site .wrap{display:flex;align-items:center;gap:20px;min-height:72px}
+.logo{flex:none;display:block}
+.logo img{height:38px;width:auto}
+nav.mnav{display:flex;gap:2px;flex:1 1 auto;min-width:0}
+nav.mnav a{text-decoration:none;font-weight:600;font-size:16px;padding:9px 12px;border-radius:var(--r);white-space:nowrap;color:var(--ink-2)}
+nav.mnav a:hover{color:var(--ink);background:var(--bg)}
+.htools{display:flex;align-items:center;gap:10px;flex:none;margin-left:auto}
+.langs{display:inline-flex;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden}
+.langs button{border:0;background:#fff;padding:7px 11px;font-weight:600;font-size:14px;cursor:pointer;color:var(--ink-2)}
+.langs button[aria-pressed=true]{background:var(--graphite);color:#fff}
+.cartbtn{display:flex;align-items:center;gap:8px;border:0;background:var(--orange-d);color:#fff;font-weight:600;padding:10px 14px;border-radius:var(--r);cursor:pointer;white-space:nowrap}
+.cartbtn:hover{background:#9C3900}
+.cartbtn .cnt{min-width:22px;height:22px;border-radius:11px;background:#fff;color:var(--orange-d);font-size:13px;font-weight:700;display:grid;place-items:center;padding:0 6px}
+header.site.fit-1 .cartbtn .lbl{display:none}
+header.site.fit-2 nav.mnav a{padding:8px 8px;font-size:15px}
+header.site.fit-3 .wrap{flex-wrap:wrap;gap:8px 12px;padding-top:10px;padding-bottom:8px}
+header.site.fit-3 nav.mnav{order:3;flex-basis:100%;margin:0 -8px}
+
+/* hero */
+.hero{background:var(--graphite);color:#fff}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;align-items:center;padding-top:48px;padding-bottom:48px}
+.hero h1{font-size:clamp(34px,4.6vw,54px)}
+.hero p.lead{margin-top:14px;color:#D7DADD;font-size:18px;max-width:34em}
+.search{margin-top:26px;display:flex;gap:8px;max-width:520px}
+.search input{flex:1;min-width:0;height:50px;border:0;border-radius:var(--r);padding:0 16px;font-size:17px;background:#fff;color:var(--ink)}
+.search input::placeholder{color:#7C8288}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:50px;padding:0 20px;border:0;border-radius:var(--r);background:var(--orange-d);color:#fff;font-weight:600;font-size:16px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{background:#9C3900}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2);height:44px}
+.btn.ghost:hover{background:var(--bg)}
+.hint{margin-top:10px;font-size:14px;color:#B9BEC3}
+.hint button{background:none;border:0;padding:0;color:#fff;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14px}
+.hero figure{margin:0;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;background:#2B2E32}
+.hero figure img{width:100%;height:100%;object-fit:cover}
+
+/* sekcje */
+section.block{padding:56px 0;scroll-margin-top:calc(var(--hh,72px) + 8px)}
+.stephead{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.stepno{font-family:var(--cond);font-weight:700;font-size:20px;color:#fff;background:var(--orange-d);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;transform:translateY(-3px)}
+.stephead h2{font-size:clamp(28px,3.4vw,38px)}
+.stephead p{color:var(--ink-2);flex-basis:100%;padding-left:48px;margin-top:-6px}
+
+/* maszyny */
+.machines{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.mcard{display:grid;grid-template-columns:132px minmax(0,1fr);background:#fff;border:2px solid var(--line);border-radius:var(--r);overflow:hidden;text-align:left;padding:0;cursor:pointer;min-height:104px}
+.mcard:hover{border-color:var(--line-2)}
+.mcard[aria-pressed=true]{border-color:var(--orange);box-shadow:inset 0 0 0 1px var(--orange)}
+.mcard img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/3}
+.mcard .t{padding:12px 14px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.mcard .n{font-family:var(--cond);font-weight:700;font-size:26px;line-height:1}
+.mcard .d{font-weight:500;color:var(--ink-2);line-height:1.3}
+.mcard .y{font-size:13.5px;color:var(--steel)}
+.mcard[aria-pressed=true] .n{color:var(--orange-d)}
+
+/* części */
+.partsbar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:var(--r) var(--r) 0 0;padding:14px 16px}
+.partsbar .who{display:flex;align-items:center;gap:12px;min-width:0}
+.partsbar .who img{width:64px;height:48px;object-fit:cover;border-radius:3px;flex:none}
+.partsbar .who b{font-family:var(--cond);font-size:24px;font-weight:700;display:block;line-height:1.05}
+.partsbar .who span{color:var(--ink-2);font-size:14.5px}
+.partsbar .pdf{font-size:14.5px;font-weight:600;color:var(--orange-d);text-underline-offset:3px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#F7F8F9;border:1px solid var(--line);border-top:0;padding:12px 16px}
+.chip{border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:6px 12px;font-size:14.5px;font-weight:500;cursor:pointer;color:var(--ink-2)}
+.chip[aria-pressed=true]{background:var(--graphite);border-color:var(--graphite);color:#fff}
+.qfield{margin-left:auto;display:flex;align-items:center;gap:6px;border:1px solid var(--line-2);border-radius:var(--r);background:#fff;padding:0 10px;height:38px;min-width:240px}
+.qfield input{border:0;outline:0;flex:1;min-width:0;font-size:15px;background:transparent}
+.qfield:focus-within{outline:3px solid var(--orange);outline-offset:1px}
+.qclear{border:0;background:none;cursor:pointer;color:var(--steel);font-size:20px;line-height:1;padding:0 2px}
+.notice{background:#FFF4EC;border:1px solid #F3C9AC;border-top:0;padding:10px 16px;font-size:14.5px;color:#5A2A08}
+.notice button{background:none;border:0;padding:0;font-weight:600;color:var(--orange-d);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:14.5px}
+table.parts{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-top:0}
+table.parts th{font-size:13.5px;font-weight:600;color:var(--steel);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);background:#fff;white-space:nowrap}
+table.parts td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.parts tr:last-child td{border-bottom:0}
+table.parts .ic{width:58px}
+.pic{width:46px;height:46px;border-radius:4px;background:#F2F3F4;display:grid;place-items:center}
+.pic svg{width:32px;height:32px}
+.pn{font-family:var(--cond);font-weight:600;font-size:18px;white-space:nowrap}
+.pname{font-weight:600;line-height:1.3}
+.pmeta{font-size:13.5px;color:var(--steel);margin-top:2px}
+.pmeta a{color:var(--ink-2);text-underline-offset:2px}
+.mtag{display:inline-block;font-family:var(--cond);font-weight:600;font-size:14px;background:#E6E8EA;border-radius:3px;padding:0 6px;margin-right:4px;color:var(--ink)}
+.price{text-align:right;white-space:nowrap}
+.price strong{font-family:var(--cond);font-size:22px;font-weight:700;display:block;line-height:1.1}
+.price small{color:var(--steel);font-size:13px}
+.buy{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:var(--r);height:40px}
+.qty button{width:34px;height:38px;border:0;background:none;cursor:pointer;font-size:19px;color:var(--ink-2)}
+.qty input{width:38px;border:0;text-align:center;font-weight:600;font-size:15px;-moz-appearance:textfield;background:transparent}
+.qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.add{height:40px;padding:0 14px;border:0;border-radius:var(--r);background:var(--graphite);color:#fff;font-weight:600;cursor:pointer;white-space:nowrap;min-width:96px}
+.add:hover{background:#25282C}
+.add.ok{background:#2F7A3B}
+.empty{background:#fff;border:1px solid var(--line);border-top:0;padding:28px 16px;color:var(--ink-2)}
+
+/* jak zamówić */
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.how div{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 20px}
+.how b{font-family:var(--cond);font-size:22px;display:block;margin-bottom:6px}
+.how p{color:var(--ink-2)}
+
+/* stopka */
+footer{background:var(--graphite);color:#D7DADD;padding:40px 0;font-size:15px}
+footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px}
+footer h3{color:#fff;font-size:20px;margin-bottom:8px}
+footer a{color:#fff;text-underline-offset:3px}
+footer p+p{margin-top:4px}
+
+/* koszyk */
+.shade{position:fixed;inset:0;background:rgba(20,22,24,.45);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.shade.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:#fff;z-index:61;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer .dh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.drawer .dh h2{font-size:26px}
+.x{border:0;background:none;font-size:28px;line-height:1;cursor:pointer;color:var(--ink-2);width:40px;height:40px}
+.dbody{flex:1;overflow:auto;padding:8px 20px 20px}
+.citem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.citem .n{font-weight:600;line-height:1.3}
+.citem .m{font-size:13.5px;color:var(--steel)}
+.citem .r{display:flex;gap:10px;align-items:center;grid-column:1/-1;justify-content:space-between}
+.citem .qty{height:34px}
+.citem .qty button{height:32px;width:30px}
+.rm{border:0;background:none;color:var(--ink-2);text-decoration:underline;text-underline-offset:2px;cursor:pointer;font-size:13.5px;padding:0}
+.citem .lt{font-family:var(--cond);font-weight:700;font-size:19px}
+.sums{margin-top:14px;font-size:15px}
+.sums div{display:flex;justify-content:space-between;padding:3px 0}
+.sums .tot{font-weight:700;font-size:18px;border-top:1px solid var(--line);margin-top:6px;padding-top:9px}
+.cempty{padding:28px 0;color:var(--ink-2)}
+.oform{margin-top:20px;border-top:1px solid var(--line);padding-top:16px;display:grid;gap:10px}
+.oform h3{font-size:21px}
+.seg2{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden}
+.seg2 button{border:0;background:#fff;padding:9px 6px;font-weight:600;font-size:14.5px;cursor:pointer;color:var(--ink-2)}
+.seg2 button[aria-pressed=true]{background:var(--graphite);color:#fff}
+.oform label{display:grid;gap:3px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.oform input,.oform textarea{border:1px solid var(--line-2);border-radius:var(--r);padding:9px 11px;font-size:15.5px;font-weight:400;color:var(--ink);width:100%}
+.oform textarea{min-height:64px;resize:vertical}
+.oform .err{color:#B3261E;font-size:14px;min-height:0}
+.oform .btn{width:100%}
+.dfoot{font-size:13px;color:var(--steel)}
+
+/* toast, modal */
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:var(--graphite);color:#fff;padding:11px 18px;border-radius:var(--r);font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;background:rgba(20,22,24,.55);display:none;place-items:center;z-index:90;padding:16px}
+.modal.open{display:grid}
+.modal .box{background:#fff;border-radius:6px;max-width:460px;width:100%;padding:26px}
+.modal h3{font-size:28px;margin-bottom:10px}
+.modal p{color:var(--ink-2);margin-bottom:18px}
+
+/* responsywność */
+@media (max-width:1000px){
+  .hero .wrap{grid-template-columns:1fr;gap:26px;padding-top:36px;padding-bottom:36px}
+  .hero figure{aspect-ratio:21/9}
+  .machines{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .qfield{margin-left:0;flex-basis:100%}
+}
+@media (max-width:900px){
+  table.parts thead{display:none}
+  table.parts,table.parts tbody,table.parts tr,table.parts td{display:block;width:100%}
+  table.parts tr{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:4px 12px;padding:12px 14px;border-bottom:1px solid var(--line)}
+  table.parts tr:last-child{border-bottom:0}
+  table.parts td{padding:0;border:0}
+  table.parts td.ic{grid-row:1/3;width:auto}
+  table.parts td.c-nr{grid-column:2;grid-row:1}
+  table.parts td.c-name{grid-column:2/4;grid-row:2}
+  table.parts td.price{grid-column:3;grid-row:1}
+  table.parts td.c-buy{grid-column:1/-1;grid-row:3;margin-top:6px}
+  .buy{justify-content:space-between}
+  .add{flex:1}
+  .buy{justify-content:flex-end}
+  .add{flex:0 0 auto;min-width:150px}
+}
+@media (max-width:760px){
+  .buy{justify-content:space-between}
+  .add{flex:1;min-width:0}
+  .wrap{padding:0 16px}
+  .demobar .wrap{flex-direction:column;align-items:flex-start;gap:1px}
+  .logo img{height:30px}
+  .langs button{padding:6px 9px;font-size:13px}
+  .cartbtn{padding:9px 11px}
+  section.block{padding:40px 0}
+  .stephead p{padding-left:0;margin-top:0}
+  .machines{grid-template-columns:1fr;gap:10px}
+  .mcard{grid-template-columns:112px minmax(0,1fr);min-height:88px}
+  .mcard .n{font-size:23px}
+  .how{grid-template-columns:1fr}
+  footer .wrap{grid-template-columns:1fr;gap:20px}
+  .search{flex-direction:column}
+  .search input{flex:none;width:100%}
+  .search .btn{width:100%}
+  .chip{padding:5px 10px;font-size:14px}
+}
+@media (max-width:359px){ .logo img{height:26px} .langs button{padding:5px 7px} .cartbtn{padding:8px 9px} }
+[hidden]{display:none!important}
+.hero :focus-visible{outline-color:#fff}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <span data-i="demo"><b>Projekt demonstracyjny</b> przygotowany dla MANDAM. Maszyny, numery i nazwy części pochodzą z katalogów MANDAM, ceny są przykładowe.</span>
+  <span><span data-i="madeBy">Przygotował:</span> <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></span>
+</div></div>
+
+<header class="site"><div class="wrap">
+  <a class="logo" href="#" aria-label="MANDAM – go farming!"><img src="img/logo.webp" width="480" height="117" alt="MANDAM – go farming!"></a>
+  <nav class="mnav" aria-label="Sekcje" data-i-aria="navLabel">
+    <a href="#maszyny" data-i="nav1">Maszyny</a>
+    <a href="#czesci" data-i="nav2">Części</a>
+    <a href="#zamawianie" data-i="nav3">Jak zamówić</a>
+  </nav>
+  <div class="htools">
+    <div class="langs" role="group" aria-label="Język / Sprache">
+      <button type="button" data-lang="pl" aria-pressed="true">PL</button>
+      <button type="button" data-lang="de" aria-pressed="false">DE</button>
+    </div>
+    <button class="cartbtn" type="button" id="openCart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl" data-i="cart">Koszyk</span><span class="cnt num" id="cartCount">0</span></button>
+  </div>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <div>
+    <h1 data-i="h1">Części zamienne MANDAM z ceną i zamówieniem online</h1>
+    <p class="lead" data-i="lead">Wybierz maszynę albo wpisz numer z katalogu. Zobaczysz cenę od razu, a zamówienie trafi prosto do działu części w Gliwicach.</p>
+    <form class="search" id="heroSearch" role="search">
+      <label class="sr" for="hq" data-i="qLabel">Numer lub nazwa części</label>
+      <input id="hq" type="search" autocomplete="off" placeholder="np. 05-02-0127 albo talerz 560">
+      <button class="btn" type="submit" data-i="find">Szukaj części</button>
+    </form>
+    <p class="hint"><span data-i="tryTxt">Spróbuj:</span> <button type="button" data-try="05-02-0133">05-02-0133</button>, <button type="button" data-try="redlica" data-try-de="Schar">redlica</button>, <button type="button" data-try="łożysko" data-try-de="Lager">łożysko</button></p>
+  </div>
+  <figure><img src="img/hero.webp" width="1600" height="1066" alt="Brona talerzowa MANDAM GAL-K w pracy na polu" data-i-alt="heroAlt"></figure>
+</div></section>
+
+<section class="block" id="maszyny"><div class="wrap">
+  <div class="stephead"><span class="stepno">1</span><h2 data-i="s1">Wybierz maszynę</h2><p data-i="s1p">Części pokazujemy dla konkretnego modelu – tak jak w katalogu części MANDAM.</p></div>
+  <div class="machines" id="machines"></div>
+</div></section>
+
+<section class="block" id="czesci" style="padding-top:0"><div class="wrap">
+  <div class="stephead"><span class="stepno">2</span><h2 data-i="s2">Dodaj części do zamówienia</h2></div>
+  <div class="partsbar" id="partsbar"></div>
+  <div class="filters">
+    <div id="chips" style="display:contents"></div>
+    <label class="qfield"><span class="sr" data-i="qLabel">Numer lub nazwa części</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7177" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" autocomplete="off"><button class="qclear" type="button" id="qClear" hidden aria-label="Wyczyść">×</button></label>
+  </div>
+  <div class="notice" id="notice" hidden></div>
+  <table class="parts" id="partsTable">
+    <thead><tr><th class="ic"><span class="sr" data-i="thPic">Rodzaj</span></th><th data-i="thNr">Nr katalogowy</th><th data-i="thName">Część</th><th class="price" data-i="thPrice">Cena netto</th><th style="text-align:right" data-i="thBuy">Ilość</th></tr></thead>
+    <tbody id="partsBody"></tbody>
+  </table>
+  <div class="empty" id="empty" hidden></div>
+</div></section>
+
+<section class="block" id="zamawianie" style="padding-top:0"><div class="wrap">
+  <div class="stephead"><span class="stepno">3</span><h2 data-i="s3">Wyślij zamówienie</h2></div>
+  <div class="how">
+    <div><b data-i="h1t">Koszyk z numerami</b><p data-i="h1p">Każda pozycja ma numer z katalogu MANDAM, więc dział części nie musi niczego dopytywać.</p></div>
+    <div><b data-i="h2t">Dane do faktury</b><p data-i="h2p">Osoba prywatna albo gospodarstwo i firma z NIP – tak jak w dotychczasowym formularzu.</p></div>
+    <div><b data-i="h3t">Potwierdzenie</b><p data-i="h3p">Dział części potwierdza dostępność, koszt wysyłki i termin – telefonicznie albo mailem.</p></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><h3>MANDAM Sp. z o.o.</h3><p>ul. Toruńska 14, 44-100 Gliwice</p><p data-i="fParts">Dział części zamiennych</p></div>
+  <div><h3 data-i="fPhone">Telefon</h3><p><a href="tel:+48322322660">+48 32 232 26 60</a> <span data-i="fExt">wewn. 39, 45</span></p></div>
+  <div><h3 data-i="fMail">E-mail</h3><p><a href="mailto:czesci@mandam.com.pl">czesci@mandam.com.pl</a></p><p><a href="https://www.mandam.com.pl/" target="_blank" rel="noopener">mandam.com.pl</a></p></div>
+</div></footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" aria-label="Koszyk" aria-hidden="true">
+  <div class="dh"><h2 data-i="cartTitle">Koszyk</h2><button class="x" type="button" id="closeCart" aria-label="Zamknij">×</button></div>
+  <div class="dbody" id="dbody"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="box"><h3 id="mTitle"></h3><p id="mText"></p><button class="btn" type="button" id="mOk">OK</button></div></div>
+
+<script>
+(() => {
+const DATA = {"pdfBase":"https://czesci.mandam.com.pl/data/upload/","machines":[{"id":"galk","name":"GAL-K","pl":"Brona talerzowa","de":"Scheibenegge","model":"2025+","modelDe":"2025+","pdf":"1775135478.pdf"},{"id":"talk","name":"TAL-K","pl":"Brona talerzowa na kołach","de":"Scheibenegge mit Fahrwerk","model":"TAL-C / TAL-K","modelDe":"TAL-C / TAL-K","pdf":"1770211953.pdf"},{"id":"kus","name":"KUS","pl":"Kultywator ścierniskowy","de":"Stoppelgrubber","model":"od IV 2021","modelDe":"ab IV 2021","pdf":"1773325068.pdf"},{"id":"top","name":"TOP","pl":"Kultywator dłutowy","de":"Meißelgrubber","model":"od IV 2021","modelDe":"ab IV 2021","pdf":"1776085690.pdf"},{"id":"grot","name":"GROT","pl":"Pług dłutowy","de":"Tiefenlockerer","model":"2025+","modelDe":"2025+","pdf":"1764346904.pdf"},{"id":"mcb","name":"MCB","pl":"Wał Cambridge","de":"Cambridge-Walze","model":"od III 2026","modelDe":"ab III 2026","pdf":"1773855261.pdf"}],"parts":[["05-02-0127","disc","talerz uzębiony 560 mm","gezahnte Scheibe 560 mm",185,[["galk",3,"12"],["talk",2,"12"]]],["05-02-0649","disc","talerz uzębiony 610 mm","gezahnte Scheibe 610 mm",229,[["galk",3,"13"],["talk",2,"13"]]],["05-02-0132","disc","talerz pogrubiony 610/6 mm","verstärkte gezahnte Scheibe 610/6 mm",289,[["galk",3],["talk",2]]],["05-02-0690","disc","talerz obrysowy 560 mm","Randscheibe 560 mm",195,[["galk",3],["talk",2]]],["05-02-0487","disc","talerz obrysowy 465 mm","Randscheibe 465 mm",145,[["talk",2]]],["07-17-0184","bearing","zespół piasty lewy (kpl.)","Nabengruppe links (kpl.)",420,[["galk",1,"01"]]],["07-17-0185","bearing","zespół piasty prawy (kpl.)","Nabengruppe rechts (kpl.)",420,[["galk",1]]],["07-17-0198","bearing","piasta","Nabe",165,[["galk",2,"04"]]],["05-01-0711","spring","guma 50 mm","Gummi 50 mm",38,[["galk",2,"06"]]],["05-01-0719","spring","guma 45 mm","Gummi 45 mm",34,[["galk",2,"07"]]],["15-01-0997","guard","osłona kamieniowa lewa","Steinschutz links",210,[["galk",3]]],["15-01-0959","guard","osłona kamieniowa prawa","Steinschutz rechts",210,[["galk",3]]],["07-17-0115","bearing","łożysko wału rurowego SKF","Rohrstabwalzenlager SKF",310,[["galk",5],["grot",4]]],["07-17-0117","bearing","łożysko wału V-/T-/C-ring","Walzenlager V-/T-/C-Ring",260,[["galk",5],["talk",3],["top",2]]],["06-01-0058","hydr","siłownik składania podwozia","Fahrgestellzylinder",1180,[["galk",5]]],["07-02-0215","fix","śruba M16","Schraube M16",4.5,[["galk",2,"08"]]],["07-06-0012","fix","nakrętka M16","Mutter M16",1.8,[["galk",2,"10"],["talk",1,"05"]]],["05-02-0201","spring","sprężyna płaska","Blattfeder",95,[["talk",1,"01"]]],["08-01-0062","fix","ramię lewe","Arm links",265,[["talk",1,"07"]]],["08-01-0063","fix","ramię prawe","Arm rechts",265,[["talk",1,"08"]]],["15-01-1598","guard","osłona kamieni prawa","Steinschutz rechts",210,[["talk",1,"11"]]],["15-01-0996","guard","osłona kamieni lewa","Steinschutz links",210,[["talk",1,"12"]]],["07-17-0171","bearing","łożysko wału, czop 40 mm","Walzenlager, Zapfen 40 mm",190,[["talk",3]]],["15-01-1040","guard","blacha boczna długa","Seitenblech lang",240,[["talk",3]]],["05-02-0202","guard","blacha boczna krótka","Seitenblech kurz",180,[["talk",3]]],["20-28-0001","fix","sworzeń dolny","unterer Kupplungsbolzen",75,[["talk",2]]],["05-02-0013","tine","grządziel","Zinkenstiel",690,[["kus",1,"01"]]],["05-02-0012","tine","stopa","Scharfuß",210,[["kus",1,"02"]]],["05-02-0007","tine","lemiesz lewy","Flügelschar links",86,[["kus",1,"03"]]],["05-02-0008","tine","lemiesz prawy","Flügelschar rechts",86,[["kus",1,"04"]]],["05-02-0009","tine","odkładnica środkowa","Leitblech Mitte",74,[["kus",1,"05"]]],["05-02-0006","tine","szpic","Spitze",48,[["kus",1,"06"]]],["05-02-0011","tine","odkładnica lewa","Leitblech links",69,[["kus",1,"07"]]],["05-02-0010","tine","odkładnica prawa","Leitblech rechts",69,[["kus",1,"08"]]],["07-02-0023","fix","śruba zrywana (zabezpieczenie)","Scherbolzen",6.5,[["kus",1,"13"],["top",1,"12"]]],["05-02-0133","disc","talerz zębaty 465 mm","gezahnte Scheibe 465 mm",135,[["kus",8,"15"],["top",5,"01"]]],["05-02-0022","disc","talerz gładki 465 mm","glatte Scheibe 465 mm",120,[["kus",8,"16"]]],["07-17-0009","bearing","łożyskowanie prawe","Lagerung rechts",230,[["kus",8,"17"]]],["07-17-0008","bearing","łożyskowanie lewe","Lagerung links",230,[["kus",8]]],["15-05-0001","disc","zespół talerzy obrysowych L+P (kpl.)","Randscheiben-Satz links + rechts (kpl.)",1290,[["kus",8]]],["05-02-0259","tine","grządziel","Zinkenstiel",720,[["top",1,"01"]]],["05-02-0255","tine","redlica skrzydełkowa 310 mm","Flügelschar 310 mm",118,[["top",1,"02"]]],["05-02-0258","tine","szpic","Spitze",52,[["top",1,"03"]]],["05-02-0555","tine","szpic wzmocniony H","verstärkte Spitze H",78,[["top",1,"04"]]],["05-02-0256","tine","odkładnica lewa","Leitblech links",72,[["top",1,"05"]]],["05-02-0257","tine","odkładnica prawa","Leitblech rechts",72,[["top",1,"06"]]],["05-02-0758","tine","redlica dłutowa 40 mm","Meißelschar 40 mm",64,[["top",1,"14"]]],["05-02-0862","tine","redlica kuta HV","geschmiedete Schar HV",89,[["top",1,"15"]]],["08-02-0591","bearing","piasta 4-otworowa","Nabe, 4 Löcher",175,[["top",5,"03"]]],["05-02-0848","tine","ząb #7885","Zinken #7885",890,[["grot",1,"01"]]],["05-02-0665","tine","osłona z nożem","Messerschutz",158,[["grot",1,"02"]]],["05-02-0667","tine","lemiesz prawy","Seitenspitze rechts",112,[["grot",1,"03"]]],["05-02-0666","tine","lemiesz lewy","Seitenspitze links",112,[["grot",1,"04"]]],["05-02-0858","tine","szpic 70 mm","Spitze 70 mm",69,[["grot",1,"05"]]],["05-02-0849","tine","szpic kuty napawany","geschmiedete Spitze, aufgepanzert",145,[["grot",1,"06"]]],["07-01-0019","fix","śruba M30×135 8.8","Schraube M30×135 8.8",24,[["grot",1]]],["07-07-0014","fix","nakrętka M30","Mutter M30",9,[["grot",1]]],["06-01-0100","hydr","siłownik wałów 174","Walzenzylinder 174",980,[["grot",3]]],["05-02-0883","roller","koło szerokie, 3 szprychy","Guss-Breitrad, 3 Speichen",165,[["mcb",3,"01"]]],["05-02-0885","roller","koło szerokie, 4 szprychy","Guss-Breitrad, 4 Speichen",175,[["mcb",3,"01a"]]],["05-02-0882","roller","koło uzębione","Gussrad gezahnt",149,[["mcb",3,"02"]]],["07-17-0137","bearing","zespół łożyskowy SKF","SKF-Lagereinheit",380,[["mcb",3,"03"]]],["15-05-0104","roller","oś środkowa L = 2196 mm","Mittelachse L = 2196 mm",640,[["mcb",3,"08"]]],["06-01-0026","hydr","siłownik skrzydeł","Flügelzylinder",1250,[["mcb",4,"01"]]],["05-02-0051","spring","sprężyna","Feder",42,[["mcb",7,"01"]]],["05-02-0052","fix","płytka skrobaka","Abstreiferplatte",18,[["mcb",7,"02"]]],["05-02-0050","fix","uchwyt sprężyny","Federhalter",36,[["mcb",7,"05"]]],["06-01-0056","hydr","siłownik regulacji kąta","Winkelverstellzylinder",890,[["mcb",7,"12"]]]]};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const EUR = 4.3;
+let lang = 'pl', current = 'galk', type = 'all', query = '', buyer = 'private';
+const cart = new Map();
+const qtyDraft = new Map();
+
+const T = {
+  pl: {
+    demo: '<b>Projekt demonstracyjny</b> przygotowany dla MANDAM. Maszyny, numery i nazwy części pochodzą z katalogów MANDAM, ceny są przykładowe.',
+    madeBy: 'Przygotował:', nav1: 'Maszyny', nav2: 'Części', nav3: 'Jak zamówić', cart: 'Koszyk', cartTitle: 'Koszyk',
+    h1: 'Części zamienne MANDAM z ceną i zamówieniem online',
+    lead: 'Wybierz maszynę albo wpisz numer z katalogu. Zobaczysz cenę od razu, a zamówienie trafi prosto do działu części w Gliwicach.',
+    qLabel: 'Numer lub nazwa części', find: 'Szukaj części', tryTxt: 'Spróbuj:', heroAlt: 'Brona talerzowa MANDAM GAL-K w pracy na polu',
+    s1: 'Wybierz maszynę', s1p: 'Części pokazujemy dla konkretnego modelu – tak jak w katalogu części MANDAM.',
+    s2: 'Dodaj części do zamówienia', s3: 'Wyślij zamówienie',
+    thPic: 'Rodzaj', thNr: 'Nr katalogowy', thName: 'Część', thPrice: 'Cena netto', thBuy: 'Ilość',
+    h1t: 'Koszyk z numerami', h1p: 'Każda pozycja ma numer z katalogu MANDAM, więc dział części nie musi niczego dopytywać.',
+    h2t: 'Dane do faktury', h2p: 'Osoba prywatna albo gospodarstwo lub firma z NIP, adres dostawy i kontakt – wszystko w jednym kroku.',
+    h3t: 'Potwierdzenie', h3p: 'Dział części potwierdza dostępność, koszt wysyłki i termin – telefonicznie albo mailem.',
+    fParts: 'Dział części zamiennych', fPhone: 'Telefon', fExt: 'wewn. 39, 45',
+    ph: 'np. 05-02-0127 albo talerz 560', phQ: 'Szukaj: numer lub nazwa',
+    types: { all: 'Wszystkie', disc: 'Talerze', tine: 'Elementy robocze', bearing: 'Łożyska i piasty', spring: 'Sprężyny i gumy', roller: 'Koła i osie wału', hydr: 'Siłowniki', guard: 'Osłony', fix: 'Sworznie, śruby, uchwyty' },
+    pdf: 'Otwórz katalog PDF', page: 'rys. str.', pos: 'poz.', net: 'netto', gross: 'brutto', add: 'Dodaj', added: 'Dodano', parts: n => `${n} ${n === 1 ? 'część' : 'części'}`,
+    allHits: (n, q) => `Wyniki dla „${q}” we wszystkich maszynach: ${n}.`, back: 'Wróć do części maszyny',
+    none: q => `Nie mamy części pasującej do „${q}”. Sprawdź numer w katalogu PDF albo zadzwoń: +48 32 232 26 60 wewn. 39.`,
+    noneType: 'Brak części tego rodzaju w tej maszynie.',
+    toastAdd: n => `Dodano do koszyka: ${n}`, cempty: 'Koszyk jest pusty. Wybierz maszynę i dodaj części z listy.',
+    sub: 'Wartość netto', vat: 'VAT 23%', tot: 'Razem brutto', remove: 'Usuń',
+    form: 'Dane do zamówienia', who: 'Kto zamawia?', priv: 'Osoba prywatna', firm: 'Gospodarstwo lub firma',
+    fName: 'Imię i nazwisko', fFirm: 'Nazwa gospodarstwa lub firmy', fNip: 'NIP', fTel: 'Telefon', fMail: 'E-mail', fNote: 'Uwagi (np. numer seryjny maszyny)', fAddr: 'Adres dostawy (ulica, kod, miejscowość)',
+    send: 'Wyślij zamówienie', errName: 'Wpisz imię i nazwisko albo nazwę firmy.', errContact: 'Podaj telefon albo e-mail, żeby dział części mógł potwierdzić zamówienie.', errMail: 'Sprawdź adres e-mail – brakuje w nim „@” albo domeny.', errTel: 'Numer telefonu powinien mieć co najmniej 9 cyfr.', errNip: 'NIP powinien mieć 10 cyfr.', errAddr: 'Wpisz adres dostawy.', max: 'W koszyku może być najwyżej 99 sztuk jednej części.', navLabel: 'Sekcje', title: 'MANDAM – części zamienne z ceną (projekt demonstracyjny)', desc: 'Projekt demonstracyjny katalogu części zamiennych MANDAM z ceną i zamówieniem online.',
+    dfoot: 'Ceny w demo są przykładowe. Koszt wysyłki dział części potwierdza po zamówieniu.',
+    sentT: 'Zamówienie wysłane', sentP: n => `To demo – w prawdziwym sklepie zamówienie (${n}) trafiłoby do działu części MANDAM razem z numerami katalogowymi, a klient dostałby potwierdzenie e-mailem.`,
+    close: 'Zamknij', clear: 'Wyczyść'
+  },
+  de: {
+    demo: '<b>Demo-Projekt</b> für MANDAM. Maschinen, Teilenummern und Bezeichnungen stammen aus den MANDAM-Ersatzteilkatalogen, die Preise sind Beispiele.',
+    madeBy: 'Erstellt von:', nav1: 'Maschinen', nav2: 'Ersatzteile', nav3: 'Bestellung', cart: 'Warenkorb', cartTitle: 'Warenkorb',
+    h1: 'MANDAM Ersatzteile mit Preis und Online-Bestellung',
+    lead: 'Wählen Sie Ihre Maschine oder geben Sie die Teilenummer aus dem Katalog ein. Der Preis steht sofort da, die Bestellung geht direkt an die Ersatzteilabteilung in Gliwice.',
+    qLabel: 'Teilenummer oder Bezeichnung', find: 'Teil suchen', tryTxt: 'Zum Beispiel:', heroAlt: 'MANDAM Scheibenegge GAL-K bei der Arbeit auf dem Feld',
+    s1: 'Maschine wählen', s1p: 'Die Teile werden für das jeweilige Modell angezeigt – wie im MANDAM-Ersatzteilkatalog.',
+    s2: 'Teile zur Bestellung hinzufügen', s3: 'Bestellung absenden',
+    thPic: 'Art', thNr: 'Teile-Nr.', thName: 'Teil', thPrice: 'Nettopreis', thBuy: 'Menge',
+    h1t: 'Warenkorb mit Teilenummern', h1p: 'Jede Position hat die Nummer aus dem MANDAM-Katalog – keine Rückfragen nötig.',
+    h2t: 'Rechnungsdaten', h2p: 'Privatperson oder Betrieb mit USt-IdNr., Lieferadresse und Kontakt – alles in einem Schritt.',
+    h3t: 'Bestätigung', h3p: 'Die Ersatzteilabteilung bestätigt Verfügbarkeit, Versandkosten und Liefertermin – telefonisch oder per E-Mail.',
+    fParts: 'Ersatzteilabteilung', fPhone: 'Telefon', fExt: 'Durchwahl 39, 45',
+    ph: 'z. B. 05-02-0127 oder Scheibe 560', phQ: 'Suche: Nummer oder Name',
+    types: { all: 'Alle', disc: 'Scheiben', tine: 'Verschleißteile', bearing: 'Lager und Naben', spring: 'Federn und Gummis', roller: 'Walzenringe und Achsen', hydr: 'Hydraulikzylinder', guard: 'Schutzbleche', fix: 'Bolzen, Schrauben, Halter' },
+    pdf: 'Katalog als PDF öffnen', page: 'Zeichnung S.', pos: 'Pos.', net: 'netto', gross: 'brutto', add: 'Hinzufügen', added: 'Hinzugefügt', parts: n => `${n} ${n === 1 ? 'Teil' : 'Teile'}`,
+    allHits: (n, q) => `Treffer für „${q}“ in allen Maschinen: ${n}.`, back: 'Zurück zu den Teilen der Maschine',
+    none: q => `Kein Teil passt zu „${q}“. Prüfen Sie die Nummer im PDF-Katalog oder rufen Sie an: +48 32 232 26 60 Durchwahl 39.`,
+    noneType: 'Keine Teile dieser Art für diese Maschine.',
+    toastAdd: n => `In den Warenkorb gelegt: ${n}`, cempty: 'Der Warenkorb ist leer. Wählen Sie eine Maschine und fügen Sie Teile hinzu.',
+    sub: 'Warenwert netto', vat: 'MwSt. 19 %', tot: 'Gesamt brutto', remove: 'Entfernen',
+    form: 'Bestelldaten', who: 'Wer bestellt?', priv: 'Privatperson', firm: 'Betrieb oder Firma',
+    fName: 'Vor- und Nachname', fFirm: 'Name des Betriebs oder der Firma', fNip: 'USt-IdNr.', fTel: 'Telefon', fMail: 'E-Mail', fNote: 'Bemerkungen (z. B. Seriennummer der Maschine)', fAddr: 'Lieferadresse (Straße, PLZ, Ort)',
+    send: 'Bestellung absenden', errName: 'Bitte Namen oder Firmennamen eingeben.', errContact: 'Bitte Telefon oder E-Mail angeben, damit die Bestellung bestätigt werden kann.', errMail: 'Bitte E-Mail-Adresse prüfen – es fehlt „@“ oder die Domain.', errTel: 'Die Telefonnummer sollte mindestens 9 Ziffern haben.', errNip: 'Bitte eine gültige USt-IdNr. eingeben (z. B. DE123456789).', errAddr: 'Bitte Lieferadresse eingeben.', max: 'Pro Teil sind höchstens 99 Stück im Warenkorb möglich.', navLabel: 'Bereiche', title: 'MANDAM – Ersatzteile mit Preis (Demo-Projekt)', desc: 'Demo-Projekt: MANDAM-Ersatzteilkatalog mit Preisen und Online-Bestellung.',
+    dfoot: 'Die Preise in der Demo sind Beispiele. Die Versandkosten bestätigt die Ersatzteilabteilung nach der Bestellung.',
+    sentT: 'Bestellung gesendet', sentP: n => `Dies ist eine Demo – im echten Shop ginge die Bestellung (${n}) mit allen Teilenummern an die MANDAM-Ersatzteilabteilung, und der Kunde bekäme eine Bestätigung per E-Mail.`,
+    close: 'Schließen', clear: 'Löschen'
+  }
+};
+
+/* piktogramy rodzajów części */
+const ICON = {
+  disc: '<svg viewBox="0 0 32 32" fill="none" stroke="#4F5358" stroke-width="1.8"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="3.2" fill="#E25303" stroke="none"/><path d="M16 4v3M16 25v3M4 16h3M25 16h3M7.5 7.5l2 2M22.5 22.5l2 2M24.5 7.5l-2 2M9.5 22.5l-2 2"/></svg>',
+  tine: '<svg viewBox="0 0 32 32" fill="none" stroke="#4F5358" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3h5v13c0 4 3 6 6 7l-2 5c-6-2-9-6-9-12z"/><path d="M19 25l4 3" stroke="#E25303" stroke-width="2.6" stroke-linecap="round"/></svg>',
+  bearing: '<svg viewBox="0 0 32 32" fill="none" stroke="#4F5358" stroke-width="1.8"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="6"/><g fill="#E25303" stroke="none"><circle cx="16" cy="7" r="1.8"/><circle cx="16" cy="25" r="1.8"/><circle cx="7" cy="16" r="1.8"/><circle cx="25" cy="16" r="1.8"/></g></svg>',
+  spring: '<svg viewBox="0 0 32 32" fill="none" stroke="#4F5358" stroke-width="1.8" stroke-linecap="round"><path d="M8 5h16M8 27h16"/><path d="M10 8l12 3-12 3 12 3-12 3 12 3" stroke="#E25303"/></svg>',
+  roller: '<svg viewBox="0 0 32 32" fill="none" stroke="#4F5358" stroke-width="1.8"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="2.6" fill="#E25303" stroke="none"/><path d="M16 13.4V5M18.3 17.3l7.2 4.2M13.7 17.3l-7.2 4.2"/></svg>',
+  hydr: '<svg viewBox="0 0 32 32" fill="none" stroke="#4F5358" stroke-width="1.8"><rect x="3" y="12" width="16" height="8" rx="1.5"/><path d="M19 16h8" stroke="#E25303" stroke-width="2.6"/><circle cx="28" cy="16" r="1.6"/><path d="M7 12V9M14 12V9"/></svg>',
+  guard: '<svg viewBox="0 0 32 32" fill="none" stroke="#4F5358" stroke-width="1.8" stroke-linejoin="round"><path d="M5 9l11-5 11 5v8c0 6-5 10-11 11C10 27 5 23 5 17z"/><path d="M11 16h10" stroke="#E25303" stroke-width="2.4"/></svg>',
+  fix: '<svg viewBox="0 0 32 32" fill="none" stroke="#4F5358" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4h10l3 5-3 5H9l-3-5z"/><path d="M12 14v12h4V14" /><path d="M12 18h4M12 22h4" stroke="#E25303"/></svg>'
+};
+
+const L = () => T[lang];
+const M = id => DATA.machines.find(m => m.id === id);
+const P = DATA.parts.map(([nr, t, pl, de, price, refs]) => ({ nr, t, pl, de, price, refs }));
+const byNr = new Map(P.map(p => [p.nr, p]));
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const pname = p => cap(lang === 'de' ? p.de : p.pl);
+const mdesc = m => lang === 'de' ? m.de : m.pl;
+const mmodel = m => lang === 'de' ? m.modelDe : m.model;
+const vat = () => lang === 'de' ? 0.19 : 0.23;
+const r2 = v => Math.round(v * 100) / 100;
+const cur = zl => r2(lang === 'de' ? zl / EUR : zl);
+const fmt = v => lang === 'de' ? v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €' : v.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' zł';
+const money = zl => fmt(cur(zl));
+const gross1 = zl => fmt(r2(cur(zl) * (1 + vat())));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l').replace(/ß/g, 'ss').replace(/×/g, 'x').replace(/[\u2010-\u2015\u2212]/g, '-');
+
+/* fokus zostaje na tym samym elemencie po przerysowaniu listy */
+function focusKey(el) {
+  if (!el || el === document.body) return null;
+  if (el.id) return '#' + CSS.escape(el.id);
+  for (const a of ['m', 't', 'dec', 'inc', 'q', 'add', 'cdec', 'cinc', 'cq', 'buyer']) if (el.dataset && el.dataset[a] !== undefined) return `[data-${a}="${CSS.escape(el.dataset[a])}"]`;
+  return null;
+}
+function keepFocus(fn, fallback) {
+  const k = focusKey(document.activeElement); fn();
+  const el = (k && document.querySelector(k)) || (fallback && document.querySelector(fallback));
+  if (el && el !== document.activeElement) el.focus({ preventScroll: true });
+}
+
+/* maszyny */
+function renderMachines() {
+  $('#machines').innerHTML = DATA.machines.map(m => `<button type="button" class="mcard" data-m="${m.id}" aria-pressed="${m.id === current}">
+    <img src="img/${m.id}.webp" width="720" height="540" alt="" loading="lazy">
+    <span class="t"><span class="n">${m.name}</span><span class="d">${mdesc(m)}</span><span class="y">${mmodel(m)}, ${L().parts(P.filter(p => p.refs.some(r => r[0] === m.id)).length)}</span></span></button>`).join('');
+}
+$('#machines').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  current = b.dataset.m; type = 'all'; setQuery('');
+  keepFocus(() => { renderMachines(); renderParts(); });
+  document.getElementById('czesci').scrollIntoView({ block: 'start' });
+});
+
+/* lista części */
+function visibleParts() {
+  if (query) {
+    // każde słowo z zapytania musi pasować do numeru albo nazwy (PL lub DE)
+    const words = norm(query).split(/\s+/).filter(Boolean);
+    return P.filter(p => { const hay = norm(p.nr) + ' ' + norm(p.pl) + ' ' + norm(p.de), flat = hay.replace(/[-\s]/g, '');
+      return words.every(w => hay.includes(w) || flat.includes(w.replace(/-/g, ''))); });
+  }
+  // najpierw części eksploatacyjne, potem reszta – kolejność jak w typowym zamówieniu na sezon
+  const order = ['tine', 'disc', 'bearing', 'spring', 'roller', 'guard', 'hydr', 'fix'];
+  return P.filter(p => p.refs.some(r => r[0] === current) && (type === 'all' || p.t === type)).sort((a, b) => order.indexOf(a.t) - order.indexOf(b.t));
+}
+function refLinks(p) {
+  const refs = query ? p.refs : p.refs.filter(r => r[0] === current);
+  return refs.map(([mid, page, pos]) => {
+    const m = M(mid);
+    const tag = query ? `<span class="mtag">${m.name}</span>` : '';
+    return `${tag}<a href="${DATA.pdfBase}${m.pdf}#page=${page}" target="_blank" rel="noopener">${L().page} ${page}${pos ? ', ' + L().pos + ' ' + pos : ''}</a>`;
+  }).join(' &nbsp; ');
+}
+function renderParts() {
+  const m = M(current), list = visibleParts();
+  $('#partsbar').innerHTML = query
+    ? `<div class="who"><div><b>${esc(query)}</b><span>${L().parts(list.length)}</span></div></div><button class="btn ghost" type="button" id="backBtn">${L().back} ${m.name}</button>`
+    : `<div class="who"><img src="img/${m.id}.webp" alt="" width="64" height="48"><div><b>${m.name} – ${mdesc(m)}</b><span>${mmodel(m)}, ${L().parts(list.length)}</span></div></div><a class="pdf" href="${DATA.pdfBase}${m.pdf}" target="_blank" rel="noopener">${L().pdf}</a>`;
+  const inMachine = P.filter(p => p.refs.some(r => r[0] === current));
+  const types = ['all', ...Object.keys(L().types).filter(t => t !== 'all' && inMachine.some(p => p.t === t))];
+  $('#chips').innerHTML = query ? '' : types.map(t => `<button type="button" class="chip" data-t="${t}" aria-pressed="${t === type}">${L().types[t]}</button>`).join('');
+  $('#notice').hidden = !query || list.length === 0;
+  if (query) $('#notice').innerHTML = esc(L().allHits(list.length, query));
+  $('#partsBody').innerHTML = list.map(p => {
+    const q = qtyDraft.get(p.nr) || 1;
+    return `<tr>
+      <td class="ic"><div class="pic" title="${L().types[p.t]}">${ICON[p.t]}</div></td>
+      <td class="c-nr"><span class="pn num">${p.nr}</span></td>
+      <td class="c-name"><div class="pname">${esc(pname(p))}</div><div class="pmeta">${refLinks(p)}</div></td>
+      <td class="price"><strong class="num">${money(p.price)}</strong><small class="num">${gross1(p.price)} ${L().gross}</small></td>
+      <td class="c-buy"><div class="buy"><span class="qty"><button type="button" data-dec="${p.nr}" aria-label="−1">−</button><input class="num" type="number" min="1" max="99" value="${q}" data-q="${p.nr}" aria-label="${L().thBuy}: ${esc(pname(p))}"><button type="button" data-inc="${p.nr}" aria-label="+1">+</button></span><button type="button" class="add" data-add="${p.nr}">${L().add}</button></div></td>
+    </tr>`;
+  }).join('');
+  $('#partsTable').hidden = list.length === 0;
+  $('#empty').hidden = list.length > 0;
+  $('#empty').textContent = query ? L().none(query) : L().noneType;
+  const back = $('#backBtn'); if (back) back.onclick = () => { setQuery(''); renderParts(); $('#q').focus(); };
+  nbsp($('#czesci'));
+}
+$('#chips').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (!b) return; type = b.dataset.t; keepFocus(renderParts); });
+const clampQ = v => Math.max(1, Math.min(99, Math.round(+v) || 1));
+$('#partsBody').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.dec || t.dataset.inc) {
+    const nr = t.dataset.dec || t.dataset.inc, inp = $(`[data-q="${nr}"]`);
+    inp.value = clampQ(+inp.value + (t.dataset.inc ? 1 : -1)); qtyDraft.set(nr, +inp.value);
+  }
+  if (t.dataset.add) {
+    const nr = t.dataset.add, inp = $(`[data-q="${nr}"]`), q = clampQ(inp.value);
+    const it = cart.get(nr), had = it ? it.qty : 0;
+    if (had >= 99) { toast(L().max); return; }
+    cart.set(nr, { nr, qty: Math.min(99, had + q) });
+    renderCart(); toast(had + q > 99 ? L().max : L().toastAdd(pname(byNr.get(nr))));
+    inp.value = 1; qtyDraft.delete(nr);
+    t.textContent = L().added; t.classList.add('ok');
+    setTimeout(() => { t.textContent = L().add; t.classList.remove('ok'); }, 1200);
+  }
+});
+$('#partsBody').addEventListener('change', e => { const inp = e.target.closest('[data-q]'); if (!inp) return; inp.value = clampQ(inp.value); qtyDraft.set(inp.dataset.q, +inp.value); });
+
+/* wyszukiwanie */
+function setQuery(v) {
+  query = v.trim(); $('#q').value = query; $('#hq').value = query; $('#qClear').hidden = !query;
+}
+$('#q').addEventListener('input', e => { query = e.target.value.trim(); $('#hq').value = query; $('#qClear').hidden = !query; renderParts(); });
+$('#qClear').onclick = () => { setQuery(''); renderParts(); $('#q').focus(); };
+$('#heroSearch').addEventListener('submit', e => { e.preventDefault(); setQuery($('#hq').value); renderParts(); document.getElementById('czesci').scrollIntoView({ block: 'start' }); });
+$$('[data-try]').forEach(b => b.onclick = () => { setQuery(lang === 'de' && b.dataset.tryDe ? b.dataset.tryDe : b.dataset.try); renderParts(); document.getElementById('czesci').scrollIntoView({ block: 'start' }); });
+
+/* koszyk */
+function renderCart() {
+  const items = [...cart.values()];
+  const n = items.reduce((a, b) => a + b.qty, 0);
+  $('#cartCount').textContent = n;
+  if (!items.length) { $('#dbody').innerHTML = `<p class="cempty">${L().cempty}</p>`; return; }
+  const sub = r2(items.reduce((a, it) => a + cur(byNr.get(it.nr).price) * it.qty, 0)), tax = r2(sub * vat());
+  $('#dbody').innerHTML = items.map(it => { const p = byNr.get(it.nr); return `<div class="citem">
+      <div><div class="n">${esc(pname(p))}</div><div class="m num">${p.nr}, ${p.refs.map(r => M(r[0]).name).join(', ')}</div></div>
+      <div class="lt num">${fmt(r2(cur(p.price) * it.qty))}</div>
+      <div class="r"><span class="qty"><button type="button" data-cdec="${p.nr}" aria-label="−1">−</button><input class="num" type="number" min="1" max="99" value="${it.qty}" data-cq="${p.nr}" aria-label="${L().thBuy}"><button type="button" data-cinc="${p.nr}" aria-label="+1">+</button></span><button class="rm" type="button" data-rm="${p.nr}">${L().remove}</button></div>
+    </div>`; }).join('') +
+    `<div class="sums"><div><span>${L().sub}</span><span class="num">${fmt(sub)}</span></div><div><span>${L().vat}</span><span class="num">${fmt(tax)}</span></div><div class="tot"><span>${L().tot}</span><span class="num">${fmt(r2(sub + tax))}</span></div></div>
+    <form class="oform" id="oform" novalidate>
+      <h3>${L().form}</h3>
+      <div><span style="font-size:14px;font-weight:600;color:var(--ink-2)">${L().who}</span>
+      <div class="seg2" role="group" aria-label="${L().who}" style="margin-top:4px"><button type="button" data-buyer="private" aria-pressed="${buyer === 'private'}">${L().priv}</button><button type="button" data-buyer="firm" aria-pressed="${buyer === 'firm'}">${L().firm}</button></div></div>
+      <label>${buyer === 'firm' ? L().fFirm : L().fName}<input id="fName" autocomplete="${buyer === 'firm' ? 'organization' : 'name'}" value="${esc(form.name)}"></label>
+      ${buyer === 'firm' ? `<label>${L().fNip}<input id="fNip" inputmode="numeric" value="${esc(form.nip)}"></label>` : ''}
+      <label>${L().fTel}<input id="fTel" type="tel" autocomplete="tel" value="${esc(form.tel)}"></label>
+      <label>${L().fMail}<input id="fMail" type="email" autocomplete="email" value="${esc(form.mail)}"></label>
+      <label>${L().fAddr}<textarea id="fAddr" autocomplete="street-address" rows="2">${esc(form.addr)}</textarea></label>
+      <label>${L().fNote}<textarea id="fNote">${esc(form.note)}</textarea></label>
+      <p class="err" id="ferr" role="alert"></p>
+      <button class="btn" type="submit">${L().send}</button>
+      <p class="dfoot">${L().dfoot}</p>
+    </form>`;
+  nbsp($('#drawer'));
+}
+const form = { name: '', nip: '', tel: '', mail: '', addr: '', note: '' };
+const keepForm = () => { const g = id => { const el = document.getElementById(id); return el ? el.value : undefined; };
+  const v = { name: g('fName'), nip: g('fNip'), tel: g('fTel'), mail: g('fMail'), addr: g('fAddr'), note: g('fNote') };
+  for (const k in v) if (v[k] !== undefined) form[k] = v[k]; };
+$('#dbody').addEventListener('input', keepForm);
+$('#dbody').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.buyer) { keepForm(); buyer = t.dataset.buyer; keepFocus(renderCart); return; }
+  const nr = t.dataset.cdec || t.dataset.cinc || t.dataset.rm; if (!nr) return;
+  keepForm();
+  if (t.dataset.rm) cart.delete(nr);
+  else { const it = cart.get(nr); it.qty = clampQ(it.qty + (t.dataset.cinc ? 1 : -1)); }
+  keepFocus(renderCart, '#closeCart');
+});
+$('#dbody').addEventListener('change', e => { const inp = e.target.closest('[data-cq]'); if (!inp) return; keepForm(); cart.get(inp.dataset.cq).qty = clampQ(inp.value); keepFocus(renderCart); });
+$('#dbody').addEventListener('submit', e => {
+  e.preventDefault(); keepForm();
+  const err = $('#ferr');
+  if (!form.name.trim()) { err.textContent = L().errName; $('#fName').focus(); return; }
+  const bad = (msg, id) => { err.textContent = msg; $(id).focus(); };
+  if (buyer === 'firm') { const nip = form.nip.replace(/[\s-]/g, '').toUpperCase(); if (lang === 'de' ? !/^[A-Z]{2}[0-9A-Z]{8,12}$/.test(nip) : !/^(PL)?\d{10}$/.test(nip)) return bad(L().errNip, '#fNip'); }
+  if (!form.tel.trim() && !form.mail.trim()) return bad(L().errContact, '#fTel');
+  if (form.tel.trim() && form.tel.replace(/\D/g, '').length < 9) return bad(L().errTel, '#fTel');
+  if (form.mail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.mail.trim())) return bad(L().errMail, '#fMail');
+  if (!form.addr.trim()) return bad(L().errAddr, '#fAddr');
+  err.textContent = '';
+  const n = [...cart.values()].reduce((a, b) => a + b.qty, 0);
+  openModal(L().sentT, L().sentP(L().parts(n)));
+});
+
+const PAGE = ['.demobar', 'header.site', 'main', 'footer'];
+const setInert = (sels, on) => sels.forEach(s => { const el = $(s); if (el) el.inert = on; });
+function openCart() { $('#drawer').classList.add('open'); $('#shade').classList.add('open'); $('#drawer').setAttribute('aria-hidden', 'false'); $('#drawer').inert = false; setInert(PAGE, true); $('#closeCart').focus(); }
+function closeCart() { $('#drawer').classList.remove('open'); $('#shade').classList.remove('open'); $('#drawer').setAttribute('aria-hidden', 'true'); $('#drawer').inert = true; setInert(PAGE, false); $('#openCart').focus(); }
+$('#drawer').inert = true;
+$('#openCart').onclick = openCart; $('#closeCart').onclick = closeCart; $('#shade').onclick = closeCart;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('#modal').classList.contains('open')) closeModal(); else if ($('#drawer').classList.contains('open')) closeCart(); } });
+let modalBack = null;
+function openModal(t, p) { modalBack = document.activeElement; $('#mTitle').textContent = t; $('#mText').textContent = p; $('#modal').classList.add('open'); setInert([...PAGE, '#drawer'], true); $('#mOk').focus(); }
+function closeModal() {
+  $('#modal').classList.remove('open');
+  const cartOpen = $('#drawer').classList.contains('open');
+  $('#drawer').inert = !cartOpen; if (!cartOpen) setInert(PAGE, false);
+  const b = modalBack && document.contains(modalBack) && !modalBack.closest('[inert]') ? modalBack : (cartOpen ? $('#closeCart') : $('#openCart'));
+  b.focus();
+}
+$('#mOk').onclick = closeModal; $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
+let toastT = 0;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2000); }
+
+/* polska typografia: jednoliterowe wyrazy nie zostają na końcu wiersza */
+function nbsp(root = document.body) {
+  if (lang !== 'pl') return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style,svg,input,textarea') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(^|[\s(„])([aiouwzAIOUWZ]) /g, '$1$2 '); if (v !== n.nodeValue) n.nodeValue = v; }
+}
+
+/* nagłówek: zagęszczamy krokami tylko wtedy, gdy zakładki naprawdę się nie mieszczą */
+function fitHeader() {
+  const h = $('header.site'), w = h.querySelector('.wrap'), nav = $('nav.mnav');
+  const over = () => nav.scrollWidth > nav.clientWidth + 1 || w.scrollWidth > w.clientWidth + 1;
+  h.classList.remove('fit-1', 'fit-2', 'fit-3');
+  for (const c of ['fit-1', 'fit-2', 'fit-3']) { if (!over()) break; h.classList.add(c); }
+  document.documentElement.style.setProperty('--hh', h.offsetHeight + 'px');
+}
+let fitRaf = 0;
+addEventListener('resize', () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitHeader); });
+if (document.fonts) document.fonts.ready.then(fitHeader);
+
+/* język */
+function applyLang() {
+  document.documentElement.lang = lang;
+  $$('[data-i]').forEach(el => { const v = L()[el.dataset.i]; if (typeof v === 'string') el.innerHTML = v; });
+  $$('[data-i-alt]').forEach(el => { el.alt = L()[el.dataset.iAlt]; });
+  $$('[data-i-aria]').forEach(el => el.setAttribute('aria-label', L()[el.dataset.iAria]));
+  $$('[data-try-de]').forEach(b => { b.textContent = lang === 'de' ? b.dataset.tryDe : b.dataset.try; });
+  document.title = L().title; const md = document.querySelector('meta[name=description]'); if (md) md.content = L().desc;
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  $('#hq').placeholder = L().ph; $('#q').placeholder = L().phQ;
+  $('#qClear').setAttribute('aria-label', L().clear); $('#closeCart').setAttribute('aria-label', L().close);
+  $('#drawer').setAttribute('aria-label', L().cartTitle);
+  renderMachines(); renderParts(); renderCart(); nbsp(); fitHeader();
+}
+$$('[data-lang]').forEach(b => b.onclick = () => { keepForm(); lang = b.dataset.lang; applyLang(); });
+
+applyLang();
+})();
+</script>
+</body>
+</html>

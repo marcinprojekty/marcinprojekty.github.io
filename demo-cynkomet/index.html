@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>CYNKOMET – części do przyczep i rozrzutników (projekt demonstracyjny)</title>
+<meta name="description" content="Projekt demonstracyjny dla CYNKOMET: części do przyczep i rozrzutników z ceną i zamówieniem online oraz wycena cynkowania ogniowego.">
+<link rel="preload" href="fonts/rubik-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23D01E25'/%3E%3Cpath d='M21 11.5a7 7 0 1 0 0 9' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* Rubik hostowany lokalnie (bez zapytań do Google – RODO) */
+@font-face{font-family:Rubik;font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/rubik-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Rubik;font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/rubik-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --zinc:#EEF1F3; --zinc-2:#DCE2E6; --zinc-3:#B9C2C8; --steel:#55616A; --ink:#231F20; --white:#fff;
+  --red:#D01E25; --red-d:#A8161C; --ok:#1F7A45;
+  --cond:Rubik,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--zinc);color:var(--ink);font:400 16px/1.6 Rubik,system-ui,sans-serif}
+img{display:block;max-width:100%}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--cond);margin:0;line-height:1.08;letter-spacing:-.015em}
+h2{font-size:clamp(26px,3.4vw,36px);font-weight:700}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+
+/* pasek demo */
+.demobar{background:var(--ink);color:#D9DDE0;font-size:13.5px}
+.demobar .wrap{display:flex;gap:6px 18px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:7px;padding-bottom:7px}
+.demobar b{color:#fff;font-weight:600}
+.demobar a{color:#fff;text-underline-offset:3px}
+
+/* nagłówek */
+header.site{position:sticky;top:0;z-index:30;background:var(--white);border-top:4px solid var(--red);box-shadow:0 1px 0 var(--zinc-2)}
+.site .wrap{display:flex;align-items:center;gap:20px;min-height:66px}
+.logo{flex:none;display:flex}
+.logo img{height:30px;width:auto}
+.menu{display:flex;gap:2px;margin-right:auto}
+.menu a{text-decoration:none;font-weight:600;padding:8px 12px;border-radius:4px;color:var(--steel);white-space:nowrap}
+.menu a:hover{color:var(--ink);background:var(--zinc)}
+.langs{display:inline-flex;border:1px solid var(--zinc-3);border-radius:4px;overflow:hidden;flex:none}
+.langs button{border:0;background:transparent;padding:6px 11px;font-weight:700;font-size:14px;cursor:pointer;color:var(--steel)}
+.langs button[aria-pressed=true]{background:var(--ink);color:#fff}
+.basket-btn{flex:none;display:flex;align-items:center;gap:8px;border:0;border-radius:4px;background:var(--red);color:#fff;font-weight:700;padding:10px 14px;cursor:pointer}
+.basket-btn:hover{background:var(--red-d)}
+.basket-btn .count{min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#fff;color:var(--red);font-size:13px;display:grid;place-items:center}
+
+/* hero */
+.hero{background:var(--white);border-bottom:1px solid var(--zinc-2)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:24px 48px;align-items:center;padding-top:44px;padding-bottom:44px}
+.hero h1{font-size:clamp(32px,4.2vw,50px);font-weight:700;text-transform:none}
+.hero h1 span{display:block;color:var(--steel);font-weight:600}
+.hero p.lead{font-size:18px;color:var(--steel);margin-top:16px;max-width:34em}
+.hero .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:4px;border:0;font-weight:700;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red-d)}
+.btn-line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.btn-line:hover{background:var(--ink);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.facts{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:22px;padding:0;list-style:none;font-size:14.5px;color:var(--steel)}
+.facts li{display:flex;align-items:center;gap:8px}
+.facts li::before{content:"";width:8px;height:8px;background:var(--red);border-radius:1px;flex:none}
+/* blacha ocynkowana: delikatne „kwiaty cynku” pod zdjęciem */
+.plate{position:relative;border-radius:6px;padding:18px;background:
+  radial-gradient(120% 90% at 20% 15%,rgba(255,255,255,.85),transparent 55%),
+  conic-gradient(from 30deg at 30% 40%,#E3E8EB,#CDD5DA,#E9EDEF,#D3DADF,#E3E8EB),
+  conic-gradient(from 200deg at 75% 70%,#D8DFE3,#EEF1F3,#CBD3D8,#E4E9EC,#D8DFE3);
+  background-blend-mode:normal,multiply,normal}
+.plate img{width:100%;height:auto;aspect-ratio:900/591;object-fit:contain;filter:drop-shadow(0 14px 18px rgba(35,31,32,.18))}
+.plate figcaption{position:absolute;left:18px;bottom:14px;font-size:13px;font-weight:600;color:#3A444B}
+
+/* sekcje */
+section{padding:64px 0;scroll-margin-top:70px}
+#parts{scroll-margin-top:86px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:12px 24px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head p{color:var(--steel);max-width:40em}
+.step{display:flex;align-items:center;gap:12px;font-family:var(--cond);font-size:20px;font-weight:600;margin:0 0 14px}
+.step i{font-style:normal;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;font-size:18px;flex:none}
+
+/* wybór maszyny */
+.tabs{display:inline-flex;background:var(--white);border:1px solid var(--zinc-2);border-radius:5px;padding:3px;margin-bottom:14px}
+.tabs button{border:0;background:transparent;padding:8px 16px;border-radius:3px;font-weight:700;cursor:pointer;color:var(--steel)}
+.tabs button[aria-pressed=true]{background:var(--ink);color:#fff}
+.machines{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mach{display:flex;flex-direction:column;text-align:left;background:var(--white);border:2px solid transparent;border-radius:6px;padding:12px 14px 14px;cursor:pointer;box-shadow:0 0 0 1px var(--zinc-2)}
+.mach:hover{box-shadow:0 0 0 1px var(--zinc-3)}
+.mach[aria-pressed=true]{border-color:var(--red);box-shadow:none}
+.mach img{width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;margin-bottom:8px}
+.mach b{font-family:var(--cond);font-size:19px;font-weight:600;line-height:1.1}
+.mach b small{font-family:Rubik,sans-serif;font-weight:400;font-size:14px;font-weight:600;color:var(--steel);margin-left:6px}
+.mach>span{font-size:14px;color:var(--steel);margin-top:4px}
+.nw{white-space:nowrap}
+
+/* lista części */
+.parts{margin-top:40px;background:var(--white);border-radius:6px;box-shadow:0 0 0 1px var(--zinc-2)}
+.parts-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:20px 22px;border-bottom:1px solid var(--zinc-2)}
+.parts-top h3{font-size:28px}
+.parts-top p{color:var(--steel);font-size:14.5px;margin-top:4px}
+.search{position:relative;width:min(340px,100%)}
+.search input{width:100%;height:44px;border:1px solid var(--zinc-3);border-radius:4px;padding:0 12px 0 38px;background:var(--white)}
+.search svg{position:absolute;left:12px;top:13px;color:var(--steel)}
+.cats{display:flex;flex-wrap:wrap;gap:6px;padding:14px 22px;border-bottom:1px solid var(--zinc-2)}
+.cats button{border:1px solid var(--zinc-3);background:var(--white);border-radius:999px;padding:5px 12px;font-size:14px;font-weight:600;cursor:pointer;color:var(--steel)}
+.cats button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.plist{list-style:none;margin:0;padding:0}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) 130px 120px 124px;gap:14px;align-items:center;padding:12px 22px;border-bottom:1px solid var(--zinc)}
+.prow:last-child{border-bottom:0}
+.prow .nm{font-weight:600}
+.prow .nr{font-size:13.5px;color:var(--steel)}
+.prow .cat{font-size:13px;color:var(--steel)}
+.prow .pr{text-align:right;font-weight:700}
+.prow .pr small{display:block;font-size:12.5px;font-weight:500;color:var(--steel)}
+.qty{display:flex;align-items:center;border:1px solid var(--zinc-3);border-radius:4px;height:40px;width:120px;justify-self:end}
+.qty button{width:36px;height:100%;border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--steel)}
+.qty input{width:46px;height:100%;border:0;text-align:center;font-weight:600;-moz-appearance:textfield;appearance:textfield}
+.qty input::-webkit-inner-spin-button,.qty input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.add{height:40px;border:0;border-radius:4px;background:var(--ink);color:#fff;font-weight:700;cursor:pointer;padding:0 14px;white-space:nowrap}
+.add:hover{background:var(--red)}
+.add.done{background:var(--ok)}
+.empty{padding:28px 22px;color:var(--steel)}
+.parts-foot{padding:14px 22px;font-size:13.5px;color:var(--steel);border-top:1px solid var(--zinc-2);background:#F7F9FA;border-radius:0 0 6px 6px}
+
+/* cynkowanie */
+.galv{background:var(--white);border-top:1px solid var(--zinc-2);border-bottom:1px solid var(--zinc-2)}
+.galv-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:24px;align-items:start}
+.form{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;min-width:0}
+fieldset.field{min-inline-size:0}
+.field label,.field legend{display:block;font-weight:600;margin-bottom:6px}
+.field small{display:block;color:var(--steel);font-size:13.5px;margin-top:5px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.choice label{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--zinc-3);border-radius:5px;padding:10px 12px;cursor:pointer;font-weight:500;margin:0}
+.choice label b{display:block;font-weight:700}
+.choice label span{font-size:13.5px;color:var(--steel)}
+.choice input{accent-color:var(--red);margin-top:4px}
+.choice label:has(input:checked){border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
+.choice label:has(input:disabled){opacity:.5;cursor:not-allowed}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:end}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end}
+.trio .field label{font-weight:500}
+.unit{display:flex;align-items:center;border:1px solid var(--zinc-3);border-radius:4px;height:46px;background:var(--white)}
+.unit input{flex:1;min-width:0;height:100%;border:0;padding:0 12px;background:transparent}
+.unit span{padding:0 12px;color:var(--steel);font-size:14px}
+.unit:focus-within{outline:3px solid var(--red);outline-offset:1px}
+.unit input:focus-visible{outline:none}
+.quote{background:var(--ink);color:#fff;border-radius:6px;padding:24px;position:sticky;top:96px}
+.quote h3{font-size:26px}
+.quote dl{margin:16px 0 0;display:grid;grid-template-columns:1fr auto;gap:8px 16px;font-size:15px}
+.quote dt{color:#B9C0C5}
+.quote dd{margin:0;text-align:right;font-weight:600}
+.quote .total{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18);display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.quote .total strong{font-family:var(--cond);font-size:34px;line-height:1;color:#fff}
+.quote .total span{color:#B9C0C5;font-size:14px}
+.quote .gross{text-align:right;color:#B9C0C5;font-size:14.5px;margin-top:4px}
+.quote .note{font-size:13.5px;color:#B9C0C5;margin-top:12px}
+.quote .warn{background:rgba(208,30,37,.18);border-left:3px solid var(--red);padding:10px 12px;border-radius:3px;font-size:14.5px;margin-top:14px}
+.quote .warn button{display:inline;border:0;background:none;color:#fff;font-weight:700;text-decoration:underline;padding:0;cursor:pointer}
+.quote .btn{width:100%;margin-top:18px}
+.prep{margin-top:6px;font-size:14px;color:var(--steel)}
+
+/* stopka */
+footer{background:var(--ink);color:#C9CED2;padding:48px 0 28px;font-size:15px}
+footer .cols{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:28px}
+footer h3{color:#fff;font-size:20px;margin-bottom:8px}
+footer a{color:#fff;text-underline-offset:3px}
+footer p+p{margin-top:4px}
+footer .legal{margin-top:32px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:#9AA3A9}
+
+/* koszyk */
+.shade{position:fixed;inset:0;background:rgba(35,31,32,.45);z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+.shade.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--white);z-index:60;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;visibility:hidden}
+.drawer.open{transform:none;visibility:visible}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--zinc-2)}
+.drawer-head h3{font-size:26px}
+.x{border:0;background:transparent;font-size:28px;line-height:1;cursor:pointer;color:var(--steel);width:40px;height:40px}
+.blist{flex:1;overflow:auto;padding:4px 20px}
+.bitem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--zinc)}
+.bitem .n{font-weight:600}
+.bitem small{color:var(--steel);font-size:13px}
+.bitem .row{display:flex;align-items:center;gap:10px;margin-top:6px}
+.bitem .qty{width:110px;height:34px;justify-self:start}
+.bitem .rm{border:0;background:none;color:var(--steel);text-decoration:underline;cursor:pointer;font-size:13.5px;padding:0}
+.bitem .sum{font-weight:700;text-align:right}
+.bfoot{border-top:1px solid var(--zinc-2);padding:16px 20px 20px;background:#F7F9FA}
+.bfoot .ln{display:flex;justify-content:space-between;gap:12px;font-size:15px;margin-bottom:4px}
+.bfoot .ln.big{font-weight:700;font-size:18px;margin-top:8px}
+.bfoot .vnote{font-size:13px;color:var(--steel);margin-top:6px}
+.bfoot .btn{width:100%;margin-top:14px}
+.bempty{padding:28px 0;color:var(--steel)}
+
+/* okno potwierdzenia, komunikat */
+.modal{position:fixed;inset:0;z-index:80;display:none;place-items:center;padding:16px;background:rgba(35,31,32,.55)}
+.modal.open{display:grid}
+.modal .box{background:#fff;border-radius:6px;max-width:460px;width:100%;padding:24px;border-top:4px solid var(--red)}
+.modal h3{font-size:28px;margin-bottom:8px}
+.modal p{color:var(--steel);margin-bottom:16px}
+/* left+right+margin auto: komunikat jest wyśrodkowany, a na telefonie może zająć całą szerokość */
+.toast{position:fixed;left:16px;right:16px;bottom:20px;margin:0 auto;width:fit-content;max-width:560px;transform:translateY(20px);background:var(--ink);color:#fff;padding:11px 16px;border-radius:5px;font-weight:600;z-index:90;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;text-align:center}
+.toast.show{opacity:1;transform:none}
+/* przy otwartym koszyku komunikat idzie na górę, żeby nie zasłaniał sum */
+.drawer.open~.toast{bottom:auto;top:16px}
+
+/* responsywność */
+@media (max-width:1000px){
+  .machines{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .galv-grid{grid-template-columns:minmax(0,1fr)}
+  .quote{position:static}
+  footer .cols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:900px){
+  .basket-btn .lbl{display:none}
+}
+@media (max-width:860px){
+  .hero .wrap{grid-template-columns:1fr;padding-top:30px;padding-bottom:30px}
+}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .site .wrap{flex-wrap:wrap;gap:8px 12px;padding-top:10px;padding-bottom:8px}
+  .logo{margin-right:auto}
+  .menu{order:3;width:100%;margin:0 -12px;justify-content:space-between}
+  .menu a{padding:6px 12px}
+  .basket-btn .lbl{display:none}
+  section{padding:44px 0}
+  .parts-top{grid-template-columns:1fr;padding:16px}
+  .search{width:100%}
+  .cats{padding:12px 16px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .cats::-webkit-scrollbar{display:none}
+  .cats button{flex:none}
+  .prow{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"nm pr" "qt ad";padding:12px 16px;gap:10px 12px}
+  .prow .info{grid-area:nm}
+  .prow .pr{grid-area:pr}
+  .prow .qty{grid-area:qt;justify-self:start}
+  .prow .add{grid-area:ad}
+  .parts-foot{padding:12px 16px}
+  .prow .nr .cat,.prow .nr .dot{display:none}
+  section{scroll-margin-top:108px}
+  #parts{scroll-margin-top:122px}
+  .trio{gap:8px}
+  .choice{grid-template-columns:minmax(0,1fr)}
+  footer .cols{grid-template-columns:1fr}
+}
+@media (max-width:400px){
+  .machines{gap:8px}
+  .mach{padding:8px 10px 10px}
+  .mach b{font-size:20px}
+  .mach b small{display:block;margin:2px 0 0}
+  .hero h1{font-size:31px}
+  .logo img{height:24px}
+  .langs button{padding:6px 8px}
+  .site .wrap{gap:8px 10px}
+  .menu a{padding:6px 8px}
+  .basket-btn{padding:8px 10px;gap:6px}
+  .trio .field label{font-size:14.5px}
+  .unit input{padding:0 8px}
+  .unit span{padding:0 8px}
+}
+/* nagłówek zagęszcza się, zanim przycisk koszyka spadnie do nowego wiersza (np. przy liczbie 999) */
+header.site.fit-1 .logo img{height:20px}
+header.site.fit-1 .langs button{padding:5px 6px;font-size:13px}
+header.site.fit-1 .basket-btn{padding:7px 8px;gap:5px}
+header.site.fit-2 .wrap{gap:8px 6px}
+header.site.fit-2 .basket-btn svg{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="demobar"><div class="wrap">
+  <p data-i="demo"><b>Projekt demonstracyjny</b> przygotowany dla CYNKOMET. Maszyny, zdjęcia i kategorie części pochodzą z cynkomet.pl, numery części i ceny są przykładowe.</p>
+  <p><span data-i="by">Przygotował:</span> <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></p>
+</div></div>
+
+<header class="site"><div class="wrap">
+  <a class="logo" href="#" aria-label="CYNKOMET – strona główna" data-i-aria="logoA"><img src="img/logo.svg" alt="CYNKOMET" width="216" height="48"></a>
+  <nav class="menu" aria-label="Sekcje" data-i-aria="navA">
+    <a href="#czesci" data-i="nav1">Części</a>
+    <a href="#cynkowanie" data-i="nav2">Cynkowanie</a>
+    <a href="#kontakt" data-i="nav3">Kontakt</a>
+  </nav>
+  <div class="langs" role="group" aria-label="Język" data-i-aria="langA">
+    <button type="button" data-lang="pl" aria-pressed="true">PL</button>
+    <button type="button" data-lang="de" aria-pressed="false">DE</button>
+  </div>
+  <button class="basket-btn" type="button" id="openBasket" aria-label="Koszyk, 0 szt."><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl" data-i="basket">Koszyk</span><span class="count num" id="count">0</span></button>
+</div></header>
+
+<main>
+<div class="hero"><div class="wrap">
+  <div>
+    <h1 data-i="h1">Części CYNKOMET <span>z ceną i zamówieniem online</span></h1>
+    <p class="lead" data-i="lead">Wybierz swoją przyczepę albo rozrzutnik i od razu zobacz pasujące części z ceną netto. Zamówienie trafia prosto do działu sprzedaży części zamiennych w Czarnej Białostockiej.</p>
+    <div class="cta">
+      <a class="btn btn-red" href="#czesci" data-i="cta1">Wybierz swoją maszynę</a>
+      <a class="btn btn-line" href="#cynkowanie" data-i="cta2">Wycena cynkowania</a>
+    </div>
+    <ul class="facts">
+      <li data-i="f1">Maszyny ocynkowane ogniowo</li>
+      <li data-i="f2">Oryginalne części do konkretnych modeli</li>
+      <li data-i="f3">Cynkownie w Czarnej Białostockiej i Wyszkowie</li>
+    </ul>
+  </div>
+  <figure class="plate" style="margin:0">
+    <img src="img/t617-6.webp" alt="Przyczepa CYNKOMET T-617/6 Duch z Puszczy" data-i-alt="heroAlt" width="900" height="591" fetchpriority="high">
+    <figcaption>T-617/6 Duch z Puszczy</figcaption>
+  </figure>
+</div></div>
+
+<section id="czesci"><div class="wrap">
+  <div class="sec-head">
+    <h2 data-i="partsH">Części zamienne</h2>
+    <p data-i="partsP">Te same kategorie co w dziale części CYNKOMET – teraz z numerem, ceną i przyciskiem „Dodaj”.</p>
+  </div>
+  <p class="step"><i>1</i><span data-i="step1">Wybierz maszynę</span></p>
+  <div class="tabs" role="group" aria-label="Rodzaj maszyny" data-i-aria="tabsA">
+    <button type="button" data-type="t" aria-pressed="true" data-i="tabT">Przyczepy</button>
+    <button type="button" data-type="n" aria-pressed="false" data-i="tabN">Rozrzutniki</button>
+  </div>
+  <div class="machines" id="machines"></div>
+
+  <div class="parts" id="parts">
+    <p class="step" style="padding:20px 22px 0;margin:0"><i>2</i><span data-i="step2">Wybierz części</span></p>
+    <div class="parts-top">
+      <div>
+        <h3 id="mName"></h3>
+        <p id="mSpec"></p>
+      </div>
+      <div class="search">
+        <label class="sr" for="q" data-i="searchL">Szukaj części</label>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input id="q" type="search" autocomplete="off">
+      </div>
+    </div>
+    <div class="cats" id="cats" role="group" aria-label="Kategorie części" data-i-aria="catsA"></div>
+    <ul class="plist" id="plist"></ul>
+    <p class="parts-foot" data-i="partsFoot">Nie widzisz części? Zadzwoń: <a href="tel:+48857102023">(85) 710 20 23</a> albo napisz: <a href="mailto:cynkomet@cynkomet.pl">cynkomet@cynkomet.pl</a>.</p>
+  </div>
+</div></section>
+
+<section id="cynkowanie" class="galv"><div class="wrap">
+  <div class="sec-head">
+    <h2 data-i="galvH">Wycena cynkowania online</h2>
+    <p data-i="galvP">Zamiast formularza PDF: podaj masę i wymiary elementu, a strona od razu sprawdzi, czy zmieści się w wannie, i policzy orientacyjną cenę.</p>
+  </div>
+  <div class="galv-grid">
+    <form class="form" id="gForm" novalidate>
+      <fieldset class="field">
+        <legend data-i="gPlant">Cynkownia</legend>
+        <div class="choice">
+          <label><input type="radio" name="plant" value="czb" checked><span><b>Czarna Białostocka</b><span data-i="gCzb">wanna 9,0 × 1,5 × 3,1 m, element do 8,5 × 2,8 × 1,4 m i 4 t</span></span></label>
+          <label><input type="radio" name="plant" value="wys"><span><b>Wyszków</b><span data-i="gWys">wanna 13,0 × 1,5 × 3,1 m, element do 12,5 × 2,8 × 1,4 m i 6 t</span></span></label>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend data-i="gMethod">Metoda</legend>
+        <div class="choice">
+          <label><input type="radio" name="method" value="hot" checked><span><b data-i="gHot">Cynkowanie ogniowe</b><span data-i="gHotS">konstrukcje i większe elementy</span></span></label>
+          <label><input type="radio" name="method" value="spin"><span><b data-i="gSpin">Cynkowanie wirowe</b><span data-i="gSpinS">drobne elementy do kosza Ø 550 × 570 mm – tylko Wyszków</span></span></label>
+        </div>
+      </fieldset>
+      <div class="duo">
+        <div class="field">
+          <label for="gMass" data-i="gMass">Masa jednego elementu</label>
+          <div class="unit"><input id="gMass" type="number" inputmode="decimal" min="0" max="100000" step="0.1" placeholder="np. 120"><span>kg</span></div>
+        </div>
+        <div class="field">
+          <label for="gQty" data-i="gQty">Liczba sztuk</label>
+          <div class="unit"><input id="gQty" type="number" inputmode="numeric" min="1" max="1000000" step="1" value="1"><span data-i="pcs">szt.</span></div>
+        </div>
+      </div>
+      <fieldset class="field">
+        <legend data-i="dimsLeg">Wymiary elementu</legend>
+        <div class="trio">
+          <div class="field"><label for="gL" data-i="gL">Długość</label><div class="unit"><input id="gL" type="number" inputmode="decimal" min="0" step="0.01"><span class="dimU">m</span></div></div>
+          <div class="field"><label for="gW" data-i="gW">Szerokość</label><div class="unit"><input id="gW" type="number" inputmode="decimal" min="0" step="0.01"><span class="dimU">m</span></div></div>
+          <div class="field"><label for="gH" data-i="gH">Wysokość</label><div class="unit"><input id="gH" type="number" inputmode="decimal" min="0" step="0.01"><span class="dimU">m</span></div></div>
+        </div>
+      </fieldset>
+      <p class="prep" data-i="gPrep">Przed oddaniem elementu sprawdź otwory technologiczne i usuń farbę oraz olej – tak jak w poradniku „Przygotowanie do cynkowania” na cynkomet.pl.</p>
+    </form>
+    <aside class="quote" aria-live="polite">
+      <h3 data-i="qH">Orientacyjna wycena</h3>
+      <dl>
+        <dt data-i="qMass">Masa łączna</dt><dd class="num" id="qMass">–</dd>
+        <dt data-i="qRate">Stawka za kg</dt><dd class="num" id="qRate">–</dd>
+      </dl>
+      <div class="total"><span data-i="qNet">Cena netto</span><strong class="num" id="qNet">–</strong></div>
+      <p class="gross"><span id="qGrossL">Brutto (VAT 23%)</span> <span class="num" id="qGross">–</span></p>
+      <div id="qWarn"></div>
+      <button class="btn btn-red" type="button" id="qSend" disabled data-i="qSend">Wyślij zapytanie</button>
+      <p class="note" data-i="qNote">Stawki są przykładowe. Ostateczną cenę potwierdza Biuro Obsługi Klienta cynkowni po obejrzeniu elementu.</p>
+    </aside>
+  </div>
+</div></section>
+</main>
+
+<footer id="kontakt"><div class="wrap">
+  <div class="cols">
+    <div>
+      <h3>CynkoMet Sp. z o.o.</h3>
+      <p>ul. Fabryczna 7W<br>16-020 Czarna Białostocka</p>
+      <p><a href="tel:+48857102023">(85) 710 20 23</a></p>
+      <p><a href="mailto:cynkomet@cynkomet.pl">cynkomet@cynkomet.pl</a></p>
+    </div>
+    <div>
+      <h3 data-i="fServ">Serwis i reklamacje</h3>
+      <p><span data-i="fServS">Serwis:</span> <a href="mailto:serwis@cynkomet.pl">serwis@cynkomet.pl</a></p>
+      <p><span data-i="fRekl">Reklamacje:</span> <a href="tel:+48857102456">85 710 24 56</a>, <a href="mailto:reklamacje@cynkomet.pl">reklamacje@cynkomet.pl</a></p>
+    </div>
+    <div>
+      <h3 data-i="fCzb">Cynkownia Czarna Białostocka</h3>
+      <p><a href="tel:+48857101049">85 710 10 49</a></p>
+      <p><a href="mailto:bok@cynkomet.pl">bok@cynkomet.pl</a></p>
+    </div>
+    <div>
+      <h3 data-i="fWys">Cynkownia Wyszków</h3>
+      <p>ul. Leśna 38, 07-200 Wyszków</p>
+      <p><a href="tel:+48296432085">29 643 20 85</a></p>
+      <p><a href="mailto:biuro.wyszkow@cynkomet.pl">biuro.wyszkow@cynkomet.pl</a></p>
+    </div>
+  </div>
+  <p class="legal" data-i="legal">Projekt demonstracyjny – nie jest oficjalną stroną CYNKOMET. Dane kontaktowe, maszyny i zdjęcia pochodzą z cynkomet.pl, ceny i numery części są przykładowe.</p>
+</div></footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="bTitle">
+  <div class="drawer-head"><h3 id="bTitle" data-i="basket">Koszyk</h3><button class="x" type="button" id="closeBasket" aria-label="Zamknij" data-i-aria="closeA">×</button></div>
+  <div class="blist" id="blist"></div>
+  <div class="bfoot" id="bfoot"></div>
+</aside>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="box">
+  <h3 id="mTitle"></h3><p id="mText"></p>
+  <button class="btn btn-red" type="button" id="mClose">OK</button>
+</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+const DATA = {"machines":[{"id":"t117","type":"t","code":"T117","name":"T-117","full":{"pl":"Przyczepa wywrotka jednoosiowa T-117","de":"Einachs-Kipper T-117"},"load":3500,"vol":"3,05–6,1","img":"img/t117.webp"},{"id":"t169","type":"t","code":"T169","name":"T-169/2","full":{"pl":"Przyczepa T-169/2","de":"Anhänger T-169/2"},"load":6130,"vol":"4,3–8,6","img":"img/t169-2.webp"},{"id":"t104","type":"t","code":"T104","name":"T-104/6","full":{"pl":"Przyczepa T-104/6","de":"Anhänger T-104/6"},"load":10400,"vol":"6,5–15,2","img":"img/t104-6.webp","air":true},{"id":"t617","type":"t","code":"T617","name":"T-617/6","nick":"Duch z Puszczy","full":{"pl":"Przyczepa T-617/6 Duch z Puszczy","de":"Anhänger T-617/6 „Duch z Puszczy“"},"load":15520,"vol":"10,5–22,7","img":"img/t617-6.webp","air":true},{"id":"n200","type":"n","code":"N200","name":"N-200","nick":"Dzik","full":{"pl":"Rozrzutnik N-200 Dzik","de":"Dungstreuer N-200 „Dzik“"},"load":800,"vol":"0,6","img":"img/n200.webp","small":true},{"id":"n233","type":"n","code":"N233","name":"N-233/5","full":{"pl":"Rozrzutnik N-233/5","de":"Dungstreuer N-233/5"},"load":4560,"vol":"5","img":"img/n233-5.webp"},{"id":"n221","type":"n","code":"N221","name":"N-221/3-4","full":{"pl":"Rozrzutnik N-221/3-4","de":"Dungstreuer N-221/3-4"},"load":8000,"vol":"8,9","img":"img/n221-3-4.webp","air":true},{"id":"n114","type":"n","code":"N114","name":"N-114","nick":"Zeus","full":{"pl":"Rozrzutnik N-114 Zeus","de":"Dungstreuer N-114 „Zeus“"},"load":14360,"vol":"12,7","img":"img/n114.webp","air":true}],"cats":{"zaczep":{"pl":"Dyszle, podpory, zaczepy","de":"Deichsel, Stützen, Zugösen","n":"01"},"hydr":{"pl":"Hydraulika, pneumatyka, elektryka","de":"Hydraulik, Pneumatik, Elektrik","n":"02"},"jezd":{"pl":"Układ jezdny i zawieszenie","de":"Fahrwerk und Federung","n":"03"},"naped":{"pl":"Napędy i łożyskowanie","de":"Antriebe und Lager","n":"04"},"przen":{"pl":"Przenośnik podłogowy","de":"Kratzboden","n":"05"},"nadw":{"pl":"Elementy nadwozia","de":"Aufbau","n":"06"},"adapt":{"pl":"Adapter, deflektor, gilotyna","de":"Streuwerk, Deflektor, Schieber","n":"07"},"akces":{"pl":"Akcesoria","de":"Zubehör","n":"08"}},"parts":[{"m":"t117","c":"zaczep","nr":"T117-01.010","pl":"Zaczep obrotowy Ø 40","de":"Drehbare Zugöse Ø 40","p":365,"u":"szt"},{"m":"t117","c":"zaczep","nr":"T117-01.020","pl":"Podpora dyszla mechaniczna","de":"Mechanische Deichselstütze","p":330,"u":"szt"},{"m":"t117","c":"zaczep","nr":"T117-01.030","pl":"Sworzeń dyszla","de":"Deichselbolzen","p":65,"u":"szt"},{"m":"t117","c":"zaczep","nr":"T117-01.040","pl":"Sprężyna naciągowa dyszla","de":"Deichsel-Zugfeder","p":40,"u":"szt"},{"m":"t117","c":"hydr","nr":"T117-02.010","pl":"Siłownik wywrotu teleskopowy","de":"Teleskop-Kippzylinder","p":2510,"u":"szt"},{"m":"t117","c":"hydr","nr":"T117-02.020","pl":"Przewód hydrauliczny z szybkozłączem","de":"Hydraulikschlauch mit Schnellkupplung","p":120,"u":"szt"},{"m":"t117","c":"hydr","nr":"T117-02.030","pl":"Lampa zespolona tylna LED, lewa","de":"LED-Rückleuchte links","p":165,"u":"szt"},{"m":"t117","c":"hydr","nr":"T117-02.040","pl":"Lampa zespolona tylna LED, prawa","de":"LED-Rückleuchte rechts","p":165,"u":"szt"},{"m":"t117","c":"hydr","nr":"T117-02.050","pl":"Wiązka elektryczna 7-pin","de":"Kabelbaum 7-polig","p":210,"u":"szt"},{"m":"t117","c":"jezd","nr":"T117-03.010","pl":"Koło kompletne","de":"Komplettrad","p":1425,"u":"szt"},{"m":"t117","c":"jezd","nr":"T117-03.020","pl":"Piasta koła z łożyskami","de":"Radnabe mit Lagern","p":675,"u":"szt"},{"m":"t117","c":"jezd","nr":"T117-03.030","pl":"Szczęki hamulcowe, komplet","de":"Bremsbacken, Satz","p":295,"u":"kpl"},{"m":"t117","c":"jezd","nr":"T117-03.040","pl":"Linka hamulca postojowego","de":"Feststellbremsseil","p":105,"u":"szt"},{"m":"t117","c":"jezd","nr":"T117-03.050","pl":"Błotnik","de":"Kotflügel","p":250,"u":"szt"},{"m":"t117","c":"jezd","nr":"T117-03.060","pl":"Szpilka koła z nakrętką","de":"Radbolzen mit Mutter","p":20,"u":"szt"},{"m":"t117","c":"nadw","nr":"T117-06.010","pl":"Burta boczna ocynkowana","de":"Bordwand seitlich, verzinkt","p":1080,"u":"szt"},{"m":"t117","c":"nadw","nr":"T117-06.020","pl":"Nadstawa burty","de":"Bordwandaufsatz","p":760,"u":"szt"},{"m":"t117","c":"nadw","nr":"T117-06.030","pl":"Zamknięcie burty","de":"Bordwandverschluss","p":85,"u":"szt"},{"m":"t117","c":"nadw","nr":"T117-06.040","pl":"Słupek środkowy burty","de":"Mittelrunge","p":270,"u":"szt"},{"m":"t117","c":"nadw","nr":"T117-06.050","pl":"Drabinka","de":"Leiter","p":225,"u":"szt"},{"m":"t117","c":"nadw","nr":"T117-06.060","pl":"Rynna zsypowa","de":"Getreiderutsche","p":295,"u":"szt"},{"m":"t117","c":"nadw","nr":"T117-06.070","pl":"Stelaż plandeki","de":"Planengestell","p":1170,"u":"kpl"},{"m":"t117","c":"nadw","nr":"T117-06.080","pl":"Plandeka kompletna","de":"Komplette Plane","p":2075,"u":"szt"},{"m":"t117","c":"akces","nr":"T117-08.010","pl":"Skrzynka narzędziowa","de":"Werkzeugkasten","p":250,"u":"szt"},{"m":"t117","c":"akces","nr":"T117-08.020","pl":"Uchwyt koła zapasowego","de":"Reserveradhalter","p":225,"u":"szt"},{"m":"t117","c":"akces","nr":"T117-08.030","pl":"Zbiornik na wodę 15 l","de":"Wassertank 15 l","p":140,"u":"szt"},{"m":"t117","c":"akces","nr":"T117-08.040","pl":"Zestaw odblasków","de":"Reflektoren-Set","p":75,"u":"kpl"},{"m":"t117","c":"akces","nr":"T117-08.050","pl":"Komplet naklejek CYNKOMET","de":"Aufkleber-Satz CYNKOMET","p":120,"u":"kpl"},{"m":"t169","c":"zaczep","nr":"T169-01.010","pl":"Zaczep obrotowy Ø 40","de":"Drehbare Zugöse Ø 40","p":400,"u":"szt"},{"m":"t169","c":"zaczep","nr":"T169-01.020","pl":"Podpora dyszla mechaniczna","de":"Mechanische Deichselstütze","p":365,"u":"szt"},{"m":"t169","c":"zaczep","nr":"T169-01.030","pl":"Sworzeń dyszla","de":"Deichselbolzen","p":65,"u":"szt"},{"m":"t169","c":"zaczep","nr":"T169-01.040","pl":"Sprężyna naciągowa dyszla","de":"Deichsel-Zugfeder","p":45,"u":"szt"},{"m":"t169","c":"hydr","nr":"T169-02.010","pl":"Siłownik wywrotu teleskopowy","de":"Teleskop-Kippzylinder","p":2770,"u":"szt"},{"m":"t169","c":"hydr","nr":"T169-02.020","pl":"Przewód hydrauliczny z szybkozłączem","de":"Hydraulikschlauch mit Schnellkupplung","p":135,"u":"szt"},{"m":"t169","c":"hydr","nr":"T169-02.030","pl":"Lampa zespolona tylna LED, lewa","de":"LED-Rückleuchte links","p":165,"u":"szt"},{"m":"t169","c":"hydr","nr":"T169-02.040","pl":"Lampa zespolona tylna LED, prawa","de":"LED-Rückleuchte rechts","p":165,"u":"szt"},{"m":"t169","c":"hydr","nr":"T169-02.050","pl":"Wiązka elektryczna 7-pin","de":"Kabelbaum 7-polig","p":210,"u":"szt"},{"m":"t169","c":"jezd","nr":"T169-03.010","pl":"Koło kompletne","de":"Komplettrad","p":1575,"u":"szt"},{"m":"t169","c":"jezd","nr":"T169-03.020","pl":"Piasta koła z łożyskami","de":"Radnabe mit Lagern","p":745,"u":"szt"},{"m":"t169","c":"jezd","nr":"T169-03.030","pl":"Szczęki hamulcowe, komplet","de":"Bremsbacken, Satz","p":325,"u":"kpl"},{"m":"t169","c":"jezd","nr":"T169-03.040","pl":"Resor paraboliczny","de":"Parabelfeder","p":590,"u":"szt"},{"m":"t169","c":"jezd","nr":"T169-03.050","pl":"Linka hamulca postojowego","de":"Feststellbremsseil","p":115,"u":"szt"},{"m":"t169","c":"jezd","nr":"T169-03.060","pl":"Błotnik","de":"Kotflügel","p":275,"u":"szt"},{"m":"t169","c":"jezd","nr":"T169-03.070","pl":"Szpilka koła z nakrętką","de":"Radbolzen mit Mutter","p":20,"u":"szt"},{"m":"t169","c":"nadw","nr":"T169-06.010","pl":"Burta boczna ocynkowana","de":"Bordwand seitlich, verzinkt","p":1195,"u":"szt"},{"m":"t169","c":"nadw","nr":"T169-06.020","pl":"Nadstawa burty","de":"Bordwandaufsatz","p":840,"u":"szt"},{"m":"t169","c":"nadw","nr":"T169-06.030","pl":"Zamknięcie burty","de":"Bordwandverschluss","p":85,"u":"szt"},{"m":"t169","c":"nadw","nr":"T169-06.040","pl":"Słupek środkowy burty","de":"Mittelrunge","p":295,"u":"szt"},{"m":"t169","c":"nadw","nr":"T169-06.050","pl":"Drabinka","de":"Leiter","p":250,"u":"szt"},{"m":"t169","c":"nadw","nr":"T169-06.060","pl":"Rynna zsypowa","de":"Getreiderutsche","p":325,"u":"szt"},{"m":"t169","c":"nadw","nr":"T169-06.070","pl":"Stelaż plandeki","de":"Planengestell","p":1290,"u":"kpl"},{"m":"t169","c":"nadw","nr":"T169-06.080","pl":"Plandeka kompletna","de":"Komplette Plane","p":2290,"u":"szt"},{"m":"t169","c":"akces","nr":"T169-08.010","pl":"Skrzynka narzędziowa","de":"Werkzeugkasten","p":275,"u":"szt"},{"m":"t169","c":"akces","nr":"T169-08.020","pl":"Uchwyt koła zapasowego","de":"Reserveradhalter","p":250,"u":"szt"},{"m":"t169","c":"akces","nr":"T169-08.030","pl":"Osłona antyrowerowa","de":"Seitlicher Unterfahrschutz","p":515,"u":"kpl"},{"m":"t169","c":"akces","nr":"T169-08.040","pl":"Zbiornik na wodę 15 l","de":"Wassertank 15 l","p":155,"u":"szt"},{"m":"t169","c":"akces","nr":"T169-08.050","pl":"Zestaw odblasków","de":"Reflektoren-Set","p":75,"u":"kpl"},{"m":"t169","c":"akces","nr":"T169-08.060","pl":"Komplet naklejek CYNKOMET","de":"Aufkleber-Satz CYNKOMET","p":120,"u":"kpl"},{"m":"t104","c":"zaczep","nr":"T104-01.010","pl":"Zaczep obrotowy Ø 40","de":"Drehbare Zugöse Ø 40","p":450,"u":"szt"},{"m":"t104","c":"zaczep","nr":"T104-01.020","pl":"Podpora dyszla hydrauliczna","de":"Hydraulische Deichselstütze","p":1260,"u":"szt"},{"m":"t104","c":"zaczep","nr":"T104-01.030","pl":"Sworzeń dyszla","de":"Deichselbolzen","p":65,"u":"szt"},{"m":"t104","c":"zaczep","nr":"T104-01.040","pl":"Sprężyna naciągowa dyszla","de":"Deichsel-Zugfeder","p":50,"u":"szt"},{"m":"t104","c":"hydr","nr":"T104-02.010","pl":"Siłownik wywrotu teleskopowy","de":"Teleskop-Kippzylinder","p":3095,"u":"szt"},{"m":"t104","c":"hydr","nr":"T104-02.020","pl":"Przewód hydrauliczny z szybkozłączem","de":"Hydraulikschlauch mit Schnellkupplung","p":150,"u":"szt"},{"m":"t104","c":"hydr","nr":"T104-02.030","pl":"Lampa zespolona tylna LED, lewa","de":"LED-Rückleuchte links","p":165,"u":"szt"},{"m":"t104","c":"hydr","nr":"T104-02.040","pl":"Lampa zespolona tylna LED, prawa","de":"LED-Rückleuchte rechts","p":165,"u":"szt"},{"m":"t104","c":"hydr","nr":"T104-02.050","pl":"Wiązka elektryczna 7-pin","de":"Kabelbaum 7-polig","p":210,"u":"szt"},{"m":"t104","c":"hydr","nr":"T104-02.060","pl":"Zawór sterujący hamulca pneumatycznego","de":"Anhängerbremsventil","p":735,"u":"szt"},{"m":"t104","c":"hydr","nr":"T104-02.070","pl":"Głowica złącza pneumatycznego","de":"Druckluft-Kupplungskopf","p":95,"u":"szt"},{"m":"t104","c":"jezd","nr":"T104-03.010","pl":"Koło kompletne","de":"Komplettrad","p":1760,"u":"szt"},{"m":"t104","c":"jezd","nr":"T104-03.020","pl":"Piasta koła z łożyskami","de":"Radnabe mit Lagern","p":835,"u":"szt"},{"m":"t104","c":"jezd","nr":"T104-03.030","pl":"Szczęki hamulcowe, komplet","de":"Bremsbacken, Satz","p":365,"u":"kpl"},{"m":"t104","c":"jezd","nr":"T104-03.040","pl":"Resor paraboliczny","de":"Parabelfeder","p":660,"u":"szt"},{"m":"t104","c":"jezd","nr":"T104-03.050","pl":"Linka hamulca postojowego","de":"Feststellbremsseil","p":130,"u":"szt"},{"m":"t104","c":"jezd","nr":"T104-03.060","pl":"Błotnik","de":"Kotflügel","p":310,"u":"szt"},{"m":"t104","c":"jezd","nr":"T104-03.070","pl":"Szpilka koła z nakrętką","de":"Radbolzen mit Mutter","p":20,"u":"szt"},{"m":"t104","c":"nadw","nr":"T104-06.010","pl":"Burta boczna ocynkowana","de":"Bordwand seitlich, verzinkt","p":1335,"u":"szt"},{"m":"t104","c":"nadw","nr":"T104-06.020","pl":"Nadstawa burty","de":"Bordwandaufsatz","p":940,"u":"szt"},{"m":"t104","c":"nadw","nr":"T104-06.030","pl":"Zamknięcie burty","de":"Bordwandverschluss","p":85,"u":"szt"},{"m":"t104","c":"nadw","nr":"T104-06.040","pl":"Słupek środkowy burty","de":"Mittelrunge","p":330,"u":"szt"},{"m":"t104","c":"nadw","nr":"T104-06.050","pl":"Drabinka","de":"Leiter","p":280,"u":"szt"},{"m":"t104","c":"nadw","nr":"T104-06.060","pl":"Rynna zsypowa","de":"Getreiderutsche","p":365,"u":"szt"},{"m":"t104","c":"nadw","nr":"T104-06.070","pl":"Stelaż plandeki","de":"Planengestell","p":1440,"u":"kpl"},{"m":"t104","c":"nadw","nr":"T104-06.080","pl":"Plandeka kompletna","de":"Komplette Plane","p":2560,"u":"szt"},{"m":"t104","c":"akces","nr":"T104-08.010","pl":"Skrzynka narzędziowa","de":"Werkzeugkasten","p":310,"u":"szt"},{"m":"t104","c":"akces","nr":"T104-08.020","pl":"Uchwyt koła zapasowego","de":"Reserveradhalter","p":280,"u":"szt"},{"m":"t104","c":"akces","nr":"T104-08.030","pl":"Osłona antyrowerowa","de":"Seitlicher Unterfahrschutz","p":575,"u":"kpl"},{"m":"t104","c":"akces","nr":"T104-08.040","pl":"Zbiornik na wodę 15 l","de":"Wassertank 15 l","p":170,"u":"szt"},{"m":"t104","c":"akces","nr":"T104-08.050","pl":"Zestaw odblasków","de":"Reflektoren-Set","p":75,"u":"kpl"},{"m":"t104","c":"akces","nr":"T104-08.060","pl":"Komplet naklejek CYNKOMET","de":"Aufkleber-Satz CYNKOMET","p":120,"u":"kpl"},{"m":"t617","c":"zaczep","nr":"T617-01.010","pl":"Zaczep obrotowy Ø 40","de":"Drehbare Zugöse Ø 40","p":495,"u":"szt"},{"m":"t617","c":"zaczep","nr":"T617-01.020","pl":"Podpora dyszla hydrauliczna","de":"Hydraulische Deichselstütze","p":1390,"u":"szt"},{"m":"t617","c":"zaczep","nr":"T617-01.030","pl":"Sworzeń dyszla","de":"Deichselbolzen","p":65,"u":"szt"},{"m":"t617","c":"zaczep","nr":"T617-01.040","pl":"Sprężyna naciągowa dyszla","de":"Deichsel-Zugfeder","p":55,"u":"szt"},{"m":"t617","c":"hydr","nr":"T617-02.010","pl":"Siłownik wywrotu teleskopowy","de":"Teleskop-Kippzylinder","p":3420,"u":"szt"},{"m":"t617","c":"hydr","nr":"T617-02.020","pl":"Przewód hydrauliczny z szybkozłączem","de":"Hydraulikschlauch mit Schnellkupplung","p":165,"u":"szt"},{"m":"t617","c":"hydr","nr":"T617-02.030","pl":"Lampa zespolona tylna LED, lewa","de":"LED-Rückleuchte links","p":165,"u":"szt"},{"m":"t617","c":"hydr","nr":"T617-02.040","pl":"Lampa zespolona tylna LED, prawa","de":"LED-Rückleuchte rechts","p":165,"u":"szt"},{"m":"t617","c":"hydr","nr":"T617-02.050","pl":"Wiązka elektryczna 7-pin","de":"Kabelbaum 7-polig","p":210,"u":"szt"},{"m":"t617","c":"hydr","nr":"T617-02.060","pl":"Zawór sterujący hamulca pneumatycznego","de":"Anhängerbremsventil","p":815,"u":"szt"},{"m":"t617","c":"hydr","nr":"T617-02.070","pl":"Głowica złącza pneumatycznego","de":"Druckluft-Kupplungskopf","p":95,"u":"szt"},{"m":"t617","c":"jezd","nr":"T617-03.010","pl":"Koło kompletne","de":"Komplettrad","p":1945,"u":"szt"},{"m":"t617","c":"jezd","nr":"T617-03.020","pl":"Piasta koła z łożyskami","de":"Radnabe mit Lagern","p":920,"u":"szt"},{"m":"t617","c":"jezd","nr":"T617-03.030","pl":"Szczęki hamulcowe, komplet","de":"Bremsbacken, Satz","p":400,"u":"kpl"},{"m":"t617","c":"jezd","nr":"T617-03.040","pl":"Resor paraboliczny","de":"Parabelfeder","p":730,"u":"szt"},{"m":"t617","c":"jezd","nr":"T617-03.050","pl":"Linka hamulca postojowego","de":"Feststellbremsseil","p":140,"u":"szt"},{"m":"t617","c":"jezd","nr":"T617-03.060","pl":"Błotnik","de":"Kotflügel","p":340,"u":"szt"},{"m":"t617","c":"jezd","nr":"T617-03.070","pl":"Szpilka koła z nakrętką","de":"Radbolzen mit Mutter","p":20,"u":"szt"},{"m":"t617","c":"nadw","nr":"T617-06.010","pl":"Burta boczna ocynkowana","de":"Bordwand seitlich, verzinkt","p":1475,"u":"szt"},{"m":"t617","c":"nadw","nr":"T617-06.020","pl":"Nadstawa burty","de":"Bordwandaufsatz","p":1040,"u":"szt"},{"m":"t617","c":"nadw","nr":"T617-06.030","pl":"Zamknięcie burty","de":"Bordwandverschluss","p":85,"u":"szt"},{"m":"t617","c":"nadw","nr":"T617-06.040","pl":"Słupek środkowy burty","de":"Mittelrunge","p":365,"u":"szt"},{"m":"t617","c":"nadw","nr":"T617-06.050","pl":"Drabinka","de":"Leiter","p":305,"u":"szt"},{"m":"t617","c":"nadw","nr":"T617-06.060","pl":"Rynna zsypowa","de":"Getreiderutsche","p":400,"u":"szt"},{"m":"t617","c":"nadw","nr":"T617-06.070","pl":"Stelaż plandeki","de":"Planengestell","p":1595,"u":"kpl"},{"m":"t617","c":"nadw","nr":"T617-06.080","pl":"Plandeka kompletna","de":"Komplette Plane","p":2830,"u":"szt"},{"m":"t617","c":"akces","nr":"T617-08.010","pl":"Skrzynka narzędziowa","de":"Werkzeugkasten","p":340,"u":"szt"},{"m":"t617","c":"akces","nr":"T617-08.020","pl":"Uchwyt koła zapasowego","de":"Reserveradhalter","p":305,"u":"szt"},{"m":"t617","c":"akces","nr":"T617-08.030","pl":"Osłona antyrowerowa","de":"Seitlicher Unterfahrschutz","p":635,"u":"kpl"},{"m":"t617","c":"akces","nr":"T617-08.040","pl":"Zbiornik na wodę 15 l","de":"Wassertank 15 l","p":190,"u":"szt"},{"m":"t617","c":"akces","nr":"T617-08.050","pl":"Zestaw odblasków","de":"Reflektoren-Set","p":75,"u":"kpl"},{"m":"t617","c":"akces","nr":"T617-08.060","pl":"Komplet naklejek CYNKOMET","de":"Aufkleber-Satz CYNKOMET","p":120,"u":"kpl"},{"m":"n200","c":"zaczep","nr":"N200-01.010","pl":"Zaczep obrotowy Ø 40","de":"Drehbare Zugöse Ø 40","p":315,"u":"szt"},{"m":"n200","c":"zaczep","nr":"N200-01.020","pl":"Podpora dyszla mechaniczna","de":"Mechanische Deichselstütze","p":285,"u":"szt"},{"m":"n200","c":"zaczep","nr":"N200-01.030","pl":"Sworzeń dyszla","de":"Deichselbolzen","p":65,"u":"szt"},{"m":"n200","c":"zaczep","nr":"N200-01.040","pl":"Wał WOM z zabezpieczeniem przeciążeniowym","de":"Gelenkwelle mit Überlastkupplung","p":1240,"u":"szt"},{"m":"n200","c":"hydr","nr":"N200-02.010","pl":"Przewód hydrauliczny z szybkozłączem","de":"Hydraulikschlauch mit Schnellkupplung","p":105,"u":"szt"},{"m":"n200","c":"hydr","nr":"N200-02.020","pl":"Lampa zespolona tylna LED, lewa","de":"LED-Rückleuchte links","p":165,"u":"szt"},{"m":"n200","c":"hydr","nr":"N200-02.030","pl":"Lampa zespolona tylna LED, prawa","de":"LED-Rückleuchte rechts","p":165,"u":"szt"},{"m":"n200","c":"hydr","nr":"N200-02.040","pl":"Wiązka elektryczna 7-pin","de":"Kabelbaum 7-polig","p":210,"u":"szt"},{"m":"n200","c":"jezd","nr":"N200-03.010","pl":"Koło kompletne","de":"Komplettrad","p":1240,"u":"szt"},{"m":"n200","c":"jezd","nr":"N200-03.020","pl":"Piasta koła z łożyskami","de":"Radnabe mit Lagern","p":585,"u":"szt"},{"m":"n200","c":"jezd","nr":"N200-03.030","pl":"Błotnik","de":"Kotflügel","p":220,"u":"szt"},{"m":"n200","c":"jezd","nr":"N200-03.040","pl":"Szpilka koła z nakrętką","de":"Radbolzen mit Mutter","p":20,"u":"szt"},{"m":"n200","c":"naped","nr":"N200-04.010","pl":"Wałek napędowy z tuleją łączącą","de":"Antriebswelle mit Verbindungshülse","p":520,"u":"szt"},{"m":"n200","c":"naped","nr":"N200-04.020","pl":"Osłona wałka napędowego","de":"Antriebswellenschutz","p":165,"u":"szt"},{"m":"n200","c":"naped","nr":"N200-04.030","pl":"Reduktor posuwu przenośnika","de":"Vorschubgetriebe Kratzboden","p":1955,"u":"szt"},{"m":"n200","c":"naped","nr":"N200-04.040","pl":"Łożysko z obudową UCF","de":"Flanschlager UCF","p":165,"u":"szt"},{"m":"n200","c":"przen","nr":"N200-05.010","pl":"Łańcuch przenośnika 14×50","de":"Kratzbodenkette 14×50","p":110,"u":"mb"},{"m":"n200","c":"przen","nr":"N200-05.020","pl":"Spinka łańcucha przenośnika","de":"Kettenschloss Kratzboden","p":30,"u":"szt"},{"m":"n200","c":"przen","nr":"N200-05.030","pl":"Listwa przenośnika","de":"Kratzbodenleiste","p":70,"u":"szt"},{"m":"n200","c":"przen","nr":"N200-05.040","pl":"Koło gniazdowe","de":"Kettenrad","p":285,"u":"szt"},{"m":"n200","c":"przen","nr":"N200-05.050","pl":"Napinacz przenośnika","de":"Kettenspanner","p":220,"u":"szt"},{"m":"n200","c":"przen","nr":"N200-05.060","pl":"Wał tylny przenośnika","de":"Hintere Kratzbodenwelle","p":1090,"u":"szt"},{"m":"n200","c":"nadw","nr":"N200-06.010","pl":"Ściana boczna skrzyni","de":"Seitenwand Ladekasten","p":1090,"u":"szt"},{"m":"n200","c":"adapt","nr":"N200-07.010","pl":"Bęben rozrzucający pionowy","de":"Vertikale Streuwalze","p":3610,"u":"szt"},{"m":"n200","c":"adapt","nr":"N200-07.020","pl":"Nożyki bębna, komplet 10 szt.","de":"Streumesser, Satz 10 St.","p":390,"u":"kpl"},{"m":"n200","c":"akces","nr":"N200-08.010","pl":"Skrzynka narzędziowa","de":"Werkzeugkasten","p":220,"u":"szt"},{"m":"n200","c":"akces","nr":"N200-08.020","pl":"Zestaw odblasków","de":"Reflektoren-Set","p":75,"u":"kpl"},{"m":"n200","c":"akces","nr":"N200-08.030","pl":"Komplet naklejek CYNKOMET","de":"Aufkleber-Satz CYNKOMET","p":120,"u":"kpl"},{"m":"n233","c":"zaczep","nr":"N233-01.010","pl":"Zaczep obrotowy Ø 40","de":"Drehbare Zugöse Ø 40","p":380,"u":"szt"},{"m":"n233","c":"zaczep","nr":"N233-01.020","pl":"Podpora dyszla mechaniczna","de":"Mechanische Deichselstütze","p":345,"u":"szt"},{"m":"n233","c":"zaczep","nr":"N233-01.030","pl":"Sworzeń dyszla","de":"Deichselbolzen","p":65,"u":"szt"},{"m":"n233","c":"zaczep","nr":"N233-01.040","pl":"Wał WOM z zabezpieczeniem przeciążeniowym","de":"Gelenkwelle mit Überlastkupplung","p":1500,"u":"szt"},{"m":"n233","c":"hydr","nr":"N233-02.010","pl":"Siłownik zasuwy","de":"Schieberzylinder","p":1075,"u":"szt"},{"m":"n233","c":"hydr","nr":"N233-02.020","pl":"Przewód hydrauliczny z szybkozłączem","de":"Hydraulikschlauch mit Schnellkupplung","p":125,"u":"szt"},{"m":"n233","c":"hydr","nr":"N233-02.030","pl":"Lampa zespolona tylna LED, lewa","de":"LED-Rückleuchte links","p":165,"u":"szt"},{"m":"n233","c":"hydr","nr":"N233-02.040","pl":"Lampa zespolona tylna LED, prawa","de":"LED-Rückleuchte rechts","p":165,"u":"szt"},{"m":"n233","c":"hydr","nr":"N233-02.050","pl":"Wiązka elektryczna 7-pin","de":"Kabelbaum 7-polig","p":210,"u":"szt"},{"m":"n233","c":"jezd","nr":"N233-03.010","pl":"Koło kompletne","de":"Komplettrad","p":1500,"u":"szt"},{"m":"n233","c":"jezd","nr":"N233-03.020","pl":"Piasta koła z łożyskami","de":"Radnabe mit Lagern","p":710,"u":"szt"},{"m":"n233","c":"jezd","nr":"N233-03.030","pl":"Szczęki hamulcowe, komplet","de":"Bremsbacken, Satz","p":310,"u":"kpl"},{"m":"n233","c":"jezd","nr":"N233-03.040","pl":"Linka hamulca postojowego","de":"Feststellbremsseil","p":110,"u":"szt"},{"m":"n233","c":"jezd","nr":"N233-03.050","pl":"Błotnik","de":"Kotflügel","p":265,"u":"szt"},{"m":"n233","c":"jezd","nr":"N233-03.060","pl":"Szpilka koła z nakrętką","de":"Radbolzen mit Mutter","p":20,"u":"szt"},{"m":"n233","c":"naped","nr":"N233-04.010","pl":"Przekładnia kątowa adaptera","de":"Winkelgetriebe Streuwerk","p":3095,"u":"szt"},{"m":"n233","c":"naped","nr":"N233-04.020","pl":"Wałek napędowy z tuleją łączącą","de":"Antriebswelle mit Verbindungshülse","p":630,"u":"szt"},{"m":"n233","c":"naped","nr":"N233-04.030","pl":"Osłona wałka napędowego","de":"Antriebswellenschutz","p":200,"u":"szt"},{"m":"n233","c":"naped","nr":"N233-04.040","pl":"Reduktor posuwu przenośnika","de":"Vorschubgetriebe Kratzboden","p":2365,"u":"szt"},{"m":"n233","c":"naped","nr":"N233-04.050","pl":"Łożysko z obudową UCF","de":"Flanschlager UCF","p":165,"u":"szt"},{"m":"n233","c":"przen","nr":"N233-05.010","pl":"Łańcuch przenośnika 14×50","de":"Kratzbodenkette 14×50","p":130,"u":"mb"},{"m":"n233","c":"przen","nr":"N233-05.020","pl":"Spinka łańcucha przenośnika","de":"Kettenschloss Kratzboden","p":30,"u":"szt"},{"m":"n233","c":"przen","nr":"N233-05.030","pl":"Listwa przenośnika","de":"Kratzbodenleiste","p":85,"u":"szt"},{"m":"n233","c":"przen","nr":"N233-05.040","pl":"Koło gniazdowe","de":"Kettenrad","p":345,"u":"szt"},{"m":"n233","c":"przen","nr":"N233-05.050","pl":"Napinacz przenośnika","de":"Kettenspanner","p":265,"u":"szt"},{"m":"n233","c":"przen","nr":"N233-05.060","pl":"Wał tylny przenośnika","de":"Hintere Kratzbodenwelle","p":1320,"u":"szt"},{"m":"n233","c":"nadw","nr":"N233-06.010","pl":"Ściana boczna skrzyni","de":"Seitenwand Ladekasten","p":1320,"u":"szt"},{"m":"n233","c":"nadw","nr":"N233-06.020","pl":"Drabinka","de":"Leiter","p":235,"u":"szt"},{"m":"n233","c":"adapt","nr":"N233-07.010","pl":"Bęben rozrzucający pionowy","de":"Vertikale Streuwalze","p":4370,"u":"szt"},{"m":"n233","c":"adapt","nr":"N233-07.020","pl":"Nożyki bębna, komplet 10 szt.","de":"Streumesser, Satz 10 St.","p":475,"u":"kpl"},{"m":"n233","c":"adapt","nr":"N233-07.030","pl":"Zasuwa hydrauliczna (gilotyna)","de":"Hydraulischer Schieber","p":2640,"u":"szt"},{"m":"n233","c":"akces","nr":"N233-08.010","pl":"Skrzynka narzędziowa","de":"Werkzeugkasten","p":265,"u":"szt"},{"m":"n233","c":"akces","nr":"N233-08.020","pl":"Zbiornik na wodę 15 l","de":"Wassertank 15 l","p":145,"u":"szt"},{"m":"n233","c":"akces","nr":"N233-08.030","pl":"Zestaw odblasków","de":"Reflektoren-Set","p":75,"u":"kpl"},{"m":"n233","c":"akces","nr":"N233-08.040","pl":"Komplet naklejek CYNKOMET","de":"Aufkleber-Satz CYNKOMET","p":120,"u":"kpl"},{"m":"n221","c":"zaczep","nr":"N221-01.010","pl":"Zaczep obrotowy Ø 40","de":"Drehbare Zugöse Ø 40","p":420,"u":"szt"},{"m":"n221","c":"zaczep","nr":"N221-01.020","pl":"Podpora dyszla hydrauliczna","de":"Hydraulische Deichselstütze","p":1180,"u":"szt"},{"m":"n221","c":"zaczep","nr":"N221-01.030","pl":"Sworzeń dyszla","de":"Deichselbolzen","p":65,"u":"szt"},{"m":"n221","c":"zaczep","nr":"N221-01.040","pl":"Wał WOM z zabezpieczeniem przeciążeniowym","de":"Gelenkwelle mit Überlastkupplung","p":1650,"u":"szt"},{"m":"n221","c":"hydr","nr":"N221-02.010","pl":"Siłownik zasuwy","de":"Schieberzylinder","p":1180,"u":"szt"},{"m":"n221","c":"hydr","nr":"N221-02.020","pl":"Przewód hydrauliczny z szybkozłączem","de":"Hydraulikschlauch mit Schnellkupplung","p":140,"u":"szt"},{"m":"n221","c":"hydr","nr":"N221-02.030","pl":"Lampa zespolona tylna LED, lewa","de":"LED-Rückleuchte links","p":165,"u":"szt"},{"m":"n221","c":"hydr","nr":"N221-02.040","pl":"Lampa zespolona tylna LED, prawa","de":"LED-Rückleuchte rechts","p":165,"u":"szt"},{"m":"n221","c":"hydr","nr":"N221-02.050","pl":"Wiązka elektryczna 7-pin","de":"Kabelbaum 7-polig","p":210,"u":"szt"},{"m":"n221","c":"hydr","nr":"N221-02.060","pl":"Zawór sterujący hamulca pneumatycznego","de":"Anhängerbremsventil","p":690,"u":"szt"},{"m":"n221","c":"hydr","nr":"N221-02.070","pl":"Głowica złącza pneumatycznego","de":"Druckluft-Kupplungskopf","p":95,"u":"szt"},{"m":"n221","c":"jezd","nr":"N221-03.010","pl":"Koło kompletne","de":"Komplettrad","p":1650,"u":"szt"},{"m":"n221","c":"jezd","nr":"N221-03.020","pl":"Piasta koła z łożyskami","de":"Radnabe mit Lagern","p":780,"u":"szt"},{"m":"n221","c":"jezd","nr":"N221-03.030","pl":"Szczęki hamulcowe, komplet","de":"Bremsbacken, Satz","p":340,"u":"kpl"},{"m":"n221","c":"jezd","nr":"N221-03.040","pl":"Linka hamulca postojowego","de":"Feststellbremsseil","p":120,"u":"szt"},{"m":"n221","c":"jezd","nr":"N221-03.050","pl":"Błotnik","de":"Kotflügel","p":290,"u":"szt"},{"m":"n221","c":"jezd","nr":"N221-03.060","pl":"Szpilka koła z nakrętką","de":"Radbolzen mit Mutter","p":20,"u":"szt"},{"m":"n221","c":"naped","nr":"N221-04.010","pl":"Przekładnia kątowa adaptera","de":"Winkelgetriebe Streuwerk","p":3400,"u":"szt"},{"m":"n221","c":"naped","nr":"N221-04.020","pl":"Wałek napędowy z tuleją łączącą","de":"Antriebswelle mit Verbindungshülse","p":690,"u":"szt"},{"m":"n221","c":"naped","nr":"N221-04.030","pl":"Osłona wałka napędowego","de":"Antriebswellenschutz","p":220,"u":"szt"},{"m":"n221","c":"naped","nr":"N221-04.040","pl":"Reduktor posuwu przenośnika","de":"Vorschubgetriebe Kratzboden","p":2600,"u":"szt"},{"m":"n221","c":"naped","nr":"N221-04.050","pl":"Łożysko z obudową UCF","de":"Flanschlager UCF","p":165,"u":"szt"},{"m":"n221","c":"przen","nr":"N221-05.010","pl":"Łańcuch przenośnika 14×50","de":"Kratzbodenkette 14×50","p":145,"u":"mb"},{"m":"n221","c":"przen","nr":"N221-05.020","pl":"Spinka łańcucha przenośnika","de":"Kettenschloss Kratzboden","p":30,"u":"szt"},{"m":"n221","c":"przen","nr":"N221-05.030","pl":"Listwa przenośnika","de":"Kratzbodenleiste","p":95,"u":"szt"},{"m":"n221","c":"przen","nr":"N221-05.040","pl":"Koło gniazdowe","de":"Kettenrad","p":380,"u":"szt"},{"m":"n221","c":"przen","nr":"N221-05.050","pl":"Napinacz przenośnika","de":"Kettenspanner","p":290,"u":"szt"},{"m":"n221","c":"przen","nr":"N221-05.060","pl":"Wał tylny przenośnika","de":"Hintere Kratzbodenwelle","p":1450,"u":"szt"},{"m":"n221","c":"nadw","nr":"N221-06.010","pl":"Ściana boczna skrzyni","de":"Seitenwand Ladekasten","p":1450,"u":"szt"},{"m":"n221","c":"nadw","nr":"N221-06.020","pl":"Drabinka","de":"Leiter","p":260,"u":"szt"},{"m":"n221","c":"adapt","nr":"N221-07.010","pl":"Bęben rozrzucający pionowy","de":"Vertikale Streuwalze","p":4800,"u":"szt"},{"m":"n221","c":"adapt","nr":"N221-07.020","pl":"Nożyki bębna, komplet 10 szt.","de":"Streumesser, Satz 10 St.","p":520,"u":"kpl"},{"m":"n221","c":"adapt","nr":"N221-07.030","pl":"Zasuwa hydrauliczna (gilotyna)","de":"Hydraulischer Schieber","p":2900,"u":"szt"},{"m":"n221","c":"akces","nr":"N221-08.010","pl":"Skrzynka narzędziowa","de":"Werkzeugkasten","p":290,"u":"szt"},{"m":"n221","c":"akces","nr":"N221-08.020","pl":"Zbiornik na wodę 15 l","de":"Wassertank 15 l","p":160,"u":"szt"},{"m":"n221","c":"akces","nr":"N221-08.030","pl":"Zestaw odblasków","de":"Reflektoren-Set","p":75,"u":"kpl"},{"m":"n221","c":"akces","nr":"N221-08.040","pl":"Komplet naklejek CYNKOMET","de":"Aufkleber-Satz CYNKOMET","p":120,"u":"kpl"},{"m":"n114","c":"zaczep","nr":"N114-01.010","pl":"Zaczep obrotowy Ø 40","de":"Drehbare Zugöse Ø 40","p":485,"u":"szt"},{"m":"n114","c":"zaczep","nr":"N114-01.020","pl":"Podpora dyszla hydrauliczna","de":"Hydraulische Deichselstütze","p":1365,"u":"szt"},{"m":"n114","c":"zaczep","nr":"N114-01.030","pl":"Sworzeń dyszla","de":"Deichselbolzen","p":65,"u":"szt"},{"m":"n114","c":"zaczep","nr":"N114-01.040","pl":"Wał WOM z zabezpieczeniem przeciążeniowym","de":"Gelenkwelle mit Überlastkupplung","p":1910,"u":"szt"},{"m":"n114","c":"hydr","nr":"N114-02.010","pl":"Siłownik zasuwy","de":"Schieberzylinder","p":1365,"u":"szt"},{"m":"n114","c":"hydr","nr":"N114-02.020","pl":"Przewód hydrauliczny z szybkozłączem","de":"Hydraulikschlauch mit Schnellkupplung","p":160,"u":"szt"},{"m":"n114","c":"hydr","nr":"N114-02.030","pl":"Lampa zespolona tylna LED, lewa","de":"LED-Rückleuchte links","p":165,"u":"szt"},{"m":"n114","c":"hydr","nr":"N114-02.040","pl":"Lampa zespolona tylna LED, prawa","de":"LED-Rückleuchte rechts","p":165,"u":"szt"},{"m":"n114","c":"hydr","nr":"N114-02.050","pl":"Wiązka elektryczna 7-pin","de":"Kabelbaum 7-polig","p":210,"u":"szt"},{"m":"n114","c":"hydr","nr":"N114-02.060","pl":"Zawór sterujący hamulca pneumatycznego","de":"Anhängerbremsventil","p":800,"u":"szt"},{"m":"n114","c":"hydr","nr":"N114-02.070","pl":"Głowica złącza pneumatycznego","de":"Druckluft-Kupplungskopf","p":95,"u":"szt"},{"m":"n114","c":"jezd","nr":"N114-03.010","pl":"Koło kompletne","de":"Komplettrad","p":1910,"u":"szt"},{"m":"n114","c":"jezd","nr":"N114-03.020","pl":"Piasta koła z łożyskami","de":"Radnabe mit Lagern","p":905,"u":"szt"},{"m":"n114","c":"jezd","nr":"N114-03.030","pl":"Szczęki hamulcowe, komplet","de":"Bremsbacken, Satz","p":395,"u":"kpl"},{"m":"n114","c":"jezd","nr":"N114-03.040","pl":"Linka hamulca postojowego","de":"Feststellbremsseil","p":140,"u":"szt"},{"m":"n114","c":"jezd","nr":"N114-03.050","pl":"Błotnik","de":"Kotflügel","p":335,"u":"szt"},{"m":"n114","c":"jezd","nr":"N114-03.060","pl":"Szpilka koła z nakrętką","de":"Radbolzen mit Mutter","p":20,"u":"szt"},{"m":"n114","c":"naped","nr":"N114-04.010","pl":"Przekładnia kątowa adaptera","de":"Winkelgetriebe Streuwerk","p":3935,"u":"szt"},{"m":"n114","c":"naped","nr":"N114-04.020","pl":"Wałek napędowy z tuleją łączącą","de":"Antriebswelle mit Verbindungshülse","p":800,"u":"szt"},{"m":"n114","c":"naped","nr":"N114-04.030","pl":"Osłona wałka napędowego","de":"Antriebswellenschutz","p":255,"u":"szt"},{"m":"n114","c":"naped","nr":"N114-04.040","pl":"Reduktor posuwu przenośnika","de":"Vorschubgetriebe Kratzboden","p":3010,"u":"szt"},{"m":"n114","c":"naped","nr":"N114-04.050","pl":"Łożysko z obudową UCF","de":"Flanschlager UCF","p":165,"u":"szt"},{"m":"n114","c":"przen","nr":"N114-05.010","pl":"Łańcuch przenośnika 14×50","de":"Kratzbodenkette 14×50","p":170,"u":"mb"},{"m":"n114","c":"przen","nr":"N114-05.020","pl":"Spinka łańcucha przenośnika","de":"Kettenschloss Kratzboden","p":30,"u":"szt"},{"m":"n114","c":"przen","nr":"N114-05.030","pl":"Listwa przenośnika","de":"Kratzbodenleiste","p":110,"u":"szt"},{"m":"n114","c":"przen","nr":"N114-05.040","pl":"Koło gniazdowe","de":"Kettenrad","p":440,"u":"szt"},{"m":"n114","c":"przen","nr":"N114-05.050","pl":"Napinacz przenośnika","de":"Kettenspanner","p":335,"u":"szt"},{"m":"n114","c":"przen","nr":"N114-05.060","pl":"Wał tylny przenośnika","de":"Hintere Kratzbodenwelle","p":1680,"u":"szt"},{"m":"n114","c":"nadw","nr":"N114-06.010","pl":"Ściana boczna skrzyni","de":"Seitenwand Ladekasten","p":1680,"u":"szt"},{"m":"n114","c":"nadw","nr":"N114-06.020","pl":"Drabinka","de":"Leiter","p":300,"u":"szt"},{"m":"n114","c":"adapt","nr":"N114-07.010","pl":"Bęben rozrzucający pionowy","de":"Vertikale Streuwalze","p":5555,"u":"szt"},{"m":"n114","c":"adapt","nr":"N114-07.020","pl":"Nożyki bębna, komplet 10 szt.","de":"Streumesser, Satz 10 St.","p":600,"u":"kpl"},{"m":"n114","c":"adapt","nr":"N114-07.030","pl":"Zasuwa hydrauliczna (gilotyna)","de":"Hydraulischer Schieber","p":3355,"u":"szt"},{"m":"n114","c":"akces","nr":"N114-08.010","pl":"Skrzynka narzędziowa","de":"Werkzeugkasten","p":335,"u":"szt"},{"m":"n114","c":"akces","nr":"N114-08.020","pl":"Zbiornik na wodę 15 l","de":"Wassertank 15 l","p":185,"u":"szt"},{"m":"n114","c":"akces","nr":"N114-08.030","pl":"Zestaw odblasków","de":"Reflektoren-Set","p":75,"u":"kpl"},{"m":"n114","c":"akces","nr":"N114-08.040","pl":"Komplet naklejek CYNKOMET","de":"Aufkleber-Satz CYNKOMET","p":120,"u":"kpl"}]};
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const EUR = 4.3, MAXQ = 999;
+let lang = 'pl', type = 't', machine = 't169', cat = 'all', query = '';
+const basket = new Map(); // klucz: numer części -> { part, qty }
+
+const T = {
+  pl: {
+    title: 'CYNKOMET – części do przyczep i rozrzutników (projekt demonstracyjny)',
+    desc: 'Projekt demonstracyjny dla CYNKOMET: części do przyczep i rozrzutników z ceną i zamówieniem online oraz wycena cynkowania ogniowego.',
+    demo: '<b>Projekt demonstracyjny</b> przygotowany dla CYNKOMET. Maszyny, zdjęcia i kategorie części pochodzą z cynkomet.pl, numery części i ceny są przykładowe.',
+    by: 'Przygotował:', nav1: 'Części', nav2: 'Cynkowanie', nav3: 'Kontakt', basket: 'Koszyk',
+    logoA: 'CYNKOMET – strona główna', navA: 'Sekcje', langA: 'Język', tabsA: 'Rodzaj maszyny', catsA: 'Kategorie części', closeA: 'Zamknij',
+    heroAlt: 'Przyczepa CYNKOMET T-617/6 Duch z Puszczy', basketA: n => `Koszyk, ${n} szt.`,
+    h1: 'Części CYNKOMET <span>z ceną i zamówieniem online</span>',
+    lead: 'Wybierz swoją przyczepę albo rozrzutnik i od razu zobacz pasujące części z ceną netto. Zamówienie trafia prosto do działu sprzedaży części zamiennych w Czarnej Białostockiej.',
+    cta1: 'Wybierz swoją maszynę', cta2: 'Wycena cynkowania',
+    f1: 'Maszyny ocynkowane ogniowo', f2: 'Oryginalne części do konkretnych modeli', f3: 'Cynkownie w Czarnej Białostockiej i Wyszkowie',
+    partsH: 'Części zamienne', partsP: 'Te same kategorie co w dziale części CYNKOMET – teraz z numerem, ceną i przyciskiem „Dodaj”.',
+    step1: 'Wybierz maszynę', step2: 'Wybierz części', tabT: 'Przyczepy', tabN: 'Rozrzutniki', searchL: 'Szukaj części',
+    partsFoot: 'Nie widzisz części? Zadzwoń: <a href="tel:+48857102023">(85) 710 20 23</a> albo napisz: <a href="mailto:cynkomet@cynkomet.pl">cynkomet@cynkomet.pl</a>.',
+    galvH: 'Wycena cynkowania online', galvP: 'Zamiast formularza PDF: podaj masę i wymiary elementu, a strona od razu sprawdzi, czy zmieści się w wannie, i policzy orientacyjną cenę.',
+    gPlant: 'Cynkownia', gCzb: 'wanna 9,0 × 1,5 × 3,1 m, element do 8,5 × 2,8 × 1,4 m i 4 t', gWys: 'wanna 13,0 × 1,5 × 3,1 m, element do 12,5 × 2,8 × 1,4 m i 6 t',
+    gMethod: 'Metoda', gHot: 'Cynkowanie ogniowe', gHotS: 'konstrukcje i większe elementy', gSpin: 'Cynkowanie wirowe', gSpinS: 'drobne elementy do kosza Ø 550 × 570 mm – tylko Wyszków',
+    gMass: 'Masa jednego elementu', gQty: 'Liczba sztuk', pcs: 'szt.', dimsLeg: 'Wymiary elementu', gL: 'Długość', gW: 'Szerokość', gH: 'Wysokość',
+    ex: 'np.',
+    gPrep: 'Przed oddaniem elementu sprawdź otwory technologiczne i usuń farbę oraz olej – tak jak w poradniku „Przygotowanie do cynkowania” na cynkomet.pl.',
+    qH: 'Orientacyjna wycena', qMass: 'Masa łączna', qRate: 'Stawka za kg', qNet: 'Cena netto', qSend: 'Wyślij zapytanie', grossL: 'Brutto (VAT 23%)',
+    qNote: 'Stawki są przykładowe. Ostateczną cenę potwierdza Biuro Obsługi Klienta cynkowni po obejrzeniu elementu.',
+    fServ: 'Serwis i reklamacje', fServS: 'Serwis:', fRekl: 'Reklamacje:', fCzb: 'Cynkownia Czarna Białostocka', fWys: 'Cynkownia Wyszków',
+    legal: 'Projekt demonstracyjny – nie jest oficjalną stroną CYNKOMET. Dane kontaktowe, maszyny i zdjęcia pochodzą z cynkomet.pl, ceny i numery części są przykładowe.',
+    // teksty z JS
+    load: 'ładowność', vol: 'pojemność', allCats: 'Wszystkie', searchPh: 'Nazwa lub numer części', nr: 'Nr kat.', net: 'netto', add: 'Dodaj', added: 'Dodano',
+    perUnit: { szt: '/ szt.', kpl: '/ kpl', mb: '/ mb' },
+    count: n => `${n} ${n === 1 ? 'część' : 'części'} do tej maszyny`,
+    none: q => `Brak części „${q}” do tej maszyny. Sprawdź numer albo zadzwoń: (85) 710 20 23.`,
+    toast: n => `Dodano do koszyka: ${n}`, maxQ: `W koszyku może być najwyżej ${MAXQ} szt. jednej części.`, qtyL: 'Ilość', minus: 'Mniej', plus: 'Więcej',
+    bEmpty: 'Koszyk jest pusty. Wybierz maszynę i dodaj części z listy.', bNet: 'Wartość netto', vat: 'VAT 23%', vatNote: '', bGross: 'Do zapłaty brutto',
+    bSend: 'Wyślij zamówienie', remove: 'Usuń', forM: 'do', grossW: 'brutto', big: 'Duże zlecenie – cenę i termin ustali doradca indywidualnie.',
+    pos: n => n === 1 ? 'pozycja' : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) ? 'pozycje' : 'pozycji',
+    sentT: 'Zamówienie wysłane', sentP: n => `To demo – w prawdziwym sklepie zamówienie (${n}) trafiłoby do działu sprzedaży części CYNKOMET, a klient dostałby potwierdzenie e-mailem.`,
+    min: 'minimalne zlecenie', fill: 'Podaj masę elementu i liczbę sztuk.',
+    dimsNeed: 'Podaj długość, szerokość i wysokość, żeby sprawdzić, czy element zmieści się w wannie.',
+    badNum: 'Masa, liczba sztuk i wymiary muszą być większe od zera.', qtyInt: 'Liczba sztuk musi być liczbą całkowitą.',
+    tooBig: 'Ta wartość jest za duża do wyceny online. Przy takim zleceniu zadzwoń do Biura Obsługi Klienta: 85 710 10 49.',
+    tooHeavy: (max, plant) => `Element jest cięższy niż ${max} t – to limit cynkowni ${plant}.`,
+    tooBigDim: (dims, plant) => `Element nie zmieści się w wannie w ${plant} – największa konstrukcja to ${dims} m.`,
+    tryWys: 'Sprawdź Wyszków', pickWys: 'Wybierz Wyszków', useHot: 'Wybierz cynkowanie ogniowe',
+    spinOnlyWys: 'Cynkowanie wirowe wykonuje tylko cynkownia w Wyszkowie.',
+    spinBig: 'Element nie zmieści się w koszu Ø 550 × 570 mm.',
+    spinHeavy: max => `Do cynkowania wirowego przyjmujemy w demo elementy do ${max} kg (przykładowy limit).`,
+    gSentT: 'Zapytanie wysłane', gSentP: (m, net) => `To demo – w prawdziwej stronie zapytanie (${m}, ${net} netto) trafiłoby do Biura Obsługi Klienta cynkowni, a doradca oddzwoniłby z ostateczną ceną i terminem.`,
+    plantName: { czb: 'Czarna Białostocka', wys: 'Wyszków' }, plantIn: { czb: 'Czarnej Białostockiej', wys: 'Wyszkowie' },
+  },
+  de: {
+    title: 'CYNKOMET – Ersatzteile für Anhänger und Dungstreuer (Demo-Projekt)',
+    desc: 'Demo-Projekt für CYNKOMET: Ersatzteile für Anhänger und Dungstreuer mit Preis und Online-Bestellung sowie Online-Angebot für Feuerverzinkung.',
+    demo: '<b>Demo-Projekt</b> für CYNKOMET. Maschinen, Fotos und Teilekategorien stammen von cynkomet.pl, Teilenummern und Preise sind Beispiele.',
+    by: 'Erstellt von:', nav1: 'Ersatzteile', nav2: 'Verzinkung', nav3: 'Kontakt', basket: 'Warenkorb',
+    logoA: 'CYNKOMET – Startseite', navA: 'Bereiche', langA: 'Sprache', tabsA: 'Maschinentyp', catsA: 'Teilekategorien', closeA: 'Schließen',
+    heroAlt: 'CYNKOMET-Anhänger T-617/6 Duch z Puszczy', basketA: n => `Warenkorb, ${n} St.`,
+    h1: 'CYNKOMET-Ersatzteile <span>mit Preis und Online-Bestellung</span>',
+    lead: 'Wählen Sie Ihren Anhänger oder Dungstreuer und sehen Sie sofort die passenden Teile mit Nettopreis. Die Bestellung geht direkt an den Ersatzteilverkauf in Czarna Białostocka.',
+    cta1: 'Maschine wählen', cta2: 'Verzinkung anfragen',
+    f1: 'Feuerverzinkte Maschinen', f2: 'Originalteile für jedes Modell', f3: 'Verzinkereien in Czarna Białostocka und Wyszków',
+    partsH: 'Ersatzteile', partsP: 'Dieselben Kategorien wie im CYNKOMET-Ersatzteilverkauf – jetzt mit Nummer, Preis und „Hinzufügen“.',
+    step1: 'Maschine wählen', step2: 'Teile wählen', tabT: 'Anhänger', tabN: 'Dungstreuer', searchL: 'Teile suchen',
+    partsFoot: 'Teil nicht gefunden? Rufen Sie an: <a href="tel:+48857102023">+48 85 710 20 23</a> oder schreiben Sie an <a href="mailto:cynkomet@cynkomet.pl">cynkomet@cynkomet.pl</a>.',
+    galvH: 'Feuerverzinkung – Online-Angebot', galvP: 'Statt PDF-Formular: Gewicht und Maße eingeben – die Seite prüft sofort, ob das Teil ins Zinkbad passt, und berechnet einen Richtpreis.',
+    gPlant: 'Verzinkerei', gCzb: 'Zinkbad 9,0 × 1,5 × 3,1 m, Teil bis 8,5 × 2,8 × 1,4 m und 4 t', gWys: 'Zinkbad 13,0 × 1,5 × 3,1 m, Teil bis 12,5 × 2,8 × 1,4 m und 6 t',
+    gMethod: 'Verfahren', gHot: 'Feuerverzinkung', gHotS: 'Konstruktionen und größere Teile', gSpin: 'Schleuderverzinkung', gSpinS: 'Kleinteile für den Korb Ø 550 × 570 mm – nur Wyszków',
+    gMass: 'Gewicht pro Teil', gQty: 'Stückzahl', pcs: 'St.', dimsLeg: 'Maße des Teils', gL: 'Länge', gW: 'Breite', gH: 'Höhe',
+    ex: 'z. B.',
+    gPrep: 'Vor der Anlieferung Entlüftungs- und Ablauföffnungen prüfen sowie Farbe und Öl entfernen – wie im Leitfaden „Vorbereitung zur Verzinkung“ auf cynkomet.pl.',
+    qH: 'Richtpreis', qMass: 'Gesamtgewicht', qRate: 'Preis pro kg', qNet: 'Nettopreis', qSend: 'Anfrage senden', grossL: 'Brutto (MwSt. 19 %)',
+    qNote: 'Die Preise pro kg sind Beispiele. Den endgültigen Preis bestätigt das Kundenbüro der Verzinkerei nach Prüfung des Teils.',
+    fServ: 'Service und Reklamationen', fServS: 'Service:', fRekl: 'Reklamationen:', fCzb: 'Verzinkerei Czarna Białostocka', fWys: 'Verzinkerei Wyszków',
+    legal: 'Demo-Projekt – keine offizielle Website von CYNKOMET. Kontaktdaten, Maschinen und Fotos stammen von cynkomet.pl, Preise und Teilenummern sind Beispiele.',
+    load: 'Nutzlast', vol: 'Volumen', allCats: 'Alle', searchPh: 'Name oder Teilenummer', nr: 'Teile-Nr.', net: 'netto', add: 'Hinzufügen', added: 'Hinzugefügt',
+    perUnit: { szt: '/ St.', kpl: '/ Satz', mb: '/ lfm' },
+    count: n => `${n} ${n === 1 ? 'Teil' : 'Teile'} für diese Maschine`,
+    none: q => `Kein Teil „${q}“ für diese Maschine. Prüfen Sie die Nummer oder rufen Sie an: +48 85 710 20 23.`,
+    toast: n => `Zum Warenkorb hinzugefügt: ${n}`, maxQ: `Pro Teil sind höchstens ${MAXQ} Stück im Warenkorb möglich.`, qtyL: 'Menge', minus: 'Weniger', plus: 'Mehr',
+    bEmpty: 'Der Warenkorb ist leer. Wählen Sie eine Maschine und fügen Sie Teile hinzu.', bNet: 'Warenwert netto', vat: 'MwSt. 19 % – Lieferung nach Deutschland',
+    vatNote: 'EU-Unternehmen mit USt-IdNr.: Reverse-Charge (0 %) nach Bestätigung.', bGross: 'Gesamt brutto',
+    bSend: 'Bestellung senden', remove: 'Entfernen', forM: 'für', grossW: 'brutto', big: 'Großauftrag – Preis und Termin legt ein Berater individuell fest.',
+    pos: n => n === 1 ? 'Position' : 'Positionen',
+    sentT: 'Bestellung gesendet', sentP: n => `Dies ist eine Demo – im echten Shop ginge die Bestellung (${n}) an den CYNKOMET-Ersatzteilverkauf und der Kunde bekäme eine Bestätigung per E-Mail.`,
+    min: 'Mindestauftrag', fill: 'Geben Sie Gewicht und Stückzahl ein.',
+    dimsNeed: 'Geben Sie Länge, Breite und Höhe ein, um zu prüfen, ob das Teil ins Zinkbad passt.',
+    badNum: 'Gewicht, Stückzahl und Maße müssen größer als null sein.', qtyInt: 'Die Stückzahl muss eine ganze Zahl sein.',
+    tooBig: 'Dieser Wert ist für ein Online-Angebot zu groß. Bitte rufen Sie das Kundenbüro an: +48 85 710 10 49.',
+    tooHeavy: (max, plant) => `Das Teil ist schwerer als ${max} t – das ist die Grenze der Verzinkerei ${plant}.`,
+    tooBigDim: (dims, plant) => `Das Teil passt nicht ins Zinkbad in ${plant} – die größte Konstruktion ist ${dims} m.`,
+    tryWys: 'Wyszków prüfen', pickWys: 'Wyszków wählen', useHot: 'Feuerverzinkung wählen',
+    spinOnlyWys: 'Die Schleuderverzinkung gibt es nur in der Verzinkerei Wyszków.',
+    spinBig: 'Das Teil passt nicht in den Korb Ø 550 × 570 mm.',
+    spinHeavy: max => `Für die Schleuderverzinkung nimmt die Demo Teile bis ${max} kg an (Beispielgrenze).`,
+    gSentT: 'Anfrage gesendet', gSentP: (m, net) => `Dies ist eine Demo – auf der echten Website ginge die Anfrage (${m}, ${net} netto) an das Kundenbüro der Verzinkerei, und ein Berater würde mit dem endgültigen Preis und Termin zurückrufen.`,
+    plantName: { czb: 'Czarna Białostocka', wys: 'Wyszków' }, plantIn: { czb: 'Czarna Białostocka', wys: 'Wyszków' },
+  }
+};
+const L = () => T[lang];
+const vatRate = () => lang === 'de' ? 0.19 : 0.23;
+// ceny w danych są w złotych netto; w wersji niemieckiej pokazujemy euro.
+// Najpierw zaokrąglamy cenę jednej sztuki w walucie strony, potem liczymy sumy z zaokrąglonych kwot.
+const r2 = v => Math.round(v * 100) / 100;
+const cur = zl => r2(lang === 'de' ? zl / EUR : zl);
+const fmt = v => lang === 'de'
+  ? new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(v)
+  : new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true }).format(v).replace(/[   ]/g, ' ') + ' zł';
+const money = zl => fmt(cur(zl));
+const kg = v => new Intl.NumberFormat(lang === 'de' ? 'de-DE' : 'pl-PL', { maximumFractionDigits: 1, useGrouping: true }).format(v).replace(/[  ]/g, ' ') + ' kg';
+const dec = v => String(v).replace('.', ',');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// wyszukiwanie bez polskich znaków i interpunkcji: „kolo” = „koło”, „led lewa” = „LED, lewa”
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').replace(/ß/g, 'ss').replace(/[^a-z0-9]+/g, ' ').trim();
+const M = id => DATA.machines.find(m => m.id === id);
+const pname = p => p[lang];
+
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ---------- fokus zostaje na tym samym przycisku po przerysowaniu listy ---------- */
+function focusKey(el) {
+  if (!el || el === document.body) return null;
+  if (el.id) return '#' + CSS.escape(el.id);
+  const box = el.closest('#blist,#plist,#cats,#machines'); if (!box) return null;
+  const pre = '#' + box.id + ' ', row = el.closest('[data-nr]');
+  if (row) {
+    const r = `[data-nr="${CSS.escape(row.dataset.nr)}"] `;
+    if (el.dataset.d) return pre + r + `[data-d="${el.dataset.d}"]`;
+    if (el.matches('input')) return pre + r + 'input';
+    if (el.matches('.rm')) return pre + r + '.rm';
+    if (el.matches('.add')) return pre + r + '.add';
+  }
+  if (el.dataset.c) return pre + `[data-c="${CSS.escape(el.dataset.c)}"]`;
+  if (el.dataset.m) return pre + `[data-m="${CSS.escape(el.dataset.m)}"]`;
+  return null;
+}
+function keepFocus(fn, ...fallback) {
+  const k = focusKey(document.activeElement); fn();
+  const el = [k, ...fallback].map(s => s && $(s)).find(Boolean);
+  if (el && el !== document.activeElement) el.focus({ preventScroll: true });
+}
+
+/* ---------- koszyk i okno: reszta strony niedostępna dla Tab, fokus wraca tam, skąd przyszedł ---------- */
+const PAGE = ['.demobar', 'header.site', 'main', 'footer'];
+const setInert = (sels, on) => sels.forEach(s => { const el = $(s); if (el) el.inert = on; });
+let lastFocus = null, modalBack = null;
+function openBasket() {
+  lastFocus = document.activeElement;
+  $('#drawer').classList.add('open'); $('#shade').classList.add('open');
+  $('#drawer').inert = false; setInert(PAGE, true); $('#closeBasket').focus();
+}
+function closeBasket(restore = true) {
+  $('#drawer').classList.remove('open'); $('#shade').classList.remove('open');
+  $('#drawer').inert = true; setInert(PAGE, false);
+  if (restore) (lastFocus && document.contains(lastFocus) ? lastFocus : $('#openBasket')).focus();
+}
+$('#drawer').inert = true;
+function modal(title, text, back) {
+  modalBack = back || document.activeElement;
+  $('#mTitle').textContent = title; $('#mText').textContent = text;
+  $('#modal').classList.add('open'); setInert([...PAGE, '#drawer'], true); $('#mClose').focus();
+}
+function closeModal() {
+  $('#modal').classList.remove('open');
+  const dOpen = $('#drawer').classList.contains('open');
+  setInert(PAGE, dOpen); $('#drawer').inert = !dOpen;
+  const b = modalBack && document.contains(modalBack) && !modalBack.closest('[inert]') ? modalBack : $(dOpen ? '#closeBasket' : '#openBasket');
+  b.focus();
+}
+$('#mClose').onclick = closeModal;
+$('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
+$('#openBasket').onclick = openBasket;
+$('#closeBasket').onclick = () => closeBasket();
+$('#shade').onclick = () => closeBasket();
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if ($('#modal').classList.contains('open')) closeModal();
+  else if ($('#drawer').classList.contains('open')) closeBasket();
+});
+
+/* ---------- maszyny ---------- */
+function renderMachines() {
+  $$('.tabs button').forEach(b => b.setAttribute('aria-pressed', b.dataset.type === type));
+  $('#machines').innerHTML = DATA.machines.filter(m => m.type === type).map(m => `
+    <button type="button" class="mach" data-m="${m.id}" aria-pressed="${m.id === machine}">
+      <img src="${m.img}" alt="" width="900" height="600" loading="lazy">
+      <b>${m.name}${m.nick ? `<small>${m.nick}</small>` : ''}</b>
+      <span>${L().load} <span class="nw">${kg(m.load)}</span> · ${L().vol} <span class="nw">${m.vol} m³</span></span>
+    </button>`).join('');
+}
+$$('.tabs button').forEach(b => b.onclick = () => {
+  if (type === b.dataset.type) return;
+  type = b.dataset.type;
+  machine = DATA.machines.find(m => m.type === type).id;
+  cat = 'all'; renderMachines(); renderParts(); nbsp();
+});
+$('#machines').addEventListener('click', e => {
+  const b = e.target.closest('.mach'); if (!b) return;
+  machine = b.dataset.m; cat = 'all';
+  $$('.mach').forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderParts(); nbsp();
+  // na telefonie lista części jest niżej – przewijamy do niej, żeby wybór był widoczny
+  if (innerWidth < 1000) $('#parts').scrollIntoView({ block: 'start' });
+});
+
+/* ---------- części ---------- */
+function partsOf(id) { return DATA.parts.filter(p => p.m === id); }
+function renderParts() {
+  const m = M(machine), all = partsOf(machine);
+  $('#mName').textContent = m.full[lang];
+  $('#mSpec').textContent = `${L().load} ${kg(m.load)} · ${L().vol} ${m.vol} m³ · ${L().count(all.length)}`;
+  const used = Object.keys(DATA.cats).filter(c => all.some(p => p.c === c));
+  if (cat !== 'all' && !used.includes(cat)) cat = 'all';
+  $('#cats').innerHTML = [['all', L().allCats], ...used.map(c => [c, DATA.cats[c][lang]])]
+    .map(([c, n]) => `<button type="button" data-c="${c}" aria-pressed="${c === cat}">${n}</button>`).join('');
+  const words = norm(query).split(' ').filter(Boolean), fq = words.join('');
+  // pełny numer części (z myślnikami, kropkami albo bez) ma pierwszeństwo przed szukaniem po słowach
+  const byNr = fq.length >= 4 ? all.filter(p => norm(p.nr).replace(/ /g, '').includes(fq)) : [];
+  const hit = byNr.length ? (p => byNr.includes(p))
+    : (p => { const hay = norm(`${p.nr} ${p.pl} ${p.de}`), flat = hay.replace(/ /g, ''); return words.every(w => hay.includes(w) || flat.includes(w)); });
+  const list = all.filter(p => (cat === 'all' || p.c === cat) && (!words.length || hit(p)));
+  $('#plist').innerHTML = list.length ? list.map(p => `
+    <li class="prow" data-nr="${p.nr}">
+      <div class="info"><div class="nm">${esc(pname(p))}</div><div class="nr">${L().nr} ${p.nr}<span class="dot"> · </span><span class="cat">${DATA.cats[p.c][lang]}</span></div></div>
+      <div class="pr num">${money(p.p)}<small>${L().net} ${L().perUnit[p.u]}</small></div>
+      <div class="qty"><button type="button" data-d="-1" aria-label="${L().minus}">−</button><input type="number" min="1" max="${MAXQ}" value="1" inputmode="numeric" aria-label="${L().qtyL}: ${esc(pname(p))}"><button type="button" data-d="1" aria-label="${L().plus}">+</button></div>
+      <button type="button" class="add">${L().add}</button>
+    </li>`).join('') : `<li class="empty">${esc(L().none(query.trim()))}</li>`;
+}
+$('#cats').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  cat = b.dataset.c; keepFocus(renderParts); nbsp();
+});
+$('#q').addEventListener('input', e => { query = e.target.value; renderParts(); nbsp(); });
+const clampQty = v => Math.min(MAXQ, Math.max(1, Math.round(+v) || 1));
+$('#plist').addEventListener('click', e => {
+  const row = e.target.closest('.prow'); if (!row) return;
+  const inp = row.querySelector('.qty input');
+  const d = e.target.closest('[data-d]');
+  if (d) { inp.value = clampQty(+inp.value + +d.dataset.d); return; }
+  const add = e.target.closest('.add');
+  if (add) {
+    const p = DATA.parts.find(x => x.nr === row.dataset.nr), q = clampQty(inp.value);
+    const prev = basket.get(p.nr), had = prev ? prev.qty : 0;
+    if (had >= MAXQ) { toast(L().maxQ); return; }
+    basket.set(p.nr, { part: p, qty: Math.min(MAXQ, had + q) });
+    inp.value = 1;
+    add.textContent = L().added; add.classList.add('done');
+    setTimeout(() => { add.textContent = L().add; add.classList.remove('done'); }, 1200);
+    renderBasket(); toast(had + q > MAXQ ? L().maxQ : L().toast(pname(p)));
+  }
+});
+$('#plist').addEventListener('change', e => { if (e.target.matches('.qty input')) e.target.value = clampQty(e.target.value); });
+
+/* ---------- koszyk ---------- */
+function totals(items) {
+  const lines = items.map(it => r2(cur(it.part.p) * it.qty));
+  const net = r2(lines.reduce((a, v) => a + v, 0)), vat = r2(net * vatRate());
+  return { lines, net, vat, gross: r2(net + vat) };
+}
+function renderBasket() {
+  const items = [...basket.values()];
+  const n = items.reduce((a, it) => a + it.qty, 0);
+  $('#count').textContent = n;
+  $('#openBasket').setAttribute('aria-label', L().basketA(n));
+  if (!items.length) {
+    $('#blist').innerHTML = `<p class="bempty">${L().bEmpty}</p>`;
+    $('#bfoot').innerHTML = ''; $('#bfoot').hidden = true; return;
+  }
+  const t = totals(items);
+  $('#bfoot').hidden = false;
+  $('#blist').innerHTML = items.map(({ part: p, qty }, i) => `
+    <div class="bitem" data-nr="${p.nr}">
+      <div><div class="n">${esc(pname(p))}</div><small>${L().nr} ${p.nr} · ${L().forM} ${M(p.m).name}</small>
+        <div class="row"><div class="qty"><button type="button" data-d="-1" aria-label="${L().minus}">−</button><input type="number" min="1" max="${MAXQ}" value="${qty}" inputmode="numeric" aria-label="${L().qtyL}: ${esc(pname(p))}"><button type="button" data-d="1" aria-label="${L().plus}">+</button></div><button type="button" class="rm">${L().remove}</button></div>
+      </div>
+      <div class="sum num">${fmt(t.lines[i])}<br><small>${qty} × ${money(p.p)}</small></div>
+    </div>`).join('');
+  $('#bfoot').innerHTML = `
+    <div class="ln"><span>${L().bNet}</span><span class="num">${fmt(t.net)}</span></div>
+    <div class="ln"><span>${L().vat}</span><span class="num">${fmt(t.vat)}</span></div>
+    <div class="ln big"><span>${L().bGross}</span><span class="num">${fmt(t.gross)}</span></div>
+    ${L().vatNote ? `<p class="vnote">${L().vatNote}</p>` : ''}
+    <button class="btn btn-red" type="button" id="bSend">${L().bSend}</button>`;
+  $('#bSend').onclick = () => {
+    closeBasket(false);
+    modal(L().sentT, L().sentP(`${items.length} ${L().pos(items.length)}, ${fmt(t.gross)} ${L().grossW}`), $('#openBasket'));
+    basket.clear(); renderBasket();
+  };
+}
+$('#blist').addEventListener('click', e => {
+  const it = e.target.closest('.bitem'); if (!it) return;
+  const entry = basket.get(it.dataset.nr);
+  if (e.target.closest('.rm')) { basket.delete(it.dataset.nr); keepFocus(renderBasket, '#blist .rm', '#closeBasket'); nbsp(); return; }
+  const d = e.target.closest('[data-d]');
+  if (d) {
+    const q = entry.qty + +d.dataset.d;
+    if (q < 1) basket.delete(it.dataset.nr);
+    else if (q > MAXQ) toast(L().maxQ);
+    else entry.qty = q;
+    keepFocus(renderBasket, '#blist .rm', '#closeBasket'); nbsp();
+  }
+});
+$('#blist').addEventListener('change', e => {
+  if (!e.target.matches('.qty input')) return;
+  const it = e.target.closest('.bitem'); basket.get(it.dataset.nr).qty = clampQty(e.target.value); keepFocus(renderBasket); nbsp();
+});
+
+/* ---------- cynkowanie ---------- */
+// przykładowe stawki netto za kg; limity wanien i kosza z cynkomet.pl, limit masy przy wirowym – przykładowy
+const GALV = {
+  rate: { hot: 2.9, spin: 5.2 }, minOrder: 300,
+  plant: { czb: { len: 8.5, t: 4 }, wys: { len: 12.5, t: 6 } }, cross: [2.8, 1.4],
+  spin: { d: 0.55, h: 0.57, kg: 20 }, bigOrder: 500000,
+  maxMass: 100000, maxQty: 1000000, maxDim: 100,
+};
+const DIMS = ['#gL', '#gW', '#gH'];
+let dimUnit = 'm';
+const method = () => $('input[name=method]:checked').value, plant = () => $('input[name=plant]:checked').value;
+// wymiary: przy ogniowym w metrach, przy wirowym w milimetrach (tak liczy się drobne elementy)
+function syncUnits() {
+  const u = method() === 'spin' ? 'mm' : 'm';
+  if (u !== dimUnit) {
+    DIMS.forEach(id => {
+      const s = $(id).value.trim(); if (s === '' || !Number.isFinite(+s)) return;
+      $(id).value = u === 'mm' ? Math.round(+s * 1000) : Math.round(+s) / 1000;
+    });
+    dimUnit = u;
+  }
+  $$('.dimU').forEach(s => { s.textContent = u; });
+  const ph = u === 'mm' ? ['200', '80', '30'] : ['6', '1,2', '0,8'];
+  DIMS.forEach((id, i) => { $(id).step = u === 'mm' ? '1' : '0.01'; $(id).placeholder = `${L().ex} ${ph[i]}`; });
+  $('#gMass').placeholder = `${L().ex} ${u === 'mm' ? '2' : '120'}`;
+}
+// pusta wartość -> null, coś nieliczbowego -> NaN
+const raw = id => { const s = String($(id).value).trim().replace(',', '.'); if (s === '') return null; const v = Number(s); return Number.isFinite(v) ? v : NaN; };
+function calcGalv() {
+  const pl = plant(), me = method();
+  const mass = raw('#gMass'), qty = raw('#gQty'), dims = DIMS.map(raw), k = me === 'spin' ? 0.001 : 1;
+  // stawka w walucie strony – w euro z dokładnością do 0,001 €, żeby stawka × masa dawała pokazaną cenę
+  const rate = lang === 'de' ? Math.round(GALV.rate[me] / EUR * 1000) / 1000 : GALV.rate[me];
+  $('#qRate').textContent = lang === 'de'
+    ? rate.toLocaleString('de-DE', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + ' €/kg'
+    : rate.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' zł/kg';
+  $('#qGrossL').textContent = L().grossL;
+  const stop = (msg, cls) => {
+    $('#qMass').textContent = '–'; $('#qGross').textContent = '–'; $('#qNet').textContent = '–';
+    $('#qWarn').innerHTML = `<p class="${cls}">${msg}</p>`; $('#qSend').disabled = true; return null;
+  };
+  const vals = [mass, qty, ...dims];
+  if (vals.some(v => Number.isNaN(v) || (v !== null && v <= 0))) return stop(L().badNum, 'warn');
+  if (mass === null || qty === null) return stop(L().fill, 'note');
+  if (!Number.isInteger(qty)) return stop(L().qtyInt, 'warn');
+  if (mass > GALV.maxMass || qty > GALV.maxQty || dims.some(v => v !== null && v * k > GALV.maxDim)) return stop(L().tooBig, 'warn');
+  const warn = [], lim = GALV.plant[pl], btn = (fix, txt) => ` <button type="button" data-fix="${fix}">${txt}</button>`;
+  const dimsOk = dims.every(v => v !== null);
+  const [a, b, c] = dimsOk ? dims.map(v => v * k).sort((x, y) => y - x) : [0, 0, 0];
+  if (me === 'hot') {
+    const fitsWys = mass <= GALV.plant.wys.t * 1000 && (!dimsOk || (a <= GALV.plant.wys.len && b <= GALV.cross[0] && c <= GALV.cross[1]));
+    if (mass > lim.t * 1000) warn.push(L().tooHeavy(dec(lim.t), L().plantName[pl]) + (pl === 'czb' && fitsWys ? btn('wys', L().tryWys) : ''));
+    if (dimsOk && (a > lim.len || b > GALV.cross[0] || c > GALV.cross[1])) warn.push(L().tooBigDim(`${dec(lim.len)} × 2,8 × 1,4`, L().plantIn[pl]) + (pl === 'czb' && fitsWys ? btn('wys', L().tryWys) : ''));
+  } else {
+    if (pl !== 'wys') warn.push(L().spinOnlyWys + btn('wys', L().pickWys));
+    if (mass > GALV.spin.kg) warn.push(L().spinHeavy(GALV.spin.kg) + btn('hot', L().useHot));
+    if (dimsOk && (a > GALV.spin.h || b > GALV.spin.d)) warn.push(L().spinBig + btn('hot', L().useHot));
+  }
+  const total = mass * qty, netRaw = r2(total * rate), min = cur(GALV.minOrder);
+  const net = Math.max(min, netRaw), gross = r2(net + r2(net * vatRate()));
+  $('#qMass').textContent = kg(total);
+  $('#qNet').textContent = fmt(net);
+  $('#qGross').textContent = fmt(gross);
+  $('#qWarn').innerHTML = warn.map(w => `<p class="warn">${w}</p>`).join('')
+    + (netRaw < min ? `<p class="note">${L().min}: ${fmt(min)}</p>` : '')
+    + (!dimsOk ? `<p class="note">${L().dimsNeed}</p>` : '')
+    + (total > GALV.bigOrder ? `<p class="note">${L().big}</p>` : '');
+  $('#qSend').disabled = warn.length > 0 || !dimsOk;
+  return { total, net };
+}
+$('#gForm').addEventListener('input', calcGalv);
+$('#gForm').addEventListener('change', e => { if (e.target.name === 'method') syncUnits(); calcGalv(); nbsp($('#cynkowanie')); });
+$('#gForm').addEventListener('submit', e => e.preventDefault());
+$('#qWarn').addEventListener('click', e => {
+  const b = e.target.closest('[data-fix]'); if (!b) return;
+  const target = $(b.dataset.fix === 'wys' ? 'input[name=plant][value=wys]' : 'input[name=method][value=hot]');
+  target.checked = true; syncUnits(); calcGalv(); nbsp($('#cynkowanie')); target.focus();
+});
+$('#qSend').onclick = () => {
+  const r = calcGalv(); if (!r) return;
+  modal(L().gSentT, L().gSentP(kg(r.total), fmt(r.net)), $('#qSend'));
+};
+
+/* ---------- nagłówek: przy wąskim ekranie zagęszczamy, zanim cokolwiek spadnie do nowego wiersza ---------- */
+function fitHeader() {
+  const h = $('header.site'), logo = $('.logo'), btn = $('#openBasket');
+  h.classList.remove('fit-1', 'fit-2');
+  for (const c of ['fit-1', 'fit-2']) { if (btn.offsetTop <= logo.offsetTop + 8) break; h.classList.add(c); }
+}
+let fitRaf = 0;
+addEventListener('resize', () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitHeader); });
+if (document.fonts) document.fonts.ready.then(fitHeader);
+new MutationObserver(fitHeader).observe($('#count'), { childList: true });
+
+/* ---------- język ---------- */
+// polska typografia: jednoliterowe wyrazy nie zostają na końcu wiersza
+function nbsp(root = document.body) {
+  if (lang !== 'pl') return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style,input,textarea') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(^|[\s(„])([aiouwzAIOUWZ]) /g, '$1$2 '); if (v !== n.nodeValue) n.nodeValue = v; }
+}
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.title = L().title;
+  $('meta[name=description]').setAttribute('content', L().desc);
+  $$('[data-i]').forEach(el => { const v = T[lang][el.dataset.i]; if (typeof v === 'string') el.innerHTML = v; });
+  $$('[data-i-aria]').forEach(el => el.setAttribute('aria-label', L()[el.dataset.iAria]));
+  $$('[data-i-alt]').forEach(el => { el.alt = L()[el.dataset.iAlt]; });
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  $('#q').placeholder = L().searchPh;
+  $('#toast').classList.remove('show');
+  renderMachines(); renderParts(); renderBasket(); syncUnits(); calcGalv(); nbsp(); fitHeader();
+}
+$$('[data-lang]').forEach(b => b.onclick = () => { if (lang !== b.dataset.lang) { lang = b.dataset.lang; applyLang(); } });
+
+applyLang();
+})();
+</script>
+</body>
+</html>

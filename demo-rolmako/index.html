@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Rolmako – części zamienne online (projekt demonstracyjny)</title>
+<meta name="description" content="Projekt demonstracyjny katalogu części Rolmako: części z katalogów PDF z ceną, rysunkiem i zamówieniem online. PL, DE, EN.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230066B3'/%3E%3Cpath d='M10 7h8.5a6 6 0 0 1 1.6 11.8L25 25h-5.2l-4.3-5.8H14.6V25H10zm4.6 4v4.4h3.6a2.2 2.2 0 0 0 0-4.4z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:400 900;font-display:swap;src:url(fonts/nunito-sans-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Nunito Sans';font-style:normal;font-weight:400 900;font-display:swap;src:url(fonts/nunito-sans-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{
+  --navy:#0A2654; --navy-2:#123468; --blue:#0066B3; --blue-d:#00518F; --sky:#E6F0F9;
+  --orange:#F05A14; --orange-d:#C9470C; --orange-dd:#A33807;
+  --paper:#F3F5F8; --white:#fff; --ink:#132033; --ink-2:#4B5A6E; --line:#D7DEE8; --line-2:#B9C4D3;
+  --ok:#137A3A; --r:8px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 "Nunito Sans",system-ui,sans-serif}
+img{display:block;max-width:100%}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.intro :focus-visible,header.top :focus-visible,footer :focus-visible{outline-color:#fff}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+h1,h2,h3{margin:0;line-height:1.1;letter-spacing:-.01em}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* pasek demo */
+.demobar{background:#E9EDF3;color:var(--ink-2);font-size:13.5px;border-bottom:1px solid var(--line)}
+.demobar .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:36px;padding-top:6px;padding-bottom:6px}
+.demobar b{color:var(--ink);font-weight:700}
+.demobar a{color:var(--blue-d);font-weight:700;text-underline-offset:3px}
+
+/* nagłówek */
+header.top{position:sticky;top:0;z-index:40;background:var(--navy);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.08)}
+.top .wrap{display:flex;align-items:center;gap:18px;height:66px}
+.brand{flex:none;display:flex;align-items:center}
+.brand img{height:26px;width:auto}
+nav.menu{display:flex;gap:2px;flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none}
+nav.menu::-webkit-scrollbar{display:none}
+nav.menu a{white-space:nowrap;text-decoration:none;font-weight:700;font-size:15px;padding:8px 12px;border-radius:6px;color:#D6E2F2}
+nav.menu a:hover{background:var(--navy-2);color:#fff}
+.tools{flex:none;display:flex;align-items:center;gap:10px}
+.langs{display:inline-flex;border:1px solid rgba(255,255,255,.28);border-radius:6px;overflow:hidden}
+.langs button{border:0;background:transparent;color:#D6E2F2;padding:6px 10px;font-size:13.5px;font-weight:800;cursor:pointer;letter-spacing:.02em}
+.langs button[aria-pressed=true]{background:#fff;color:var(--navy)}
+.langsel{display:none;height:36px;border:1px solid rgba(255,255,255,.35);background:var(--navy);color:#fff;border-radius:6px;font-weight:800;padding:0 4px;cursor:pointer}
+.basketbtn{display:flex;align-items:center;gap:8px;border:0;background:var(--orange-d);color:#fff;font-weight:800;padding:10px 14px;border-radius:6px;cursor:pointer}
+.basketbtn:hover{background:var(--orange-dd)}
+.basketbtn .cnt{min-width:22px;height:22px;border-radius:11px;background:#fff;color:var(--orange-d);font-size:13px;display:grid;place-items:center;padding:0 6px}
+.fit-1 nav.menu a{padding:8px 8px;font-size:14.5px}
+.fit-2 .basketbtn .lbl{display:none}
+header.top.fit-3 .wrap{height:auto;flex-wrap:wrap;gap:8px 12px;padding-top:10px;padding-bottom:8px}
+header.top.fit-3 nav.menu{order:3;flex-basis:100%;margin:0 -8px}
+header.top.fit-3 .tools{margin-left:auto}
+nav.menu.cut-right{-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+
+/* wstęp */
+.intro{background:var(--blue);color:#fff}
+.intro .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:36px;align-items:center;padding-top:44px;padding-bottom:44px}
+.intro h1{font-size:clamp(30px,4.2vw,50px);font-weight:900;max-width:16ch}
+.intro .lead{margin-top:14px;font-size:18px;color:#E3EEF9;max-width:52ch}
+.search{margin-top:24px;display:flex;gap:8px;max-width:560px}
+.search input{flex:1;min-width:0;height:52px;border:0;border-radius:var(--r);padding:0 16px;font-size:17px;color:var(--ink);background:#fff}
+.search input::placeholder{color:#7C8899}
+.search button{height:52px;border:0;border-radius:var(--r);padding:0 20px;font-weight:800;background:var(--navy);color:#fff;cursor:pointer}
+.search button:hover{background:#061A3C}
+.hint{margin-top:10px;font-size:14px;color:#E3EEF9}
+.hint button{background:none;border:0;padding:0;color:#fff;font-weight:800;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.indemo{margin-top:18px;font-size:15px;color:#E3EEF9;border-left:3px solid var(--orange);padding-left:12px}
+.indemo b{color:#fff}
+.shot{margin:0}
+.shot img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r);border:3px solid rgba(255,255,255,.18)}
+.shot figcaption{margin-top:8px;font-size:13px;color:#E3EEF9}
+
+#work,#drawing,.lhead,.row{scroll-margin-top:calc(var(--hh, 66px) + 12px)}
+[hidden]{display:none!important}
+.lback{flex-basis:100%}
+.bitem .qty{margin-top:6px}
+.bitem .qty button{width:30px;height:32px}
+.bitem .qty input{width:42px;height:32px}
+
+/* wybór maszyny */
+section{padding:44px 0}
+.shead{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.shead h2{font-size:clamp(24px,2.6vw,32px);font-weight:900}
+.shead p{color:var(--ink-2);max-width:60ch}
+.machines{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.mcard{display:flex;flex-direction:column;text-align:left;border:2px solid var(--line);background:#fff;border-radius:var(--r);padding:0;cursor:pointer;overflow:hidden;transition:border-color .15s}
+.mcard img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;background:#E4E9F0}
+.mcard .t{padding:10px 12px 12px}
+.mcard b{display:block;font-size:16px;font-weight:900;color:var(--navy)}
+.mcard small{display:block;color:var(--ink-2);font-size:13.5px;line-height:1.3;margin-top:2px}
+.mcard em{display:block;font-style:normal;font-size:13px;color:var(--blue-d);font-weight:800;margin-top:6px}
+.mcard:hover{border-color:var(--line-2)}
+.mcard[aria-pressed=true]{border-color:var(--blue);box-shadow:0 0 0 3px var(--sky)}
+
+/* katalog maszyny */
+.work{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r)}
+.drawing{position:sticky;top:84px;padding:14px}
+.drawing .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.drawing .bar h3{font-size:17px;font-weight:900;color:var(--navy)}
+.pager{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-2);white-space:nowrap}
+.pager button{width:34px;height:34px;border:1px solid var(--line-2);background:#fff;border-radius:6px;cursor:pointer;font-weight:900}
+.pager button:disabled{opacity:.35;cursor:default}
+.pager .zoombtn{width:auto;padding:0 12px;margin-left:4px;font-weight:800}
+.drawing.full{position:fixed;inset:0;z-index:70;border-radius:0;border:0;overflow:auto;padding:14px 16px 24px}
+.drawing.full .canvas{max-width:1700px;margin:0 auto}
+.drawing.full .bar{max-width:min(1700px,calc(100vw - 32px));margin:0 auto 10px;position:sticky;left:0;top:-14px;background:#fff;z-index:2;padding:6px 0}
+.drawing.full .dnote{max-width:1700px;margin:10px auto 0}
+.canvas{position:relative;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff}
+.canvas img{width:100%;height:auto}
+.pos{position:absolute;transform:translate(-50%,-50%);min-width:30px;height:26px;border-radius:13px;border:2px solid transparent;background:transparent;cursor:pointer;padding:0}
+.pos:hover,.pos:focus-visible{border-color:var(--orange);background:rgba(240,90,20,.12)}
+.pos.on{border-color:var(--orange);background:rgba(240,90,20,.22);animation:ping 1.2s ease-out 2}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(240,90,20,.55)}100%{box-shadow:0 0 0 14px rgba(240,90,20,0)}}
+.dnote{margin-top:10px;font-size:13.5px;color:var(--ink-2)}
+.list{padding:0}
+.lhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.lhead h3{font-size:20px;font-weight:900;color:var(--navy)}
+.lhead .sub{color:var(--ink-2);font-size:14px}
+.filter{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);background:#FAFBFD;flex-wrap:wrap;align-items:center}
+.filter input{flex:1;min-width:180px;height:42px;border:1px solid var(--line-2);border-radius:6px;padding:0 12px;background:#fff}
+.chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 6px 0 12px;border-radius:16px;background:var(--sky);color:var(--blue-d);font-weight:800;font-size:14px}
+.chip button{width:24px;height:24px;border-radius:12px;border:0;background:#fff;color:var(--blue-d);cursor:pointer;font-weight:900;line-height:1}
+.rows{list-style:none;margin:0;padding:0}
+.row{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row.hl{background:#FFF4EC;box-shadow:inset 3px 0 0 var(--orange)}
+.row img{width:64px;height:64px;object-fit:contain;border:1px solid var(--line);border-radius:6px;background:#fff}
+.row .nm{font-weight:800;line-height:1.3}
+.row .meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13.5px;color:var(--ink-2);margin-top:3px}
+.row .meta b{color:var(--ink);font-weight:800}
+.row .note{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+.row .mtag{display:inline-block;font-size:12.5px;font-weight:800;color:#fff;background:var(--navy);border-radius:4px;padding:1px 6px}
+.linkbtn{background:none;border:0;padding:0;color:var(--blue-d);font-weight:800;font-size:13.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.buy{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.buy .ctl{display:flex;gap:8px;align-items:center}
+.price{text-align:right;white-space:nowrap}
+.price strong{font-size:18px;font-weight:900;line-height:1.1}
+.price small{color:var(--ink-2);font-size:12.5px;margin-left:5px}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line-2);border-radius:6px;overflow:hidden;background:#fff}
+.qty button{width:32px;height:36px;border:0;background:#fff;cursor:pointer;font-weight:900;font-size:17px}
+.qty button:hover{background:var(--paper)}
+.qty input{width:38px;height:36px;border:0;text-align:center;font-weight:800;-moz-appearance:textfield}
+.qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.add{height:38px;border:0;border-radius:6px;background:var(--blue);color:#fff;font-weight:800;padding:0 14px;cursor:pointer;white-space:nowrap}
+.add:hover{background:var(--blue-d)}
+.add.done{background:var(--ok)}
+.empty{padding:28px 16px;color:var(--ink-2)}
+.morebtn-wrap{padding:14px 16px;border-top:1px solid var(--line);text-align:center}
+.outline{height:42px;border:1px solid var(--line-2);background:#fff;border-radius:6px;padding:0 18px;font-weight:800;cursor:pointer}
+.outline:hover{border-color:var(--blue);color:var(--blue-d)}
+
+/* jak zamówić */
+.how{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;counter-reset:s}
+.steps li{counter-increment:s;padding:18px 18px 18px 64px;position:relative;border:1px solid var(--line);border-radius:var(--r);background:var(--paper)}
+.steps li::before{content:counter(s);position:absolute;left:16px;top:16px;width:34px;height:34px;border-radius:17px;background:var(--navy);color:#fff;font-weight:900;display:grid;place-items:center}
+.steps b{display:block;font-size:17px;font-weight:900;color:var(--navy);margin-bottom:4px}
+.steps p{color:var(--ink-2)}
+
+/* stopka */
+footer{background:var(--navy);color:#C9D6E8;padding:40px 0 30px}
+footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px}
+footer img{height:24px;width:auto;margin-bottom:12px}
+footer h3{color:#fff;font-size:15px;font-weight:900;margin-bottom:8px}
+footer a{color:#fff;text-underline-offset:3px}
+footer p{font-size:15px}
+.legal{max-width:1280px;margin:26px auto 0;padding:16px 24px 0;border-top:1px solid rgba(255,255,255,.15);font-size:13px;color:#9FB2CC}
+
+/* koszyk */
+.shade{position:fixed;inset:0;background:rgba(10,20,40,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
+.shade.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(460px,100%);background:#fff;z-index:61;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer .dh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.drawer .dh h3{font-size:22px;font-weight:900;color:var(--navy)}
+.x{width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:6px;font-size:22px;line-height:1;cursor:pointer}
+.dbody{flex:1;overflow:auto;padding:8px 20px}
+.bitem{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.bitem img{width:52px;height:52px;object-fit:contain;border:1px solid var(--line);border-radius:6px}
+.bitem .n{font-weight:800;font-size:14.5px;line-height:1.3}
+.bitem small{color:var(--ink-2);font-size:13px}
+.bitem .r{text-align:right;font-weight:900;white-space:nowrap}
+.bitem .rm{background:none;border:0;padding:0;color:var(--blue-d);font-weight:800;font-size:13px;cursor:pointer;text-decoration:underline}
+.dfoot{border-top:1px solid var(--line);padding:14px 20px 18px;background:#FAFBFD}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.fields label{display:flex;flex-direction:column;gap:3px;font-size:13px;font-weight:800;color:var(--ink-2)}
+.fields input,.fields select{width:100%;min-width:0;height:40px;border:1px solid var(--line-2);border-radius:6px;padding:0 10px;background:#fff;font-weight:600;color:var(--ink)}
+.fields .wide{grid-column:1/-1}
+.sum{display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:15px}
+.sum.total{font-size:19px;font-weight:900;padding-top:8px;margin-top:6px;border-top:1px solid var(--line)}
+.vatnote{font-size:13px;color:var(--ink-2);margin-top:4px}
+.send{width:100%;height:50px;margin-top:12px;border:0;border-radius:var(--r);background:var(--orange-d);color:#fff;font-weight:900;font-size:17px;cursor:pointer}
+.send:hover{background:var(--orange-dd)}
+.send:disabled{background:#B9C4D3;cursor:not-allowed}
+.bempty{padding:30px 0;color:var(--ink-2)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,30px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:var(--r);font-weight:700;opacity:0;pointer-events:none;transition:.2s;z-index:80;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.drawer.open~.toast{top:16px;bottom:auto}
+.modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(10,20,40,.5);z-index:90;padding:16px}
+.modal.open{display:grid}
+.modal .box{background:#fff;border-radius:12px;max-width:470px;width:100%;padding:26px}
+.modal h3{font-size:24px;font-weight:900;color:var(--navy);margin-bottom:10px}
+.modal p{color:var(--ink-2);margin-bottom:16px}
+.modal .add{height:44px;padding:0 22px}
+
+/* responsywność */
+@media (max-width:1180px){ .machines{grid-template-columns:repeat(3,minmax(0,1fr))} }
+@media (max-width:980px){
+  .intro .wrap{grid-template-columns:1fr;gap:24px}
+  .shot{max-width:620px}
+  .work{grid-template-columns:1fr}
+  .drawing{position:static}
+  .steps{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .legal{padding:16px 16px 0}
+  .demobar .wrap{flex-direction:column;align-items:flex-start;gap:2px}
+  .brand img{height:21px}
+  .langs button{padding:6px 8px}
+  .basketbtn{padding:9px 11px}
+  .intro .wrap{padding-top:30px;padding-bottom:30px}
+  .lead{font-size:16.5px}
+  .search{flex-direction:column}
+  .search input{flex:none;width:100%}
+  .search button{width:100%}
+  section{padding:34px 0}
+  .machines{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .mcard b{font-size:15px}
+  .drawing .bar{flex-wrap:wrap}
+  .drawing .bar h3{flex-basis:100%}
+  .drawing.full .canvas{width:1100px;max-width:none}
+  .row{grid-template-columns:56px minmax(0,1fr);padding:12px}
+  .row img{width:56px;height:56px}
+  .buy{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .price{text-align:left}
+  .lhead,.filter{padding-left:12px;padding-right:12px}
+  footer .wrap{grid-template-columns:1fr}
+}
+@media (max-width:480px){ .langs{display:none} .langsel{display:inline-block} .brand img{height:17px} .tools{gap:8px} }
+@media (max-width:350px){ .brand img{height:15px} .fields{grid-template-columns:minmax(0,1fr)} .dbody,.dfoot{padding-left:14px;padding-right:14px} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="demobar"><div class="wrap">
+  <span data-i="demo"><b>Projekt demonstracyjny</b> przygotowany dla ROLMAKO. Części, symbole i rysunki pochodzą z katalogów PDF na rolmako.pl, ceny są przykładowe.</span>
+  <span><span data-i="by">Przygotował:</span> <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></span>
+</div></div>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#" aria-label="Rolmako"><img src="img/logo-white.png" alt="Rolmako" width="390" height="44"></a>
+  <nav class="menu" aria-label="Sekcje">
+    <a href="#katalog" data-i="nav1">Części zamienne</a>
+    <a href="#jak" data-i="nav2">Jak zamówić</a>
+    <a href="#kontakt" data-i="nav3">Kontakt</a>
+  </nav>
+  <div class="tools">
+    <div class="langs" role="group" aria-label="Język / Sprache / Language">
+      <button type="button" data-lang="pl" aria-pressed="true">PL</button>
+      <button type="button" data-lang="de" aria-pressed="false">DE</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <select class="langsel" id="langSel" aria-label="Język / Sprache / Language"><option value="pl">PL</option><option value="de">DE</option><option value="en">EN</option></select>
+    <button class="basketbtn" type="button" id="openBasket"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl" data-i="basket">Zamówienie</span><span class="cnt num" id="bCount">0</span></button>
+  </div>
+</div></header>
+
+<main>
+<div class="intro"><div class="wrap">
+  <div>
+    <h1 data-i="h1">Części do maszyn Rolmako – z ceną i zamówieniem online</h1>
+    <p class="lead" data-i="lead">Zamiast szukać w katalogach PDF: wybierz maszynę, kliknij pozycję na rysunku i dodaj część do zamówienia. Symbol i numer seryjny maszyny trafiają do biura od razu.</p>
+    <form class="search" id="searchForm" role="search">
+      <label class="sr" for="q" data-i="qLabel">Szukaj części po symbolu lub nazwie</label>
+      <input id="q" type="search" autocomplete="off" placeholder="np. M-081, talerz, siłownik">
+      <button type="submit" data-i="qBtn">Szukaj części</button>
+    </form>
+    <p class="hint"><span data-i="tryTxt">Spróbuj:</span> <button type="button" data-try="M-081">M-081</button>, <button type="button" data-try="UCF 210">UCF 210</button>, <button type="button" data-try="dłuto" data-try-de="Schar" data-try-en="point">dłuto</button></p>
+    <p class="indemo" id="inDemo"></p>
+  </div>
+  <figure class="shot"><img src="img/m/hero.webp" alt="" width="1000" height="750"><figcaption data-i="cap">Brona talerzowa U 652 w pracy. Zdjęcie: rolmako.pl</figcaption></figure>
+</div></div>
+
+<section id="katalog"><div class="wrap">
+  <div class="shead">
+    <h2 data-i="s1">Wybierz maszynę</h2>
+    <p data-i="s1p">W demo jest 6 katalogów z rolmako.pl. Pozostałe dodam tak samo – z plików PDF, które już Państwo mają.</p>
+  </div>
+  <div class="machines" id="machines"></div>
+
+  <div class="work" id="work" style="margin-top:22px">
+    <div class="panel drawing" id="drawing">
+      <div class="bar">
+        <h3 id="dTitle">Rysunek</h3>
+        <div class="pager"><button type="button" id="dPrev" aria-label="Poprzedni rysunek">‹</button><span class="num" id="dPage">1 / 1</span><button type="button" id="dNext" aria-label="Następny rysunek">›</button><button type="button" class="zoombtn" id="dZoom">Powiększ</button></div>
+      </div>
+      <div class="canvas" id="canvas"><img id="dImg" alt=""></div>
+      <p class="dnote" id="dNote"></p>
+    </div>
+    <div class="panel list">
+      <div class="lhead"><h3 id="lTitle">Części</h3><span class="sub num" id="lCount"></span><div class="lback" id="lBack" hidden></div></div>
+      <div class="filter">
+        <label class="sr" for="f" data-i="fLabel">Filtruj części tej maszyny</label>
+        <input id="f" type="search" autocomplete="off" placeholder="Filtruj: symbol, nazwa, nr pozycji">
+        <span id="chipWrap"></span>
+      </div>
+      <ul class="rows" id="rows"></ul>
+      <div class="morebtn-wrap" id="moreWrap" hidden><button class="outline" type="button" id="moreBtn">Pokaż wszystkie</button></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="how" id="jak"><div class="wrap">
+  <div class="shead"><h2 data-i="s2">Jak zamówić część</h2></div>
+  <ol class="steps">
+    <li><b data-i="st1">Znajdź część</b><p data-i="st1p">Po symbolu z tabliczki albo z rysunku maszyny. Pozycje na rysunku są klikalne.</p></li>
+    <li><b data-i="st2">Dodaj do zamówienia</b><p data-i="st2p">Cena jest widoczna od razu – w złotych, a w wersji niemieckiej i angielskiej w euro.</p></li>
+    <li><b data-i="st3">Podaj numer seryjny</b><p data-i="st3p">Model, numer fabryczny i rok produkcji – o to prosi katalog części Rolmako. W tej propozycji biuro potwierdza potem termin wysyłki.</p></li>
+  </ol>
+</div></section>
+</main>
+
+<footer id="kontakt">
+  <div class="wrap">
+    <div><img src="img/logo-white.png" alt="Rolmako" width="390" height="44"><p data-i="fAbout">Rolmako – maszyny, wiedza, technologia. Polski producent maszyn do uprawy gleby.</p></div>
+    <div><h3 data-i="fAddr">Adres</h3><p>ul. Nekielska 11F<br>Psary Małe, 62-300 Września</p></div>
+    <div><h3 data-i="fCont">Kontakt</h3><p><a href="tel:+48614388735">+48 61 438 87 35</a><br><a href="mailto:rolmako@rolmako.pl">rolmako@rolmako.pl</a><br><a href="https://www.rolmako.pl/" target="_blank" rel="noopener">rolmako.pl</a></p></div>
+  </div>
+  <p class="legal" data-i="legal">Projekt demonstracyjny. Symbole, nazwy, miniatury i rysunki pochodzą z katalogów części zamiennych Rolmako (rolmako.pl/spare-parts), ceny i dostępność są przykładowe.</p>
+</footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Zamówienie" aria-hidden="true">
+  <div class="dh"><h3 data-i="bTitle">Zamówienie</h3><button class="x" type="button" id="closeBasket" aria-label="Zamknij">×</button></div>
+  <div class="dbody" id="bList"></div>
+  <div class="dfoot" id="bFoot"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="box"><h3 id="mTitle"></h3><p id="mText"></p><button class="add" type="button" id="mClose">OK</button></div></div>
+
+<script>
+(() => {
+const DATA = [{"id":"u652","model":"U 652","photo":"img/m/u652.webp","parts":[{"lp":1,"sym":"M-084","pl":"Amortyzator gumowy słupicy brony talerzowej","npl":"","img":"img/p/u652-1.webp","de":"Gummidämpfer für Scheibenstiel","en":"Rubber shock absorber for disc arm","nde":"","nen":"","zl":44},{"lp":2,"sym":"B-275","pl":"Daszek słupicy","npl":"","img":"img/p/u652-2.webp","de":"Abdeckung Scheibenstiel","en":"Disc arm cap","nde":"","nen":"","zl":43},{"lp":3,"sym":"ZB-090A","pl":"Słupica bezobsługowa przednia SKF","npl":"","img":"img/p/u652-3.webp","de":"Scheibenstiel wartungsfrei vorne SKF","en":"Maintenance-free disc arm, front SKF","nde":"","nen":"","zl":925},{"lp":4,"sym":"ZB-090B","pl":"Słupica bezobsługowa tylna SKF","npl":"","img":"img/p/u652-4.webp","de":"Scheibenstiel wartungsfrei hinten SKF","en":"Maintenance-free disc arm, rear SKF","nde":"","nen":"","zl":909},{"lp":5,"sym":"M-227A","pl":"Słupica ślimakowa przednia","npl":"","img":"img/p/u652-5.webp","de":"Scheibenstiel mit Spiralfeder vorne","en":"Coil-spring disc arm, front","nde":"","nen":"","zl":661},{"lp":6,"sym":"M-227B","pl":"Słupica ślimakowa tylna","npl":"","img":"img/p/u652-6.webp","de":"Scheibenstiel mit Spiralfeder hinten","en":"Coil-spring disc arm, rear","nde":"","nen":"","zl":627},{"lp":7,"sym":"ZBBA-056A","pl":"Mocowanie piasty tylne","npl":"","img":"img/p/u652-7.webp","de":"Nabenhalter hinten","en":"Hub mount, rear","nde":"","nen":"","zl":50},{"lp":8,"sym":"ZBBA-056B","pl":"Mocowanie piasty przednie","npl":"","img":"img/p/u652-8.webp","de":"Nabenhalter vorne","en":"Hub mount, front","nde":"","nen":"","zl":51},{"lp":9,"sym":"M-085A","pl":"Piasta bezobsługowa FKL","npl":"","img":"img/p/u652-9.webp","de":"Wartungsfreie Nabe FKL","en":"Maintenance-free hub FKL","nde":"","nen":"","zl":488},{"lp":10,"sym":"M-085","pl":"Piasta bezobsługowa SKF","npl":"zamiennie BAA-004","img":"img/p/u652-10.webp","de":"Wartungsfreie Nabe SKF","en":"Maintenance-free hub SKF","nde":"alternativ BAA-004","nen":"alternative: BAA-004","zl":602},{"lp":11,"sym":"M-083","pl":"Talerz roboczy ALFA Ø560","npl":"","img":"img/p/u652-11.webp","de":"Arbeitsscheibe ALFA Ø560","en":"Working disc ALFA Ø560","nde":"","nen":"","zl":294},{"lp":12,"sym":"M-081","pl":"Talerz roboczy Ø560 z agresywnym uzębieniem OFAS","npl":"4 otwory","img":"img/p/u652-12.webp","de":"Arbeitsscheibe Ø560, grob gezahnt, OFAS","en":"Working disc Ø560, aggressive notches, OFAS","nde":"4 Löcher","nen":"4 holes","zl":246},{"lp":13,"sym":"M-082","pl":"Talerz Ø560 skrajny OFAS 4 otwory","npl":"","img":"img/p/u652-13.webp","de":"Randscheibe Ø560 OFAS, 4 Löcher","en":"Edge disc Ø560 OFAS, 4 holes","nde":"","nen":"","zl":239},{"lp":14,"sym":"M-228","pl":"Talerz roboczy Ø560 z drobnym uzębieniem POLSKI","npl":"4 otwory, czas oczekiwania 14 dni roboczych","img":"img/p/u652-14.webp","de":"Arbeitsscheibe Ø560, fein gezahnt, polnische Fertigung","en":"Working disc Ø560, fine notches, Polish-made","nde":"4 Löcher, Lieferzeit 14 Arbeitstage","nen":"4 holes, lead time 14 working days","zl":207},{"lp":15,"sym":"M-244","pl":"Talerz roboczy Ø560 z agresywnym uzębieniem POLSKI","npl":"4 otwory","img":"img/p/u652-15.webp","de":"Arbeitsscheibe Ø560, grob gezahnt, polnische Fertigung","en":"Working disc Ø560, aggressive notches, Polish-made","nde":"4 Löcher","nen":"4 holes","zl":212},{"lp":16,"sym":"MH-051","pl":"Siłownik hydrauliczny składania ramion","npl":"","img":"img/p/u652-16.webp","de":"Hydraulikzylinder Klappung","en":"Hydraulic folding cylinder","nde":"","nen":"","zl":1635},{"lp":17,"sym":"MH-117","pl":"Siłownik hydrauliczny składania ramion","npl":"","img":"img/p/u652-17.webp","de":"Hydraulikzylinder Klappung","en":"Hydraulic folding cylinder","nde":"","nen":"","zl":1750},{"lp":18,"sym":"MH-152","pl":"Siłownik hydrauliczny hydraulicznej regulacji głębokości","npl":"","img":"img/p/u652-18.webp","de":"Hydraulikzylinder Tiefenverstellung","en":"Hydraulic depth adjustment cylinder","nde":"","nen":"","zl":1547},{"lp":19,"sym":"MH-142","pl":"Siłownik hydrauliczny blokady hydraulicznej","npl":"","img":"img/p/u652-19.webp","de":"Hydraulikzylinder der Verriegelung","en":"Hydraulic locking cylinder","nde":"","nen":"","zl":1545},{"lp":20,"sym":"MH-118","pl":"Siłownik hydrauliczny wózka","npl":"","img":"img/p/u652-20.webp","de":"Hydraulikzylinder Fahrwerk","en":"Hydraulic transport chassis cylinder","nde":"","nen":"","zl":1576},{"lp":21,"sym":"B-458A","pl":"Mocowanie sprężynki zgrzebła za wałem","npl":"","img":"img/p/u652-21.webp","de":"Halter Striegelfeder hinter der Walze","en":"Mount for harrow spring behind roller","nde":"","nen":"","zl":53},{"lp":22,"sym":"M-061A","pl":"Sprężynka zgrzebła sprężynowego za wałem","npl":"Ø12","img":"img/p/u652-22.webp","de":"Feder Federstriegel hinter der Walze","en":"Spring for spring harrow behind roller","nde":"Ø12","nen":"Ø12","zl":62},{"lp":23,"sym":"M-016","pl":"Zespół łożyskowy wału UCF 208","npl":"łożysko D208, średnica wewn. 40 mm, rozstaw otworów 102 mm","img":"img/p/u652-23.webp","de":"Walzen-Flanschlager UCF 208","en":"Roller bearing unit UCF 208","nde":"Lager D208, Innendurchmesser 40 mm, Lochabstand 102 mm","nen":"bearing D208, inner diameter 40 mm, hole spacing 102 mm","zl":165},{"lp":24,"sym":"M-017","pl":"Zespół łożyskowy wału UCF 210","npl":"łożysko D210, średnica wewn. 50 mm, rozstaw otworów 111 mm","img":"img/p/u652-24.webp","de":"Walzen-Flanschlager UCF 210","en":"Roller bearing unit UCF 210","nde":"Lager D210, Innendurchmesser 50 mm, Lochabstand 111 mm","nen":"bearing D210, inner diameter 50 mm, hole spacing 111 mm","zl":227},{"lp":25,"sym":"ZWA-065","pl":"Felga z oponą Ø600 (komplet)","npl":"","img":"img/p/u652-25.webp","de":"Felge mit Reifen Ø600 (komplett)","en":"Rim with tyre Ø600 (complete)","nde":"","nen":"","zl":1502},{"lp":26,"sym":"WA-129","pl":"Piasta koła wału oponowego","npl":"","img":"img/p/u652-26.webp","de":"Nabe der Reifenwalze","en":"Tyre roller hub","nde":"","nen":"","zl":277},{"lp":27,"sym":"WA-083","pl":"Obręcz wału sprężynowego Ø470","npl":"","img":"img/p/u652-27.webp","de":"Ring der Federwalze Ø470","en":"Spring roller hoop Ø470","nde":"","nen":"","zl":216},{"lp":28,"sym":"WA-123","pl":"Obręcz wału sprężynowego Ø550","npl":"","img":"img/p/u652-28.webp","de":"Ring der Federwalze Ø550","en":"Spring roller hoop Ø550","nde":"","nen":"","zl":220},{"lp":29,"sym":"WA-057","pl":"Koło gumowe Ø500 (robocze)","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-29.webp","de":"Gummiring Ø500 (Arbeitsring)","en":"Rubber ring Ø500 (working)","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":142},{"lp":30,"sym":"WA-056","pl":"Dystans gumowy Ø500","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-30.webp","de":"Gummi-Distanzring Ø500","en":"Rubber spacer Ø500","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":47},{"lp":31,"sym":"M-252","pl":"Koło gumowe Ø500 (robocze)","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-31.webp","de":"Gummiring Ø500 (Arbeitsring)","en":"Rubber ring Ø500 (working)","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":137},{"lp":32,"sym":"M-253","pl":"Koło zewnętrzne Ø500","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-32.webp","de":"Außenring Ø500","en":"Outer ring Ø500","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":151},{"lp":33,"sym":"WA-046","pl":"Końcówka skrobaka wału gumowego","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-33.webp","de":"Abstreiferspitze Gummiwalze","en":"Scraper tip, rubber roller","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":29},{"lp":34,"sym":"WA-047","pl":"Uchwyt skrobaka podwójny wału gumowego","npl":"","img":"img/p/u652-34.webp","de":"Abstreiferhalter doppelt, Gummiwalze","en":"Double scraper holder, rubber roller","nde":"","nen":"","zl":69},{"lp":35,"sym":"WA-045","pl":"Uchwyt skrobaka pojedynczy wału gumowego","npl":"","img":"img/p/u652-35.webp","de":"Abstreiferhalter einfach, Gummiwalze","en":"Single scraper holder, rubber roller","nde":"","nen":"","zl":53},{"lp":36,"sym":"WA-024","pl":"Płytka mocująca dolna skrobaka","npl":"","img":"img/p/u652-36.webp","de":"Abstreifer-Klemmplatte unten","en":"Scraper clamping plate, lower","nde":"","nen":"","zl":18.2},{"lp":37,"sym":"WA-157","pl":"Płytka mocująca górna skrobaka","npl":"","img":"img/p/u652-37.webp","de":"Abstreifer-Klemmplatte oben","en":"Scraper clamping plate, upper","nde":"","nen":"","zl":18.1},{"lp":38,"sym":"WA-014","pl":"Końcówka skrobaka wału Packer","npl":"","img":"img/p/u652-38.webp","de":"Abstreiferspitze Packerwalze","en":"Scraper tip, packer roller","nde":"","nen":"","zl":30},{"lp":39,"sym":"WA-015","pl":"Uchwyt skrobaka potrójny wału Packer","npl":"","img":"img/p/u652-39.webp","de":"Abstreiferhalter dreifach, Packerwalze","en":"Triple scraper holder, packer roller","nde":"","nen":"","zl":81},{"lp":40,"sym":"WA-092","pl":"Uchwyt skrobaka wału z pierścieni stalowych","npl":"","img":"img/p/u652-40.webp","de":"Abstreiferhalter Stahlringwalze","en":"Scraper holder, steel ring roller","nde":"","nen":"","zl":56},{"lp":41,"sym":"ZWA-086","pl":"Mocowanie skrobaka wału z pierścieni stalowych","npl":"","img":"img/p/u652-41.webp","de":"Abstreiferbefestigung Stahlringwalze","en":"Scraper mount, steel ring roller","nde":"","nen":"","zl":54},{"lp":42,"sym":"WA-160","pl":"Nakładka skrobaka wału z pierścieni stalowych","npl":"","img":"img/p/u652-42.webp","de":"Abstreiferauflage Stahlringwalze","en":"Scraper blade, steel ring roller","nde":"","nen":"","zl":36},{"lp":43,"sym":"M-242","pl":"Uchwyt skrobaka wału U-ring/T-ring","npl":"","img":"img/p/u652-43.webp","de":"Abstreiferhalter U-Ring/T-Ring-Walze","en":"Scraper holder, U-ring/T-ring roller","nde":"","nen":"","zl":51},{"lp":44,"sym":"M-243","pl":"Końcówka skrobaka wału U-ring/T-ring","npl":"","img":"img/p/u652-44.webp","de":"Abstreiferspitze U-Ring/T-Ring-Walze","en":"Scraper tip, U-ring/T-ring roller","nde":"","nen":"","zl":28},{"lp":45,"sym":"B-570","pl":"Mocowanie uchwytu skrobaka wału U-ring/T-ring","npl":"","img":"img/p/u652-45.webp","de":"Halterung Abstreiferträger U-Ring/T-Ring-Walze","en":"Scraper holder mount, U-ring/T-ring roller","nde":"","nen":"","zl":53},{"lp":46,"sym":"WA-016","pl":"Uchwyt skrobaka Packer","npl":"","img":"img/p/u652-46.webp","de":"Abstreiferhalter Packer","en":"Packer scraper holder","nde":"","nen":"","zl":51},{"lp":47,"sym":"WA-046A","pl":"Nakładka skrobaka wału gumowego szeroka","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-47.webp","de":"Abstreiferauflage Gummiwalze, breit","en":"Wide scraper blade, rubber roller","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":35},{"lp":48,"sym":"WA-042","pl":"Koło CROSSKILL Ø400 (wewnętrzne)","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-48.webp","de":"CROSSKILL-Ring Ø400 (innen)","en":"CROSSKILL ring Ø400 (inner)","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":154},{"lp":49,"sym":"WA-084","pl":"Koło krańcowe CROSSKILL Ø400","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-49.webp","de":"CROSSKILL-Endring Ø400","en":"CROSSKILL end ring Ø400","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":179},{"lp":50,"sym":"WA-124","pl":"Koło krańcowe CROSSKILL Ø500","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-50.webp","de":"CROSSKILL-Endring Ø500","en":"CROSSKILL end ring Ø500","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":181},{"lp":51,"sym":"WA-125","pl":"Koło CROSSKILL Ø500 (wewnętrzne)","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u652-51.webp","de":"CROSSKILL-Ring Ø500 (innen)","en":"CROSSKILL ring Ø500 (inner)","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":156},{"lp":52,"sym":"M-020","pl":"Jarzmo M12 na profil 80x80","npl":"","img":"img/p/u652-52.webp","de":"U-Bügel M12 für Profil 80x80","en":"U-bolt M12 for 80x80 profile","nde":"","nen":"","zl":22},{"lp":53,"sym":"M-232","pl":"Jarzmo M12 na profil 50x50","npl":"","img":"img/p/u652-53.webp","de":"U-Bügel M12 für Profil 50x50","en":"U-bolt M12 for 50x50 profile","nde":"","nen":"","zl":23},{"lp":54,"sym":"M-214A","pl":"Jarzmo M12 na profil 60x60","npl":"","img":"img/p/u652-54.webp","de":"U-Bügel M12 für Profil 60x60","en":"U-bolt M12 for 60x60 profile","nde":"","nen":"","zl":21},{"lp":55,"sym":"M-059","pl":"Odblask trójkąt","npl":"","img":"img/p/u652-55.webp","de":"Rückstrahler Dreieck","en":"Triangle reflector","nde":"","nen":"","zl":8.1},{"lp":56,"sym":"M-038","pl":"Odblask pomarańczowy kwadratowy","npl":"","img":"img/p/u652-56.webp","de":"Rückstrahler orange, quadratisch","en":"Orange reflector, square","nde":"","nen":"","zl":8.3},{"lp":57,"sym":"M-235","pl":"Lampa LED","npl":"","img":"img/p/u652-57.webp","de":"LED-Leuchte","en":"LED lamp","nde":"","nen":"","zl":94},{"lp":58,"sym":"M-236","pl":"Wtyczka do świateł","npl":"","img":"img/p/u652-58.webp","de":"Stecker Beleuchtung","en":"Lighting plug","nde":"","nen":"","zl":37},{"lp":59,"sym":"MH-015","pl":"Wtyczka hydrauliczna ISO M22x1,5","npl":"","img":"img/p/u652-59.webp","de":"Hydraulikstecker ISO M22x1,5","en":"Hydraulic coupler ISO M22x1.5","nde":"","nen":"","zl":42},{"lp":60,"sym":"M-237","pl":"Kompletna śruba daszka, kl. 8.8 (standard)","npl":"w komplecie: śruba M12x55, nakrętka, podkładka","img":"img/p/u652-60.webp","de":"Schraubensatz Abdeckung, Kl. 8.8 (Standard)","en":"Cap bolt set, class 8.8 (standard)","nde":"Satz: Schraube M12x55, Mutter, Scheibe","nen":"set: bolt M12x55, nut, washer","zl":11.8},{"lp":61,"sym":"M-238","pl":"Kompletna śruba daszka, kl. 10.9","npl":"w komplecie: śruba M12x55, nakrętka, podkładka","img":"img/p/u652-61.webp","de":"Schraubensatz Abdeckung, Kl. 10.9","en":"Cap bolt set, class 10.9","nde":"Satz: Schraube M12x55, Mutter, Scheibe","nen":"set: bolt M12x55, nut, washer","zl":15},{"lp":62,"sym":"M-240","pl":"Kompletna śruba talerza – piasta bezobsługowa (4 otwory)","npl":"w komplecie: śruba M12x1,25x20, podkładka","img":"img/p/u652-62.webp","de":"Scheibenschraubensatz – wartungsfreie Nabe (4 Löcher)","en":"Disc bolt set – maintenance-free hub (4 holes)","nde":"Satz: Schraube M12x1,25x20, Scheibe","nen":"set: bolt M12x1.25x20, washer","zl":11.9},{"lp":63,"sym":"M-167","pl":"Segment zgrzebła palcowego","npl":"","img":"img/p/u652-63.webp","de":"Fingerstriegel-Segment","en":"Finger harrow segment","nde":"","nen":"","zl":252},{"lp":64,"sym":"BC-088","pl":"Mocowanie zgrzebła palcowego","npl":"","img":"img/p/u652-64.webp","de":"Halter Fingerstriegel","en":"Finger harrow mount","nde":"","nen":"","zl":55},{"lp":65,"sym":"MH-099","pl":"Stacja dokująca szybkozłącza grzybkowego","npl":"","img":"img/p/u652-65.webp","de":"Parkstation für Kupplungen","en":"Coupler parking station","nde":"","nen":"","zl":197},{"lp":66,"sym":"MH-047","pl":"Zawór przeciążeniowo-blokujący","npl":"","img":"img/p/u652-66.webp","de":"Überlast-Sperrventil","en":"Overload/lock valve","nde":"","nen":"","zl":448},{"lp":67,"sym":"MH-048","pl":"Rurka z oczkiem (przyłącze oczkowe długie)","npl":"OXL 300x3/8\", otwór 16 mm, długość 300 mm, rurka Ø12","img":"img/p/u652-67.webp","de":"Rohr mit Ringauge (Ringanschluss lang)","en":"Pipe with eye (long banjo fitting)","nde":"OXL 300x3/8\", Bohrung 16 mm, Länge 300 mm, Rohr Ø12","nen":"OXL 300x3/8\", hole 16 mm, length 300 mm, pipe Ø12","zl":61},{"lp":68,"sym":"MH-042","pl":"Przyłącze oczkowe 3/8 z przeciwnakrętką","npl":"","img":"img/p/u652-68.webp","de":"Ringanschluss 3/8 mit Kontermutter","en":"Banjo fitting 3/8 with lock nut","nde":"","nen":"","zl":16.3},{"lp":69,"sym":"M-233","pl":"Tablica wyróżniająca 423x423","npl":"","img":"img/p/u652-69.webp","de":"Warntafel 423x423","en":"Warning sign 423x423","nde":"","nen":"","zl":70},{"lp":70,"sym":"M-169","pl":"Sprężyna zabezpieczenia ramion","npl":"","img":"img/p/u652-70.webp","de":"Feder Rahmensicherung","en":"Wing safety spring","nde":"","nen":"","zl":56},{"lp":71,"sym":"M-209","pl":"Oś hamowna 2050 hamulec pneumatyczny jeden tłok","npl":"","img":"img/p/u652-71.webp","de":"Bremsachse 2050, Druckluftbremse, ein Kolben","en":"Brake axle 2050, air brake, one piston","nde":"","nen":"","zl":5082},{"lp":72,"sym":"M-210","pl":"Oś hamowna 2050 hamulec hydrauliczny dwa tłoki","npl":"","img":"img/p/u652-72.webp","de":"Bremsachse 2050, hydraulische Bremse, zwei Kolben","en":"Brake axle 2050, hydraulic brake, two pistons","nde":"","nen":"","zl":5821},{"lp":73,"sym":"ZB-575","pl":"Kołnierz","npl":"","img":"img/p/u652-73.webp","de":"Flansch","en":"Flange","nde":"","nen":"","zl":63},{"lp":74,"sym":"B-1564","pl":"Osłona sworznia belki zaczepowej","npl":"","img":"img/p/u652-74.webp","de":"Bolzenabdeckung Anbaubalken","en":"Hitch beam pin cover","nde":"","nen":"","zl":26},{"lp":75,"sym":"M-200","pl":"Tuleja ślizgowa","npl":"","img":"img/p/u652-75.webp","de":"Gleitbuchse","en":"Slide bushing","nde":"","nen":"","zl":37},{"lp":76,"sym":"B-1608","pl":"Podkładka stalowa","npl":"","img":"img/p/u652-76.webp","de":"Stahlscheibe","en":"Steel washer","nde":"","nen":"","zl":3.7},{"lp":77,"sym":"B-1573","pl":"Podkładka ślizgowa","npl":"","img":"img/p/u652-77.webp","de":"Gleitscheibe","en":"Sliding washer","nde":"","nen":"","zl":4.3},{"lp":78,"sym":"BC-878","pl":"Piasta koła podporowego","npl":"","img":"img/p/u652-78.webp","de":"Stützradnabe","en":"Support wheel hub","nde":"","nen":"","zl":266},{"lp":79,"sym":"M-112","pl":"Zbiornik powietrza 20 l","npl":"","img":"img/p/u652-79.webp","de":"Luftbehälter 20 l","en":"Air tank 20 l","nde":"","nen":"","zl":353},{"lp":80,"sym":"M-109","pl":"Filtr przewodowy","npl":"","img":"img/p/u652-80.webp","de":"Leitungsfilter","en":"In-line filter","nde":"","nen":"","zl":124},{"lp":81,"sym":"M-110","pl":"Zawór sterujący przyczepy","npl":"","img":"img/p/u652-81.webp","de":"Anhängersteuerventil","en":"Trailer control valve","nde":"","nen":"","zl":622},{"lp":82,"sym":"M-111","pl":"Regulator siły hamowania","npl":"","img":"img/p/u652-82.webp","de":"Bremskraftregler","en":"Brake force regulator","nde":"","nen":"","zl":504},{"lp":83,"sym":"M-114","pl":"Złącze pneumatyczne przyczepy","npl":"","img":"img/p/u652-83.webp","de":"Anhänger-Druckluftkupplung","en":"Trailer air coupling","nde":"","nen":"","zl":65},{"lp":84,"sym":"ZB-019A","pl":"Sworzeń blokady ramion","npl":"","img":"img/p/u652-84.webp","de":"Bolzen Rahmenverriegelung","en":"Wing lock pin","nde":"","nen":"","zl":64},{"lp":85,"sym":"ZGH-009","pl":"Sworzeń blokady ramion","npl":"","img":"img/p/u652-85.webp","de":"Bolzen Rahmenverriegelung","en":"Wing lock pin","nde":"","nen":"","zl":64},{"lp":86,"sym":"ZGM-053","pl":"Pokrętło belki przesuwnej","npl":"","img":"img/p/u652-86.webp","de":"Kurbel des Verschiebebalkens","en":"Sliding beam crank","nde":"","nen":"","zl":155},{"lp":87,"sym":"ZB-013","pl":"Sworzeń siłownika ramion składanych – tłoczysko","npl":"","img":"img/p/u652-87.webp","de":"Bolzen Klappzylinder – Kolbenstange","en":"Folding cylinder pin – rod end","nde":"","nen":"","zl":63},{"lp":88,"sym":"ZB-026","pl":"Sworzeń siłownika ramion składanych – cylinder","npl":"","img":"img/p/u652-88.webp","de":"Bolzen Klappzylinder – Zylinderseite","en":"Folding cylinder pin – cylinder end","nde":"","nen":"","zl":61},{"lp":89,"sym":"ZBBA-015","pl":"Sworzeń ramion składanych – przód","npl":"","img":"img/p/u652-89.webp","de":"Bolzen Klapprahmen – vorne","en":"Folding wing pin – front","nde":"","nen":"","zl":64},{"lp":90,"sym":"ZBBA-014","pl":"Sworzeń ramion składanych – tył","npl":"","img":"img/p/u652-90.webp","de":"Bolzen Klapprahmen – hinten","en":"Folding wing pin – rear","nde":"","nen":"","zl":64},{"lp":91,"sym":"ZGH-011","pl":"Sworzeń zaczepowy","npl":"","img":"img/p/u652-91.webp","de":"Anbaubolzen","en":"Hitch pin","nde":"","nen":"","zl":61},{"lp":92,"sym":"BBA-199A","pl":"Sworzeń przesuwnej belki talerzy","npl":"","img":"img/p/u652-92.webp","de":"Bolzen verschiebbarer Scheibenbalken","en":"Sliding disc beam pin","nde":"","nen":"","zl":63},{"lp":93,"sym":"BBA-199","pl":"Sworzeń przesuwnej belki talerzy","npl":"","img":"img/p/u652-93.webp","de":"Bolzen verschiebbarer Scheibenbalken","en":"Sliding disc beam pin","nde":"","nen":"","zl":67},{"lp":94,"sym":"ZBBA-016","pl":"Sworzeń belki wału","npl":"","img":"img/p/u652-94.webp","de":"Bolzen Walzenbalken","en":"Roller beam pin","nde":"","nen":"","zl":65},{"lp":95,"sym":"ZB-053","pl":"Sworzeń siłownika regulacji głębokości wału – cylinder","npl":"","img":"img/p/u652-95.webp","de":"Bolzen Zylinder Walzentiefe – Zylinderseite","en":"Roller depth cylinder pin – cylinder end","nde":"","nen":"","zl":67},{"lp":96,"sym":"ZB-054","pl":"Sworzeń siłownika regulacji głębokości wału – tłoczysko","npl":"","img":"img/p/u652-96.webp","de":"Bolzen Zylinder Walzentiefe – Kolbenstange","en":"Roller depth cylinder pin – rod end","nde":"","nen":"","zl":60},{"lp":97,"sym":"ZB-011","pl":"Sworzeń zgrzebła sprężynowego","npl":"","img":"img/p/u652-97.webp","de":"Bolzen Federstriegel","en":"Spring harrow pin","nde":"","nen":"","zl":66},{"lp":98,"sym":"ZB-791","pl":"Sworzeń belki zgrzebła sprężynowego","npl":"","img":"img/p/u652-98.webp","de":"Bolzen Federstriegelbalken","en":"Spring harrow beam pin","nde":"","nen":"","zl":61},{"lp":99,"sym":"BC-875","pl":"Śruba specjalna M20x120 (10,9)","npl":"","img":"img/p/u652-99.webp","de":"Spezialschraube M20x120 (10.9)","en":"Special bolt M20x120 (10.9)","nde":"","nen":"","zl":34},{"lp":100,"sym":"BC-876","pl":"Śruba specjalna M20x90 (10,9)","npl":"","img":"img/p/u652-100.webp","de":"Spezialschraube M20x90 (10.9)","en":"Special bolt M20x90 (10.9)","nde":"","nen":"","zl":36},{"lp":101,"sym":"BC-874","pl":"Śruba specjalna M30x120 (10,9)","npl":"","img":"img/p/u652-101.webp","de":"Spezialschraube M30x120 (10.9)","en":"Special bolt M30x120 (10.9)","nde":"","nen":"","zl":56},{"lp":102,"sym":"ZBC-153","pl":"Sworzeń ramion składanych – tył","npl":"","img":"img/p/u652-102.webp","de":"Bolzen Klapprahmen – hinten","en":"Folding wing pin – rear","nde":"","nen":"","zl":60},{"lp":103,"sym":"ZBC-007","pl":"Sworzeń wózka","npl":"","img":"img/p/u652-103.webp","de":"Bolzen Fahrwerk","en":"Chassis pin","nde":"","nen":"","zl":66},{"lp":104,"sym":"ZBC-038","pl":"Sworzeń siłownika wózka","npl":"","img":"img/p/u652-104.webp","de":"Bolzen Fahrwerkszylinder","en":"Chassis cylinder pin","nde":"","nen":"","zl":64},{"lp":105,"sym":"ZB-017","pl":"Sworzeń zastrzału","npl":"","img":"img/p/u652-105.webp","de":"Bolzen Strebe","en":"Strut pin","nde":"","nen":"","zl":60},{"lp":106,"sym":"ZB-021","pl":"Sworzeń cięgła dyszla – rama","npl":"","img":"img/p/u652-106.webp","de":"Bolzen Deichselstrebe – Rahmen","en":"Drawbar link pin – frame","nde":"","nen":"","zl":61},{"lp":107,"sym":"ZB-020","pl":"Sworzeń cięgła dyszla – dyszel","npl":"","img":"img/p/u652-107.webp","de":"Bolzen Deichselstrebe – Deichsel","en":"Drawbar link pin – drawbar","nde":"","nen":"","zl":62},{"lp":108,"sym":"ZBC-214","pl":"Sworzeń nogi dyszla","npl":"","img":"img/p/u652-108.webp","de":"Bolzen Deichselstütze","en":"Drawbar stand pin","nde":"","nen":"","zl":62},{"lp":109,"sym":"ZB-014","pl":"Sworzeń nogi dyszla","npl":"","img":"img/p/u652-109.webp","de":"Bolzen Deichselstütze","en":"Drawbar stand pin","nde":"","nen":"","zl":62},{"lp":110,"sym":"ZB-584","pl":"Sworzeń belki zaczepowej dyszla","npl":"","img":"img/p/u652-110.webp","de":"Bolzen Anbaubalken der Deichsel","en":"Drawbar hitch beam pin","nde":"","nen":"","zl":65},{"lp":111,"sym":"BBA-401","pl":"Sworzeń przesuwnej belki talerzy","npl":"","img":"img/p/u652-111.webp","de":"Bolzen verschiebbarer Scheibenbalken","en":"Sliding disc beam pin","nde":"","nen":"","zl":67},{"lp":112,"sym":"BC-139","pl":"Sworzeń przesuwnej belki talerzy","npl":"","img":"img/p/u652-112.webp","de":"Bolzen verschiebbarer Scheibenbalken","en":"Sliding disc beam pin","nde":"","nen":"","zl":68},{"lp":113,"sym":"ZBC-279","pl":"Sworzeń koła podporowego – śruba rzymska – rama","npl":"","img":"img/p/u652-113.webp","de":"Bolzen Stützrad – Spannschloss – Rahmen","en":"Support wheel pin – turnbuckle – frame","nde":"","nen":"","zl":63},{"lp":114,"sym":"ZBC-278","pl":"Sworzeń koła podporowego – śruba rzymska – koło","npl":"","img":"img/p/u652-114.webp","de":"Bolzen Stützrad – Spannschloss – Rad","en":"Support wheel pin – turnbuckle – wheel","nde":"","nen":"","zl":61},{"lp":115,"sym":"ZBC-073","pl":"Sworzeń koła podporowego – zawias","npl":"","img":"img/p/u652-115.webp","de":"Bolzen Stützrad – Scharnier","en":"Support wheel pin – hinge","nde":"","nen":"","zl":63},{"lp":116,"sym":"ZBBA-061","pl":"Śruba pociągowa przesuwnej belki talerzy","npl":"","img":"img/p/u652-116.webp","de":"Gewindespindel verschiebbarer Scheibenbalken","en":"Lead screw, sliding disc beam","nde":"","nen":"","zl":120}],"draws":[{"src":"img/d/u652-1.webp","w":1700,"h":884,"labels":[{"t":"6,7","n":[6,7],"x":0.7376,"y":0.9124},{"t":"5,8","n":[5,8],"x":0.4091,"y":0.7994},{"t":"21,22","n":[21,22],"x":0.8891,"y":0.4705},{"t":"23,24","n":[23,24],"x":0.8394,"y":0.9124},{"t":"53","n":[53],"x":0.8383,"y":0.771},{"t":"54,63,64","n":[54,63,64],"x":0.6211,"y":0.9124},{"t":"84","n":[84],"x":0.2706,"y":0.6036},{"t":"86","n":[86],"x":0.2296,"y":0.1277},{"t":"87","n":[87],"x":0.2827,"y":0.068},{"t":"88","n":[88],"x":0.3454,"y":0.068},{"t":"89","n":[89],"x":0.2706,"y":0.6877},{"t":"90","n":[90],"x":0.2706,"y":0.7994},{"t":"91","n":[91],"x":0.2201,"y":0.5205},{"t":"92","n":[92],"x":0.4115,"y":0.9388},{"t":"116","n":[116],"x":0.4708,"y":0.9388},{"t":"93","n":[93],"x":0.5438,"y":0.9388},{"t":"97","n":[97],"x":0.8892,"y":0.3503},{"t":"98","n":[98],"x":0.8892,"y":0.1022}]},{"src":"img/d/u652-2.webp","w":1700,"h":922,"labels":[{"t":"1,2,3,60,61","n":[1,2,3,60,61],"x":0.3577,"y":0.8275},{"t":"9 - 15,62","n":[9,10,11,12,13,14,15,62],"x":0.6438,"y":0.9412},{"t":"16","n":[16],"x":0.3312,"y":0.0682},{"t":"18","n":[18],"x":0.4624,"y":0.0654},{"t":"19,70","n":[19,70],"x":0.215,"y":0.5592},{"t":"94","n":[94],"x":0.7547,"y":0.9412},{"t":"95","n":[95],"x":0.3992,"y":0.0653},{"t":"96","n":[96],"x":0.553,"y":0.0653},{"t":"99","n":[99],"x":0.8533,"y":0.5177},{"t":"100","n":[100],"x":0.8533,"y":0.6794},{"t":"4","n":[4],"x":0.5149,"y":0.9412}]},{"src":"img/d/u652-3.webp","w":1700,"h":874,"labels":[{"t":"55-59,69","n":[55,56,57,58,59,69],"x":0.8698,"y":0.0688},{"t":"17,59,65-68","n":[17,59,65,66,67,68],"x":0.6908,"y":0.0688},{"t":"71,72","n":[71,72],"x":0.819,"y":0.9287},{"t":"25,26","n":[25,26],"x":0.5437,"y":0.9381},{"t":"20","n":[20],"x":0.7492,"y":0.9381},{"t":"73-77,110","n":[73,74,75,76,77,110],"x":0.1278,"y":0.1364},{"t":"78","n":[78],"x":0.1968,"y":0.8266},{"t":"79-83","n":[79,80,81,82,83],"x":0.228,"y":0.1763},{"t":"108","n":[108],"x":0.2334,"y":0.496},{"t":"109","n":[109],"x":0.1801,"y":0.496},{"t":"85","n":[85],"x":0.3581,"y":0.1065},{"t":"101","n":[101],"x":0.4822,"y":0.9381},{"t":"102","n":[102],"x":0.6757,"y":0.9381},{"t":"103","n":[103],"x":0.6919,"y":0.8826},{"t":"104","n":[104],"x":0.805,"y":0.1423},{"t":"105","n":[105],"x":0.4159,"y":0.9381},{"t":"106","n":[106],"x":0.307,"y":0.1065},{"t":"107","n":[107],"x":0.2603,"y":0.1065},{"t":"111","n":[111],"x":0.3466,"y":0.4601},{"t":"112","n":[112],"x":0.3099,"y":0.5001},{"t":"113","n":[113],"x":0.2729,"y":0.527},{"t":"114","n":[114],"x":0.1861,"y":0.574},{"t":"115","n":[115],"x":0.356,"y":0.8357}]},{"src":"img/d/u652-4.webp","w":1700,"h":943,"labels":[{"t":"41","n":[41],"x":0.611,"y":0.9404},{"t":"40","n":[40],"x":0.3812,"y":0.7012},{"t":"42","n":[42],"x":0.6109,"y":0.9091},{"t":"52","n":[52],"x":0.3901,"y":0.9426},{"t":"29","n":[29],"x":0.843,"y":0.0472},{"t":"30","n":[30],"x":0.8017,"y":0.0472},{"t":"34","n":[34],"x":0.7281,"y":0.4167},{"t":"36,37","n":[36,37],"x":0.7947,"y":0.4167},{"t":"33","n":[33],"x":0.8571,"y":0.4167},{"t":"46","n":[46],"x":0.7971,"y":0.9138},{"t":"39","n":[39],"x":0.8516,"y":0.8503},{"t":"38","n":[38],"x":0.8516,"y":0.8251},{"t":"55,56","n":[55,56],"x":0.8516,"y":0.8889},{"t":"43,44,45","n":[43,44,45],"x":0.4982,"y":0.0796},{"t":"53","n":[53],"x":0.61,"y":0.3545},{"t":"36,37","n":[36,37],"x":0.6748,"y":0.3544},{"t":"47","n":[47],"x":0.6774,"y":0.3006},{"t":"31","n":[31],"x":0.6356,"y":0.089},{"t":"32","n":[32],"x":0.6035,"y":0.089},{"t":"27,28","n":[27,28],"x":0.3009,"y":0.6507},{"t":"48,51","n":[48,51],"x":0.2429,"y":0.1139},{"t":"49,50","n":[49,50],"x":0.1587,"y":0.1453}]}]},{"id":"u622","model":"U 622","photo":"img/m/u622.webp","parts":[{"lp":1,"sym":"M-156","pl":"Amortyzator brony talerzowej lekkiej","npl":"","img":"img/p/u622-1.webp","de":"Dämpfer der leichten Scheibenegge","en":"Shock absorber, light disc harrow","nde":"","nen":"","zl":48},{"lp":2,"sym":"ZBL-029A","pl":"Słupica brony lekkiej – tylna","npl":"","img":"img/p/u622-2.webp","de":"Scheibenstiel leichte Egge – hinten","en":"Disc arm, light harrow – rear","nde":"","nen":"","zl":301},{"lp":3,"sym":"ZBL-029B","pl":"Słupica brony lekkiej – przednia","npl":"","img":"img/p/u622-3.webp","de":"Scheibenstiel leichte Egge – vorne","en":"Disc arm, light harrow – front","nde":"","nen":"","zl":307},{"lp":4,"sym":"ZB-611B","pl":"Piasta obsługowa kompletna","npl":"","img":"img/p/u622-4.webp","de":"Wartungspflichtige Nabe, komplett","en":"Serviceable hub, complete","nde":"","nen":"","zl":423},{"lp":5,"sym":"M-085A","pl":"Piasta bezobsługowa FKL","npl":"","img":"img/p/u622-5.webp","de":"Wartungsfreie Nabe FKL","en":"Maintenance-free hub FKL","nde":"","nen":"","zl":488},{"lp":6,"sym":"M-085","pl":"Piasta bezobsługowa SKF","npl":"zamiennie BAA-004","img":"img/p/u622-6.webp","de":"Wartungsfreie Nabe SKF","en":"Maintenance-free hub SKF","nde":"alternativ BAA-004","nen":"alternative: BAA-004","zl":602},{"lp":7,"sym":"M-083","pl":"Talerz roboczy ALFA Ø560","npl":"tylko z piastą bezobsługową","img":"img/p/u622-7.webp","de":"Arbeitsscheibe ALFA Ø560","en":"Working disc ALFA Ø560","nde":"nur mit wartungsfreier Nabe","nen":"only with maintenance-free hub","zl":294},{"lp":8,"sym":"M-079","pl":"Talerz roboczy Ø510 z agresywnym uzębieniem OFAS 4 otwory","npl":"","img":"img/p/u622-8.webp","de":"Arbeitsscheibe Ø510, grob gezahnt, OFAS, 4 Löcher","en":"Working disc Ø510, aggressive notches, OFAS, 4 holes","nde":"","nen":"","zl":222},{"lp":9,"sym":"M-080","pl":"Talerz Ø510 skrajny OFAS 4 otwory","npl":"","img":"img/p/u622-9.webp","de":"Randscheibe Ø510 OFAS, 4 Löcher","en":"Edge disc Ø510 OFAS, 4 holes","nde":"","nen":"","zl":239},{"lp":10,"sym":"M-081","pl":"Talerz roboczy Ø560 z agresywnym uzębieniem OFAS","npl":"4 otwory","img":"img/p/u622-10.webp","de":"Arbeitsscheibe Ø560, grob gezahnt, OFAS","en":"Working disc Ø560, aggressive notches, OFAS","nde":"4 Löcher","nen":"4 holes","zl":246},{"lp":11,"sym":"M-082","pl":"Talerz Ø560 skrajny OFAS 4 otwory","npl":"","img":"img/p/u622-11.webp","de":"Randscheibe Ø560 OFAS, 4 Löcher","en":"Edge disc Ø560 OFAS, 4 holes","nde":"","nen":"","zl":239},{"lp":12,"sym":"M-067","pl":"Talerz roboczy Ø510 z agresywnym uzębieniem OFAS 6 otworów","npl":"","img":"img/p/u622-12.webp","de":"Arbeitsscheibe Ø510, grob gezahnt, OFAS, 6 Löcher","en":"Working disc Ø510, aggressive notches, OFAS, 6 holes","nde":"","nen":"","zl":227},{"lp":13,"sym":"M-068","pl":"Talerz Ø510 skrajny OFAS 6 otworów","npl":"","img":"img/p/u622-13.webp","de":"Randscheibe Ø510 OFAS, 6 Löcher","en":"Edge disc Ø510 OFAS, 6 holes","nde":"","nen":"","zl":227},{"lp":14,"sym":"M-069","pl":"Talerz roboczy Ø560 z agresywnym uzębieniem OFAS 6 otworów","npl":"","img":"img/p/u622-14.webp","de":"Arbeitsscheibe Ø560, grob gezahnt, OFAS, 6 Löcher","en":"Working disc Ø560, aggressive notches, OFAS, 6 holes","nde":"","nen":"","zl":236},{"lp":15,"sym":"M-070","pl":"Talerz Ø560 skrajny OFAS 6 otworów","npl":"","img":"img/p/u622-15.webp","de":"Randscheibe Ø560 OFAS, 6 Löcher","en":"Edge disc Ø560 OFAS, 6 holes","nde":"","nen":"","zl":244},{"lp":16,"sym":"M-230","pl":"Talerz roboczy Ø510 z drobnym uzębieniem POLSKI 4 otwory","npl":"4 otwory, czas oczekiwania 14 dni roboczych","img":"img/p/u622-16.webp","de":"Arbeitsscheibe Ø510, fein gezahnt, polnische Fertigung, 4 Löcher","en":"Working disc Ø510, fine notches, Polish-made, 4 holes","nde":"4 Löcher, Lieferzeit 14 Arbeitstage","nen":"4 holes, lead time 14 working days","zl":182},{"lp":17,"sym":"M-228","pl":"Talerz roboczy Ø560 z drobnym uzębieniem POLSKI","npl":"4 otwory, czas oczekiwania 14 dni roboczych","img":"img/p/u622-17.webp","de":"Arbeitsscheibe Ø560, fein gezahnt, polnische Fertigung","en":"Working disc Ø560, fine notches, Polish-made","nde":"4 Löcher, Lieferzeit 14 Arbeitstage","nen":"4 holes, lead time 14 working days","zl":207},{"lp":18,"sym":"M-071A","pl":"Talerz roboczy Ø510 z drobnym uzębieniem POLSKI 6 otworów","npl":"","img":"img/p/u622-18.webp","de":"Arbeitsscheibe Ø510, fein gezahnt, polnische Fertigung, 6 Löcher","en":"Working disc Ø510, fine notches, Polish-made, 6 holes","nde":"","nen":"","zl":179},{"lp":19,"sym":"M-073A","pl":"Talerz roboczy Ø560 z drobnym uzębieniem POLSKI 6 otworów","npl":"","img":"img/p/u622-19.webp","de":"Arbeitsscheibe Ø560, fein gezahnt, polnische Fertigung, 6 Löcher","en":"Working disc Ø560, fine notches, Polish-made, 6 holes","nde":"","nen":"","zl":229},{"lp":20,"sym":"M-244","pl":"Talerz roboczy Ø560 z agresywnym uzębieniem POLSKI","npl":"4 otwory","img":"img/p/u622-20.webp","de":"Arbeitsscheibe Ø560, grob gezahnt, polnische Fertigung","en":"Working disc Ø560, aggressive notches, Polish-made","nde":"4 Löcher","nen":"4 holes","zl":212},{"lp":21,"sym":"M-245","pl":"Talerz roboczy Ø510 z agresywnym uzębieniem POLSKI","npl":"4 otwory","img":"img/p/u622-21.webp","de":"Arbeitsscheibe Ø510, grob gezahnt, polnische Fertigung","en":"Working disc Ø510, aggressive notches, Polish-made","nde":"4 Löcher","nen":"4 holes","zl":180},{"lp":22,"sym":"M-073","pl":"Talerz roboczy Ø560 z agresywnym uzębieniem POLSKI","npl":"6 otworów","img":"img/p/u622-22.webp","de":"Arbeitsscheibe Ø560, grob gezahnt, polnische Fertigung","en":"Working disc Ø560, aggressive notches, Polish-made","nde":"6 Löcher","nen":"6 holes","zl":225},{"lp":23,"sym":"M-071","pl":"Talerz roboczy Ø510 z agresywnym uzębieniem POLSKI","npl":"6 otworów","img":"img/p/u622-23.webp","de":"Arbeitsscheibe Ø510, grob gezahnt, polnische Fertigung","en":"Working disc Ø510, aggressive notches, Polish-made","nde":"6 Löcher","nen":"6 holes","zl":194},{"lp":24,"sym":"B-458A","pl":"Mocowanie sprężynki zgrzebła za wałem","npl":"","img":"img/p/u622-24.webp","de":"Halter Striegelfeder hinter der Walze","en":"Mount for harrow spring behind roller","nde":"","nen":"","zl":53},{"lp":25,"sym":"M-061","pl":"Sprężynka zgrzebła sprężynowego za wałem","npl":"","img":"img/p/u622-25.webp","de":"Feder Federstriegel hinter der Walze","en":"Spring for spring harrow behind roller","nde":"","nen":"","zl":60},{"lp":26,"sym":"M-016","pl":"Zespół łożyskowy wału UCF 208","npl":"łożysko D208, średnica wewn. 40 mm, rozstaw otworów 102 mm","img":"img/p/u622-26.webp","de":"Walzen-Flanschlager UCF 208","en":"Roller bearing unit UCF 208","nde":"Lager D208, Innendurchmesser 40 mm, Lochabstand 102 mm","nen":"bearing D208, inner diameter 40 mm, hole spacing 102 mm","zl":165},{"lp":27,"sym":"M-017","pl":"Zespół łożyskowy wału UCF 210","npl":"łożysko D210, średnica wewn. 50 mm, rozstaw otworów 111 mm","img":"img/p/u622-27.webp","de":"Walzen-Flanschlager UCF 210","en":"Roller bearing unit UCF 210","nde":"Lager D210, Innendurchmesser 50 mm, Lochabstand 111 mm","nen":"bearing D210, inner diameter 50 mm, hole spacing 111 mm","zl":227},{"lp":28,"sym":"WA-083","pl":"Obręcz wału sprężynowego Ø470","npl":"","img":"img/p/u622-28.webp","de":"Ring der Federwalze Ø470","en":"Spring roller hoop Ø470","nde":"","nen":"","zl":216},{"lp":29,"sym":"WA-123","pl":"Obręcz wału sprężynowego Ø550","npl":"","img":"img/p/u622-29.webp","de":"Ring der Federwalze Ø550","en":"Spring roller hoop Ø550","nde":"","nen":"","zl":220},{"lp":30,"sym":"WA-057","pl":"Koło gumowe Ø500 (robocze)","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-30.webp","de":"Gummiring Ø500 (Arbeitsring)","en":"Rubber ring Ø500 (working)","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":142},{"lp":31,"sym":"WA-056","pl":"Dystans gumowy Ø500","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-31.webp","de":"Gummi-Distanzring Ø500","en":"Rubber spacer Ø500","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":47},{"lp":32,"sym":"M-252","pl":"Koło gumowe Ø500 (robocze)","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-32.webp","de":"Gummiring Ø500 (Arbeitsring)","en":"Rubber ring Ø500 (working)","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":137},{"lp":33,"sym":"M-253","pl":"Koło zewnętrzne Ø500","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-33.webp","de":"Außenring Ø500","en":"Outer ring Ø500","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":151},{"lp":34,"sym":"WA-046","pl":"Końcówka skrobaka wału gumowego","npl":"","img":"img/p/u622-34.webp","de":"Abstreiferspitze Gummiwalze","en":"Scraper tip, rubber roller","nde":"","nen":"","zl":29},{"lp":35,"sym":"WA-047","pl":"Uchwyt skrobaka podwójny wału gumowego","npl":"","img":"img/p/u622-35.webp","de":"Abstreiferhalter doppelt, Gummiwalze","en":"Double scraper holder, rubber roller","nde":"","nen":"","zl":69},{"lp":36,"sym":"WA-045","pl":"Uchwyt skrobaka pojedynczy wału gumowego","npl":"","img":"img/p/u622-36.webp","de":"Abstreiferhalter einfach, Gummiwalze","en":"Single scraper holder, rubber roller","nde":"","nen":"","zl":53},{"lp":37,"sym":"WA-024","pl":"Płytka mocująca dolna skrobaka","npl":"","img":"img/p/u622-37.webp","de":"Abstreifer-Klemmplatte unten","en":"Scraper clamping plate, lower","nde":"","nen":"","zl":18.2},{"lp":38,"sym":"WA-157","pl":"Płytka mocująca górna skrobaka","npl":"","img":"img/p/u622-38.webp","de":"Abstreifer-Klemmplatte oben","en":"Scraper clamping plate, upper","nde":"","nen":"","zl":18.1},{"lp":39,"sym":"WA-014","pl":"Końcówka skrobaka wału Packer","npl":"","img":"img/p/u622-39.webp","de":"Abstreiferspitze Packerwalze","en":"Scraper tip, packer roller","nde":"","nen":"","zl":30},{"lp":40,"sym":"WA-015","pl":"Uchwyt skrobaka potrójny wału Packer","npl":"","img":"img/p/u622-40.webp","de":"Abstreiferhalter dreifach, Packerwalze","en":"Triple scraper holder, packer roller","nde":"","nen":"","zl":81},{"lp":41,"sym":"WA-092","pl":"Uchwyt skrobaka wału z pierścieni stalowych","npl":"","img":"img/p/u622-41.webp","de":"Abstreiferhalter Stahlringwalze","en":"Scraper holder, steel ring roller","nde":"","nen":"","zl":56},{"lp":42,"sym":"ZWA-086","pl":"Mocowanie skrobaka wału z pierścieni stalowych","npl":"","img":"img/p/u622-42.webp","de":"Abstreiferbefestigung Stahlringwalze","en":"Scraper mount, steel ring roller","nde":"","nen":"","zl":54},{"lp":43,"sym":"WA-160","pl":"Nakładka wału z pierścieni stalowych","npl":"","img":"img/p/u622-43.webp","de":"Auflage Stahlringwalze","en":"Steel ring roller blade","nde":"","nen":"","zl":36},{"lp":44,"sym":"M-242","pl":"Uchwyt skrobaka wału U-ring/T-ring","npl":"","img":"img/p/u622-44.webp","de":"Abstreiferhalter U-Ring/T-Ring-Walze","en":"Scraper holder, U-ring/T-ring roller","nde":"","nen":"","zl":51},{"lp":45,"sym":"M-243","pl":"Końcówka skrobaka wału U-ring/T-ring","npl":"","img":"img/p/u622-45.webp","de":"Abstreiferspitze U-Ring/T-Ring-Walze","en":"Scraper tip, U-ring/T-ring roller","nde":"","nen":"","zl":28},{"lp":46,"sym":"B-570","pl":"Mocowanie uchwytu skrobaka wału U-ring/T-ring","npl":"","img":"img/p/u622-46.webp","de":"Halterung Abstreiferträger U-Ring/T-Ring-Walze","en":"Scraper holder mount, U-ring/T-ring roller","nde":"","nen":"","zl":53},{"lp":47,"sym":"WA-042","pl":"Koło CROSSKILL Ø400 (wewnętrzne)","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-47.webp","de":"CROSSKILL-Ring Ø400 (innen)","en":"CROSSKILL ring Ø400 (inner)","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":154},{"lp":48,"sym":"WA-084","pl":"Koło krańcowe CROSSKILL Ø400","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-48.webp","de":"CROSSKILL-Endring Ø400","en":"CROSSKILL end ring Ø400","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":179},{"lp":49,"sym":"WA-124","pl":"Koło krańcowe CROSSKILL Ø500","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-49.webp","de":"CROSSKILL-Endring Ø500","en":"CROSSKILL end ring Ø500","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":181},{"lp":50,"sym":"WA-125","pl":"Koło CROSSKILL Ø500 (wewnętrzne)","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-50.webp","de":"CROSSKILL-Ring Ø500 (innen)","en":"CROSSKILL ring Ø500 (inner)","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":156},{"lp":51,"sym":"M-020","pl":"Jarzmo M12 na profil 80x80","npl":"","img":"img/p/u622-51.webp","de":"U-Bügel M12 für Profil 80x80","en":"U-bolt M12 for 80x80 profile","nde":"","nen":"","zl":22},{"lp":52,"sym":"WA-046A","pl":"Nakładka skrobaka wału gumowego szeroka","npl":"przy zamówieniu podaj numer seryjny maszyny","img":"img/p/u622-52.webp","de":"Abstreiferauflage Gummiwalze, breit","en":"Wide scraper blade, rubber roller","nde":"bei der Bestellung bitte Seriennummer der Maschine angeben","nen":"please give the machine serial number when ordering","zl":35},{"lp":53,"sym":"M-214A","pl":"Jarzmo M12 na profil 50x50","npl":"","img":"img/p/u622-53.webp","de":"U-Bügel M12 für Profil 50x50","en":"U-bolt M12 for 50x50 profile","nde":"","nen":"","zl":21},{"lp":54,"sym":"WA-016","pl":"Uchwyt skrobaka Packer","npl":"","img":"img/p/u622-54.webp","de":"Abstreiferhalter Packer","en":"Packer scraper holder","nde":"","nen":"","zl":51},{"lp":55,"sym":"M-233","pl":"Tablica wyróżniająca 423x423","npl":"","img":"img/p/u622-55.webp","de":"Warntafel 423x423","en":"Warning sign 423x423","nde":"","nen":"","zl":70},{"lp":56,"sym":"M-059","pl":"Odblask trójkąt","npl":"","img":"img/p/u622-56.webp","de":"Rückstrahler Dreieck","en":"Triangle reflector","nde":"","nen":"","zl":8.1},{"lp":57,"sym":"M-038","pl":"Odblask pomarańczowy kwadratowy","npl":"","img":"img/p/u622-57.webp","de":"Rückstrahler orange, quadratisch","en":"Orange reflector, square","nde":"","nen":"","zl":8.3},{"lp":58,"sym":"M-235","pl":"Lampa LED","npl":"","img":"img/p/u622-58.webp","de":"LED-Leuchte","en":"LED lamp","nde":"","nen":"","zl":94},{"lp":59,"sym":"M-236","pl":"Wtyczka do świateł","npl":"","img":"img/p/u622-59.webp","de":"Stecker Beleuchtung","en":"Lighting plug","nde":"","nen":"","zl":37},{"lp":60,"sym":"M-239","pl":"Kompletna śruba talerza – piasta obsługowa (6 otworów)","npl":"w komplecie: śruba M12x35, nakrętka, podkładka","img":"img/p/u622-60.webp","de":"Scheibenschraubensatz – wartungspflichtige Nabe (6 Löcher)","en":"Disc bolt set – serviceable hub (6 holes)","nde":"Satz: Schraube M12x35, Mutter, Scheibe","nen":"set: bolt M12x35, nut, washer","zl":11.4},{"lp":61,"sym":"M-240","pl":"Kompletna śruba talerza – piasta bezobsługowa (4 otwory)","npl":"w komplecie: śruba M12x1,25x20, podkładka","img":"img/p/u622-61.webp","de":"Scheibenschraubensatz – wartungsfreie Nabe (4 Löcher)","en":"Disc bolt set – maintenance-free hub (4 holes)","nde":"Satz: Schraube M12x1,25x20, Scheibe","nen":"set: bolt M12x1.25x20, washer","zl":11.9},{"lp":62,"sym":"M-063","pl":"Piasta sześciootworowa żebrowana","npl":"wykonywana wg rysunku Rolmako","img":"img/p/u622-62.webp","de":"Sechsloch-Nabe, gerippt","en":"Six-hole ribbed hub","nde":"gefertigt nach Rolmako-Zeichnung","nen":"made to Rolmako drawing","zl":198},{"lp":63,"sym":"M-064","pl":"Uszczelniacz simering","npl":"35x62x10 mm","img":"img/p/u622-63.webp","de":"Wellendichtring (Simmerring)","en":"Shaft seal (oil seal)","nde":"35x62x10 mm","nen":"35x62x10 mm","zl":15.4},{"lp":64,"sym":"M-241","pl":"Łożysko stożkowe SKF","npl":"rozmiar 30206","img":"img/p/u622-64.webp","de":"Kegelrollenlager SKF","en":"Tapered roller bearing SKF","nde":"Größe 30206","nen":"size 30206","zl":65},{"lp":65,"sym":"M-030","pl":"Łożysko stożkowe KFŁT Kraśnik","npl":"rozmiar 30206","img":"img/p/u622-65.webp","de":"Kegelrollenlager KFŁT Kraśnik","en":"Tapered roller bearing KFŁT Kraśnik","nde":"Größe 30206","nen":"size 30206","zl":42},{"lp":66,"sym":"M-065","pl":"Podkładka łożyskowa MB06","npl":"","img":"img/p/u622-66.webp","de":"Sicherungsblech MB06","en":"Bearing lock washer MB06","nde":"","nen":"","zl":7.2},{"lp":67,"sym":"M-066","pl":"Nakrętka łożyskowa","npl":"KM06","img":"img/p/u622-67.webp","de":"Nutmutter","en":"Bearing lock nut","nde":"KM06","nen":"KM06","zl":14.5},{"lp":68,"sym":"M-036","pl":"O-ring 70x3","npl":"","img":"img/p/u622-68.webp","de":"O-Ring 70x3","en":"O-ring 70x3","nde":"","nen":"","zl":5.7},{"lp":69,"sym":"B-331","pl":"Śruba M24 ze smarownikiem","npl":"","img":"img/p/u622-69.webp","de":"Schraube M24 mit Schmiernippel","en":"Bolt M24 with grease nipple","nde":"","nen":"","zl":9.2},{"lp":70,"sym":"ZB-791","pl":"Sworzeń belki zgrzebła sprężynowego","npl":"","img":"img/p/u622-70.webp","de":"Bolzen Federstriegelbalken","en":"Spring harrow beam pin","nde":"","nen":"","zl":61},{"lp":71,"sym":"ZBC-028","pl":"Sworzeń belki zaczepowej","npl":"","img":"img/p/u622-71.webp","de":"Bolzen Anbaubalken","en":"Hitch beam pin","nde":"","nen":"","zl":67},{"lp":72,"sym":"ZBC-026","pl":"Sworzeń – regulacja głębokości wału","npl":"","img":"img/p/u622-72.webp","de":"Bolzen – Walzentiefenverstellung","en":"Pin – roller depth adjustment","nde":"","nen":"","zl":63},{"lp":73,"sym":"ZB-011","pl":"Sworzeń zgrzebła sprężynowego","npl":"","img":"img/p/u622-73.webp","de":"Bolzen Federstriegel","en":"Spring harrow pin","nde":"","nen":"","zl":66},{"lp":74,"sym":"B-709","pl":"Sworzeń zawiasu pozycji transportowej","npl":"dotyczy tylko wersji 3,0 m","img":"img/p/u622-74.webp","de":"Scharnierbolzen Transportstellung","en":"Transport position hinge pin","nde":"nur für die 3,0-m-Version","nen":"3.0 m version only","zl":66},{"lp":75,"sym":"M-027","pl":"Smarowniczka prosta M6x1","npl":"","img":"img/p/u622-75.webp","de":"Schmiernippel gerade M6x1","en":"Grease nipple, straight M6x1","nde":"","nen":"","zl":4.2},{"lp":76,"sym":"M-248","pl":"Nakrętka M22x1,5 samokontrująca","npl":"","img":"img/p/u622-76.webp","de":"Sicherungsmutter M22x1,5","en":"Self-locking nut M22x1.5","nde":"","nen":"","zl":6},{"lp":77,"sym":"M-250","pl":"Podkładka Ø22","npl":"","img":"img/p/u622-77.webp","de":"Unterlegscheibe Ø22","en":"Washer Ø22","nde":"","nen":"","zl":4},{"lp":78,"sym":"B-280B","pl":"Osłona piasty","npl":"","img":"img/p/u622-78.webp","de":"Nabenkappe","en":"Hub cover","nde":"","nen":"","zl":26},{"lp":79,"sym":"B-695","pl":"Oś piasty talerza","npl":"","img":"img/p/u622-79.webp","de":"Scheibennabenachse","en":"Disc hub axle","nde":"","nen":"","zl":144}],"draws":[{"src":"img/d/u622-1.webp","w":1700,"h":931,"labels":[{"t":"1","n":[1],"x":0.088,"y":0.379},{"t":"2","n":[2],"x":0.0834,"y":0.5109},{"t":"3,4,5,6","n":[3,4,5,6],"x":0.1998,"y":0.838},{"t":"7-23","n":[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],"x":0.1098,"y":0.838},{"t":"24,25,53","n":[24,25,53],"x":0.8885,"y":0.4147},{"t":"26,27","n":[26,27],"x":0.3996,"y":0.9419},{"t":"56-59","n":[56,57,58,59],"x":0.7983,"y":0.0616}]},{"src":"img/d/u622-2.webp","w":1700,"h":941,"labels":[{"t":"73","n":[73],"x":0.8657,"y":0.4962},{"t":"70","n":[70],"x":0.7714,"y":0.3595},{"t":"69","n":[69],"x":0.7364,"y":0.8819},{"t":"72","n":[72],"x":0.692,"y":0.8819},{"t":"74","n":[74],"x":0.2846,"y":0.1471},{"t":"60,61","n":[60,61],"x":0.3076,"y":0.9425},{"t":"55-59","n":[55,56,57,58,59],"x":0.5896,"y":0.0551},{"t":"25","n":[25],"x":0.9192,"y":0.605},{"t":"24,53","n":[24,53],"x":0.7836,"y":0.8819}]},{"src":"img/d/u622-3.webp","w":1700,"h":988,"labels":[{"t":"68","n":[68],"x":0.1821,"y":0.4476},{"t":"67","n":[67],"x":0.2239,"y":0.4476},{"t":"66","n":[66],"x":0.2696,"y":0.4476},{"t":"64,65","n":[64,65],"x":0.3153,"y":0.4476},{"t":"62","n":[62],"x":0.393,"y":0.4476},{"t":"75","n":[75],"x":0.3613,"y":0.0608},{"t":"64,65","n":[64,65],"x":0.4872,"y":0.4491},{"t":"63","n":[63],"x":0.5381,"y":0.4476},{"t":"79","n":[79],"x":0.598,"y":0.4463},{"t":"78","n":[78],"x":0.701,"y":0.4476},{"t":"77","n":[77],"x":0.7535,"y":0.4476},{"t":"76","n":[76],"x":0.7953,"y":0.4476},{"t":"5,6","n":[5,6],"x":0.4172,"y":0.9506},{"t":"76","n":[76],"x":0.5782,"y":0.8715}]},{"src":"img/d/u622-4.webp","w":1700,"h":907,"labels":[{"t":"30","n":[30],"x":0.8331,"y":0.071},{"t":"31","n":[31],"x":0.799,"y":0.0501},{"t":"35","n":[35],"x":0.7259,"y":0.4379},{"t":"34","n":[34],"x":0.8559,"y":0.4422},{"t":"37,38","n":[37,38],"x":0.7931,"y":0.4391},{"t":"44,45,46","n":[44,45,46],"x":0.4933,"y":0.0914},{"t":"35","n":[35],"x":0.6056,"y":0.3726},{"t":"37,38","n":[37,38],"x":0.6709,"y":0.3726},{"t":"51","n":[51],"x":0.6736,"y":0.3161},{"t":"32","n":[32],"x":0.6313,"y":0.0942},{"t":"33","n":[33],"x":0.599,"y":0.0942},{"t":"47,50","n":[47,50],"x":0.2352,"y":0.1201},{"t":"48,49","n":[48,49],"x":0.1503,"y":0.1531},{"t":"42","n":[42],"x":0.5722,"y":0.938},{"t":"41","n":[41],"x":0.3403,"y":0.6871},{"t":"43","n":[43],"x":0.572,"y":0.9051},{"t":"50","n":[50],"x":0.3492,"y":0.9403},{"t":"54","n":[54],"x":0.8141,"y":0.9233},{"t":"40","n":[40],"x":0.8141,"y":0.8956},{"t":"39","n":[39],"x":0.8141,"y":0.8692}]}]},{"id":"u626","model":"U 626","photo":"img/m/u626.webp","parts":[{"lp":1,"sym":"M-546A","pl":"Dłuto zęba STORM lewe","npl":"","img":"img/p/u626-1.webp","de":"Schar für STORM-Zinken, links","en":"STORM tine point, left","nde":"","nen":"","zl":139},{"lp":2,"sym":"M-551","pl":"Dłuto zęba STORM prawe","npl":"","img":"img/p/u626-2.webp","de":"Schar für STORM-Zinken, rechts","en":"STORM tine point, right","nde":"","nen":"","zl":149},{"lp":3,"sym":"M-552","pl":"Dłuto zęba STORM napawane lewe","npl":"","img":"img/p/u626-3.webp","de":"Schar für STORM-Zinken, aufgepanzert, links","en":"STORM tine point, hardfaced, left","nde":"","nen":"","zl":236},{"lp":4,"sym":"M-546","pl":"Dłuto zęba STORM napawane prawe","npl":"","img":"img/p/u626-4.webp","de":"Schar für STORM-Zinken, aufgepanzert, rechts","en":"STORM tine point, hardfaced, right","nde":"","nen":"","zl":220},{"lp":5,"sym":"M-548","pl":"Osłona zęba STORM","npl":"","img":"img/p/u626-5.webp","de":"Zinkenschutz STORM","en":"STORM tine guard","nde":"","nen":"","zl":164},{"lp":6,"sym":"M-548A","pl":"Osłona zęba STORM prawa","npl":"","img":"img/p/u626-6.webp","de":"Zinkenschutz STORM, rechts","en":"STORM tine guard, right","nde":"","nen":"","zl":164},{"lp":7,"sym":"M-513","pl":"Ząb STORM prawy","npl":"","img":"img/p/u626-7.webp","de":"Zinken STORM, rechts","en":"STORM tine, right","nde":"","nen":"","zl":686},{"lp":8,"sym":"M-512","pl":"Ząb STORM lewy","npl":"","img":"img/p/u626-8.webp","de":"Zinken STORM, links","en":"STORM tine, left","nde":"","nen":"","zl":726},{"lp":9,"sym":"M-227B","pl":"Słupica ślimakowa tylna","npl":"","img":"img/p/u626-9.webp","de":"Scheibenstiel mit Spiralfeder hinten","en":"Coil-spring disc arm, rear","nde":"","nen":"","zl":627},{"lp":10,"sym":"ZBBA-056A","pl":"Mocowanie piasty tylne","npl":"","img":"img/p/u626-10.webp","de":"Nabenhalter hinten","en":"Hub mount, rear","nde":"","nen":"","zl":50},{"lp":11,"sym":"M-514","pl":"Sprężyna STORM zewnętrzna","npl":"","img":"img/p/u626-11.webp","de":"Feder STORM außen","en":"STORM spring, outer","nde":"","nen":"","zl":114},{"lp":12,"sym":"M-515","pl":"Sprężyna STORM wewnętrzna","npl":"","img":"img/p/u626-12.webp","de":"Feder STORM innen","en":"STORM spring, inner","nde":"","nen":"","zl":118},{"lp":13,"sym":"M-081","pl":"Talerz roboczy Ø560 z agresywnym uzębieniem OFAS","npl":"4 otwory","img":"img/p/u626-13.webp","de":"Arbeitsscheibe Ø560, grob gezahnt, OFAS","en":"Working disc Ø560, aggressive notches, OFAS","nde":"4 Löcher","nen":"4 holes","zl":246},{"lp":14,"sym":"M-537","pl":"Piasta AgriHub SMART","npl":"","img":"img/p/u626-14.webp","de":"Nabe AgriHub SMART","en":"AgriHub SMART hub","nde":"","nen":"","zl":696},{"lp":15,"sym":"M-017","pl":"Zespół łożyskowy obsługowy UCF 210","npl":"","img":"img/p/u626-15.webp","de":"Flanschlager mit Schmierung UCF 210","en":"Greasable bearing unit UCF 210","nde":"","nen":"","zl":227},{"lp":16,"sym":"M-326","pl":"Zespół łożyskowy bezobsługowy UCF 210","npl":"","img":"img/p/u626-16.webp","de":"Flanschlager wartungsfrei UCF 210","en":"Maintenance-free bearing unit UCF 210","nde":"","nen":"","zl":268},{"lp":17,"sym":"M-435","pl":"Ogranicznik skoku duży","npl":"","img":"img/p/u626-17.webp","de":"Hubbegrenzer groß","en":"Stroke limiter, large","nde":"","nen":"","zl":30},{"lp":18,"sym":"M-436","pl":"Ogranicznik skoku 9,5 mm","npl":"","img":"img/p/u626-18.webp","de":"Hubbegrenzer 9,5 mm","en":"Stroke limiter 9.5 mm","nde":"","nen":"","zl":33},{"lp":19,"sym":"M-059","pl":"Odblask trójkąt","npl":"","img":"img/p/u626-19.webp","de":"Rückstrahler Dreieck","en":"Triangle reflector","nde":"","nen":"","zl":8.1},{"lp":20,"sym":"M-386","pl":"Pojemnik na instrukcję","npl":"","img":"img/p/u626-20.webp","de":"Dokumentenrolle","en":"Manual holder","nde":"","nen":"","zl":48},{"lp":21,"sym":"M-233","pl":"Tablica wyróżniająca 423x423","npl":"","img":"img/p/u626-21.webp","de":"Warntafel 423x423","en":"Warning sign 423x423","nde":"","nen":"","zl":70},{"lp":22,"sym":"M-236","pl":"Wtyczka 7-pin","npl":"","img":"img/p/u626-22.webp","de":"Stecker 7-polig","en":"7-pin plug","nde":"","nen":"","zl":37},{"lp":23,"sym":"M-235","pl":"Lampa LED","npl":"nowy typ","img":"img/p/u626-23.webp","de":"LED-Leuchte","en":"LED lamp","nde":"neuer Typ","nen":"new type","zl":94},{"lp":24,"sym":"M-248","pl":"Nakrętka M22x1,5 DIN 985 ocynk kl. 8","npl":"","img":"img/p/u626-24.webp","de":"Mutter M22x1,5 DIN 985 verzinkt Kl. 8","en":"Nut M22x1.5 DIN 985 galvanised cl. 8","nde":"","nen":"","zl":6},{"lp":25,"sym":"","pl":"Kołek sprężysty Ø16x40","npl":"przychodzi razem z kołkiem Ø10x40, który należy zamówić osobno","img":"img/p/u626-25.webp","de":"Spannstift Ø16x40","en":"Spring pin Ø16x40","nde":"wird mit Spannstift Ø10x40 verbaut – bitte separat bestellen","nen":"fitted together with spring pin Ø10x40 – order it separately","zl":2.8},{"lp":26,"sym":"","pl":"Kołek sprężysty Ø10x40","npl":"przychodzi razem z kołkiem Ø16x40, który należy zamówić osobno","img":"img/p/u626-26.webp","de":"Spannstift Ø10x40","en":"Spring pin Ø10x40","nde":"wird mit Spannstift Ø16x40 verbaut – bitte separat bestellen","nen":"fitted together with spring pin Ø16x40 – order it separately","zl":3},{"lp":27,"sym":"M-084","pl":"Amortyzator gumowy brony talerzowej 40x180","npl":"","img":"img/p/u626-27.webp","de":"Gummidämpfer Scheibenegge 40x180","en":"Rubber shock absorber, disc harrow 40x180","nde":"","nen":"","zl":44},{"lp":28,"sym":"","pl":"Śruba M12x1,25x20 kl. 10.9 DIN 933","npl":"zamiennie kl. 8.8 ocynk","img":"img/p/u626-28.webp","de":"Schraube M12x1,25x20 Kl. 10.9 DIN 933","en":"Bolt M12x1.25x20 cl. 10.9 DIN 933","nde":"alternativ Kl. 8.8 verzinkt","nen":"alternative: cl. 8.8 galvanised","zl":9.5},{"lp":29,"sym":"","pl":"Śruba z nakrętką 12x25 mm do mocowania osłony","npl":"","img":"img/p/u626-29.webp","de":"Schraube mit Mutter 12x25 mm für Schutzbefestigung","en":"Bolt with nut 12x25 mm for guard mounting","nde":"","nen":"","zl":8.9},{"lp":30,"sym":"","pl":"Sworzeń zaczepowy 32x125","npl":"","img":"img/p/u626-30.webp","de":"Anbaubolzen 32x125","en":"Hitch pin 32x125","nde":"","nen":"","zl":67}],"draws":[{"src":"img/d/u626-1.webp","w":1700,"h":1384,"labels":[]}]},{"id":"u624","model":"U 624","photo":"img/m/u624.webp","parts":[{"lp":1,"sym":"M-407","pl":"Redlica do zęba pługa dłutowego","npl":"redlice dwustronne lub jednostronne – w zależności od dostępności","img":"img/p/u624-1.webp","de":"Schar für Meißelpflug-Zinken","en":"Point for chisel plough tine","nde":"beidseitig oder einseitig – je nach Verfügbarkeit","nen":"double- or single-sided – depending on availability","zl":89},{"lp":2,"sym":"M-416","pl":"Redlica napawana do zęba pługa dłutowego","npl":"","img":"img/p/u624-2.webp","de":"Schar aufgepanzert für Meißelpflug-Zinken","en":"Hardfaced point for chisel plough tine","nde":"","nen":"","zl":136},{"lp":3,"sym":"M-417","pl":"Redlica z węglikiem spiekanym do zęba pługa dłutowego","npl":"","img":"img/p/u624-3.webp","de":"Hartmetallschar für Meißelpflug-Zinken","en":"Carbide point for chisel plough tine","nde":"","nen":"","zl":251},{"lp":4,"sym":"M-408","pl":"Grządziel do zęba pługa dłutowego","npl":"","img":"img/p/u624-4.webp","de":"Grindel für Meißelpflug-Zinken","en":"Shank for chisel plough tine","nde":"","nen":"","zl":516},{"lp":5,"sym":"M-415","pl":"Podcinacz do zęba pługa dłutowego lewy","npl":"","img":"img/p/u624-5.webp","de":"Flügelschar für Meißelpflug-Zinken, links","en":"Wing for chisel plough tine, left","nde":"","nen":"","zl":99},{"lp":6,"sym":"M-415A","pl":"Podcinacz do zęba pługa dłutowego prawy","npl":"","img":"img/p/u624-6.webp","de":"Flügelschar für Meißelpflug-Zinken, rechts","en":"Wing for chisel plough tine, right","nde":"","nen":"","zl":100},{"lp":7,"sym":"M-409","pl":"Podcinacz napawany do zęba pługa dłutowego lewy","npl":"","img":"img/p/u624-7.webp","de":"Flügelschar aufgepanzert für Meißelpflug-Zinken, links","en":"Hardfaced wing for chisel plough tine, left","nde":"","nen":"","zl":151},{"lp":8,"sym":"M-409A","pl":"Podcinacz napawany do zęba pługa dłutowego prawy","npl":"","img":"img/p/u624-8.webp","de":"Flügelschar aufgepanzert für Meißelpflug-Zinken, rechts","en":"Hardfaced wing for chisel plough tine, right","nde":"","nen":"","zl":144},{"lp":9,"sym":"","pl":"Śruba M14x90 kl. 10.9 DIN 931 ocynk","npl":"","img":"img/p/u624-9.webp","de":"Schraube M14x90 Kl. 10.9 DIN 931 verzinkt","en":"Bolt M14x90 cl. 10.9 DIN 931 galvanised","nde":"","nen":"","zl":8.5},{"lp":10,"sym":"","pl":"Śruba M24x90 kl. 10.9 DIN 931 ocynk","npl":"","img":"img/p/u624-10.webp","de":"Schraube M24x90 Kl. 10.9 DIN 931 verzinkt","en":"Bolt M24x90 cl. 10.9 DIN 931 galvanised","nde":"","nen":"","zl":8.5},{"lp":11,"sym":"","pl":"Kołek sprężysty Ø13x50","npl":"","img":"img/p/u624-11.webp","de":"Spannstift Ø13x50","en":"Spring pin Ø13x50","nde":"","nen":"","zl":2.9},{"lp":12,"sym":"","pl":"Kołek sprężysty Ø5x50","npl":"","img":"img/p/u624-12.webp","de":"Spannstift Ø5x50","en":"Spring pin Ø5x50","nde":"","nen":"","zl":3},{"lp":13,"sym":"ZPD-0007","pl":"Rozbijacz brył do pługa dłutowego","npl":"","img":"img/p/u624-13.webp","de":"Krümler für Meißelpflug","en":"Clod breaker for chisel plough","nde":"","nen":"","zl":962},{"lp":14,"sym":"MH-001","pl":"Manometr","npl":"","img":"img/p/u624-14.webp","de":"Manometer","en":"Pressure gauge","nde":"","nen":"","zl":90},{"lp":15,"sym":"MH-093","pl":"Dzielnik strumienia DFL","npl":"","img":"img/p/u624-15.webp","de":"Stromteiler DFL","en":"Flow divider DFL","nde":"","nen":"","zl":498},{"lp":16,"sym":"","pl":"Sworzeń zaczepowy 32x125","npl":"","img":"img/p/u624-16.webp","de":"Anbaubolzen 32x125","en":"Hitch pin 32x125","nde":"","nen":"","zl":67},{"lp":17,"sym":"MH-047","pl":"Zawór przeciążeniowo-blokujący","npl":"","img":"img/p/u624-17.webp","de":"Überlast-Sperrventil","en":"Overload/lock valve","nde":"","nen":"","zl":448},{"lp":18,"sym":"MH-016","pl":"Akumulator gazowy hydrauliczny","npl":"","img":"img/p/u624-18.webp","de":"Hydraulikspeicher (Gas)","en":"Hydraulic gas accumulator","nde":"","nen":"","zl":1332},{"lp":19,"sym":"MH-096","pl":"Zawór przelewowy głębosza","npl":"","img":"img/p/u624-19.webp","de":"Überströmventil Tiefenlockerer","en":"Subsoiler relief valve","nde":"","nen":"","zl":459},{"lp":20,"sym":"M-020","pl":"Jarzmo M12 na profil 80x80","npl":"","img":"img/p/u624-20.webp","de":"U-Bügel M12 für Profil 80x80","en":"U-bolt M12 for 80x80 profile","nde":"","nen":"","zl":22},{"lp":21,"sym":"MH-064","pl":"Kostka rozdzielająca hydrauliczna, 12 wyjść","npl":"","img":"img/p/u624-21.webp","de":"Hydraulikverteiler, 12 Ausgänge","en":"Hydraulic distribution block, 12 outlets","nde":"","nen":"","zl":523},{"lp":22,"sym":"MH-120","pl":"Kostka rozdzielająca hydrauliczna, 10 wyjść","npl":"","img":"img/p/u624-22.webp","de":"Hydraulikverteiler, 10 Ausgänge","en":"Hydraulic distribution block, 10 outlets","nde":"","nen":"","zl":497},{"lp":23,"sym":"M-419","pl":"Płyta ślizgowa 11x63x100","npl":"","img":"img/p/u624-23.webp","de":"Gleitplatte 11x63x100","en":"Slide plate 11x63x100","nde":"","nen":"","zl":61},{"lp":24,"sym":"","pl":"Obejma butli pługa dłutowego","npl":"","img":"img/p/u624-24.webp","de":"Speicherschelle Meißelpflug","en":"Accumulator clamp, chisel plough","nde":"","nen":"","zl":44},{"lp":25,"sym":"M-418","pl":"Łącznik górny M30, 140 mm","npl":"","img":"img/p/u624-25.webp","de":"Oberlenker M30, 140 mm","en":"Top link M30, 140 mm","nde":"","nen":"","zl":437},{"lp":26,"sym":"MH-139","pl":"Siłownik hydrauliczny składania skrajnych talerzy","npl":"","img":"img/p/u624-26.webp","de":"Hydraulikzylinder Klappung Randscheiben","en":"Hydraulic cylinder for folding edge discs","nde":"","nen":"","zl":1751},{"lp":27,"sym":"MH-163","pl":"Siłownik Gaspardo","npl":"","img":"img/p/u624-27.webp","de":"Hydraulikzylinder Gaspardo","en":"Gaspardo hydraulic cylinder","nde":"","nen":"","zl":1597},{"lp":28,"sym":"M-462","pl":"Ząb wału kuty","npl":"","img":"img/p/u624-28.webp","de":"Walzenzahn geschmiedet","en":"Forged roller tooth","nde":"","nen":"","zl":40},{"lp":29,"sym":"M-297","pl":"Jarzmo typu D 100x100 M20","npl":"wersja LIGHT","img":"img/p/u624-29.webp","de":"U-Bügel Typ D 100x100 M20","en":"U-bolt type D 100x100 M20","nde":"Version LIGHT","nen":"LIGHT version","zl":46},{"lp":30,"sym":"M-017","pl":"Zespół łożyskowy obsługowy UCF 210","npl":"","img":"img/p/u624-30.webp","de":"Flanschlager mit Schmierung UCF 210","en":"Greasable bearing unit UCF 210","nde":"","nen":"","zl":227},{"lp":31,"sym":"M-326","pl":"Zespół łożyskowy bezobsługowy UCF 210","npl":"","img":"img/p/u624-31.webp","de":"Flanschlager wartungsfrei UCF 210","en":"Maintenance-free bearing unit UCF 210","nde":"","nen":"","zl":268},{"lp":32,"sym":"M-059","pl":"Odblask trójkąt","npl":"","img":"img/p/u624-32.webp","de":"Rückstrahler Dreieck","en":"Triangle reflector","nde":"","nen":"","zl":8.1},{"lp":33,"sym":"M-386","pl":"Pojemnik na instrukcję","npl":"","img":"img/p/u624-33.webp","de":"Dokumentenrolle","en":"Manual holder","nde":"","nen":"","zl":48},{"lp":34,"sym":"M-233","pl":"Tablica wyróżniająca 423x423","npl":"","img":"img/p/u624-34.webp","de":"Warntafel 423x423","en":"Warning sign 423x423","nde":"","nen":"","zl":70},{"lp":35,"sym":"M-236","pl":"Wtyczka 7-pin","npl":"","img":"img/p/u624-35.webp","de":"Stecker 7-polig","en":"7-pin plug","nde":"","nen":"","zl":37},{"lp":36,"sym":"M-235","pl":"Lampa LED","npl":"nowy typ","img":"img/p/u624-36.webp","de":"LED-Leuchte","en":"LED lamp","nde":"neuer Typ","nen":"new type","zl":94}],"draws":[{"src":"img/d/u624-1.webp","w":1700,"h":1428,"labels":[]}]},{"id":"u445","model":"U 445","photo":"img/m/u445.webp","parts":[{"lp":1,"sym":"M-463","pl":"Ząb SM 45x10","npl":"","img":"img/p/u445-1.webp","de":"Zinken SM 45x10","en":"SM tine 45x10","nde":"","nen":"","zl":61},{"lp":2,"sym":"M-534","pl":"Wzmocnienie zęba SM 45x10","npl":"","img":"img/p/u445-2.webp","de":"Zinkenverstärkung SM 45x10","en":"SM tine reinforcement 45x10","nde":"","nen":"","zl":24},{"lp":3,"sym":"M-464","pl":"Gęsiostopka 120 mm do zęba SM 45x10","npl":"","img":"img/p/u445-3.webp","de":"Gänsefußschar 120 mm für SM-Zinken 45x10","en":"Duck-foot share 120 mm for SM tine 45x10","nde":"","nen":"","zl":51},{"lp":4,"sym":"M-506","pl":"Redlica zęba SM 45x12","npl":"","img":"img/p/u445-4.webp","de":"Schar für SM-Zinken 45x12","en":"SM tine point 45x12","nde":"","nen":"","zl":20},{"lp":5,"sym":"","pl":"Koło 200/60-14.5","npl":"","img":"img/p/u445-5.webp","de":"Rad 200/60-14.5","en":"Wheel 200/60-14.5","nde":"","nen":"","zl":613},{"lp":6,"sym":"M-482","pl":"Kołpak koła","npl":"","img":"img/p/u445-6.webp","de":"Radkappe","en":"Wheel cap","nde":"","nen":"","zl":37},{"lp":7,"sym":"M-387","pl":"Zaczep typu Scharmüller","npl":"","img":"img/p/u445-7.webp","de":"Kupplung Typ Scharmüller","en":"Scharmüller-type hitch","nde":"","nen":"","zl":376},{"lp":8,"sym":"M-495","pl":"Łożysko VibroStar","npl":"","img":"img/p/u445-8.webp","de":"Lager VibroStar","en":"VibroStar bearing","nde":"","nen":"","zl":118},{"lp":9,"sym":"M-390","pl":"Odbojnik gumowy","npl":"","img":"img/p/u445-9.webp","de":"Gummipuffer","en":"Rubber buffer","nde":"","nen":"","zl":25},{"lp":10,"sym":"M-516","pl":"Uszczelniacz 55x68x8","npl":"","img":"img/p/u445-10.webp","de":"Wellendichtring 55x68x8","en":"Shaft seal 55x68x8","nde":"","nen":"","zl":17.1},{"lp":11,"sym":"MH-093","pl":"Dzielnik strumienia DFL","npl":"","img":"img/p/u445-11.webp","de":"Stromteiler DFL","en":"Flow divider DFL","nde":"","nen":"","zl":498},{"lp":12,"sym":"M-442","pl":"Pokrętło trójramienne M12","npl":"","img":"img/p/u445-12.webp","de":"Sterngriff M12","en":"Star knob M12","nde":"","nen":"","zl":17.1},{"lp":13,"sym":"MH-047","pl":"Zawór przeciążeniowo-blokujący","npl":"","img":"img/p/u445-13.webp","de":"Überlast-Sperrventil","en":"Overload/lock valve","nde":"","nen":"","zl":448},{"lp":14,"sym":"M-214A","pl":"Jarzmo M12 na profil 50x50","npl":"","img":"img/p/u445-14.webp","de":"U-Bügel M12 für Profil 50x50","en":"U-bolt M12 for 50x50 profile","nde":"","nen":"","zl":21},{"lp":15,"sym":"MH-188","pl":"Zawór zwrotny bliźniaczy VibroStar","npl":"","img":"img/p/u445-15.webp","de":"Doppel-Rückschlagventil VibroStar","en":"Twin check valve VibroStar","nde":"","nen":"","zl":430},{"lp":16,"sym":"M-104","pl":"Ząb włóki polowej ciężkiej 80x10","npl":"","img":"img/p/u445-16.webp","de":"Zinken schwere Planierschiene 80x10","en":"Heavy leveller tine 80x10","nde":"","nen":"","zl":66},{"lp":17,"sym":"M-103","pl":"Nakładka zęba włóki szeroka (150 mm)","npl":"","img":"img/p/u445-17.webp","de":"Schleppschar breit (150 mm)","en":"Leveller tine blade, wide (150 mm)","nde":"","nen":"","zl":45},{"lp":18,"sym":"M-105","pl":"Uchwyt zęba włóki 80x10 (profil 70x70)","npl":"","img":"img/p/u445-18.webp","de":"Zinkenhalter Planierschiene 80x10 (Profil 70x70)","en":"Leveller tine holder 80x10 (70x70 profile)","nde":"","nen":"","zl":78},{"lp":19,"sym":"MH-189","pl":"Siłownik główny kół VibroStar z pamięcią","npl":"","img":"img/p/u445-19.webp","de":"Hauptzylinder Räder VibroStar mit Speicherfunktion","en":"Main wheel cylinder VibroStar with memory","nde":"","nen":"","zl":1629},{"lp":20,"sym":"MH-178","pl":"Siłownik kół VibroStar lewy","npl":"","img":"img/p/u445-20.webp","de":"Radzylinder VibroStar, links","en":"Wheel cylinder VibroStar, left","nde":"","nen":"","zl":1714},{"lp":21,"sym":"MH-176","pl":"Siłownik kół VibroStar prawy","npl":"","img":"img/p/u445-21.webp","de":"Radzylinder VibroStar, rechts","en":"Wheel cylinder VibroStar, right","nde":"","nen":"","zl":1683},{"lp":22,"sym":"MH-177","pl":"Siłownik włóki Crossboard VibroStar środkowy","npl":"","img":"img/p/u445-22.webp","de":"Zylinder Crossboard VibroStar, Mitte","en":"Crossboard cylinder VibroStar, centre","nde":"","nen":"","zl":1714},{"lp":23,"sym":"MH-174","pl":"Siłownik włóki Crossboard VibroStar lewy","npl":"","img":"img/p/u445-23.webp","de":"Zylinder Crossboard VibroStar, links","en":"Crossboard cylinder VibroStar, left","nde":"","nen":"","zl":1633},{"lp":24,"sym":"MH-175","pl":"Siłownik włóki Crossboard VibroStar prawy","npl":"","img":"img/p/u445-24.webp","de":"Zylinder Crossboard VibroStar, rechts","en":"Crossboard cylinder VibroStar, right","nde":"","nen":"","zl":1616},{"lp":25,"sym":"MH-179","pl":"Siłownik ramion VibroStar","npl":"","img":"img/p/u445-25.webp","de":"Klappzylinder VibroStar","en":"Wing cylinder VibroStar","nde":"","nen":"","zl":1694},{"lp":26,"sym":"M-172A","pl":"Gęsiostopka SX","npl":"","img":"img/p/u445-26.webp","de":"Gänsefußschar SX","en":"Duck-foot share SX","nde":"","nen":"","zl":62},{"lp":27,"sym":"AK-285","pl":"Sprężyna włóki prostej","npl":"","img":"img/p/u445-27.webp","de":"Feder Planierschiene","en":"Leveller spring","nde":"","nen":"","zl":58},{"lp":28,"sym":"M-059","pl":"Odblask trójkąt","npl":"","img":"img/p/u445-28.webp","de":"Rückstrahler Dreieck","en":"Triangle reflector","nde":"","nen":"","zl":8.1},{"lp":29,"sym":"M-386","pl":"Pojemnik na instrukcję","npl":"","img":"img/p/u445-29.webp","de":"Dokumentenrolle","en":"Manual holder","nde":"","nen":"","zl":48},{"lp":30,"sym":"M-233","pl":"Tablica wyróżniająca 423x423","npl":"","img":"img/p/u445-30.webp","de":"Warntafel 423x423","en":"Warning sign 423x423","nde":"","nen":"","zl":70},{"lp":31,"sym":"M-236","pl":"Wtyczka 7-pin","npl":"","img":"img/p/u445-31.webp","de":"Stecker 7-polig","en":"7-pin plug","nde":"","nen":"","zl":37},{"lp":32,"sym":"M-235","pl":"Lampa LED","npl":"nowy typ","img":"img/p/u445-32.webp","de":"LED-Leuchte","en":"LED lamp","nde":"neuer Typ","nen":"new type","zl":94},{"lp":33,"sym":"M-496","pl":"Palec zgrzebła VibroStar","npl":"","img":"img/p/u445-33.webp","de":"Striegelzinken VibroStar","en":"Harrow tine VibroStar","nde":"","nen":"","zl":24},{"lp":32,"sym":"M-507","pl":"Sprężyna ślimakowa VibroStar","npl":"","img":"img/p/u445-34.webp","de":"Spiralfeder VibroStar","en":"Coil spring VibroStar","nde":"","nen":"","zl":61},{"lp":33,"sym":"M-500","pl":"Sprężyna VibroStar","npl":"","img":"img/p/u445-35.webp","de":"Feder VibroStar","en":"VibroStar spring","nde":"","nen":"","zl":56},{"lp":34,"sym":"M-497A","pl":"Sprężyna zgrzebła VibroStar lewa","npl":"","img":"img/p/u445-36.webp","de":"Striegelfeder VibroStar, links","en":"Harrow spring VibroStar, left","nde":"","nen":"","zl":59},{"lp":35,"sym":"M-497","pl":"Sprężyna zgrzebła VibroStar prawa","npl":"","img":"img/p/u445-37.webp","de":"Striegelfeder VibroStar, rechts","en":"Harrow spring VibroStar, right","nde":"","nen":"","zl":57},{"lp":36,"sym":"","pl":"Śruba M10x40 kl. 10.9 DIN 608 owalna","npl":"","img":"img/p/u445-38.webp","de":"Flachrundschraube M10x40 Kl. 10.9 DIN 608","en":"Flat round-head bolt M10x40 cl. 10.9 DIN 608","nde":"","nen":"","zl":8.7}],"draws":[{"src":"img/d/u445-1.webp","w":1700,"h":1515,"labels":[]}]},{"id":"procut","model":"ProCut","photo":"img/m/procut.webp","parts":[{"lp":1,"sym":"WA-254A","pl":"Nóż do wału ProCut","npl":"","img":"img/p/procut-1.webp","de":"Messer für ProCut-Walze","en":"Knife for ProCut roller","nde":"","nen":"","zl":90},{"lp":2,"sym":"WA-254","pl":"Nóż do wału ProCut OFAS","npl":"","img":"img/p/procut-2.webp","de":"Messer für ProCut-Walze, OFAS","en":"Knife for ProCut roller, OFAS","nde":"","nen":"","zl":127},{"lp":3,"sym":"","pl":"Sworzeń zaczepowy 32x125","npl":"","img":"img/p/procut-3.webp","de":"Anbaubolzen 32x125","en":"Hitch pin 32x125","nde":"","nen":"","zl":67},{"lp":4,"sym":"WA-332B","pl":"Nóż spiralny tylny","npl":"","img":"img/p/procut-4.webp","de":"Spiralmesser hinten","en":"Spiral knife, rear","nde":"","nen":"","zl":581},{"lp":5,"sym":"WA-332A","pl":"Nóż spiralny przedni","npl":"","img":"img/p/procut-5.webp","de":"Spiralmesser vorne","en":"Spiral knife, front","nde":"","nen":"","zl":646},{"lp":6,"sym":"","pl":"Sworzeń zaczepowy 25x142","npl":"","img":"img/p/procut-6.webp","de":"Anbaubolzen 25x142","en":"Hitch pin 25x142","nde":"","nen":"","zl":65},{"lp":7,"sym":"M-017","pl":"Zespół łożyskowy obsługowy UCF 210","npl":"","img":"img/p/procut-7.webp","de":"Flanschlager mit Schmierung UCF 210","en":"Greasable bearing unit UCF 210","nde":"","nen":"","zl":227},{"lp":8,"sym":"M-326","pl":"Zespół łożyskowy bezobsługowy UCF 210","npl":"","img":"img/p/procut-8.webp","de":"Flanschlager wartungsfrei UCF 210","en":"Maintenance-free bearing unit UCF 210","nde":"","nen":"","zl":268},{"lp":9,"sym":"M-059","pl":"Odblask trójkąt","npl":"","img":"img/p/procut-9.webp","de":"Rückstrahler Dreieck","en":"Triangle reflector","nde":"","nen":"","zl":8.1},{"lp":10,"sym":"M-386","pl":"Pojemnik na instrukcję","npl":"","img":"img/p/procut-10.webp","de":"Dokumentenrolle","en":"Manual holder","nde":"","nen":"","zl":48},{"lp":11,"sym":"M-233","pl":"Tablica wyróżniająca 423x423","npl":"","img":"img/p/procut-11.webp","de":"Warntafel 423x423","en":"Warning sign 423x423","nde":"","nen":"","zl":70},{"lp":12,"sym":"M-236","pl":"Wtyczka 7-pin","npl":"","img":"img/p/procut-12.webp","de":"Stecker 7-polig","en":"7-pin plug","nde":"","nen":"","zl":37},{"lp":13,"sym":"M-235","pl":"Lampa LED","npl":"","img":"img/p/procut-13.webp","de":"LED-Leuchte","en":"LED lamp","nde":"","nen":"","zl":94},{"lp":14,"sym":"M-165","pl":"Amortyzator gumowy brony talerzowej Ø50x210","npl":"","img":"img/p/procut-14.webp","de":"Gummidämpfer Scheibenegge Ø50x210","en":"Rubber shock absorber, disc harrow Ø50x210","nde":"","nen":"","zl":49}],"draws":[{"src":"img/d/procut-1.webp","w":1700,"h":1165,"labels":[]}]}];
+const EUR = 4.3, VAT_PL = 0.23, VAT_DE = 0.19, SHOW = 25;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const T = {
+  pl: {
+    demo: '<b>Projekt demonstracyjny</b> przygotowany dla ROLMAKO. Części, symbole i rysunki pochodzą z katalogów PDF na rolmako.pl, ceny są przykładowe.',
+    by: 'Przygotował:', nav1: 'Części zamienne', nav2: 'Jak zamówić', nav3: 'Kontakt', basket: 'Zamówienie',
+    h1: 'Części do maszyn Rolmako – z ceną i zamówieniem online',
+    lead: 'Zamiast szukać w katalogach PDF: wybierz maszynę, kliknij pozycję na rysunku i dodaj część do zamówienia. Symbol i numer seryjny maszyny trafiają do biura od razu.',
+    qLabel: 'Szukaj części po symbolu lub nazwie', qBtn: 'Szukaj części', tryTxt: 'Spróbuj:',
+    inDemo: (p, m) => `W demo: <b>${p} części</b> z ${m} katalogów, z miniaturami i rysunkami Rolmako.`, cap: 'Brona talerzowa U 652 w pracy. Zdjęcie: rolmako.pl',
+    s1: 'Wybierz maszynę', s1p: 'W demo jest 6 katalogów z rolmako.pl. Pozostałe dodam tak samo – z plików PDF, które już Państwo mają.',
+    fLabel: 'Filtruj części tej maszyny', s2: 'Jak zamówić część',
+    st1: 'Znajdź część', st1p: 'Po symbolu z tabliczki albo z rysunku maszyny. Pozycje na rysunku są klikalne.',
+    st2: 'Dodaj do zamówienia', st2p: 'Cena jest widoczna od razu – w złotych, a w wersji niemieckiej i angielskiej w euro.',
+    st3: 'Podaj numer seryjny', st3p: 'Model, numer fabryczny i rok produkcji – o to prosi katalog części Rolmako. W tej propozycji biuro potwierdza potem termin wysyłki.',
+    fAbout: 'Rolmako – maszyny, wiedza, technologia. Polski producent maszyn do uprawy gleby.', fAddr: 'Adres', fCont: 'Kontakt',
+    legal: 'Projekt demonstracyjny. Symbole, nazwy, miniatury i rysunki pochodzą z katalogów części zamiennych Rolmako (rolmako.pl/spare-parts), ceny i dostępność są przykładowe.',
+    bTitle: 'Zamówienie',
+    q: 'np. M-081, talerz, siłownik', f: 'Filtruj: symbol, nazwa, nr pozycji',
+    parts: n => `${n} ${n === 1 ? 'część' : 'części'}`,
+    partsOf: (n, all) => `${n} z ${all} części`,
+    pos: 'Poz.', sym: 'Symbol', noSym: 'bez symbolu', drawing: 'Rysunek', onDrawing: 'Pokaż na rysunku', add: 'Dodaj', added: 'Dodano',
+    net: 'netto', gross: 'brutto', posChip: p => `Pozycja ${p}`, clear: 'Wyczyść',
+    dNoteHot: 'Kliknij numer na rysunku – lista pokaże części z tej pozycji.',
+    dNoteImg: 'Numery na rysunku odpowiadają kolumnie „Poz.” w liście części.',
+    prev: 'Poprzedni rysunek', next: 'Następny rysunek', zoom: 'Powiększ', unzoom: 'Zamknij powiększenie', showAll: n => `Pokaż wszystkie (${n})`,
+    none: 'Nic nie pasuje do tego filtra. Sprawdź symbol albo zadzwoń: +48 61 438 87 35.', noneQ: 'Nie znaleźliśmy takiej części. Sprawdź symbol z tabliczki albo zadzwoń: +48 61 438 87 35.',
+    results: (q, n, m) => n ? `Wyniki dla „${q}”: ${n} ${n === 1 ? 'część' : 'części'} w ${m} ${m === 1 ? 'maszynie' : 'maszynach'}` : `Brak wyników dla „${q}”`,
+    searchTitle: 'Wyniki wyszukiwania', backTo: m => `Wróć do maszyny ${m}`, fSearch: 'Zawęź wyniki: symbol, nazwa', max: 'Jednej części można zamówić najwyżej 999 szt.', title: 'Rolmako – części zamienne online (projekt demonstracyjny)', desc: 'Projekt demonstracyjny katalogu części Rolmako: części z katalogów PDF z ceną, rysunkiem i zamówieniem online.', openMach: 'Otwórz w maszynie',
+    toastAdd: n => `Dodano do zamówienia: ${n}`, inMachine: 'w maszynie',
+    bEmpty: 'Zamówienie jest puste. Dodaj części z listy albo z rysunku.', remove: 'Usuń', pcs: 'szt.',
+    model: 'Maszyna', serial: 'Numer fabryczny', year: 'Rok produkcji', company: 'Gospodarstwo / firma', phone: 'Telefon',
+    serialPh: 'z tabliczki znamionowej', sub: 'Wartość netto', vat: 'VAT 23%', total: 'Razem brutto', vatNote: '',
+    send: 'Wyślij zamówienie', needSerial: 'Podaj numer fabryczny maszyny – tak jak prosi katalog Rolmako.',
+    sentT: 'Zamówienie wysłane', sentP: n => `To demo – w prawdziwym sklepie zamówienie (${n}) z numerem fabrycznym trafiłoby do działu części Rolmako, a klient dostałby potwierdzenie e-mailem.`,
+    mixed: 'kilka maszyn'
+  },
+  de: {
+    demo: '<b>Demo-Projekt</b> für ROLMAKO. Teile, Teilenummern und Zeichnungen stammen aus den PDF-Katalogen auf rolmako.pl, die Preise sind Beispielpreise.',
+    by: 'Erstellt von:', nav1: 'Ersatzteile', nav2: 'Bestellablauf', nav3: 'Kontakt', basket: 'Bestellung',
+    h1: 'Ersatzteile für Rolmako-Maschinen – mit Preis und Online-Bestellung',
+    lead: 'Statt in PDF-Katalogen zu suchen: Maschine wählen, Position in der Zeichnung anklicken und das Teil bestellen. Teilenummer und Seriennummer gehen direkt an Rolmako.',
+    qLabel: 'Teil nach Nummer oder Name suchen', qBtn: 'Teil suchen', tryTxt: 'Beispiele:',
+    inDemo: (p, m) => `In der Demo: <b>${p} Teile</b> aus ${m} Katalogen, mit Miniaturen und Rolmako-Zeichnungen.`, cap: 'Scheibenegge U 652 im Einsatz. Foto: rolmako.pl',
+    s1: 'Maschine wählen', s1p: 'Die Demo enthält 6 Kataloge von rolmako.pl. Die übrigen werden genauso aus den vorhandenen PDF-Dateien übernommen.',
+    fLabel: 'Teile dieser Maschine filtern', s2: 'So bestellen Sie ein Ersatzteil',
+    st1: 'Teil finden', st1p: 'Über die Teilenummer oder die Zeichnung der Maschine. Die Positionen in der Zeichnung sind anklickbar.',
+    st2: 'In die Bestellung legen', st2p: 'Der Preis ist sofort sichtbar – in Euro.',
+    st3: 'Seriennummer angeben', st3p: 'Modell, Seriennummer und Baujahr – das verlangt der Rolmako-Ersatzteilkatalog. In diesem Vorschlag bestätigt Rolmako danach den Versandtermin.',
+    fAbout: 'Rolmako – Maschinen, Wissen, Technologie. Polnischer Hersteller von Bodenbearbeitungsgeräten.', fAddr: 'Adresse', fCont: 'Kontakt',
+    legal: 'Demo-Projekt. Teilenummern, Bezeichnungen, Miniaturen und Zeichnungen stammen aus den Rolmako-Ersatzteilkatalogen (rolmako.pl/spare-parts), Preise und Verfügbarkeit sind Beispiele.',
+    bTitle: 'Bestellung',
+    q: 'z. B. M-081, Scheibe, Zylinder', f: 'Filtern: Nummer, Name, Position',
+    parts: n => `${n} ${n === 1 ? 'Teil' : 'Teile'}`, partsOf: (n, all) => `${n} von ${all} Teilen`,
+    pos: 'Pos.', sym: 'Nr.', noSym: 'ohne Nummer', drawing: 'Zeichnung', onDrawing: 'In der Zeichnung zeigen', add: 'Hinzufügen', added: 'Hinzugefügt',
+    net: 'netto', gross: 'brutto', posChip: p => `Position ${p}`, clear: 'Löschen',
+    dNoteHot: 'Klicken Sie auf eine Nummer in der Zeichnung – die Liste zeigt die Teile dieser Position.',
+    dNoteImg: 'Die Nummern in der Zeichnung entsprechen der Spalte „Pos.“ in der Teileliste.',
+    prev: 'Vorherige Zeichnung', next: 'Nächste Zeichnung', zoom: 'Vergrößern', unzoom: 'Schließen', showAll: n => `Alle anzeigen (${n})`,
+    none: 'Keine Treffer für diesen Filter. Prüfen Sie die Nummer oder rufen Sie an: +48 61 438 87 35.', noneQ: 'Kein passendes Teil gefunden. Prüfen Sie die Nummer auf dem Typenschild oder rufen Sie an: +48 61 438 87 35.',
+    results: (q, n, m) => n ? `Ergebnisse für „${q}“: ${n} ${n === 1 ? 'Teil' : 'Teile'} in ${m} ${m === 1 ? 'Maschine' : 'Maschinen'}` : `Keine Ergebnisse für „${q}“`,
+    searchTitle: 'Suchergebnisse', backTo: m => `Zurück zur Maschine ${m}`, fSearch: 'Ergebnisse eingrenzen: Nummer, Name', max: 'Pro Teil sind höchstens 999 Stück möglich.', title: 'Rolmako – Ersatzteile online (Demo-Projekt)', desc: 'Demo-Projekt eines Rolmako-Ersatzteilkatalogs: Teile aus den PDF-Katalogen mit Preis, Zeichnung und Online-Bestellung.', openMach: 'In der Maschine öffnen',
+    toastAdd: n => `Zur Bestellung hinzugefügt: ${n}`, inMachine: 'in Maschine',
+    bEmpty: 'Die Bestellung ist leer. Fügen Sie Teile aus der Liste oder der Zeichnung hinzu.', remove: 'Entfernen', pcs: 'Stk.',
+    model: 'Maschine', serial: 'Seriennummer', year: 'Baujahr', company: 'Betrieb / Firma', phone: 'Telefon',
+    serialPh: 'vom Typenschild', sub: 'Warenwert netto', vat: 'MwSt. 19 %', total: 'Gesamt brutto', vatNote: 'In der Liste stehen Nettopreise, hier im Warenkorb kommen 19 % MwSt. dazu. Firmenkunden mit USt-IdNr. erhalten eine Nettorechnung.',
+    send: 'Bestellung senden', needSerial: 'Bitte die Seriennummer der Maschine angeben – wie im Rolmako-Katalog verlangt.',
+    sentT: 'Bestellung gesendet', sentP: n => `Dies ist eine Demo – im echten Shop ginge die Bestellung (${n}) mit Seriennummer an die Ersatzteilabteilung von Rolmako und der Kunde bekäme eine Bestätigung per E-Mail.`,
+    mixed: 'mehrere Maschinen'
+  },
+  en: {
+    demo: '<b>Demo project</b> prepared for ROLMAKO. Parts, part numbers and drawings come from the PDF catalogues on rolmako.pl; prices are examples.',
+    by: 'Prepared by:', nav1: 'Spare parts', nav2: 'How to order', nav3: 'Contact', basket: 'Order',
+    h1: 'Spare parts for Rolmako machines – with prices and online ordering',
+    lead: 'Instead of searching PDF catalogues: pick the machine, click the position on the drawing and add the part to your order. The part number and machine serial number go straight to Rolmako.',
+    qLabel: 'Search parts by number or name', qBtn: 'Search parts', tryTxt: 'Try:',
+    inDemo: (p, m) => `In the demo: <b>${p} parts</b> from ${m} catalogues, with Rolmako thumbnails and drawings.`, cap: 'U 652 disc harrow at work. Photo: rolmako.pl',
+    s1: 'Choose your machine', s1p: 'The demo includes 6 catalogues from rolmako.pl. The rest can be added the same way from the existing PDF files.',
+    fLabel: 'Filter parts of this machine', s2: 'How to order a part',
+    st1: 'Find the part', st1p: 'By the part number or on the machine drawing. Positions on the drawing are clickable.',
+    st2: 'Add it to your order', st2p: 'You see the price straight away, in euro.',
+    st3: 'Enter the serial number', st3p: 'Model, serial number and year of production – the Rolmako parts catalogue asks for them. In this proposal Rolmako then confirms the shipping date.',
+    fAbout: 'Rolmako – machines, knowledge, technology. Polish manufacturer of soil cultivation machines.', fAddr: 'Address', fCont: 'Contact',
+    legal: 'Demo project. Part numbers, names, thumbnails and drawings come from the Rolmako spare parts catalogues (rolmako.pl/spare-parts); prices and availability are examples.',
+    bTitle: 'Order',
+    q: 'e.g. M-081, disc, cylinder', f: 'Filter: number, name, position',
+    parts: n => `${n} ${n === 1 ? 'part' : 'parts'}`, partsOf: (n, all) => `${n} of ${all} parts`,
+    pos: 'Pos.', sym: 'No.', noSym: 'no part number', drawing: 'Drawing', onDrawing: 'Show on drawing', add: 'Add', added: 'Added',
+    net: 'net', gross: 'gross', posChip: p => `Position ${p}`, clear: 'Clear',
+    dNoteHot: 'Click a number on the drawing – the list shows the parts at that position.',
+    dNoteImg: 'The numbers on the drawing match the “Pos.” column in the parts list.',
+    prev: 'Previous drawing', next: 'Next drawing', zoom: 'Enlarge', unzoom: 'Close', showAll: n => `Show all (${n})`,
+    none: 'Nothing matches this filter. Check the part number or call: +48 61 438 87 35.', noneQ: 'No matching part found. Check the number on the rating plate or call: +48 61 438 87 35.',
+    results: (q, n, m) => n ? `Results for “${q}”: ${n} ${n === 1 ? 'part' : 'parts'} in ${m} ${m === 1 ? 'machine' : 'machines'}` : `No results for “${q}”`,
+    searchTitle: 'Search results', backTo: m => `Back to machine ${m}`, fSearch: 'Narrow results: number, name', max: 'You can order at most 999 pcs of one part.', title: 'Rolmako – spare parts online (demo project)', desc: 'Demo project of a Rolmako spare parts catalogue: parts from the PDF catalogues with prices, drawings and online ordering.', openMach: 'Open in machine',
+    toastAdd: n => `Added to order: ${n}`, inMachine: 'in machine',
+    bEmpty: 'Your order is empty. Add parts from the list or from the drawing.', remove: 'Remove', pcs: 'pcs',
+    model: 'Machine', serial: 'Serial number', year: 'Year of production', company: 'Farm / company', phone: 'Phone',
+    serialPh: 'from the rating plate', sub: 'Net value', vat: '', total: 'Total net', vatNote: 'VAT is charged according to the destination country (EU companies with a VAT ID: reverse charge).',
+    send: 'Send order', needSerial: 'Please enter the machine serial number – the Rolmako catalogue asks for it.',
+    sentT: 'Order sent', sentP: n => `This is a demo – in the real shop the order (${n}) with the serial number would go to the Rolmako parts department and the customer would get an e-mail confirmation.`,
+    mixed: 'several machines'
+  }
+};
+const MNAME = {
+  u652: { pl: 'Brona talerzowa', de: 'Scheibenegge', en: 'Disc harrow' },
+  u622: { pl: 'Lekka brona talerzowa', de: 'Leichte Scheibenegge', en: 'Light disc harrow' },
+  u626: { pl: 'Głębosz STORM', de: 'Tiefenlockerer STORM', en: 'STORM subsoiler' },
+  u624: { pl: 'Pług dłutowy', de: 'Meißelpflug', en: 'Chisel plough' },
+  u445: { pl: 'Kultywator VibroStar', de: 'Saatbettgrubber VibroStar', en: 'VibroStar cultivator' },
+  procut: { pl: 'Wał nożowy', de: 'Messerwalze', en: 'Knife roller' }
+};
+let lang = 'pl', cur = DATA[0].id, page = 0, posSel = null, filt = '', query = '', showAll = false;
+const basket = new Map();      // klucz: maszyna|poz|symbol
+const L = () => T[lang];
+const M = id => DATA.find(m => m.id === id);
+const mLabel = m => `${m.model} ${MNAME[m.id][lang]}`;
+const key = (m, p) => `${m.id}|${p.lp}|${p.sym || p.pl}`;
+const pname = p => lang === 'pl' ? p.pl : (p[lang] || p.pl);
+const pnote = p => lang === 'pl' ? p.npl : (p['n' + lang] || p.npl);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = (v, cur) => cur === 'zl'
+  ? v.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' zł'
+  : v.toLocaleString(lang === 'de' ? 'de-DE' : 'en-IE', { style: 'currency', currency: 'EUR' });
+const r2 = v => Math.round(v * 100) / 100;
+const unit = zl => r2(lang === 'pl' ? zl : zl / EUR);
+const fmtCur = v => fmt(v, lang === 'pl' ? 'zl' : 'eur');
+const money = zl => fmtCur(unit(zl));
+const clampQ = v => Math.min(999, Math.max(1, Math.round(+v) || 1));
+
+/* ---------- fokus zostaje na tym samym elemencie po przerysowaniu ---------- */
+function focusKey(el) {
+  if (!el || el === document.body || !el.isConnected) return null;
+  if (el.id) return '#' + CSS.escape(el.id);
+  const box = el.parentElement && el.parentElement.closest('[data-k]');
+  const a = [...el.attributes].find(x => x.name.startsWith('data-') && x.name !== 'data-k');
+  if (!a) return null;
+  const own = a.value ? `[${a.name}="${CSS.escape(a.value)}"]` : `[${a.name}]`;
+  return box ? `${box.tagName.toLowerCase()}[data-k="${CSS.escape(box.dataset.k)}"] ${own}` : own;
+}
+function keepFocus(fn, fallback) {
+  const k = focusKey(document.activeElement); fn();
+  const el = (k && document.querySelector(k)) || (fallback && document.querySelector(fallback));
+  if (el && el !== document.activeElement) el.focus({ preventScroll: true });
+}
+
+/* ---------- maszyny ---------- */
+function renderMachines() {
+  $('#machines').innerHTML = DATA.map(m => `<button class="mcard" type="button" data-m="${m.id}" aria-pressed="${m.id === cur && !query}">
+    <img src="${m.photo}" alt="" loading="lazy" width="900" height="675"><span class="t"><b>${m.model}</b><small>${MNAME[m.id][lang]}</small><em class="num">${L().parts(m.parts.length)}</em></span></button>`).join('');
+}
+$('#machines').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  openMachine(b.dataset.m, true);
+});
+function openMachine(id, scroll) {
+  cur = id; page = 0; posSel = null; filt = ''; query = ''; showAll = false;
+  $('#f').value = ''; $('#q').value = '';
+  keepFocus(() => { renderMachines(); renderDrawing(); renderList(); });
+  if (scroll) $('#work').scrollIntoView({ block: 'start' });
+}
+
+/* ---------- rysunek ---------- */
+function renderDrawing() {
+  const m = M(cur), d = m.draws[page];
+  $('#dTitle').textContent = `${L().drawing} – ${m.model}`;
+  $('#dPage').textContent = `${page + 1} / ${m.draws.length}`;
+  $('#dPrev').disabled = page === 0; $('#dNext').disabled = page === m.draws.length - 1;
+  $('#dPrev').setAttribute('aria-label', L().prev); $('#dNext').setAttribute('aria-label', L().next);
+  const img = $('#dImg'); img.src = d.src; img.width = d.w; img.height = d.h; img.alt = `${L().drawing} ${page + 1} – ${mLabel(m)}`;
+  $$('#canvas .pos').forEach(b => b.remove());
+  d.labels.forEach(l => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'pos'; b.style.left = (l.x * 100) + '%'; b.style.top = (l.y * 100) + '%';
+    b.style.minWidth = Math.max(30, l.t.length * 9) + 'px';
+    b.dataset.n = l.n.join(','); b.setAttribute('aria-label', `${L().pos} ${l.t}`);
+    if (posSel && l.n.some(n => posSel.includes(n))) b.classList.add('on');
+    $('#canvas').appendChild(b);
+  });
+  $('#dNote').textContent = d.labels.length ? L().dNoteHot : L().dNoteImg;
+  $('#dZoom').textContent = $('#drawing').classList.contains('full') ? L().unzoom : L().zoom;
+}
+$('#dPrev').onclick = () => { if (page > 0) { page--; renderDrawing(); } if ($('#dPrev').disabled) $('#dNext').focus(); };
+$('#dNext').onclick = () => { const m = M(cur); if (page < m.draws.length - 1) { page++; renderDrawing(); } if ($('#dNext').disabled) $('#dPrev').focus(); };
+function setFull(on) { $('#drawing').classList.toggle('full', on); document.body.style.overflow = on ? 'hidden' : ''; $('#dZoom').textContent = on ? L().unzoom : L().zoom; }
+$('#dZoom').onclick = () => setFull(!$('#drawing').classList.contains('full'));
+$('#canvas').addEventListener('click', e => {
+  const b = e.target.closest('.pos'); if (!b) return;
+  const wasFull = $('#drawing').classList.contains('full'); if (wasFull) setFull(false);
+  posSel = b.dataset.n.split(',').map(Number); query = ''; filt = ''; $('#f').value = ''; showAll = true;
+  keepFocus(() => { renderDrawing(); renderList(); });
+  const first = $('#rows .row.hl');
+  if (first && (wasFull || matchMedia('(max-width:980px)').matches)) first.scrollIntoView({ block: 'center' });
+});
+function showOnDrawing(lp) {
+  const m = M(cur);
+  const i = m.draws.findIndex(d => d.labels.some(l => l.n.includes(lp)));
+  if (i < 0) return;
+  page = i; posSel = [lp]; renderDrawing(); renderList();
+  const b = [...$$('#canvas .pos')].find(x => x.dataset.n.split(',').map(Number).includes(lp));
+  $('#drawing').scrollIntoView({ block: 'start' });
+  if (b) b.focus({ preventScroll: true });
+}
+
+/* ---------- lista części ---------- */
+function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l').replace(/[\s\-–.]+/g, ''); }
+function matches(p, q) {
+  const n = norm(q); if (!n) return true;
+  return [p.sym, p.pl, p.de, p.en, p.npl, p.nde, p.nen].some(v => norm(v).includes(n)) || (/^\d+$/.test(q.trim()) && p.lp === +q.trim());
+}
+function rowHTML(m, p, withMachine) {
+  const k = key(m, p), inB = basket.has(k), onDraw = m.draws.some(d => d.labels.some(l => l.n.includes(p.lp)));
+  const note = pnote(p);
+  return `<li class="row${posSel && posSel.includes(p.lp) && !withMachine ? ' hl' : ''}" data-k="${esc(k)}">
+    <img src="${p.img}" alt="" loading="lazy" width="240" height="240">
+    <div><div class="nm">${esc(pname(p))}</div>
+      <div class="meta">${withMachine ? `<span class="mtag">${m.model}</span>` : ''}<span>${L().sym}: <b class="num">${p.sym ? esc(p.sym) : L().noSym}</b></span><span>${L().pos} <b class="num">${p.lp}</b></span>${onDraw && !withMachine ? `<button class="linkbtn" type="button" data-draw="${p.lp}">${L().onDrawing}</button>` : ''}${withMachine ? `<button class="linkbtn" type="button" data-open="${m.id}" data-lp="${p.lp}">${L().openMach}</button>` : ''}</div>
+      ${note ? `<div class="note">${esc(note)}</div>` : ''}</div>
+    <div class="buy"><div class="price"><strong class="num">${money(p.zl)}</strong><small>${L().net}</small></div>
+      <div class="ctl"><span class="qty"><button type="button" data-d="-1" aria-label="−1">−</button><input class="num" type="number" min="1" max="999" value="1" inputmode="numeric" aria-label="${L().pcs}"><button type="button" data-d="1" aria-label="+1">+</button></span>
+      <button class="add${inB ? ' done' : ''}" type="button" data-add>${inB ? '✓ ' + L().added : L().add}</button></div></div>
+  </li>`;
+}
+function renderList() {
+  const m = M(cur);
+  let list, html, title, count;
+  if (query) {
+    const hits = [];
+    if (norm(query)) DATA.forEach(mm => mm.parts.forEach(p => { if (matches(p, query) && matches(p, filt)) hits.push([mm, p]); }));
+    const mset = new Set(hits.map(h => h[0].id));
+    title = L().searchTitle; count = L().results(query, hits.length, mset.size);
+    list = hits;
+    const vis = showAll || filt ? hits : hits.slice(0, SHOW);
+    html = vis.map(([mm, p]) => rowHTML(mm, p, true)).join('');
+    $('#moreWrap').hidden = showAll || filt || hits.length <= SHOW;
+    $('#moreBtn').textContent = L().showAll(hits.length);
+  } else {
+    let parts = m.parts.filter(p => matches(p, filt));
+    if (posSel) parts = parts.filter(p => posSel.includes(p.lp));
+    title = `${m.model} ${MNAME[m.id][lang]}`;
+    count = parts.length === m.parts.length ? L().parts(m.parts.length) : L().partsOf(parts.length, m.parts.length);
+    list = parts;
+    const vis = showAll || filt ? parts : parts.slice(0, SHOW);
+    html = vis.map(p => rowHTML(m, p, false)).join('');
+    $('#moreWrap').hidden = showAll || filt || parts.length <= SHOW;
+    $('#moreBtn').textContent = L().showAll(parts.length);
+  }
+  $('#lTitle').textContent = title; $('#lCount').textContent = count;
+  $('#lBack').hidden = !query;
+  $('#lBack').innerHTML = query ? `<button class="outline" type="button" id="backBtn">${esc(L().backTo(m.model))}</button>` : '';
+  $('#f').placeholder = query ? L().fSearch : L().f;
+  $('#rows').innerHTML = list.length ? html : `<li class="empty">${esc(query && !filt ? L().noneQ : L().none)}</li>`;
+  $('#chipWrap').innerHTML = posSel && !query ? `<span class="chip">${esc(L().posChip(posSel.length > 3 ? posSel[0] + '–' + posSel[posSel.length - 1] : posSel.join(', ')))}<button type="button" id="chipX" aria-label="${L().clear}">×</button></span>` : '';
+  $('#drawing').hidden = !!query;
+  nbsp($('#rows'));
+}
+$('#moreBtn').onclick = () => { showAll = true; renderList(); const r = $(`#rows .row:nth-child(${SHOW + 1}) [data-add]`); if (r) r.focus(); };
+$('#lBack').addEventListener('click', e => { if (e.target.id === 'backBtn') { openMachine(cur, false); $('#lTitle').scrollIntoView({ block: 'start' }); $('#f').focus({ preventScroll: true }); } });
+$('#chipWrap').addEventListener('click', e => { if (e.target.id === 'chipX') { posSel = null; showAll = false; keepFocus(() => { renderDrawing(); renderList(); }, '#f'); } });
+$('#f').addEventListener('input', e => { filt = e.target.value; posSel = null; renderDrawing(); renderList(); });
+$('#rows').addEventListener('click', e => {
+  const row = e.target.closest('.row'); if (!row) return;
+  const dq = e.target.closest('[data-d]');
+  if (dq) { const inp = row.querySelector('.qty input'); inp.value = clampQ((+inp.value || 1) + +dq.dataset.d); return; }
+  const dr = e.target.closest('[data-draw]'); if (dr) { showOnDrawing(+dr.dataset.draw); return; }
+  const op = e.target.closest('[data-open]');
+  if (op) { const lp = +op.dataset.lp; openMachine(op.dataset.open, false); posSel = [lp]; showAll = true; const i = M(cur).draws.findIndex(d => d.labels.some(l => l.n.includes(lp))); page = Math.max(0, i); renderDrawing(); renderList(); $('#work').scrollIntoView({ block: 'start' }); return; }
+  if (e.target.closest('[data-add]')) {
+    const k = row.dataset.k, [mid] = k.split('|'), mm = M(mid), p = mm.parts.find(pp => key(mm, pp) === k);
+    const qty = clampQ(row.querySelector('.qty input').value);
+    const it = basket.get(k) || { k, m: mid, qty: 0 };
+    if (it.qty >= 999) { toast(L().max); return; }
+    const capped = it.qty + qty > 999; it.qty = Math.min(999, it.qty + qty); basket.set(k, it);
+    const b = e.target.closest('[data-add]'); b.classList.add('done'); b.textContent = '✓ ' + L().added;
+    toast(capped ? L().max : L().toastAdd(pname(p))); renderBasket();
+  }
+});
+$('#rows').addEventListener('change', e => { if (e.target.matches('.qty input')) e.target.value = clampQ(e.target.value); });
+
+/* ---------- wyszukiwarka ---------- */
+function runSearch(q) {
+  query = q.trim(); showAll = false; posSel = null; filt = ''; $('#f').value = '';
+  if (!query) { openMachine(cur, false); return; }
+  renderMachines(); renderList();
+  $('#work').scrollIntoView({ block: 'start' });
+}
+$('#searchForm').addEventListener('submit', e => { e.preventDefault(); runSearch($('#q').value); });
+// wyczyszczenie pola wyszukiwania wraca do wybranej maszyny
+$('#q').addEventListener('input', e => { if (!e.target.value.trim() && query) openMachine(cur, false); });
+$$('[data-try]').forEach(b => b.onclick = () => { const v = b.dataset['try' + (lang === 'pl' ? '' : lang[0].toUpperCase() + lang[1])] || b.dataset.try; $('#q').value = v; runSearch(v); });
+
+/* ---------- zamówienie ---------- */
+const form = { serial: '', year: '', company: '', phone: '' };
+function itemOf(it) { const mm = M(it.m); return [mm, mm.parts.find(p => key(mm, p) === it.k)]; }
+function renderBasket() {
+  const n = [...basket.values()].reduce((a, b) => a + b.qty, 0);
+  $('#bCount').textContent = n;
+  const items = [...basket.values()];
+  $('#bList').innerHTML = items.length ? items.map(it => {
+    const [mm, p] = itemOf(it);
+    return `<div class="bitem" data-k="${esc(it.k)}"><img src="${p.img}" alt="" loading="lazy"><div><div class="n">${esc(pname(p))}</div><small class="num">${mm.model} · ${p.sym ? esc(p.sym) : L().noSym} · ${it.qty} ${L().pcs} × ${money(p.zl)}</small><br><span class="qty"><button type="button" data-bd="-1" aria-label="−1">−</button><input class="num" type="number" min="1" max="999" value="${it.qty}" inputmode="numeric" data-bq aria-label="${L().pcs}: ${esc(pname(p))}"><button type="button" data-bd="1" aria-label="+1">+</button></span> <button class="rm" type="button" data-rm="${esc(it.k)}">${L().remove}</button></div><div class="r num">${fmtCur(r2(unit(p.zl) * it.qty))}</div></div>`;
+  }).join('') : `<p class="bempty">${esc(L().bEmpty)}</p>`;
+  const models = [...new Set(items.map(it => it.m))];
+  const net = r2(items.reduce((a, it) => a + r2(unit(itemOf(it)[1].zl) * it.qty), 0));
+  const vat = lang === 'pl' ? VAT_PL : lang === 'de' ? VAT_DE : 0;
+  const f = fmtCur, tax = r2(net * vat);
+  $('#bFoot').innerHTML = `
+    <div class="fields">
+      <label class="wide">${L().model}<input value="${esc(models.length === 1 ? mLabel(M(models[0])) : models.length ? L().mixed + ': ' + models.map(id => M(id).model).join(', ') : '')}" readonly></label>
+      <label>${L().serial} *<input id="fSerial" value="${esc(form.serial)}" placeholder="${esc(L().serialPh)}" autocomplete="off"></label>
+      <label>${L().year}<select id="fYear"><option value=""></option>${Array.from({ length: 22 }, (_, i) => 2026 - i).map(y => `<option${String(y) === form.year ? ' selected' : ''}>${y}</option>`).join('')}</select></label>
+      <label>${L().company}<input id="fCompany" value="${esc(form.company)}" autocomplete="organization"></label>
+      <label>${L().phone}<input id="fPhone" value="${esc(form.phone)}" type="tel" autocomplete="tel"></label>
+    </div>
+    ${vat ? `<div class="sum"><span>${L().sub}</span><span class="num">${f(net)}</span></div><div class="sum"><span>${L().vat}</span><span class="num">${f(tax)}</span></div>` : ''}
+    <div class="sum total"><span>${L().total}</span><span class="num">${f(r2(net + tax))}</span></div>
+    ${L().vatNote ? `<p class="vatnote">${esc(L().vatNote)}</p>` : ''}
+    <button class="send" type="button" id="send"${items.length ? '' : ' disabled'}>${L().send}</button>`;
+  nbsp($('#drawer'));
+}
+$('#bFoot').addEventListener('input', e => {
+  const id = { fSerial: 'serial', fYear: 'year', fCompany: 'company', fPhone: 'phone' }[e.target.id]; if (id) form[id] = e.target.value;
+});
+$('#bFoot').addEventListener('change', e => { if (e.target.id === 'fYear') form.year = e.target.value; });
+$('#bList').addEventListener('click', e => {
+  const bd = e.target.closest('[data-bd]');
+  if (bd) { const it = basket.get(bd.closest('[data-k]').dataset.k); const want = it.qty + +bd.dataset.bd; if (want > 999) toast(L().max); it.qty = clampQ(want); keepFocus(renderBasket); return; }
+  const b = e.target.closest('[data-rm]'); if (!b) return;
+  basket.delete(b.dataset.rm); keepFocus(() => { renderBasket(); renderList(); }, '#closeBasket');
+});
+$('#bList').addEventListener('change', e => {
+  if (!e.target.matches('[data-bq]')) return;
+  const it = basket.get(e.target.closest('[data-k]').dataset.k); if (+e.target.value > 999) toast(L().max);
+  it.qty = clampQ(e.target.value); keepFocus(renderBasket);
+});
+$('#bFoot').addEventListener('click', e => {
+  if (e.target.id !== 'send') return;
+  if (!form.serial.trim()) { const s = $('#fSerial'); s.focus(); s.setCustomValidity(L().needSerial); s.reportValidity(); s.addEventListener('input', () => s.setCustomValidity(''), { once: true }); return; }
+  const n = [...basket.values()].reduce((a, b) => a + b.qty, 0);
+  closeBasket(false); modal(L().sentT, L().sentP(`${n} ${L().pcs}`));
+  basket.clear(); form.serial = ''; renderBasket(); renderList();
+});
+const PAGE = ['.demobar', 'header.top', 'main', 'footer'];
+const setInert = (sels, on) => sels.forEach(sel => { const el = $(sel); if (el) el.inert = on; });
+const basketOpen = () => $('#drawer').classList.contains('open');
+function openBasket() { $('#drawer').classList.add('open'); $('#shade').classList.add('open'); $('#drawer').setAttribute('aria-hidden', 'false'); $('#drawer').inert = false; setInert(PAGE, true); setTimeout(() => $('#closeBasket').focus(), 50); }
+function closeBasket(back = true) { if (!basketOpen()) return; $('#drawer').classList.remove('open'); $('#shade').classList.remove('open'); $('#drawer').setAttribute('aria-hidden', 'true'); $('#drawer').inert = true; setInert(PAGE, false); if (back) $('#openBasket').focus(); }
+$('#drawer').inert = true;
+$('#openBasket').onclick = openBasket; $('#closeBasket').onclick = () => closeBasket(); $('#shade').onclick = () => closeBasket();
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if ($('#modal').classList.contains('open')) closeModal();
+  else if ($('#drawing').classList.contains('full')) { setFull(false); $('#dZoom').focus(); }
+  else if (basketOpen()) closeBasket();
+});
+
+/* ---------- drobiazgi ---------- */
+let tt;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2200); }
+let modalBack = null;
+function modal(h, p) { modalBack = document.activeElement; $('#mTitle').textContent = h; $('#mText').textContent = p; $('#modal').classList.add('open'); setInert([...PAGE, '#drawer'], true); $('#mClose').focus(); }
+function closeModal() {
+  $('#modal').classList.remove('open');
+  if (basketOpen()) $('#drawer').inert = false; else setInert(PAGE, false);
+  const back = modalBack && modalBack.isConnected && !modalBack.closest('[inert]') && modalBack !== document.body ? modalBack : (basketOpen() ? $('#closeBasket') : $('#openBasket'));
+  back.focus();
+}
+$('#mClose').onclick = closeModal;
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+/* polska typografia: jednoliterowe wyrazy nie zostają na końcu wiersza */
+function nbsp(root = document.body) {
+  if (lang !== 'pl') return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style,input,select,option,textarea') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(^|[\s(„])([aiouwzAIOUWZ]) /g, '$1$2 '); if (v !== n.nodeValue) n.nodeValue = v; }
+}
+
+/* nagłówek: zagęszczamy krokami tylko wtedy, gdy coś się nie mieści */
+function fitHeader() {
+  const h = $('header.top'), w = h.querySelector('.wrap'), nav = $('nav.menu');
+  const over = () => nav.scrollWidth > nav.clientWidth + 1 || w.scrollWidth > w.clientWidth + 1;
+  h.classList.remove('fit-1', 'fit-2', 'fit-3');
+  for (const c of ['fit-1', 'fit-2', 'fit-3']) { if (!over()) break; h.classList.add(c); }
+  nav.scrollLeft = 0; navCut();
+  document.documentElement.style.setProperty('--hh', h.offsetHeight + 'px');
+}
+function navCut() { const nav = $('nav.menu'); nav.classList.toggle('cut-right', nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2); }
+$('nav.menu').addEventListener('scroll', navCut, { passive: true });
+let fr = 0; const refit = () => { cancelAnimationFrame(fr); fr = requestAnimationFrame(fitHeader); };
+addEventListener('resize', refit);
+if (window.ResizeObserver) new ResizeObserver(refit).observe(document.body);   // także gdy pojawi się pasek przewijania
+if (document.fonts) document.fonts.ready.then(fitHeader);
+
+/* ---------- język ---------- */
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.title = L().title; $('meta[name=description]').content = L().desc;
+  clearTimeout(tt); $('#toast').classList.remove('show');
+  $$('[data-i]').forEach(el => { const v = T[lang][el.dataset.i]; if (typeof v === 'string') el.innerHTML = v; });
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  $('#langSel').value = lang;
+  $('nav.menu').setAttribute('aria-label', { pl: 'Sekcje', de: 'Bereiche', en: 'Sections' }[lang]);
+  $('#closeBasket').setAttribute('aria-label', { pl: 'Zamknij', de: 'Schließen', en: 'Close' }[lang]);
+  $('#q').placeholder = L().q; $('#f').placeholder = L().f;
+  $$('[data-try]').forEach(b => { const v = b.dataset['try' + (lang === 'pl' ? '' : lang[0].toUpperCase() + lang[1])]; if (v) b.textContent = v; });
+  $('#drawer').setAttribute('aria-label', L().bTitle);
+  $('#inDemo').innerHTML = L().inDemo(DATA.reduce((a, m) => a + m.parts.length, 0), DATA.length);
+  renderMachines(); renderDrawing(); renderList(); renderBasket(); nbsp(); fitHeader();
+}
+$$('[data-lang]').forEach(b => b.onclick = () => { lang = b.dataset.lang; keepFocus(applyLang); });
+$('#langSel').onchange = e => { lang = e.target.value; keepFocus(applyLang); };
+applyLang();
+})();
+</script>
+</body>
+</html>
