@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salonowe BDO – ewidencja odpadów dla salonów beauty</title>
+<meta name="description" content="Ewidencja odpadów salonu, która prowadzi się sama: po każdym odbiorze wpisujemy odpady do BDO i przygotowujemy sprawozdanie. Sprawdź, czy Twój salon musi być w BDO.">
+<meta property="og:title" content="Salonowe BDO – ewidencja odpadów dla salonów beauty">
+<meta property="og:description" content="Sprawdź w minutę, czy Twój salon musi być w BDO.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f5f6f3">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d2b2c'/%3E%3Cpath d='M9 17l5 5 9-11' fill='none' stroke='%23c8285e' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f5f6f3;
+  --ink: #1d2b2c;
+  --ink-soft: #4a5a5b;
+  --line: #d9e1dd;
+  --mist: #e7ede9;
+  --accent: #c8285e;
+  --accent-ink: #ffffff;
+  --ok: #2f6b4f;
+  --radius-lg: 22px;
+  --radius-sm: 10px;
+  --wrap: 1120px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+::selection { background: #f6c9d8; color: var(--ink); }
+html { scrollbar-color: #b9c6c1 var(--paper); }
+input, select { caret-color: var(--accent); }
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 20px; }
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 12px; top: 12px; background: var(--ink); color: #fff; padding: 8px 14px; z-index: 10; }
+
+header.top { padding: 22px 0; }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-weight: 800; font-size: 19px; letter-spacing: -0.01em; text-decoration: none; padding: 8px 0; }
+.logo span { color: var(--accent); }
+.top a.cta-small { font-weight: 600; font-size: 15px; text-decoration: none; padding: 9px 16px; border: 1.5px solid var(--ink); border-radius: 999px; white-space: nowrap; }
+.top a.cta-small:hover { background: var(--ink); color: #fff; }
+
+.hero { padding: 40px 0 88px; }
+.hero .wrap { display: grid; grid-template-columns: 1.05fr 0.95fr; grid-template-areas: "intro check" "facts check"; grid-template-rows: auto 1fr; gap: 0 56px; align-items: start; }
+.hero .intro { grid-area: intro; }
+.hero .facts { grid-area: facts; }
+.hero .check { grid-area: check; }
+h1 {
+  font-size: clamp(38px, 5.2vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  margin: 0 0 24px;
+  max-width: 16ch;
+}
+.lead { font-size: clamp(18px, 2vw, 21px); color: var(--ink-soft); max-width: 34em; margin: 0 0 28px; }
+.facts { margin: 0; padding-top: 20px; border-top: 1px solid var(--line); max-width: 34em; color: var(--ink-soft); font-size: 16px; }
+.facts b { color: var(--ink); font-weight: 800; white-space: nowrap; }
+.facts small { display: block; margin-top: 8px; font-size: 13px; }
+
+/* sprawdzarka */
+.check { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 28px; box-shadow: 0 24px 60px -36px rgba(29, 43, 44, .35); }
+.check h2 { font-size: 28px; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 4px; }
+.check .sub { margin: 0 0 20px; color: var(--ink-soft); font-size: 15px; }
+fieldset { border: 0; margin: 0 0 18px; padding: 0; }
+legend { font-weight: 600; font-size: 16px; margin-bottom: 10px; padding: 0; }
+.hint { display: block; font-weight: 400; color: var(--ink-soft); font-size: 14px; margin-top: 2px; }
+.opts { display: flex; gap: 10px; flex-wrap: wrap; }
+.opts label { position: relative; }
+.opts input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+.opts span { display: inline-block; padding: 10px 18px; border: 1.5px solid var(--line); border-radius: 999px; font-weight: 500; font-size: 15px; cursor: pointer; background: var(--paper); min-width: 64px; text-align: center; }
+.opts span:hover { border-color: var(--ink-soft); }
+.opts input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
+.opts input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.result { margin-top: 8px; border-radius: var(--radius-sm); padding: 16px 18px; background: var(--mist); font-size: 15.5px; }
+.result[data-state="tak"] { background: #fbe9ef; }
+.result[data-state="nie"] { background: #e6f1eb; }
+.result strong { display: block; font-size: 18px; margin-bottom: 4px; }
+.result ul { margin: 8px 0 0; padding-left: 18px; }
+.result .go { display: inline-block; margin-top: 12px; font-weight: 600; color: var(--accent); }
+.legal-note { font-size: 12.5px; color: var(--ink-soft); margin: 14px 0 0; }
+
+section { padding: 88px 0; }
+section.band { background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+h2.sec { font-size: clamp(30px, 4vw, 46px); letter-spacing: -0.03em; line-height: 1.08; margin: 0 0 18px; max-width: 18ch; }
+.sec-lead { color: var(--ink-soft); max-width: 38em; margin: 0 0 44px; font-size: 18px; }
+
+.does { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; }
+.does div { padding: 22px 0; border-top: 1px solid var(--line); }
+.does h3 { margin: 0 0 6px; font-size: 22px; line-height: 1.25; letter-spacing: -0.01em; }
+.does p { margin: 0; color: var(--ink-soft); }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; counter-reset: s; }
+.steps li { counter-increment: s; }
+.steps li::before { content: counter(s); display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: #fff; font-weight: 800; margin-bottom: 16px; }
+.steps h3 { margin: 0 0 6px; font-size: 22px; line-height: 1.25; }
+.steps p { margin: 0; color: var(--ink-soft); }
+
+.price { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.amount { font-size: clamp(60px, 8vw, 96px); font-weight: 800; letter-spacing: -0.05em; line-height: .9; }
+.amount small { font-size: 22px; letter-spacing: 0; font-weight: 600; color: var(--ink-soft); }
+.price ul { margin: 0; padding: 0; list-style: none; }
+.price li { padding: 12px 0 12px 30px; border-top: 1px solid var(--line); position: relative; }
+.price li::before { content: ""; position: absolute; left: 4px; top: 21px; width: 12px; height: 7px; border-left: 2.5px solid var(--ok); border-bottom: 2.5px solid var(--ok); transform: rotate(-45deg); }
+.early { margin-top: 18px; color: var(--ink-soft); }
+.early b { color: var(--accent); }
+
+form.join { background: var(--ink); color: #fff; border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 48px); display: grid; grid-template-columns: 1fr 1fr; gap: 18px 22px; }
+form.join h2 { grid-column: 1 / -1; color: #fff; margin: 0; }
+form.join p.intro { grid-column: 1 / -1; margin: 0 0 6px; color: #c9d4d2; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field input, .field select { width: 100%; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-weight: 600; font-size: 15px; }
+.field input, .field select { font: inherit; font-size: 16px; padding: 12px 14px; border-radius: var(--radius-sm); border: 1.5px solid #4a5d5e; background: #26393a; color: #fff; min-height: 48px; }
+.field input::placeholder { color: #9fb0ae; }
+.consent { grid-column: 1 / -1; display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #c9d4d2; }
+.consent input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+button.go-btn { grid-column: 1 / -1; justify-self: start; font: inherit; font-weight: 600; font-size: 17px; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 999px; padding: 15px 30px; cursor: pointer; min-height: 52px; }
+button.go-btn:hover { background: #b01f50; }
+button.go-btn:active { transform: translateY(1px); }
+button.go-btn:disabled { opacity: .7; cursor: progress; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form-msg { grid-column: 1 / -1; margin: 0; font-weight: 500; }
+.form-msg[data-state="err"] { color: #ffb3c8; }
+.form-msg[data-state="ok"] { color: #a8e0c2; }
+
+.faq details { border-top: 1px solid var(--line); padding: 18px 0; }
+.faq summary { cursor: pointer; font-weight: 600; font-size: 22px; list-style-position: outside; }
+.faq details p { margin: 10px 0 0; color: var(--ink-soft); max-width: 40em; }
+
+footer { padding: 40px 0 56px; color: var(--ink-soft); font-size: 14px; }
+footer p { margin: 0 0 6px; max-width: 60em; }
+
+@media (max-width: 900px) {
+  .hero .wrap { grid-template-columns: 1fr; grid-template-areas: "intro" "check" "facts"; gap: 32px; }
+  .price { grid-template-columns: 1fr; gap: 36px; }
+  .steps { grid-template-columns: 1fr; }
+  .does { grid-template-columns: 1fr; }
+  section { padding: 64px 0; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .wrap { padding: 0 16px; }
+  .check { padding: 20px 16px; }
+  form.join { grid-template-columns: 1fr; }
+  .top a.cta-small { padding: 8px 12px; font-size: 14px; }
+}
+@media (min-width: 1800px) {
+  :root { --wrap: 1280px; }
+  body { font-size: 18px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .result { transition: background-color .25s ease; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#tresc">Przejdź do treści</a>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#">Salonowe<span> BDO</span></a>
+    <a class="cta-small" href="#zapisy">Zapisz się</a>
+  </div>
+</header>
+
+<main id="tresc">
+  <div class="hero">
+    <div class="wrap">
+      <div class="intro">
+        <h1>Ewidencja odpadów, która prowadzi się sama</h1>
+        <p class="lead">Od 2025 roku nawet jedna igła po zabiegu oznacza wpis do BDO i ewidencję odpadów. Podłączasz BDO raz, a po każdym odbiorze sami wpisujemy odpady do Twojej ewidencji, pilnujemy kart przekazania i przygotowujemy sprawozdanie przed 15 marca.</p>
+      </div>
+      <p class="facts">Ponad połowa salonów beauty (<b>54%</b>) nie prowadzi ewidencji odpadów medycznych i niebezpiecznych, a kara za brak wpisu albo ewidencji sięga <b>1&nbsp;000&nbsp;000&nbsp;zł</b>.<small>Źródła: raport EMKA S.A. i Fundacji Beauty Razem 2026; art. 194 ustawy o odpadach.</small></p>
+
+      <form class="check" id="sprawdz" aria-labelledby="sprawdz-t" novalidate>
+        <h2 id="sprawdz-t">Czy Twój salon musi być w BDO?</h2>
+        <p class="sub">Trzy pytania, wynik od razu. Nic nie wysyłamy.</p>
+        <fieldset>
+          <legend>Czy po zabiegach zostają igły, ostrza albo materiały z krwią?<span class="hint">Np. makijaż permanentny, mezoterapia igłowa, mikronakłuwanie, podologia, przekłuwanie.</span></legend>
+          <div class="opts">
+            <label><input type="radio" name="q1" value="tak"><span>Tak</span></label>
+            <label><input type="radio" name="q1" value="nie"><span>Nie</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Czy zostają opakowania po chemii z piktogramami zagrożenia?<span class="hint">Np. utleniacze i farby do włosów, aceton, kwasy do peelingów, środki do dezynfekcji.</span></legend>
+          <div class="opts">
+            <label><input type="radio" name="q2" value="tak"><span>Tak</span></label>
+            <label><input type="radio" name="q2" value="nie"><span>Nie</span></label>
+            <label><input type="radio" name="q2" value="?"><span>Nie wiem</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Czy salon ma już wpis do BDO?</legend>
+          <div class="opts">
+            <label><input type="radio" name="q3" value="tak"><span>Tak</span></label>
+            <label><input type="radio" name="q3" value="nie"><span>Nie</span></label>
+          </div>
+        </fieldset>
+        <div class="result" id="wynik" role="status" aria-live="polite">Zaznacz odpowiedzi, a wynik pojawi się tutaj.</div>
+        <p class="legal-note">Wynik to wskazówka na podstawie przepisów obowiązujących od 1.01.2025, nie porada prawna.</p>
+      </form>
+    </div>
+  </div>
+
+  <section class="band" aria-labelledby="co-t">
+    <div class="wrap">
+      <h2 class="sec" id="co-t">Wszystko, czego wymaga od salonu ustawa o odpadach</h2>
+      <p class="sec-lead">Firma odbierająca odpady wystawia kartę przekazania i waży odpady. Wszystko, co z tej karty wynika dla salonu, robimy automatycznie, a Ty dostajesz tylko SMS, że jest w porządku.</p>
+      <div class="does">
+        <div><h3>Wpis do BDO krok po kroku</h3><p>Prowadzimy przez wniosek do urzędu marszałkowskiego i podpowiadamy, które pola wypełnić w przypadku salonu.</p></div>
+        <div><h3>Gotowe kody odpadów</h3><p>Zaznaczasz zabiegi, które wykonujesz, a my dobieramy kody, np. 18 01 03* dla igieł i 15 01 10* dla opakowań po chemii.</p></div>
+        <div><h3>Ewidencja bez wpisywania</h3><p>Po każdym odbiorze pobieramy z BDO kartę z masą podaną przez odbiorcę i sami dopisujemy do Twojej ewidencji, ile odpadów wytworzono i komu je przekazano.</p></div>
+        <div><h3>Sprawozdanie roczne na czas</h3><p>Od połowy lutego czeka na Ciebie sprawozdanie przygotowane z całorocznej ewidencji. Sprawdzasz je i zatwierdzasz przed 15 marca.</p></div>
+        <div><h3>Teczka na kontrolę</h3><p>Umowa z odbiorcą, karty przekazania i ewidencja w jednym miejscu. Pobierasz komplet w PDF, gdy przyjdzie kontrola WIOŚ.</p></div>
+        <div><h3>Alarm, gdy coś utknie</h3><p>Jeśli odbiorca przez 3 dni nie potwierdzi przejęcia odpadów albo odrzuci kartę, dostajesz SMS z tym, co zrobić. Poza tym nie musisz o BDO pamiętać.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="jak-t">
+    <div class="wrap">
+      <h2 class="sec" id="jak-t">Jak to działa</h2>
+      <p class="sec-lead">Odbiór odpadów zostaje taki, jak teraz. Znika tylko pilnowanie ewidencji.</p>
+      <ol class="steps">
+        <li><h3>Podłączasz BDO raz</h3><p>Tworzysz w BDO klucz dostępu dla Salonowego BDO. Przeprowadzimy Cię przez to w około 10 minut.</p></li>
+        <li><h3>Firma odbiera odpady</h3><p>Jak dotąd: odbiorca waży odpady i wystawia kartę przekazania w BDO.</p></li>
+        <li><h3>Ewidencja uzupełnia się sama</h3><p>Po potwierdzeniu odbioru wpis trafia do BDO, a Ty dostajesz SMS: „Odbiór z 12.11 wpisany do ewidencji”.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="cena-t">
+    <div class="wrap price">
+      <div>
+        <h2 class="sec" id="cena-t">Jedna cena, bez umowy na rok</h2>
+        <div class="amount">29 zł <small>miesięcznie netto</small></div>
+        <p class="early">Albo 249 zł netto za rok. <b>Pierwsze 100 salonów z listy zapisów płaci 19 zł miesięcznie</b> tak długo, jak korzysta z usługi.</p>
+      </div>
+      <ul>
+        <li>Sprawdzenie obowiązków i dobór kodów odpadów</li>
+        <li>Pomoc przy wpisie do BDO</li>
+        <li>Ewidencja po każdym odbiorze, bez wpisywania</li>
+        <li>SMS, gdy karta utknie albo zostanie odrzucona</li>
+        <li>Sprawozdanie roczne gotowe przed 15 marca</li>
+        <li>Teczka dokumentów na kontrolę</li>
+        <li>Rezygnacja w dowolnym momencie</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="zapisy" aria-labelledby="zapisy-t">
+    <div class="wrap">
+      <form class="join" id="join" novalidate>
+        <h2 class="sec" id="zapisy-t">Zapisz salon na listę startową</h2>
+        <p class="intro">Zapis jest bezpłatny i do niczego nie zobowiązuje. Napiszemy, gdy ruszymy.</p>
+        <div class="field">
+          <label for="f-name">Imię</label>
+          <input id="f-name" name="imie" autocomplete="given-name" required>
+        </div>
+        <div class="field">
+          <label for="f-mail">E-mail</label>
+          <input id="f-mail" name="email" type="email" autocomplete="email" inputmode="email" required>
+        </div>
+        <div class="field">
+          <label for="f-type">Rodzaj salonu</label>
+          <select id="f-type" name="rodzaj" required>
+            <option value="">Wybierz</option>
+            <option>Kosmetologia / medycyna estetyczna</option>
+            <option>Makijaż permanentny / tatuaż</option>
+            <option>Podologia</option>
+            <option>Paznokcie</option>
+            <option>Fryzjer / barber</option>
+            <option>Inny</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-bdo">Wpis do BDO</label>
+          <select id="f-bdo" name="bdo" required>
+            <option value="">Wybierz</option>
+            <option>Mam wpis</option>
+            <option>Nie mam wpisu</option>
+            <option>Nie wiem</option>
+          </select>
+        </div>
+        <div class="hp" aria-hidden="true"><label for="f-www">Strona www</label><input id="f-www" name="www" tabindex="-1" autocomplete="off"></div>
+        <label class="consent"><input type="checkbox" name="zgoda" id="f-zgoda" required><span>Zgadzam się na kontakt mailowy w sprawie startu Salonowego BDO. Dane służą tylko do tego celu i usuniemy je na prośbę.</span></label>
+        <button class="go-btn" type="submit">Zapisz salon</button>
+        <p class="form-msg" id="join-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-t">
+    <div class="wrap">
+      <h2 class="sec" id="faq-t">Pytania</h2>
+      <details><summary>Czy fryzjer też musi być w BDO?</summary><p>Zależy od odpadów. Salon, w którym powstają wyłącznie odpady podobne do komunalnych, nie musi mieć wpisu. Wystarczy jednak jeden rodzaj odpadów niebezpiecznych w roku, np. opakowania po chemii z piktogramem zagrożenia, i od 2025 roku ewidencja jest obowiązkowa.</p></details>
+      <details><summary>Co się zmieniło 1 stycznia 2025?</summary><p>Nowe rozporządzenie Ministra Klimatu i Środowiska (Dz.U. 2024 poz. 1644) usunęło odpady niebezpieczne z listy zwolnień. Wcześniej małe ilości nie wymagały ewidencji, teraz prowadzi się ją bez względu na ilość.</p></details>
+      <details><summary>Czy to oficjalna usługa BDO?</summary><p>Nie. BDO to system Ministerstwa Klimatu i Środowiska. Salonowe BDO to niezależna usługa, która łączy się z nim przez publiczne API, za Twoją zgodą i Twoim kluczem dostępu.</p></details>
+      <details><summary>Czy muszę cokolwiek wpisywać?</summary><p>Nie. Masę odpadów podaje w karcie przekazania firma, która je odbiera. My przenosimy ją do Twojej ewidencji. Jeśli karty wystawiasz w BDO sama, robisz to jak dotąd, a resztą zajmujemy się my.</p></details>
+      <details><summary>Co z moim kluczem dostępu do BDO?</summary><p>Klucz służy tylko do ewidencji Twojego salonu i przechowujemy go zaszyfrowany. W każdej chwili możesz go usunąć w BDO, a wtedy nasz dostęp znika od razu.</p></details>
+      <details><summary>Kto odpowiada za ewidencję?</summary><p>Prawnie nadal Ty, jako wytwórca odpadów. Dlatego każdy wpis widzisz w BDO i w panelu, a sprawozdanie zatwierdzasz sama.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Salonowe BDO nie jest powiązane z Ministerstwem Klimatu i Środowiska ani z systemem BDO. Informacje na stronie nie są poradą prawną.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var form = document.getElementById("sprawdz");
+  var out = document.getElementById("wynik");
+  function val(n) { var e = form.querySelector('input[name="' + n + '"]:checked'); return e ? e.value : null; }
+  function render() {
+    var q1 = val("q1"), q2 = val("q2"), q3 = val("q3");
+    if (!q1 || !q2 || !q3) { out.removeAttribute("data-state"); out.textContent = "Zaznacz odpowiedzi, a wynik pojawi się tutaj."; return; }
+    var codes = [];
+    if (q1 === "tak") codes.push("18 01 03* – odpady zakaźne, np. igły i materiały z krwią");
+    if (q2 === "tak") codes.push("15 01 10* – opakowania z pozostałościami substancji niebezpiecznych");
+    var must = q1 === "tak" || q2 === "tak";
+    var html;
+    if (must) {
+      out.setAttribute("data-state", "tak");
+      html = "<strong>Tak, salon musi prowadzić ewidencję odpadów" + (q3 === "nie" ? " i mieć wpis do BDO." : ".") + "</strong>" +
+        "Od 1.01.2025 dotyczy to każdej ilości odpadów niebezpiecznych. Prawdopodobne kody:<ul><li>" + codes.join("</li><li>") + "</li></ul>" +
+        (q3 === "nie" ? "Bez wpisu grozi kara administracyjna. " : "") + '<a class="go" href="#zapisy">Zapisz salon, zrobimy to za Ciebie</a>';
+    } else if (q2 === "?") {
+      out.setAttribute("data-state", "");
+      html = "<strong>Prawdopodobnie tak, jeśli na opakowaniach jest piktogram zagrożenia.</strong>Sprawdź etykiety farb, utleniaczy i acetonu: romb z czerwoną ramką oznacza zwykle odpad niebezpieczny, a wtedy ewidencja jest obowiązkowa. " +
+        '<a class="go" href="#zapisy">Zapisz się, sprawdzimy to z Tobą</a>';
+    } else {
+      out.setAttribute("data-state", "nie");
+      html = "<strong>Raczej nie musisz mieć wpisu do BDO.</strong>Jeśli powstają u Ciebie tylko odpady podobne do komunalnych, ministerstwo zwalnia salon z wpisu. Wróć do tego testu, gdy dodasz zabiegi z igłami albo chemią.";
+    }
+    out.innerHTML = html;
+  }
+  form.addEventListener("change", render);
+  form.addEventListener("submit", function (e) { e.preventDefault(); });
+
+  // Adres wdrożenia Apps Script (arkusz „Salonowe BDO – zapisy”). Pusty = zapisy jeszcze wyłączone.
+  var ZAPISY_URL = "https://script.google.com/macros/s/AKfycbw3kA6IkjdsOyuanz1YVVcysVfAOGaoBhxWSsuXC1mSjCxAQtynhyFMac8sRor9HW5E/exec";
+  var join = document.getElementById("join");
+  var msg = document.getElementById("join-msg");
+  var btn = join.querySelector("button[type=submit]");
+  join.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var bad = Array.prototype.filter.call(join.querySelectorAll("[required]"), function (f) { return f.type === "checkbox" ? !f.checked : !f.value.trim() || !f.checkValidity(); });
+    if (bad.length) {
+      msg.setAttribute("data-state", "err");
+      var mail = document.getElementById("f-mail");
+      msg.textContent = bad.length === 1 && bad[0] === mail && mail.value.trim()
+        ? "Sprawdź adres e-mail – brakuje w nim np. znaku @."
+        : "Uzupełnij wszystkie pola i zaznacz zgodę, żeby się zapisać.";
+      bad[0].focus();
+      return;
+    }
+    if (!ZAPISY_URL) {
+      msg.setAttribute("data-state", "err");
+      msg.textContent = "Zapisy ruszają lada dzień. Wróć proszę jutro.";
+      return;
+    }
+    var data = new URLSearchParams(new FormData(join));
+    data.set("zgoda", "tak");
+    data.set("zrodlo", (new URLSearchParams(location.search).get("utm_source") || document.referrer || "bezpośrednio").slice(0, 120));
+    btn.disabled = true;
+    btn.textContent = "Zapisuję…";
+    msg.removeAttribute("data-state");
+    msg.textContent = "";
+    fetch(ZAPISY_URL, { method: "POST", mode: "no-cors", body: data })
+      .then(function () {
+        msg.setAttribute("data-state", "ok");
+        msg.textContent = "Dziękujemy, salon jest na liście. Napiszemy przed startem.";
+        join.reset();
+      })
+      .catch(function () {
+        msg.setAttribute("data-state", "err");
+        msg.textContent = "Nie udało się zapisać – sprawdź internet i spróbuj jeszcze raz.";
+      })
+      .then(function () { btn.disabled = false; btn.textContent = "Zapisz salon"; });
+  });
+})();
+</script>
+</body>
+</html>
