@@ -751,14 +751,21 @@ function dragRotate(canvas, state) {
   const up = () => { down = false; state.dragging = false; };
   canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
 }
-/* Model ustawiony kołami na podłodze, długością wzdłuż osi Z, środkiem w (0,0) */
-function fitModel(obj, len) {
+/* Model ustawiony kołami na podłodze, długością wzdłuż osi Z, środkiem w (0,0).
+   tires: nazwy materiałów opon – podłogę liczymy od nich, bo niektóre modele mają elementy sięgające niżej niż koła */
+function fitModel(obj, len, tires) {
   const g = new THREE.Group(); g.add(obj);
   let box = new THREE.Box3().setFromObject(g), s = box.getSize(new THREE.Vector3());
   if (s.x > s.z) { obj.rotation.y += Math.PI / 2; box.setFromObject(g); s = box.getSize(new THREE.Vector3()); }
   obj.scale.multiplyScalar(len / s.z);
   box.setFromObject(g); const c = box.getCenter(new THREE.Vector3());
-  obj.position.x -= c.x; obj.position.z -= c.z; obj.position.y -= box.min.y;
+  let floorY = box.min.y;
+  if (tires) {
+    const tb = new THREE.Box3(); g.updateMatrixWorld(true);
+    g.traverse(o => { if (o.isMesh && tires.test(o.material?.name || '')) tb.expandByObject(o, true); });
+    if (!tb.isEmpty()) floorY = tb.min.y;
+  }
+  obj.position.x -= c.x; obj.position.z -= c.z; obj.position.y -= floorY;
   return g;
 }
 /* Która strona to przód: szukamy reflektorów */
@@ -1136,7 +1143,7 @@ function buildConfigurator() {
           else if (n === 'Material' || n === 'TIRE32') o.material = M.acc;
         });
         gltf.scene.traverse(o => { if (o.isMesh && o.material.transmission > 0) { o.material.transmission = 0; o.material.transparent = true; o.material.opacity = Math.min(o.material.opacity, .4); } });
-        const g = fitModel(gltf.scene, 4.7); g.userData.front = frontSign(g, MODELS.cen.front); addContactShadow(g);
+        const g = fitModel(gltf.scene, 4.7, /^(pneu|TIRE)/i); g.userData.front = frontSign(g, MODELS.cen.front); addContactShadow(g);
         cars.cen = g; loadEl.textContent = '';
         applyAll(true);
       }
