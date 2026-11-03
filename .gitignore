@@ -1,0 +1,12 @@
+# Nigdy do publicznego repo: bazy, klucze, dane salonów
+*.sqlite
+*.sqlite-journal
+*.db
+*.klucz
+*.key
+.env
+*.jsonl
+salon*.json
+venv/
+__pycache__/
+_mock.html

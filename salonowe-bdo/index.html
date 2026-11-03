@@ -10,10 +10,12 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#f5f6f3">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d2b2c'/%3E%3Cpath d='M9 17l5 5 9-11' fill='none' stroke='%23c8285e' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;800&display=swap" rel="stylesheet">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <style>
+@font-face { font-family: "Onest"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url(fonts/onest-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url(fonts/onest-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 :root {
   --paper: #f5f6f3;
   --ink: #1d2b2c;
@@ -317,7 +319,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
       <details><summary>Czy muszę cokolwiek wpisywać?</summary><p>Nie. Masę odpadów podaje w karcie przekazania firma, która je odbiera, a my przenosimy ją do Twojej ewidencji. Kartę przekazania wystawiasz jednym kliknięciem, wybierając dzień odbioru w aplikacji. W dniu odbioru potwierdzasz w aplikacji przekazanie odpadów kierowcy.</p></details>
       <details><summary>Co jeśli firma nie potwierdzi odbioru w BDO?</summary><p>To częsty problem: bez potwierdzenia przejęcia karta wisi i nie da się zamknąć ewidencji ani sprawozdania. Pilnujemy tego za Ciebie. Po 3 dniach dostajesz gotową wiadomość do odbiorcy, po tygodniu przypomnienie, żeby zadzwonić, a po dwóch tygodniach pomagamy z pismem. Gdy odbiorca potwierdzi, odbiór sam trafia do ewidencji.</p></details>
       <details><summary>Co jest w teczce na kontrolę?</summary><p>Procedura postępowania z odpadami z Twoimi kodami, sposobem przechowywania i firmą odbierającą, gotowa do podpisania przez personel. Do tego wszystkie karty przekazania i ewidencja z danego roku, gotowe do pokazania kontrolerowi.</p></details>
-      <details><summary>Co z moim kluczem dostępu do BDO?</summary><p>Klucz służy tylko do ewidencji Twojego salonu i przechowujemy go zaszyfrowany. W każdej chwili możesz go usunąć w BDO, a wtedy nasz dostęp znika od razu.</p></details>
+      <details><summary>Co z moim kluczem dostępu do BDO?</summary><p>Klucz służy tylko do obsługi BDO Twojego salonu: kart przekazania, ewidencji i sprawozdania. Przechowujemy go zaszyfrowany i nigdy nie prosimy o niego mailem. W każdej chwili możesz go usunąć w BDO – nasz dostęp wygasa wtedy najpóźniej po godzinie. Po rezygnacji usuwamy Twoje dane z naszego serwera, a ewidencja zostaje w BDO.</p></details>
       <details><summary>Kto odpowiada za ewidencję?</summary><p>Prawnie nadal Ty, jako wytwórca odpadów. Dlatego każdy wpis widzisz w BDO i w panelu, a sprawozdanie zatwierdzasz sama.</p></details>
     </div>
   </section>
@@ -384,7 +386,8 @@ footer p { margin: 0 0 6px; max-width: 60em; }
     }
     var data = new URLSearchParams(new FormData(join));
     data.set("zgoda", "tak");
-    data.set("zrodlo", (new URLSearchParams(location.search).get("utm_source") || document.referrer || "bezpośrednio").slice(0, 120));
+    var ref = ""; try { ref = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
+    data.set("zrodlo", (new URLSearchParams(location.search).get("utm_source") || ref || "bezpośrednio").slice(0, 120));
     btn.disabled = true;
     btn.textContent = "Zapisuję…";
     msg.removeAttribute("data-state");
