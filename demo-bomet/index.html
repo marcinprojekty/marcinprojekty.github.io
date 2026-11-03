@@ -185,6 +185,11 @@ footer p+p{margin-top:3px}
 .sums div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
 .sums .tot{margin-top:6px;padding-top:10px;border-top:1px solid var(--ink);font-weight:600;align-items:baseline}
 .sums .tot span:last-child{font-family:var(--disp);font-weight:700;font-size:30px}
+.sums .dfoot{margin-top:6px}
+.nipf{display:grid;gap:6px}
+.hint{font-size:13.5px;color:var(--ink-3);line-height:1.4}
+.hint.ok{color:var(--green-dd);font-weight:600}
+.hint.ok::before{content:"\2713\00a0";content:"\2713\00a0" / ""}
 .cempty{padding:32px 0;color:var(--ink-2)}
 .cempty .btn{margin-top:18px}
 .oform{margin-top:28px;display:grid;gap:14px}
@@ -359,7 +364,7 @@ footer p+p{margin-top:3px}
   <div class="dbody" id="dbody"></div>
 </aside>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-describedby="mText"><div class="box"><h2 id="mTitle"></h2><p id="mText"></p><pre id="mPre"></pre><button class="btn" type="button" id="mOk"></button></div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-describedby="mText"><div class="box"><h2 id="mTitle"></h2><p id="mText"></p><pre id="mPre" tabindex="0"></pre><button class="btn" type="button" id="mOk"></button></div></div>
 
 <script>
 (() => {
@@ -403,24 +408,28 @@ const T = {
     none: q => `Nie znaleźliśmy części „${q}”. Sprawdź pisownię albo zadzwoń do działu części: +48 25 792 38 88.`,
     noneType: 'Dla tej maszyny nie ma części tego rodzaju.',
     live: n => `Lista części: ${n}`,
-    vatnote: 'Ceny przykładowe. Brutto zawiera 23% VAT, liczony od ceny netto.',
+    vatnote: 'Ceny przykładowe. Brutto zawiera 23% VAT, liczony od ceny netto. Firmy z ważnym numerem VAT UE spoza Polski płacą VAT 0% (dostawa wewnątrzwspólnotowa).',
     toastAdd: (n, q) => `W koszyku: ${n} (${q} szt.)`, qtyMsg: 'Ilość: od 1 do 999 sztuk. Poprawiliśmy wartość.', maxMsg: 'Jednej części możesz zamówić najwyżej 999 sztuk.',
     cempty: 'Koszyk jest pusty. Wybierz maszynę i dodaj części z listy.', cemptyBtn: 'Przejdź do części',
-    sub: 'Wartość netto', vat: 'VAT 23%', tot: 'Razem brutto', remove: 'Usuń', removeAria: n => `Usuń z koszyka: ${n}`, shipNote: 'Koszt wysyłki dział części potwierdzi po zamówieniu.',
+    sub: 'Wartość netto', vat: p => `VAT ${p}%`, vatWdt: 'VAT 0% – dostawa wewnątrzwspólnotowa (WDT)', tot: 'Razem brutto',
+    rateNote: 'Stawka VAT w demo jest przykładowa. Dla osób prywatnych zależy od kraju dostawy.', plNote: '',
+    wdtNote: 'W prawdziwym sklepie numer VAT UE zostałby sprawdzony w systemie VIES.',
+    nipHint: 'Z ważnym numerem VAT UE spoza Polski (z kodem kraju, np. DE123456789): VAT 0% (WDT).',
+    nipHintOk: 'Numer VAT UE spoza Polski: VAT 0% – dostawa wewnątrzwspólnotowa (WDT).', remove: 'Usuń', removeAria: n => `Usuń z koszyka: ${n}`, shipNote: 'Koszt wysyłki dział części potwierdzi po zamówieniu.',
     form: 'Dane do zamówienia', mdata: 'Dane maszyny',
     fSym: 'Model (symbol)', fSymPick: 'Wybierz symbol', fSymUnknown: 'Nie wiem', fYear: 'Rok produkcji', fSerial: 'Numer fabryczny', fSerialHint: 'z tabliczki znamionowej',
     who: 'Kto zamawia?', priv: 'Osoba prywatna', farm: 'Gospodarstwo rolne', firm: 'Firma',
-    fName: 'Imię i nazwisko', fFarm: 'Imię i nazwisko lub nazwa gospodarstwa', fFirm: 'Nazwa firmy', fNip: 'NIP', optional: 'nieobowiązkowo',
+    fName: 'Imię i nazwisko', fFarm: 'Imię i nazwisko lub nazwa gospodarstwa', fFirm: 'Nazwa firmy', fNip: 'NIP lub nr VAT UE', optional: 'nieobowiązkowo',
     fTel: 'Telefon', fMail: 'E-mail', contactHint: 'Podaj telefon lub e-mail.',
     del: 'Dostawa', courier: 'Kurier', pickup: 'Odbiór osobisty w Węgrowie', fAddr: 'Adres dostawy (ulica, kod, miejscowość)', fNote: 'Uwagi',
     send: 'Wyślij zamówienie', dfoot: 'To wersja demonstracyjna – formularz niczego nie wysyła.',
     errSym: m => `Wybierz symbol maszyny ${m} z tabliczki znamionowej albo „Nie wiem”.`,
     errUnknown: m => `Maszyna ${m}: podaj rok produkcji albo numer fabryczny, żeby dział części dobrał właściwe części.`,
     errYear: `Rok produkcji wpisz jako 4 cyfry, od 1985 do ${YEAR}.`,
-    errName: 'Wpisz imię i nazwisko albo nazwę.', errNip: 'NIP powinien mieć 10 cyfr.', errContact: 'Podaj telefon albo e-mail, żeby dział części mógł potwierdzić zamówienie.',
+    errName: 'Wpisz imię i nazwisko albo nazwę.', errNip: 'Wpisz NIP (10 cyfr) albo numer VAT UE z kodem kraju, np. DE123456789.', errContact: 'Podaj telefon albo e-mail, żeby dział części mógł potwierdzić zamówienie.',
     errTel: 'Numer telefonu powinien mieć co najmniej 9 cyfr.', errMail: 'Sprawdź adres e-mail – brakuje w nim „@” albo domeny.', errAddr: 'Wpisz adres dostawy albo wybierz odbiór osobisty.',
     sentT: 'Wersja demonstracyjna', sentP: 'Nic nie zostało wysłane. W prawdziwym sklepie dział części Bomet dostałby takie zamówienie:', ok: 'Rozumiem',
-    oLines: 'Części', oMachine: 'Maszyna', oMachines: 'Maszyny', oAddr: 'Adres dostawy', oNote: 'Uwagi', oYear: 'rok', oSerial: 'nr fabr.', oBuyer: 'Zamawiający', oDel: 'Dostawa', oSum: 'Razem brutto', oUnknown: 'symbol nieznany',
+    oLines: 'Części', oMachine: 'Maszyna', oMachines: 'Maszyny', oAddr: 'Adres dostawy', oNote: 'Uwagi', oYear: 'rok', oSerial: 'nr fabr.', oBuyer: 'Zamawiający', oDel: 'Dostawa', oSum: 'Razem brutto', oUnknown: 'symbol nieznany', oNip: eu => eu ? 'nr VAT UE' : 'NIP',
     title: 'Bomet – części zamienne online (projekt demonstracyjny)', desc: 'Projekt demonstracyjny: części zamienne do maszyn Bomet z ceną i zamówieniem online.'
   },
   de: {
@@ -451,10 +460,14 @@ const T = {
     none: q => `Kein Teil gefunden für „${q}“. Prüfen Sie die Schreibweise oder rufen Sie die Ersatzteilabteilung an: +48 25 792 38 88.`,
     noneType: 'Für diese Maschine gibt es keine Teile dieser Art.',
     live: n => `Teileliste: ${n}`,
-    vatnote: 'Beispielpreise. Brutto inkl. 19 % MwSt., berechnet vom Nettopreis. Beispielkurs 1 € = 4,30 zł.',
+    vatnote: 'Beispielpreise. Brutto inkl. 19 % MwSt., berechnet vom Nettopreis. Firmen mit gültiger USt-IdNr. aus einem anderen EU-Land als Polen: 0 % MwSt. (innergemeinschaftliche Lieferung). Beispielkurs 1 € = 4,30 zł.',
     toastAdd: (n, q) => `Im Warenkorb: ${n} (${q} Stk.)`, qtyMsg: 'Menge: 1 bis 999 Stück. Der Wert wurde korrigiert.', maxMsg: 'Pro Teil sind höchstens 999 Stück möglich.',
     cempty: 'Der Warenkorb ist leer. Wählen Sie eine Maschine und fügen Sie Teile hinzu.', cemptyBtn: 'Zu den Ersatzteilen',
-    sub: 'Warenwert netto', vat: 'MwSt. 19 %', tot: 'Gesamt brutto', remove: 'Entfernen', removeAria: n => `Aus dem Warenkorb entfernen: ${n}`, shipNote: 'Die Versandkosten bestätigt die Ersatzteilabteilung nach der Bestellung.',
+    sub: 'Warenwert netto', vat: p => `MwSt. ${p} %`, vatWdt: 'MwSt. 0 % – steuerfreie innergemeinschaftliche Lieferung', tot: 'Gesamt brutto',
+    rateNote: 'Der Steuersatz ist in der Demo ein Beispiel. Für Privatpersonen hängt er vom Lieferland ab.', plNote: 'Mit polnischer NIP gilt die polnische MwSt. (23 %).',
+    wdtNote: 'Im echten Shop würde die USt-IdNr. über VIES geprüft.',
+    nipHint: 'Mit gültiger USt-IdNr. aus einem anderen EU-Land als Polen: 0 % MwSt. (innergemeinschaftliche Lieferung).',
+    nipHintOk: 'USt-IdNr. aus einem anderen EU-Land: 0 % MwSt. – steuerfreie innergemeinschaftliche Lieferung.', remove: 'Entfernen', removeAria: n => `Aus dem Warenkorb entfernen: ${n}`, shipNote: 'Die Versandkosten bestätigt die Ersatzteilabteilung nach der Bestellung.',
     form: 'Bestelldaten', mdata: 'Maschinendaten',
     fSym: 'Modell (Typ)', fSymPick: 'Typ wählen', fSymUnknown: 'Weiß ich nicht', fYear: 'Baujahr', fSerial: 'Seriennummer', fSerialHint: 'vom Typenschild',
     who: 'Wer bestellt?', priv: 'Privatperson', farm: 'Landwirt', firm: 'Firma',
@@ -465,10 +478,10 @@ const T = {
     errSym: m => `Bitte den Typ der Maschine ${m} vom Typenschild wählen oder „Weiß ich nicht“.`,
     errUnknown: m => `Maschine ${m}: bitte Baujahr oder Seriennummer angeben, damit die passenden Teile gefunden werden.`,
     errYear: `Baujahr bitte vierstellig angeben, von 1985 bis ${YEAR}.`,
-    errName: 'Bitte Namen angeben.', errNip: 'Bitte eine gültige USt-IdNr. angeben (z. B. DE123456789).', errContact: 'Bitte Telefon oder E-Mail angeben, damit die Bestellung bestätigt werden kann.',
+    errName: 'Bitte Namen angeben.', errNip: 'Bitte eine gültige USt-IdNr. mit Ländercode angeben (z. B. DE123456789).', errContact: 'Bitte Telefon oder E-Mail angeben, damit die Bestellung bestätigt werden kann.',
     errTel: 'Die Telefonnummer sollte mindestens 9 Ziffern haben.', errMail: 'Bitte E-Mail-Adresse prüfen – es fehlt „@“ oder die Domain.', errAddr: 'Bitte Lieferadresse angeben oder Abholung wählen.',
     sentT: 'Demo-Version', sentP: 'Es wurde nichts gesendet. Im echten Shop bekäme die Bomet-Ersatzteilabteilung diese Bestellung:', ok: 'Verstanden',
-    oLines: 'Teile', oMachine: 'Maschine', oMachines: 'Maschinen', oAddr: 'Lieferadresse', oNote: 'Bemerkungen', oYear: 'Baujahr', oSerial: 'Ser.-Nr.', oBuyer: 'Besteller', oDel: 'Lieferung', oSum: 'Gesamt brutto', oUnknown: 'Typ unbekannt',
+    oLines: 'Teile', oMachine: 'Maschine', oMachines: 'Maschinen', oAddr: 'Lieferadresse', oNote: 'Bemerkungen', oYear: 'Baujahr', oSerial: 'Ser.-Nr.', oBuyer: 'Besteller', oDel: 'Lieferung', oSum: 'Gesamt brutto', oUnknown: 'Typ unbekannt', oNip: () => 'USt-IdNr.',
     title: 'Bomet – Ersatzteile online (Demo-Projekt)', desc: 'Demo-Projekt: Ersatzteile für Bomet-Landmaschinen mit Preis und Online-Bestellung.'
   }
 };
@@ -484,10 +497,33 @@ const pname = p => cap(lang === 'de' ? p.de : p.pl);
 const mname = m => lang === 'de' && m.nameDe ? m.nameDe : m.name;
 const mtype = m => lang === 'de' ? m.de : m.pl;
 const mspec = m => lang === 'de' ? m.specDe : m.specPl;
-const vat = () => lang === 'de' ? 0.19 : 0.23;
+const vat = () => lang === 'de' ? 0.19 : 0.23;                       // stawka podstawowa (cennik, osoby prywatne)
 const r2 = v => Math.round((v + Number.EPSILON) * 100) / 100;
 const unit = zl => r2(lang === 'de' ? zl / EUR : zl);               // cena sztuki netto w walucie, zaokrąglona
 const unitGross = zl => r2(unit(zl) * (1 + vat()));
+
+/* NIP / numer VAT UE: format numeru według kraju (w prawdziwym sklepie dodatkowo VIES) */
+const EUVAT = { AT: /^U\d{8}$/, BE: /^[01]\d{9}$/, BG: /^\d{9,10}$/, CY: /^\d{8}[A-Z]$/, CZ: /^\d{8,10}$/, DE: /^\d{9}$/, DK: /^\d{8}$/, EE: /^\d{9}$/, EL: /^\d{9}$/,
+  ES: /^[0-9A-Z]\d{7}[0-9A-Z]$/, FI: /^\d{8}$/, FR: /^[0-9A-Z]{2}\d{9}$/, HR: /^\d{11}$/, HU: /^\d{8}$/, IE: /^\d[0-9A-Z+*]\d{5}[A-Z]{1,2}$/, IT: /^\d{11}$/,
+  LT: /^(\d{9}|\d{12})$/, LU: /^\d{8}$/, LV: /^\d{11}$/, MT: /^\d{8}$/, NL: /^\d{9}B\d{2}$/, PT: /^\d{9}$/, RO: /^\d{2,10}$/, SE: /^\d{10}01$/, SI: /^\d{8}$/, SK: /^\d{10}$/,
+  XI: /^(\d{9}|\d{12}|GD\d{3}|HA\d{3})$/ };
+const cleanNip = s => String(s).replace(/[\s.\-]/g, '').toUpperCase();
+function taxId(raw) {                                                 // { v, kind: 'pl' | 'eu' | '', ok }
+  const v = cleanNip(raw), m = /^([A-Z]{2})(.*)$/.exec(v);
+  if (!v) return { v, kind: '', ok: false };
+  if (!m) return { v, kind: 'pl', ok: lang === 'pl' && /^\d{10}$/.test(v) };   // bez kodu kraju: polski NIP (tylko w wersji PL)
+  if (m[1] === 'PL') return { v, kind: 'pl', ok: /^\d{10}$/.test(m[2]) };
+  return { v, kind: 'eu', ok: !!EUVAT[m[1]] && EUVAT[m[1]].test(m[2]) };
+}
+// stawka w koszyku: firma lub gospodarstwo z ważnym numerem VAT UE spoza Polski – 0% (WDT); z polskim NIP – 23%; pozostali – stawka podstawowa
+function vatInfo() {
+  const t = buyer === 'private' ? { kind: '', ok: false } : taxId(form.nip);
+  if (t.ok && t.kind === 'eu') return { rate: 0, wdt: true, pl: false };
+  if (t.ok && t.kind === 'pl') return { rate: 0.23, wdt: false, pl: true };
+  return { rate: vat(), wdt: false, pl: false };
+}
+const pct = r => String(Math.round(r * 100));
+const vatLabel = vi => vi.wdt ? L().vatWdt : L().vat(pct(vi.rate));
 const fmt = v => lang === 'de'
   ? v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'
   : v.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true }).replace(/(\d)\s(\d{3})(?=,)/, '$1 $2') + ' zł';
@@ -555,7 +591,7 @@ function rowHTML(p) {
     <div class="c-name"><div class="pname hy">${name}</div>${tags}</div>
     <div class="price"><strong class="num">${fmt(unitGross(p.price))}</strong><small class="num">${fmt(unit(p.price))} ${esc(L().net)}</small></div>
     <div class="c-buy"><div class="buy">
-      <span class="qty"><button type="button" data-dec="${esc(p.nr)}" aria-label="${esc(L().dec)}">−</button><input class="num" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" value="${q}" data-q="${esc(p.nr)}" aria-label="${esc(L().qtyAria(pname(p)))}"><button type="button" data-inc="${esc(p.nr)}" aria-label="${esc(L().inc)}">+</button></span>
+      <span class="qty"><button type="button" data-dec="${esc(p.nr)}" aria-label="${esc(L().dec + ': ' + pname(p))}">−</button><input class="num" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" value="${q}" data-q="${esc(p.nr)}" aria-label="${esc(L().qtyAria(pname(p)))}"><button type="button" data-inc="${esc(p.nr)}" aria-label="${esc(L().inc + ': ' + pname(p))}">+</button></span>
       <button type="button" class="add" data-add="${esc(p.nr)}" aria-label="${esc(L().addAria(pname(p)))}">${esc(L().add)}</button>
     </div></div>
   </li>`;
@@ -645,8 +681,21 @@ $('#haveNr').onclick = () => { document.getElementById('czesci').scrollIntoView(
 const items = () => [...cart.values()];
 function totals() {
   const sub = r2(items().reduce((a, it) => a + unit(byNr.get(it.nr).price) * it.qty, 0));
-  const tax = r2(sub * vat());
-  return { sub, tax, gross: r2(sub + tax), n: items().reduce((a, b) => a + b.qty, 0) };
+  const vi = vatInfo(), tax = r2(sub * vi.rate);
+  return { sub, tax, vi, gross: r2(sub + tax), n: items().reduce((a, b) => a + b.qty, 0) };
+}
+function sumsHTML() {
+  const t = totals(), vi = t.vi;
+  const note = vi.wdt ? L().wdtNote : vi.pl ? L().plNote : L().rateNote;
+  return `<div><span>${esc(L().sub)}</span><span class="num">${fmt(t.sub)}</span></div><div><span>${esc(vatLabel(vi))}</span><span class="num">${fmt(t.tax)}</span></div><div class="tot"><span>${esc(L().tot)}</span><span class="num">${fmt(t.gross)}</span></div>${note ? `<p class="dfoot">${esc(note)}</p>` : ''}<p class="dfoot">${esc(L().shipNote)}</p>`;
+}
+// po każdej zmianie numeru: sumy, przycisk koszyka i podpowiedź przy polu (bez przerysowania formularza)
+function updateVat() {
+  const s = $('#sums'); if (s) { s.innerHTML = sumsHTML(); nbsp(s); }
+  bump();
+  const h = $('#nipHint'); if (!h) return;
+  const ok = vatInfo().wdt, txt = ok ? L().nipHintOk : L().nipHint;
+  if (h.textContent !== txt) { h.textContent = txt; h.classList.toggle('ok', ok); nbsp(h); }
 }
 function bump() {
   const t = totals();
@@ -660,14 +709,13 @@ function renderCart() {
   bump();
   const list = items();
   if (!list.length) { $('#dbody').innerHTML = `<div class="cempty"><p>${esc(L().cempty)}</p><button type="button" class="btn" id="toParts">${esc(L().cemptyBtn)}</button></div>`; nbsp($('#drawer')); return; }
-  const t = totals();
   const nameLabel = buyer === 'firm' ? L().fFirm : buyer === 'farm' ? L().fFarm : L().fName;
   $('#dbody').innerHTML = list.map(it => { const p = byNr.get(it.nr), nm = esc(pname(p)); return `<div class="citem">
       <div><div class="n hy">${nm}</div><div class="m"><span class="num">${esc(p.nr)}</span>, ${esc(mname(M(it.m)))}, ${fmt(unit(p.price))} ${esc(L().net)} / ${esc(L().perPc)}</div></div>
       <div class="lt num">${fmt(r2(unit(p.price) * it.qty))}<small>${esc(L().net)}</small></div>
-      <div class="r"><span class="qty"><button type="button" data-cdec="${esc(p.nr)}" aria-label="${esc(L().dec)}">−</button><input class="num" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" value="${it.qty}" data-cq="${esc(p.nr)}" aria-label="${esc(L().qtyAria(pname(p)))}"><button type="button" data-cinc="${esc(p.nr)}" aria-label="${esc(L().inc)}">+</button></span><button class="rm" type="button" data-rm="${esc(p.nr)}" aria-label="${esc(L().removeAria(pname(p)))}">${esc(L().remove)}</button></div>
+      <div class="r"><span class="qty"><button type="button" data-cdec="${esc(p.nr)}" aria-label="${esc(L().dec + ': ' + pname(p))}">−</button><input class="num" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" value="${it.qty}" data-cq="${esc(p.nr)}" aria-label="${esc(L().qtyAria(pname(p)))}"><button type="button" data-cinc="${esc(p.nr)}" aria-label="${esc(L().inc + ': ' + pname(p))}">+</button></span><button class="rm" type="button" data-rm="${esc(p.nr)}" aria-label="${esc(L().removeAria(pname(p)))}">${esc(L().remove)}</button></div>
     </div>`; }).join('') +
-    `<div class="sums"><div><span>${esc(L().sub)}</span><span class="num">${fmt(t.sub)}</span></div><div><span>${esc(L().vat)}</span><span class="num">${fmt(t.tax)}</span></div><div class="tot"><span>${esc(L().tot)}</span><span class="num">${fmt(t.gross)}</span></div><p class="dfoot" style="margin-top:6px">${esc(L().shipNote)}</p></div>
+    `<div class="sums" id="sums">${sumsHTML()}</div>
     <form class="oform" id="oform" novalidate>
       <h3>${esc(L().form)}</h3>
       ${cartMachines().map(m => { const f = mfield(m.id), id = esc(m.id); return `<fieldset class="mset"><legend><b>${esc(mname(m))}</b> <span>${esc(mtype(m))}</span></legend>
@@ -679,7 +727,7 @@ function renderCart() {
         <div class="seg">${['private', 'farm', 'firm'].map(b => `<button type="button" data-buyer="${b}" aria-pressed="${buyer === b}">${esc(L()[b === 'private' ? 'priv' : b])}</button>`).join('')}</div>
       </fieldset>
       <label>${esc(nameLabel)}<input id="fName" autocomplete="${buyer === 'firm' ? 'organization' : 'name'}" maxlength="120" value="${esc(form.name)}"></label>
-      ${buyer !== 'private' ? `<label><span>${esc(L().fNip)}${buyer === 'farm' ? ` <i>${esc(L().optional)}</i>` : ''}</span><input id="fNip" ${lang === 'pl' ? 'inputmode="numeric"' : ''} maxlength="20" autocomplete="off" value="${esc(form.nip)}"></label>` : ''}
+      ${buyer !== 'private' ? `<div class="nipf"><label><span>${esc(L().fNip)}${buyer === 'farm' ? ` <i>${esc(L().optional)}</i>` : ''}</span><input id="fNip" maxlength="20" autocomplete="off" spellcheck="false" autocapitalize="characters" aria-describedby="nipHint" value="${esc(form.nip)}"></label><p class="hint${vatInfo().wdt ? ' ok' : ''}" id="nipHint" aria-live="polite">${esc(vatInfo().wdt ? L().nipHintOk : L().nipHint)}</p></div>` : ''}
       <div class="grid2"><label>${esc(L().fTel)}<input id="fTel" type="tel" autocomplete="tel" maxlength="20" value="${esc(form.tel)}"></label>
       <label>${esc(L().fMail)}<input id="fMail" type="email" autocomplete="email" maxlength="120" value="${esc(form.mail)}"></label></div>
       <fieldset><legend>${esc(L().del)}</legend>
@@ -701,7 +749,9 @@ function keepForm() {
   $$('[data-myear]').forEach(el => { mfield(el.dataset.myear).year = el.value; });
   $$('[data-mserial]').forEach(el => { mfield(el.dataset.mserial).serial = el.value; });
 }
-$('#dbody').addEventListener('input', e => { keepForm(); if (e.target.getAttribute('aria-invalid')) { e.target.removeAttribute('aria-invalid'); e.target.removeAttribute('aria-describedby'); } });
+const hintOf = el => el.id === 'fNip' ? 'nipHint' : '';          // stała podpowiedź pola (zostaje obok komunikatu błędu)
+const undescribe = el => { el.removeAttribute('aria-invalid'); if (hintOf(el)) el.setAttribute('aria-describedby', hintOf(el)); else el.removeAttribute('aria-describedby'); };
+$('#dbody').addEventListener('input', e => { keepForm(); if (e.target.getAttribute('aria-invalid')) { undescribe(e.target); const er = $('#ferr'); if (er) er.textContent = ''; } if (e.target.id === 'fNip') updateVat(); });
 $('#dbody').addEventListener('change', e => {
   keepForm();
   const inp = e.target.closest('[data-cq]'); if (!inp) return;
@@ -727,9 +777,10 @@ $('#dbody').addEventListener('click', e => {
 });
 $('#dbody').addEventListener('submit', e => {
   e.preventDefault(); keepForm();
-  $$('#oform [aria-invalid]').forEach(el => { el.removeAttribute('aria-invalid'); el.removeAttribute('aria-describedby'); });
+  $$('#oform [aria-invalid]').forEach(undescribe);
   const err = $('#ferr');
-  const bad = (msg, sel) => { err.textContent = msg; const el = $(sel); if (el) { el.setAttribute('aria-invalid', 'true'); el.setAttribute('aria-describedby', 'ferr'); el.focus(); } return false; };
+  // komunikat pokazujemy tuż pod błędnym polem (na telefonie przycisk „Wyślij” jest daleko niżej)
+  const bad = (msg, sel) => { const el = $(sel); if (el) { const host = el.closest('.grid2') || el.closest('label') || el; host.after(err); } err.textContent = msg; if (el) { el.setAttribute('aria-invalid', 'true'); el.setAttribute('aria-describedby', ['ferr', hintOf(el)].filter(Boolean).join(' ')); el.focus(); } return false; };
   for (const m of cartMachines()) {
     const f = mfield(m.id), id = CSS.escape(m.id);
     if (!f.sym) return bad(L().errSym(mname(m)), `#sym-${id}`);
@@ -739,9 +790,8 @@ $('#dbody').addEventListener('submit', e => {
   }
   if (!form.name.trim()) return bad(L().errName, '#fName');
   if (buyer !== 'private') {
-    const nip = form.nip.replace(/[\s-]/g, '').toUpperCase();
-    const okNip = lang === 'de' ? /^[A-Z]{2}[0-9A-Z]{8,12}$/.test(nip) : /^(PL)?\d{10}$/.test(nip);
-    if ((buyer === 'firm' || nip) && !okNip) return bad(L().errNip, '#fNip');
+    const tid = taxId(form.nip);
+    if ((buyer === 'firm' || tid.v) && !tid.ok) return bad(L().errNip, '#fNip');
   }
   const tel = form.tel.trim(), mail = form.mail.trim();
   if (!tel && !mail) return bad(L().errContact, '#fTel');
@@ -755,11 +805,12 @@ function summary() {
   const t = totals(), l = L();
   const lines = items().map(it => { const p = byNr.get(it.nr); return `${p.nr} – ${pname(p)} – ${l.pcs(it.qty)}`; });
   const ms = cartMachines().map(m => { const f = mfield(m.id); return `${mname(m)} (${mtype(m)}), ${f.sym === '?' ? l.oUnknown : f.sym}${f.year.trim() ? `, ${l.oYear} ${f.year.trim()}` : ''}${f.serial.trim() ? `, ${l.oSerial} ${f.serial.trim()}` : ''}`; });
-  const who = [form.name.trim(), buyer !== 'private' && form.nip.trim() ? `${l.fNip} ${form.nip.trim()}` : '', form.tel.trim(), form.mail.trim()].filter(Boolean).join(', ');
+  const tid = taxId(form.nip);
+  const who = [form.name.trim(), buyer !== 'private' && tid.v ? `${l.oNip(tid.kind === 'eu')} ${tid.v}` : '', form.tel.trim(), form.mail.trim()].filter(Boolean).join(', ');
   const kind = l[buyer === 'private' ? 'priv' : buyer], note = form.note.trim().replace(/\s*\n\s*/g, ' ');
   const del = delivery === 'pickup' ? l.pickup : `${l.courier}\n${l.oAddr}: ${form.addr.trim().replace(/\s*\n\s*/g, ', ')}`;
   // w podsumowaniu zwykłe spacje i bez miękkich dywizów (łatwe kopiowanie)
-  return `${ms.length > 1 ? l.oMachines : l.oMachine}:\n${ms.join('\n')}\n\n${l.oLines}:\n${lines.join('\n')}\n\n${l.oBuyer} (${kind}): ${who}\n${l.oDel}: ${del}${note ? `\n${l.oNote}: ${note}` : ''}\n${l.oSum}: ${fmt(t.gross)}`.replace(/[  ]/g, ' ').replace(/­/g, '');
+  return `${ms.length > 1 ? l.oMachines : l.oMachine}:\n${ms.join('\n')}\n\n${l.oLines}:\n${lines.join('\n')}\n\n${l.oBuyer} (${kind}): ${who}\n${l.oDel}: ${del}${note ? `\n${l.oNote}: ${note}` : ''}\n\n${l.sub}: ${fmt(t.sub)}\n${vatLabel(t.vi)}: ${fmt(t.tax)}\n${l.oSum}: ${fmt(t.gross)}`.replace(/[  ]/g, ' ').replace(/­/g, '');
 }
 
 /* okna: koszyk i potwierdzenie (reszta strony nieaktywna, fokus wraca) */
@@ -788,7 +839,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Tab') {   // pętla fokusu w otwartym oknie
     const box = $('#modal').classList.contains('open') ? $('#modal') : $('#drawer').classList.contains('open') ? $('#drawer') : null;
     if (!box) return;
-    const f = [...box.querySelectorAll('button,input,select,textarea,a[href]')].filter(el => !el.disabled && el.offsetParent !== null);
+    const f = [...box.querySelectorAll('button,input,select,textarea,a[href],[tabindex="0"]')].filter(el => !el.disabled && el.offsetParent !== null);
     if (!f.length) return;
     const first = f[0], last = f[f.length - 1];
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }

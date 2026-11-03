@@ -39,6 +39,12 @@ p{margin:0;text-wrap:pretty}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 [hidden]{display:none!important}
 
+/* link „przejdź do treści” – widoczny tylko przy fokusie */
+.skip{position:absolute;left:16px;top:8px;z-index:100;background:var(--graphite);color:#fff;font-weight:600;font-size:15px;padding:10px 16px;border-radius:6px;text-decoration:none}
+.skip:focus-visible{outline-color:#fff;outline-offset:-5px}
+.skip:not(:focus){width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+main{scroll-margin-top:var(--hh,72px)}
+
 /* pasek demo */
 .demobar{background:var(--graphite);color:#C9CDD1;font-size:13.5px;line-height:1.45}
 .demobar .wrap{display:flex;justify-content:space-between;gap:6px 20px;align-items:center;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
@@ -244,13 +250,13 @@ footer .fnote{grid-column:1/-1;border-top:1px solid #4A4F55;padding-top:20px;fon
   .how{grid-template-columns:1fr;gap:20px}
 }
 @media (max-width:900px){
-  table.parts thead{display:none}
+  /* nagłówki kolumn ukryte tylko wizualnie – czytniki nadal je odczytują (role table/row/cell w HTML) */
+  table.parts thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
   table.parts,table.parts tbody,table.parts tr,table.parts td{display:block;width:100%}
   table.parts tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:14px 16px;border-bottom:1px solid var(--line)}
   table.parts tr:last-child{border-bottom:0}
   table.parts td{padding:0;border:0}
   td.c-nr{grid-column:1;grid-row:1}
-  td.c-name{grid-column:1/-1;grid-row:2}
   td.price{grid-column:2;grid-row:1/3;align-self:start}
   td.c-name{grid-column:1;grid-row:2}
   td.c-buy{grid-column:1/-1;grid-row:3;margin-top:8px}
@@ -300,6 +306,7 @@ footer .fnote{grid-column:1/-1;border-top:1px solid #4A4F55;padding-top:20px;fon
 </style>
 </head>
 <body>
+<a class="skip" href="#top" data-i="skip">Przejdź do treści</a>
 <div class="demobar"><div class="wrap">
   <span data-i="demo"></span>
   <span><span data-i="madeBy">Przygotował:</span> <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></span>
@@ -322,7 +329,7 @@ footer .fnote{grid-column:1/-1;border-top:1px solid #4A4F55;padding-top:20px;fon
   </div>
 </div></header>
 
-<main id="top">
+<main id="top" tabindex="-1">
 <section class="hero"><div class="wrap">
   <div>
     <h1 data-i="h1">Części zamienne EXPOM</h1>
@@ -350,6 +357,7 @@ footer .fnote{grid-column:1/-1;border-top:1px solid #4A4F55;padding-top:20px;fon
 <section class="block" id="czesci"><div class="wrap">
   <div class="shead"><span class="n" aria-hidden="true">2</span><div><h2 data-i="s2" id="s2h" tabindex="-1">Dodaj części</h2><p data-i="s2p"></p></div></div>
   <div class="cfg" id="cfg"></div>
+  <p class="sr" id="liveCfg" aria-live="polite"></p>
   <div class="toolbar">
     <div class="chips" id="chips" role="group" data-i-aria="catLabel" aria-label="Rodzaj części"></div>
     <div class="qfield"><label class="sr" for="q" data-i="qLabel">Numer lub nazwa części</label><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5F656C" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" autocomplete="off"><button class="qclear" type="button" id="qClear" hidden aria-label="Wyczyść">×</button></div>
@@ -357,10 +365,10 @@ footer .fnote{grid-column:1/-1;border-top:1px solid #4A4F55;padding-top:20px;fon
   <div class="notice" id="notice" hidden></div>
   <p class="sr" id="liveCount" aria-live="polite"></p>
   <div class="plist">
-    <table class="parts" id="partsTable">
+    <table class="parts" id="partsTable" role="table" aria-labelledby="pcap">
       <caption class="sr" id="pcap"></caption>
-      <thead><tr><th scope="col" data-i="thNr">Nr katalogowy</th><th scope="col" data-i="thName">Część</th><th scope="col" class="price" data-i="thPrice">Cena netto</th><th scope="col" style="text-align:right" data-i="thBuy">Ilość</th></tr></thead>
-      <tbody id="partsBody"></tbody>
+      <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader" data-i="thNr">Nr katalogowy</th><th scope="col" role="columnheader" data-i="thName">Część</th><th scope="col" role="columnheader" class="price" data-i="thPrice">Cena netto</th><th scope="col" role="columnheader" style="text-align:right" data-i="thBuy">Ilość</th></tr></thead>
+      <tbody id="partsBody" role="rowgroup"></tbody>
     </table>
     <div class="empty" id="empty" hidden></div>
   </div>
@@ -405,7 +413,7 @@ const COUNTRIES = ['PL', 'DE', 'AT', 'CZ', 'SK', 'LT', 'LV', 'EE', 'NL', 'BE', '
 const T = {
   pl: {
     demo: '<b>Projekt demonstracyjny</b> dla EXPOM. Numery części TYTAN PLUS i MAXIMUS są z katalogów EXPOM, reszta części i wszystkie ceny – przykładowe.',
-    madeBy: 'Przygotował:', logoLabel: 'EXPOM – części zamienne, początek strony', navLabel: 'Sekcje', nav1: 'Maszyny', nav2: 'Części', nav3: 'Zamawianie',
+    skip: 'Przejdź do treści', madeBy: 'Przygotował:', logoLabel: 'EXPOM – części zamienne, początek strony', navLabel: 'Sekcje', nav1: 'Maszyny', nav2: 'Części', nav3: 'Zamawianie',
     cart: 'Koszyk', cartSr: 'szt. w koszyku', cartTitle: 'Koszyk',
     h1: 'Części zamienne EXPOM',
     lead: 'Wybierz swoją maszynę i rok produkcji. Zobaczysz pasujące części z ceną i zamówisz je od razu – bez maili i telefonów. Części sprzedajemy do maszyn do 10 lat wstecz.',
@@ -422,7 +430,7 @@ const T = {
     fnote: 'Projekt demonstracyjny – zamówienia nie są nigdzie wysyłane. Ceny są przykładowe; w euro przeliczone po przykładowym kursie 4,25 zł/EUR.', goCart: 'Przejdź do koszyka',
     catLabel: 'Rodzaj części',
     cats: { all: 'Wszystkie', ring: 'Wał i pierścienie', wear: 'Części robocze', bearing: 'Łożyska i osie', chassis: 'Koła i podwozie', hydr: 'Hydraulika', light: 'Oświetlenie', small: 'Sworznie i mocowania' },
-    width: 'Szerokość robocza', rowsLbl: 'Liczba rzędów', rows: 'rzędów', ring: 'Rodzaj wału', year: 'Rok produkcji', anyW: 'Wszystkie szerokości', anyR: 'Wszystkie wały', pickYear: 'Wybierz', older: (y) => `${y} lub starsza`,
+    width: 'Szerokość robocza', rowsLbl: 'Liczba rzędów', rows: 'rzędów', ring: 'Rodzaj wału', year: 'Rok produkcji', anyW: 'Wszystkie szerokości', anyRows: 'Każda liczba rzędów', anyR: 'Wszystkie wały', pickYear: 'Wybierz', older: (y) => `${y} lub starsza`,
     yrNone: 'Podaj rok produkcji – części sprzedajemy do maszyn do 10 lat wstecz.',
     yrOk: y => `Rocznik ${y}: maszyna mieści się w 10 latach – części są dostępne.`,
     yrAsk: 'Maszyna starsza niż 10 lat – dostępność potwierdzi dział części. Zamówienie możesz wysłać normalnie.',
@@ -446,7 +454,7 @@ const T = {
     fName: 'Imię i nazwisko', fFarm: 'Gospodarstwo (imię i nazwisko lub nazwa)', fFirm: 'Nazwa firmy', fNip: 'NIP', fVatId: 'Numer VAT UE', fTaxId: 'Numer identyfikacji podatkowej', fCountry: 'Kraj',
     fTel: 'Telefon', fMail: 'E-mail', fAddr: 'Adres dostawy (ulica, kod, miejscowość)', fDel: 'Dostawa', delC: 'Kurier', delP: 'Odbiór osobisty w Krośniewicach', fNote: 'Uwagi',
     send: 'Wyślij zamówienie',
-    errName: 'Wpisz imię i nazwisko albo nazwę.', errYear: 'Wybierz rok produkcji maszyny – dział części sprawdzi po nim dopasowanie części.', errNip: 'NIP powinien mieć 10 cyfr.', errNipSum: 'Ten NIP ma błędną cyfrę kontrolną – sprawdź go.', errVatId: c => `Numer VAT UE powinien zaczynać się od kodu wybranego kraju (${c}), np. ${c}123456789.`, errTaxId: 'Wpisz numer identyfikacji podatkowej firmy.',
+    errName: 'Wpisz imię i nazwisko albo nazwę.', errYear: 'Wybierz rok produkcji maszyny – dział części sprawdzi po nim dopasowanie części.', errNip: 'NIP powinien mieć 10 cyfr.', errNipSum: 'Ten NIP ma błędną cyfrę kontrolną – sprawdź go.', errVatId: (c, ex) => `Numer VAT UE nie pasuje do wybranego kraju (${c}). Wzór: ${ex}.`, errTaxId: 'Wpisz pełny numer identyfikacji podatkowej.',
     errContact: 'Podaj telefon albo e-mail, żeby dział części mógł potwierdzić zamówienie.', errTel: 'Numer telefonu powinien mieć co najmniej 9 cyfr.', errMail: 'Sprawdź adres e-mail – brakuje w nim „@” albo domeny.', errAddr: 'Wpisz adres dostawy.',
     dfoot: 'To projekt demonstracyjny: po kliknięciu nic nie zostanie wysłane.',
     sentT: 'Gotowe – to tylko demo', sentP: n => `W prawdziwym sklepie zamówienie (${n}) trafiłoby do działu części EXPOM razem z numerami katalogowymi i danymi maszyny, a klient dostałby potwierdzenie e-mailem. Tutaj żadne dane nie zostały wysłane.`,
@@ -455,7 +463,7 @@ const T = {
   },
   de: {
     demo: '<b>Demo-Projekt</b> für EXPOM. Teilenummern für TYTAN PLUS und MAXIMUS aus den EXPOM-Ersatzteillisten, übrige Teile und alle Preise sind Beispiele.',
-    madeBy: 'Erstellt von:', logoLabel: 'EXPOM – Ersatzteile, zum Seitenanfang', navLabel: 'Bereiche', nav1: 'Maschinen', nav2: 'Ersatzteile', nav3: 'Bestellung',
+    skip: 'Zum Inhalt springen', madeBy: 'Erstellt von:', logoLabel: 'EXPOM – Ersatzteile, zum Seitenanfang', navLabel: 'Bereiche', nav1: 'Maschinen', nav2: 'Ersatzteile', nav3: 'Bestellung',
     cart: 'Warenkorb', cartSr: 'Stk. im Warenkorb', cartTitle: 'Warenkorb',
     h1: 'EXPOM-Ersatz­teile',
     lead: 'Wählen Sie Ihre Maschine und das Baujahr. Sie sehen sofort die passenden Teile mit Preis und bestellen direkt – ohne E-Mails und Telefonate. Ersatzteile liefern wir für Maschinen, die bis zu 10 Jahre alt sind.',
@@ -472,7 +480,7 @@ const T = {
     fnote: 'Demo-Projekt – Bestellungen werden nirgendwohin gesendet. Die Preise sind Beispiele, umgerechnet zum Beispielkurs 4,25 PLN/EUR.', goCart: 'Zum Warenkorb',
     catLabel: 'Teileart',
     cats: { all: 'Alle', ring: 'Walze und Ringe', wear: 'Verschleißteile', bearing: 'Lager und Achsen', chassis: 'Räder und Fahrwerk', hydr: 'Hydraulik', light: 'Beleuchtung', small: 'Bolzen und Befestigung' },
-    width: 'Arbeitsbreite', rowsLbl: 'Reihenzahl', rows: 'Reihen', ring: 'Walzentyp', year: 'Baujahr', anyW: 'Alle Breiten', anyR: 'Alle Walzen', pickYear: 'Wählen', older: (y) => `${y} oder älter`,
+    width: 'Arbeitsbreite', rowsLbl: 'Reihenzahl', rows: 'Reihen', ring: 'Walzentyp', year: 'Baujahr', anyW: 'Alle Breiten', anyRows: 'Alle Reihenzahlen', anyR: 'Alle Walzen', pickYear: 'Wählen', older: (y) => `${y} oder älter`,
     yrNone: 'Bitte Baujahr angeben – Ersatzteile gibt es für Maschinen, die bis zu 10 Jahre alt sind.',
     yrOk: y => `Baujahr ${y}: innerhalb von 10 Jahren – Ersatzteile sind lieferbar.`,
     yrAsk: 'Maschine älter als 10 Jahre – die Verfügbarkeit bestätigt die Ersatzteilabteilung. Sie können trotzdem bestellen.',
@@ -495,7 +503,7 @@ const T = {
     fName: 'Vor- und Nachname', fFarm: 'Betrieb (Name)', fFirm: 'Firmenname', fNip: 'NIP (polnische Steuernummer)', fVatId: 'USt-IdNr.', fTaxId: 'Steuernummer', fCountry: 'Land',
     fTel: 'Telefon', fMail: 'E-Mail', fAddr: 'Lieferadresse (Straße, PLZ, Ort)', fDel: 'Lieferung', delC: 'Paketdienst', delP: 'Abholung in Krośniewice', fNote: 'Bemerkungen',
     send: 'Bestellung absenden',
-    errName: 'Bitte Namen oder Firmennamen eingeben.', errYear: 'Bitte das Baujahr wählen – damit prüft die Ersatzteilabteilung, ob die Teile passen.', errNip: 'Die NIP hat 10 Ziffern.', errNipSum: 'Diese NIP hat eine falsche Prüfziffer – bitte prüfen.', errVatId: c => `Die USt-IdNr. muss mit dem Code des gewählten Landes beginnen (${c}), z. B. ${c}123456789.`, errTaxId: 'Bitte die Steuernummer der Firma eingeben.',
+    errName: 'Bitte Namen oder Firmennamen eingeben.', errYear: 'Bitte das Baujahr wählen – damit prüft die Ersatzteilabteilung, ob die Teile passen.', errNip: 'Die NIP hat 10 Ziffern.', errNipSum: 'Diese NIP hat eine falsche Prüfziffer – bitte prüfen.', errVatId: (c, ex) => `Die USt-IdNr. passt nicht zum gewählten Land (${c}). Format: ${ex}.`, errTaxId: 'Bitte die vollständige Steuernummer eingeben.',
     errContact: 'Bitte Telefon oder E-Mail angeben, damit die Bestellung bestätigt werden kann.', errTel: 'Die Telefonnummer sollte mindestens 9 Ziffern haben.', errMail: 'Bitte E-Mail-Adresse prüfen – es fehlt „@“ oder die Domain.', errAddr: 'Bitte Lieferadresse eingeben.',
     dfoot: 'Dies ist ein Demo-Projekt: Beim Klick wird nichts gesendet.',
     sentT: 'Fertig – nur eine Demo', sentP: n => `Im echten Shop ginge die Bestellung (${n}) mit allen Teilenummern und Maschinendaten an die EXPOM-Ersatzteilabteilung, und der Kunde bekäme eine Bestätigung per E-Mail. Hier wurden keine Daten gesendet.`,
@@ -504,7 +512,7 @@ const T = {
   },
   en: {
     demo: '<b>Demo project</b> for EXPOM. TYTAN PLUS and MAXIMUS part numbers are from EXPOM parts lists; other parts and all prices are examples.',
-    madeBy: 'Prepared by:', logoLabel: 'EXPOM – spare parts, back to top', navLabel: 'Sections', nav1: 'Machines', nav2: 'Parts', nav3: 'Ordering',
+    skip: 'Skip to content', madeBy: 'Prepared by:', logoLabel: 'EXPOM – spare parts, back to top', navLabel: 'Sections', nav1: 'Machines', nav2: 'Parts', nav3: 'Ordering',
     cart: 'Cart', cartSr: 'pcs in cart', cartTitle: 'Cart',
     h1: 'EXPOM spare parts',
     lead: 'Choose your machine and year of manufacture. You will see matching parts with prices and can order right away – no emails or phone calls. We supply parts for machines up to 10 years old.',
@@ -521,7 +529,7 @@ const T = {
     fnote: 'Demo project – orders are not sent anywhere. Prices are examples, converted to euro at a sample rate of 4.25 PLN/EUR.', goCart: 'Go to cart',
     catLabel: 'Part type',
     cats: { all: 'All', ring: 'Roller and rings', wear: 'Wear parts', bearing: 'Bearings and axles', chassis: 'Wheels and chassis', hydr: 'Hydraulics', light: 'Lighting', small: 'Pins and fixings' },
-    width: 'Working width', rowsLbl: 'Number of rows', rows: 'rows', ring: 'Roller type', year: 'Year of manufacture', anyW: 'All widths', anyR: 'All rollers', pickYear: 'Choose', older: (y) => `${y} or older`,
+    width: 'Working width', rowsLbl: 'Number of rows', rows: 'rows', ring: 'Roller type', year: 'Year of manufacture', anyW: 'All widths', anyRows: 'Any number of rows', anyR: 'All rollers', pickYear: 'Choose', older: (y) => `${y} or older`,
     yrNone: 'Enter the year of manufacture – we supply parts for machines up to 10 years old.',
     yrOk: y => `Year ${y}: within 10 years – parts are available.`,
     yrAsk: 'Machine older than 10 years – the parts department will confirm availability. You can still place the order.',
@@ -544,7 +552,7 @@ const T = {
     fName: 'Full name', fFarm: 'Farm (name)', fFirm: 'Company name', fNip: 'NIP (Polish tax number)', fVatId: 'EU VAT number', fTaxId: 'Tax ID', fCountry: 'Country',
     fTel: 'Phone', fMail: 'Email', fAddr: 'Delivery address (street, postcode, town)', fDel: 'Delivery', delC: 'Courier', delP: 'Pick-up in Krośniewice', fNote: 'Notes',
     send: 'Send the order',
-    errName: 'Enter your name or company name.', errYear: 'Choose the year of manufacture – the parts department uses it to check the fit.', errNip: 'The NIP has 10 digits.', errNipSum: 'This NIP has an invalid check digit – please check it.', errVatId: c => `The EU VAT number must start with the code of the selected country (${c}), e.g. ${c}123456789.`, errTaxId: 'Enter the company tax ID.',
+    errName: 'Enter your name or company name.', errYear: 'Choose the year of manufacture – the parts department uses it to check the fit.', errNip: 'The NIP has 10 digits.', errNipSum: 'This NIP has an invalid check digit – please check it.', errVatId: (c, ex) => `The EU VAT number does not match the selected country (${c}). Format: ${ex}.`, errTaxId: 'Enter the full tax ID.',
     errContact: 'Enter a phone number or email so the parts department can confirm the order.', errTel: 'The phone number should have at least 9 digits.', errMail: 'Check the email address – the “@” or the domain is missing.', errAddr: 'Enter the delivery address.',
     dfoot: 'This is a demo: nothing is sent when you click.',
     sentT: 'Done – this is only a demo', sentP: n => `In the real shop the order (${n}) would go to the EXPOM parts department with all part numbers and machine details, and the customer would get an email confirmation. No data was sent here.`,
@@ -574,12 +582,12 @@ const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '
 const pname = p => p[lang];
 const pfull = p => p.nr ? `${p[lang]} (${p.nr})` : p[lang];   // nazwa z numerem do etykiet czytników ekranu
 const mtype = m => m[lang];
-const r2 = v => Math.round(v * 100) / 100;
 const isEur = () => lang !== 'pl';
-const unit = zl => r2(isEur() ? zl / DATA.eur : zl);   // cena sztuki w walucie – zaokrąglona przed sumowaniem
+const unitC = zl => Math.round((isEur() ? zl / DATA.eur : zl) * 100);   // cena sztuki w groszach/centach – zaokrąglona przed sumowaniem
+const unit = zl => unitC(zl) / 100;
 const fmt = v => { const o = { style: 'currency', currency: isEur() ? 'EUR' : 'PLN', minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: 'always' }; try { return v.toLocaleString(LOC(), o); } catch (e) { o.useGrouping = true; return v.toLocaleString(LOC(), o); } };
 const isExample = p => p.refs.every(r => !M(r[0]).cat);
-const grossUnit = zl => r2(unit(zl) * 1.23);
+const grossUnit = zl => Math.round(unitC(zl) * 123 / 100) / 100;
 const nfmt = v => v.toLocaleString(LOC(), { maximumFractionDigits: 2 });
 const vLabel = (m, v) => m.vk === 'rows' ? `${v} ${L().rows}` : `${nfmt(v)} m`;
 const vRange = m => { const a = m.vAll || m.v; return m.vk === 'rows' ? `${a.join(' / ')} ${L().rows}` : (a.length > 1 ? `${nfmt(a[0])}–${nfmt(a[a.length - 1])} m` : `${nfmt(a[0])} m`); };
@@ -608,8 +616,8 @@ function renderMachines() {
   $('#machines').innerHTML = DATA.groups.map(g => `<div class="mgroup"><h3>${esc(g[lang])}</h3><div class="machines">` +
     DATA.machines.filter(m => m.group === g.id).map(m => `<button type="button" class="mcard" data-m="${esc(m.id)}" aria-pressed="${m.id === current}">
       <span class="im${PHOTO.has(m.id) ? ' ph' : ''}"><img src="img/${esc(m.id)}.webp" width="720" height="450" alt="" loading="lazy" decoding="async"></span>
-      ${m.cat ? `<span class="tag">${esc(L().catTag)}</span>` : ''}
-      <span class="t"><span class="n">${esc(m.name)}</span><span class="d">${esc(mtype(m))}</span><span class="w num">${esc(vRange(m))}, ${esc(L().parts(machinePartCount(m.id)))}</span></span></button>`).join('') +
+      <span class="t"><span class="n">${esc(m.name)}</span><span class="d">${esc(mtype(m))}</span><span class="w num">${esc(vRange(m))}, ${esc(L().parts(machinePartCount(m.id)))}</span></span>
+      ${m.cat ? `<span class="tag">${esc(L().catTag)}</span>` : ''}</button>`).join('') +
     `</div></div>`).join('');
 }
 $('#machines').addEventListener('click', e => {
@@ -630,7 +638,7 @@ function scrollToEl(sel) {
 function renderCfg() {
   const m = M(current), c = cfgOf(current), l = L();
   const vField = m.v.length > 1
-    ? `<label class="field">${m.vk === 'rows' ? l.rowsLbl : l.width}<select data-c="v"><option value="">${l.anyW}</option>${m.v.map(v => `<option value="${v}"${String(c.v) === String(v) ? ' selected' : ''}>${esc(vLabel(m, v))}</option>`).join('')}</select></label>`
+    ? `<label class="field">${m.vk === 'rows' ? l.rowsLbl : l.width}<select data-c="v"><option value="">${m.vk === 'rows' ? l.anyRows : l.anyW}</option>${m.v.map(v => `<option value="${v}"${String(c.v) === String(v) ? ' selected' : ''}>${esc(vLabel(m, v))}</option>`).join('')}</select></label>`
     : `<div class="field"><span>${m.vk === 'rows' ? l.rowsLbl : l.width}</span><span class="static">${esc(vLabel(m, m.v[0]))}</span></div>`;
   const rField = !m.rings ? '' : m.rings.length > 1
     ? `<label class="field ring">${l.ring}<select data-c="ring"><option value="">${l.anyR}</option>${m.rings.map(r => `<option value="${r}"${c.ring === r ? ' selected' : ''}>${esc(ringName(r))}</option>`).join('')}</select></label>`
@@ -644,12 +652,13 @@ function renderCfg() {
     : `<span>${esc(l.srcEx)} ${esc(l.priceEx)}</span>`;
   $('#cfg').innerHTML = `<div class="who"><img src="img/${esc(m.id)}.webp" alt=""${PHOTO.has(m.id) ? ' class="ph"' : ''} width="120" height="75"><div><b>${esc(m.name)}</b><span>${esc(mtype(m))}</span><br><a href="${esc(DATA.site + m.url)}" target="_blank" rel="noopener">${esc(l.machinePage)}<span class="sr"> ${esc(m.name)} (expom.com.pl)</span></a></div></div>
     <div class="fields">${vField}${rField}${yField}</div>
-    <div class="info" aria-live="polite">${yr}${src}</div>`;
+    <div class="info">${yr}${src}</div>`;
   nbsp($('#cfg'));
 }
 $('#cfg').addEventListener('change', e => {
   const s = e.target.closest('[data-c]'); if (!s) return;
   const c = cfgOf(current); c[s.dataset.c] = s.value;
+  if (s.dataset.c === 'year') { const l = L(); $('#liveCfg').textContent = c.year === 'old' ? l.yrAsk : c.year ? l.yrOk(c.year) : l.yrNone; }
   if (!formMachineTouched) syncFormMachine();
   keepFocus(() => { renderCfg(); renderParts(); if (cart.size) renderCart(); });
 });
@@ -682,11 +691,11 @@ function renderParts() {
     const q = qtyDraft.get(p.id) || 1, nm = esc(pname(p));
     const tags = query ? [...new Set(p.refs.map(r => M(r[0]).name))].map(n => `<span class="mtag">${esc(n)}</span>`).join('') : '';
     const spec = specTxt(p.spec);
-    return `<tr>
-      <td class="c-nr">${p.nr ? `<span class="pn">${esc(p.nr)}</span>` : isExample(p) ? `<span class="pn ex">${esc(l.exTag)}</span>` : `<span class="pn ex"><span aria-hidden="true">—</span><span class="sr">${esc(l.noNr)}</span></span>`}</td>
-      <td class="c-name"><div class="pname">${nm}</div>${spec || tags ? `<div class="pmeta">${tags}${esc(spec)}</div>` : ''}</td>
-      <td class="price"><strong class="num">${fmt(unit(p.price))}</strong><small class="num">${fmt(grossUnit(p.price))} ${l.gross}</small></td>
-      <td class="c-buy"><div class="buy"><span class="qty"><button type="button" data-dec="${esc(p.id)}" aria-label="${esc(l.dec(pfull(p)))}">−</button><input class="num" type="number" inputmode="numeric" min="1" max="${QMAX}" value="${q}" data-q="${esc(p.id)}" aria-label="${esc(l.qtyFor(pfull(p)))}"><button type="button" data-inc="${esc(p.id)}" aria-label="${esc(l.inc(pfull(p)))}">+</button></span><button type="button" class="add" data-add="${esc(p.id)}">${esc(l.add)}<span class="sr">: ${esc(pfull(p))}</span></button></div></td>
+    return `<tr role="row">
+      <td role="cell" class="c-nr">${p.nr ? `<span class="pn">${esc(p.nr)}</span>` : isExample(p) ? `<span class="pn ex">${esc(l.exTag)}</span>` : `<span class="pn ex"><span aria-hidden="true">—</span><span class="sr">${esc(l.noNr)}</span></span>`}</td>
+      <td role="cell" class="c-name"><div class="pname">${nm}</div>${spec || tags ? `<div class="pmeta">${tags}${esc(spec)}</div>` : ''}</td>
+      <td role="cell" class="price"><strong class="num">${fmt(unit(p.price))}</strong><small class="num">${fmt(grossUnit(p.price))} ${l.gross}</small></td>
+      <td role="cell" class="c-buy"><div class="buy"><span class="qty"><button type="button" data-dec="${esc(p.id)}" aria-label="${esc(l.dec(pfull(p)))}">−</button><input class="num" type="number" inputmode="numeric" min="1" max="${QMAX}" value="${q}" data-q="${esc(p.id)}" aria-label="${esc(l.qtyFor(pfull(p)))}"><button type="button" data-inc="${esc(p.id)}" aria-label="${esc(l.inc(pfull(p)))}">+</button></span><button type="button" class="add" data-add="${esc(p.id)}">${esc(l.add)}<span class="sr">: ${esc(pfull(p))}</span></button></div></td>
     </tr>`;
   }).join('');
   $('#pcap').textContent = query ? l.allHits(list.length, query) : l.cap(m.name, list.length);
@@ -722,6 +731,14 @@ $('#partsBody').addEventListener('click', e => {
     setTimeout(() => { if (t.isConnected) { t.firstChild.textContent = L().add; t.classList.remove('ok'); } }, 1400);
   }
 });
+// Enter w polu ilości dodaje część do koszyka (jak przycisk „Dodaj”)
+$('#partsBody').addEventListener('keydown', e => {
+  const inp = e.target.closest('[data-q]'); if (!inp || e.key !== 'Enter') return;
+  e.preventDefault(); const bad = outOfRange(inp.value);
+  inp.dispatchEvent(new Event('change', { bubbles: true }));   // poprawia wartość i pokazuje komunikat
+  if (bad) return;
+  const b =$(`[data-add="${CSS.escape(inp.dataset.q)}"]`); if (b) b.click();
+});
 $('#partsBody').addEventListener('change', e => {
   const inp = e.target.closest('[data-q]'); if (!inp) return;
   if (outOfRange(inp.value)) toast(L().qtyMsg);
@@ -738,14 +755,17 @@ $$('[data-try]').forEach(b => b.onclick = () => { setQuery(b.textContent); rende
 /* koszyk */
 function totals() {
   const items = [...cart.entries()];
-  const sub = r2(items.reduce((a, [id, q]) => a + unit(byId.get(id).price) * q, 0));
-  const rc = reverseCharge(), tax = rc ? 0 : r2(sub * 0.23);
-  return { sub, tax, tot: r2(sub + tax), rc, n: items.reduce((a, [, q]) => a + q, 0) };
+  const subC = items.reduce((a, [id, q]) => a + unitC(byId.get(id).price) * q, 0);   // w groszach/centach
+  const rc = reverseCharge(), taxC = rc ? 0 : Math.round(subC * 23 / 100);
+  return { sub: subC / 100, tax: taxC / 100, tot: (subC + taxC) / 100, rc, n: items.reduce((a, [, q]) => a + q, 0) };
 }
 // numer VAT UE: kod wybranego kraju + 2–12 znaków (jak w VIES)
 const isEU = c => c !== 'XX';
 const vatId = () => { const id = (form.nip || '').replace(/[\s.-]/g, '').toUpperCase(); return id; };
-const vatIdOk = () => { const id = vatId(); return /^[A-Z]{2}[0-9A-Z]{2,12}$/.test(id) && id.slice(0, 2) === form.country; };
+// format numeru VAT UE dla krajów z listy (bez sprawdzania w VIES); prefiks kraju można pominąć
+const VAT_FMT = { DE: ['\\d{9}', '123456789'], AT: ['U\\d{8}', 'U12345678'], CZ: ['\\d{8,10}', '12345678'], SK: ['\\d{10}', '1234567890'], LT: ['(\\d{9}|\\d{12})', '123456789'], LV: ['\\d{11}', '12345678901'], EE: ['\\d{9}', '123456789'], NL: ['\\d{9}B\\d{2}', '123456789B01'], BE: ['[01]\\d{9}', '0123456789'], FR: ['[0-9A-Z]{2}\\d{9}', '12345678901'], DK: ['\\d{8}', '12345678'], SE: ['\\d{12}', '123456789001'], HU: ['\\d{8}', '12345678'], RO: ['\\d{2,10}', '1234567'] };
+const vatEx = c => c + (VAT_FMT[c] ? VAT_FMT[c][1] : '123456789');
+const vatIdOk = () => { const c = form.country, f = VAT_FMT[c], id = vatId(); if (!f) return false; const re = new RegExp('^' + c + f[0] + '$'); return re.test(id) || re.test(c + id); };
 // VAT 0% tylko przy WDT: kupujący z innego kraju UE z numerem VAT UE tego kraju
 function reverseCharge() { return buyer !== 'priv' && form.country !== 'PL' && isEU(form.country) && vatIdOk(); }
 const nipOk = n => { const d = n.replace(/^PL/, ''); if (!/^\d{10}$/.test(d)) return false; const w = [6, 5, 7, 2, 3, 4, 5, 6, 7]; return w.reduce((a, x, i) => a + x * d[i], 0) % 11 === +d[9]; };
@@ -766,7 +786,7 @@ function renderCart() {
   const idLbl = form.country === 'PL' ? l.fNip : isEU(form.country) ? l.fVatId : l.fTaxId;
   $('#dbody').innerHTML = items.map(([id, q]) => { const p = byId.get(id); const ms = [...new Set(p.refs.map(r => M(r[0]).name))].join(', '); return `<div class="citem">
       <div><div class="n">${esc(pname(p))}</div><div class="m num">${p.nr ? esc(p.nr) + ', ' : ''}${esc(ms)}, ${fmt(unit(p.price))} ${l.net}</div></div>
-      <div class="lt num">${fmt(r2(unit(p.price) * q))}</div>
+      <div class="lt num">${fmt(unitC(p.price) * q / 100)}</div>
       <div class="r"><span class="qty"><button type="button" data-cdec="${esc(id)}" aria-label="${esc(l.dec(pfull(p)))}">−</button><input class="num" type="number" inputmode="numeric" min="1" max="${QMAX}" value="${q}" data-cq="${esc(id)}" aria-label="${esc(l.qtyFor(pfull(p)))}"><button type="button" data-cinc="${esc(id)}" aria-label="${esc(l.inc(pfull(p)))}">+</button></span><button class="rm" type="button" data-rm="${esc(id)}">${esc(l.remove)}<span class="sr">: ${esc(pfull(p))}</span></button></div>
     </div>`; }).join('') +
     `<div class="sums" id="sums">${sumsHtml()}</div>
@@ -836,7 +856,7 @@ $('#dbody').addEventListener('submit', e => {
   if (buyer === 'firm' || (buyer === 'farm' && nip)) {
     if (form.country === 'PL') { if (!/^(PL)?\d{10}$/.test(nip)) return bad(l.errNip, '#fNip'); if (!nipOk(nip)) return bad(l.errNipSum, '#fNip'); }
     else if (!isEU(form.country)) { if (nip.length < 4) return bad(l.errTaxId, '#fNip'); }
-    else if (!vatIdOk()) return bad(l.errVatId(form.country), '#fNip');
+    else if (!vatIdOk()) return bad(l.errVatId(form.country, vatEx(form.country)), '#fNip');
   }
   if (!form.tel.trim() && !form.mail.trim()) return bad(l.errContact, '#fTel');
   if (form.tel.trim() && form.tel.replace(/\D/g, '').length < 9) return bad(l.errTel, '#fTel');
@@ -846,8 +866,10 @@ $('#dbody').addEventListener('submit', e => {
   openModal(l.sentT, l.sentP(l.pcs(totals().n)));   // demo: nic nie jest wysyłane
 });
 
+$('.skip').addEventListener('click', e => { e.preventDefault(); const m = $('main'); m.focus({ preventScroll: true }); scrollToEl('main'); });
+
 /* szuflada i okno – reszta strony jest „inert”, więc fokus nie ucieka */
-const PAGE = ['.demobar', 'header.site', 'main', 'footer'];
+const PAGE = ['.skip', '.demobar', 'header.site', 'main', 'footer'];
 const setInert = (sels, on) => sels.forEach(s => { const el = $(s); if (el) el.inert = on; });
 let cartBack = null;
 function openCart() {
@@ -881,7 +903,7 @@ function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.ad
 function nbsp(root = document.body) {
   if (lang !== 'pl') return;
   const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script,style,svg,input,textarea,select,option') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
-  let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(^|[\s(„])([aiouwzAIOUWZ]) /g, '$1$2 '); if (v !== n.nodeValue) n.nodeValue = v; }
+  let n; while ((n = w.nextNode())) { const v = n.nodeValue.replace(/(?<=^|[\s(„])([aiouwzAIOUWZ]) /g, '$1 '); if (v !== n.nodeValue) n.nodeValue = v; }
 }
 
 /* nagłówek: zagęszczamy krokami tylko wtedy, gdy elementy się nie mieszczą */

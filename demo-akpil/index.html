@@ -33,6 +33,10 @@ h2,h3{text-wrap:balance}
 .num{font-variant-numeric:tabular-nums}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 [hidden]{display:none!important}
+.skip{position:absolute;left:12px;top:-100px;z-index:100;background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--r);font-weight:600;text-decoration:none}
+.skip:focus{top:8px;outline:3px solid #fff;outline-offset:0;box-shadow:0 0 0 6px var(--ink)}
+main{scroll-margin-top:var(--hh,68px)}
+main:focus{outline:0}
 
 /* pasek demo */
 .demobar{background:var(--ink);color:#D5DADE;font-size:14px;line-height:1.45}
@@ -98,12 +102,13 @@ section.block{padding:clamp(56px,7vw,104px) 0;scroll-margin-top:calc(var(--hh,68
 /* części */
 .parts-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(24px,3.5vw,56px);align-items:start}
 .mpanel{position:sticky;top:calc(var(--hh,68px) + 20px)}
-.mfig{position:relative;margin:0;border:1px solid var(--line);border-radius:var(--r);background:#fff;overflow:hidden}
+.mfig{position:relative;margin:0;border:1px solid var(--line);border-radius:var(--r);background:#fff;overflow:hidden;isolation:isolate}
 .mfig img{width:100%;aspect-ratio:3/2;object-fit:contain;border-radius:var(--r)}
 .hs{position:absolute;width:40px;height:40px;margin:-20px 0 0 -20px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center;font-weight:600;font-size:14px;color:var(--ink)}
-.hs .dot{width:26px;height:26px;border-radius:50%;background:var(--red);border:3px solid #fff;box-shadow:0 0 0 1px rgba(30,34,38,.3),0 2px 6px rgba(30,34,38,.18);display:grid;place-items:center;transition:transform .15s}
+.hs .dot{position:relative;z-index:2;width:26px;height:26px;border-radius:50%;background:var(--red);border:3px solid #fff;box-shadow:0 0 0 1px rgba(30,34,38,.3),0 2px 6px rgba(30,34,38,.18);display:grid;place-items:center;transition:transform .15s}
 .hs .dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
-.hs .lbl{position:absolute;left:38px;top:50%;transform:translateY(-50%);background:#fff;border:1px solid var(--ink);border-radius:999px;padding:3px 10px;line-height:1.3;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+/* etykiety pod wszystkimi punktami (z-index 1 < 2), więc aktywna etykieta nie zasłania sąsiedniego punktu */
+.hs .lbl{position:absolute;z-index:1;left:38px;top:50%;transform:translateY(-50%);background:#fff;border:1px solid var(--ink);border-radius:999px;padding:3px 10px;line-height:1.3;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
 .hs.flip .lbl{left:auto;right:38px}
 .hs.below .lbl{left:50%;top:calc(100% + 2px);transform:translateX(-50%)}
 .hs:hover .dot{transform:scale(1.12)}
@@ -122,6 +127,7 @@ section.block{padding:clamp(56px,7vw,104px) 0;scroll-margin-top:calc(var(--hh,68
 .qfield{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:var(--r);background:#fff;padding:0 6px 0 14px;height:52px}
 .qfield:focus-within{outline:3px solid var(--ink);outline-offset:1px}
 .qfield input{border:0;outline:0;flex:1;min-width:0;font-size:17px;background:transparent;height:100%}
+.qfield input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
 .qfield svg{flex:none}
 .qclear{border:0;background:none;cursor:pointer;color:var(--ink-2);font-size:24px;line-height:1;width:40px;height:40px;border-radius:4px}
 .qclear:hover{background:var(--mist)}
@@ -217,8 +223,9 @@ footer :focus-visible{outline-color:#fff}
 .dfoot{font-size:14px;color:var(--ink-2)}
 
 /* toast, okno */
-.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r);font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:calc(100% - 32px)}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+/* left/right + auto marginesy: szerokość z treści, ale do pełnej szerokości ekranu (left:50% ścinało ją do połowy) */
+.toast{position:fixed;left:16px;right:16px;bottom:22px;margin:0 auto;width:fit-content;max-width:560px;transform:translateY(16px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r);font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80}
+.toast.show{opacity:1;transform:none}
 .modal{position:fixed;inset:0;background:rgba(30,34,38,.55);display:none;place-items:center;z-index:90;padding:16px}
 .modal.open{display:grid}
 .modal .box{background:#fff;border-radius:8px;max-width:500px;width:100%;padding:clamp(22px,4vw,32px);max-height:calc(100vh - 32px);overflow:auto}
@@ -246,7 +253,9 @@ footer :focus-visible{outline-color:#fff}
   .part .buy{grid-column:1/-1;justify-content:flex-end}
   .mpanel{grid-template-columns:minmax(0,1fr);gap:16px}
   .hs .dot{width:30px;height:30px}
-  .hs .lbl{display:none}
+  /* na dotyku nie ma najechania: widać tylko etykietę wybranego punktu */
+  .hs:not([aria-pressed=true]) .lbl{display:none}
+  .hs .lbl{font-size:13px;padding:2px 8px}
 }
 @media (max-width:620px){
   .langs{display:none}
@@ -269,12 +278,15 @@ footer :focus-visible{outline-color:#fff}
   header.site .wrap{gap:10px}
   .seg button{padding:8px 12px}
   .two{grid-template-columns:minmax(0,1fr)}
+  .chips{gap:6px}
+  .chip{padding:6px 11px;font-size:14.5px;min-height:36px}
 }
 @media (max-width:359px){ .logo img{height:24px} .qty button{width:34px} .qty input{width:40px} }
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important} }
 </style>
 </head>
 <body>
+<a class="skip" href="#top" data-i="skip">Przejdź do treści</a>
 <div class="demobar"><div class="wrap">
   <span data-i="demo"><b>Projekt demonstracyjny</b> dla AKPIL. Maszyny i ich parametry pochodzą z katalogów AKPIL, lista części, numery i ceny są przykładowe.</span>
   <span><span data-i="madeBy">Przygotował:</span> <a href="https://marcinprojekty.github.io/" target="_blank" rel="noopener">Marcin Projekty</a></span>
@@ -283,10 +295,10 @@ footer :focus-visible{outline-color:#fff}
 <header class="site"><div class="wrap">
   <a class="logo" href="#top" data-i-aria="home" aria-label="AKPIL – strona główna sklepu z częściami"><img src="img/logo.webp" width="480" height="156" alt="AKPIL 1975"></a>
   <div class="langs" role="group" aria-label="Język / Language / Sprache / Langue">
-    <button type="button" data-lang="pl" lang="pl" aria-pressed="true" aria-label="Polski">PL</button>
-    <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
-    <button type="button" data-lang="de" lang="de" aria-pressed="false" aria-label="Deutsch">DE</button>
-    <button type="button" data-lang="fr" lang="fr" aria-pressed="false" aria-label="Français">FR</button>
+    <button type="button" data-lang="pl" lang="pl" aria-pressed="true" aria-label="PL – Polski">PL</button>
+    <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="EN – English">EN</button>
+    <button type="button" data-lang="de" lang="de" aria-pressed="false" aria-label="DE – Deutsch">DE</button>
+    <button type="button" data-lang="fr" lang="fr" aria-pressed="false" aria-label="FR – Français">FR</button>
   </div>
   <select class="langsel" id="langSel" aria-label="Język / Language / Sprache / Langue">
     <option value="pl" lang="pl">PL</option><option value="en" lang="en">EN</option><option value="de" lang="de">DE</option><option value="fr" lang="fr">FR</option>
@@ -294,7 +306,7 @@ footer :focus-visible{outline-color:#fff}
   <button class="cartbtn" type="button" id="openCart" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 6h16l-2 9H7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg><span class="lbl" data-i="cart">Koszyk</span><span class="cnt num" id="cartCount" aria-hidden="true">0</span><span class="sr" id="cartSr"></span></button>
 </div></header>
 
-<main id="top">
+<main id="top" tabindex="-1">
 <section class="hero"><div class="wrap">
   <div>
     <h1 data-i="h1">Części do maszyn AKPIL</h1>
@@ -310,7 +322,7 @@ footer :focus-visible{outline-color:#fff}
       <li><a href="#zamawianie"><span class="n" aria-hidden="true">3</span><span data-i="st3">Zamów</span></a></li>
     </ol>
   </div>
-  <figure><img src="img/hero.webp" width="2000" height="1079" alt="Agregat talerzowy AKPIL Tigre XL w pracy, widok z drona" data-i-alt="heroAlt" fetchpriority="high"></figure>
+  <figure><img src="img/hero.webp" srcset="img/hero-800.webp 800w, img/hero-1200.webp 1200w, img/hero.webp 2000w" sizes="(max-width: 900px) 100vw, min(80vw, 1150px)" width="2000" height="1079" alt="Agregat talerzowy AKPIL Tigre XL w pracy, widok z drona" data-i-alt="heroAlt" fetchpriority="high"></figure>
 </div></section>
 
 <section class="block machines-sec" id="maszyny"><div class="wrap">
@@ -368,7 +380,7 @@ footer :focus-visible{outline-color:#fff}
 <script>
 (() => {
 'use strict';
-const DATA = {"eurRate":4.3,"dealerDiscount":0.25,"pdf":{"disc":"https://akpil.pl/wp-content/uploads/2025/12/Akpil-Maszyny-rolnicze-Agregaty-talerzowe.pdf","cult":"https://akpil.pl/wp-content/uploads/2025/12/Akpil-Maszyny-rolnicze-Agregaty-uprawowe-v2.pdf"},"types":{"disc":{"pl":"Agregat talerzowy","en":"Disc harrow","de":"Kurzscheibenegge","fr":"Déchaumeur à disques"},"cult":{"pl":"Agregat podorywkowy","en":"Stubble cultivator","de":"Grubber","fr":"Déchaumeur à dents"},"chisel":{"pl":"Pług dłutowy","en":"Chisel plough","de":"Meißelpflug","fr":"Chisel"}},"machines":[{"id":"bison-xl","name":"Bison XL","type":"disc","pdf":"disc","page":6,"w":[4,6],"n2":{"pl":"32–48 talerzy ø610 mm","en":"32–48 discs, ø610 mm","de":"32–48 Scheiben, ø610 mm","fr":"32 à 48 disques, ø610 mm"},"hot":[["disc",12,64],["hub",30,74],["roller",52,66],["hydr",31,25],["frame",78,56]]},{"id":"tigre-xl","name":"Tigre XL","type":"disc","pdf":"disc","page":37,"w":[4,6],"n2":{"pl":"32–48 talerzy ø660 mm","en":"32–48 discs, ø660 mm","de":"32–48 Scheiben, ø660 mm","fr":"32 à 48 disques, ø660 mm"},"hot":[["disc",50,70],["roller",89,61],["frame",58,48],["hydr",10,51]]},{"id":"gepard","name":"Gepard","type":"disc","pdf":"disc","page":67,"w":[1.75,4],"n2":{"pl":"14–32 talerze ø560 mm","en":"14–32 discs, ø560 mm","de":"14–32 Scheiben, ø560 mm","fr":"14 à 32 disques, ø560 mm"},"hot":[["disc",24,58],["hub",48,65],["roller",87,62],["frame",37,15]]},{"id":"scorpio-s","name":"Scorpio S","type":"cult","pdf":"cult","page":19,"w":[2.5,3.6],"n2":{"pl":"8–12 zębów, wał rurowy ø530 mm","en":"8–12 tines, tube roller ø530 mm","de":"8–12 Zinken, Rohrstabwalze ø530 mm","fr":"8 à 12 dents, rouleau à barres ø530 mm"},"hot":[["tine",46,71],["guard",55,37],["disc",33,56],["roller",10,57],["frame",89,40]]},{"id":"grizzly","name":"Grizzly","type":"cult","pdf":"cult","page":62,"w":[2.5,3.5],"n2":{"pl":"11–15 zębów sprężynowych 40×40 mm","en":"11–15 spring tines, 40×40 mm","de":"11–15 Federzinken, 40×40 mm","fr":"11 à 15 dents à ressort, 40×40 mm"},"hot":[["tine",41,80],["guard",40,50],["roller",88,68],["hydr",28,30]]},{"id":"humero","name":"Humero","type":"chisel","pdf":"cult","page":73,"w":[1.6,3],"n2":{"pl":"3–7 zębów z redlicami obracalnymi","en":"3–7 tines with reversible points","de":"3–7 Zinken mit Wendescharen","fr":"3 à 7 dents à socs réversibles"},"hot":[["tine",27,83],["guard",47,56],["roller",74,50],["frame",34,9]]}],"parts":[{"nr":"TU-560-4-1","c":"disc","zl":178,"ico":1,"fit":["gepard"],"n":{"pl":"Talerz uzębiony ø560×4 mm, typ I","en":"Notched disc ø560×4 mm, type I","de":"Gezackte Scheibe ø560×4 mm, Typ I","fr":"Disque crénelé ø560×4 mm, type I"}},{"nr":"TU-560-4-2","c":"disc","zl":184,"ico":2,"fit":["gepard"],"n":{"pl":"Talerz uzębiony ø560×4 mm, typ II","en":"Notched disc ø560×4 mm, type II","de":"Gezackte Scheibe ø560×4 mm, Typ II","fr":"Disque crénelé ø560×4 mm, type II"}},{"nr":"TU-610-5-2","c":"disc","zl":238,"ico":2,"fit":["bison-xl"],"n":{"pl":"Talerz uzębiony ø610×5 mm, typ II","en":"Notched disc ø610×5 mm, type II","de":"Gezackte Scheibe ø610×5 mm, Typ II","fr":"Disque crénelé ø610×5 mm, type II"}},{"nr":"TU-610-5-1","c":"disc","zl":246,"ico":1,"fit":["bison-xl"],"n":{"pl":"Talerz uzębiony ø610×5 mm, typ I","en":"Notched disc ø610×5 mm, type I","de":"Gezackte Scheibe ø610×5 mm, Typ I","fr":"Disque crénelé ø610×5 mm, type I"}},{"nr":"TU-660-6-1","c":"disc","zl":318,"ico":1,"fit":["tigre-xl"],"n":{"pl":"Talerz uzębiony ø660×6 mm, typ I","en":"Notched disc ø660×6 mm, type I","de":"Gezackte Scheibe ø660×6 mm, Typ I","fr":"Disque crénelé ø660×6 mm, type I"}},{"nr":"TG-660-6","c":"disc","zl":345,"ico":4,"fit":["tigre-xl"],"n":{"pl":"Talerz skrajny „gwiazda” ø660 mm","en":"Outer star disc ø660 mm","de":"Randscheibe „Stern“ ø660 mm","fr":"Disque d’extrémité étoile ø660 mm"}},{"nr":"TW-455","c":"disc","zl":142,"ico":3,"fit":["scorpio-s"],"n":{"pl":"Talerz wyrównujący ø455 mm","en":"Levelling disc ø455 mm","de":"Einebnungsscheibe ø455 mm","fr":"Disque niveleur ø455 mm"}},{"nr":"PK-25","c":"hub","zl":386,"fit":["bison-xl","gepard"],"n":{"pl":"Piasta talerza z łożyskiem kasetowym, bezobsługowa","en":"Disc hub with cassette bearing, maintenance-free","de":"Scheibennabe mit Kassettenlager, wartungsfrei","fr":"Moyeu de disque à roulement cassette, sans entretien"}},{"nr":"PL-30","c":"hub","zl":428,"fit":["tigre-xl"],"n":{"pl":"Piasta talerza z uszczelnieniem labiryntowym","en":"Disc hub with labyrinth seal","de":"Scheibennabe mit Labyrinthdichtung","fr":"Moyeu de disque à joint labyrinthe"}},{"nr":"LB-22","c":"hub","zl":274,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Łożysko baryłkowe wału doprawiającego, w obudowie przeciwpyłowej","en":"Packer roller spherical bearing in dust-proof housing","de":"Pendelrollenlager der Nachläuferwalze im staubdichten Gehäuse","fr":"Roulement à rotule du rouleau arrière, en carter étanche"}},{"nr":"LW-530","c":"hub","zl":189,"fit":["scorpio-s","grizzly","humero"],"n":{"pl":"Łożysko wału w obudowie","en":"Roller bearing unit with housing","de":"Walzenlager mit Gehäuse","fr":"Palier de rouleau avec carter"}},{"nr":"OM-10","c":"hub","zl":46,"fit":["gepard"],"n":{"pl":"Osłona metalowa łożyskowania","en":"Metal bearing guard","de":"Lagerschutz aus Stahl","fr":"Protection métallique de roulement"}},{"nr":"GZ-40210","c":"guard","zl":58,"fit":["bison-xl"],"n":{"pl":"Gumowe zabezpieczenie talerza 40×210 mm","en":"Rubber disc protection 40×210 mm","de":"Gummi-Überlastsicherung der Scheibe 40×210 mm","fr":"Sécurité caoutchouc de disque 40×210 mm"}},{"nr":"GZ-35160","c":"guard","zl":47,"fit":["gepard"],"n":{"pl":"Gumowe zabezpieczenie talerza 35×160 mm","en":"Rubber disc protection 35×160 mm","de":"Gummi-Überlastsicherung der Scheibe 35×160 mm","fr":"Sécurité caoutchouc de disque 35×160 mm"}},{"nr":"AP-40","c":"guard","zl":94,"fit":["bison-xl","gepard"],"n":{"pl":"Amortyzator poliuretanowy talerza","en":"Polyurethane disc shock absorber","de":"Polyurethan-Dämpfer der Scheibe","fr":"Amortisseur polyuréthane de disque"}},{"nr":"SZ-660","c":"guard","zl":118,"fit":["tigre-xl"],"n":{"pl":"Sprężyna zabezpieczenia talerza","en":"Disc safety spring","de":"Sicherungsfeder der Scheibe","fr":"Ressort de sécurité de disque"}},{"nr":"SP-2","c":"guard","zl":162,"fit":["scorpio-s"],"n":{"pl":"Podwójna sprężyna zabezpieczenia zęba, komplet","en":"Double tine safety spring, set","de":"Doppelfeder der Zinkensicherung, Satz","fr":"Double ressort de sécurité de dent, jeu"}},{"nr":"OS-3D","c":"guard","zl":74,"fit":["grizzly"],"n":{"pl":"Ogranicznik zabezpieczenia 3D NON-STOP","en":"3D NON-STOP protection stop","de":"Anschlag der 3D-NON-STOP-Sicherung","fr":"Butée de sécurité 3D NON-STOP"}},{"nr":"SR-12","c":"guard","zl":6.4,"fit":["humero"],"n":{"pl":"Śruba zrywalna zabezpieczenia zęba M12","en":"Tine shear bolt M12","de":"Abscherschraube der Zinkensicherung M12","fr":"Boulon de cisaillement de dent M12"}},{"nr":"GS-310","c":"tine","zl":112,"fit":["scorpio-s","grizzly"],"n":{"pl":"Gęsiostopa 310 mm","en":"Duck-foot share 310 mm","de":"Gänsefußschar 310 mm","fr":"Soc patte d’oie 310 mm"}},{"nr":"RP-490","c":"tine","zl":86,"fit":["scorpio-s","grizzly"],"n":{"pl":"Redlica prosta 490×60×16 mm","en":"Straight point 490×60×16 mm","de":"Gerade Schar 490×60×16 mm","fr":"Soc droit 490×60×16 mm"}},{"nr":"RW-50","c":"tine","zl":58,"fit":["scorpio-s"],"n":{"pl":"Redliczka wąska 50 mm","en":"Narrow point 50 mm","de":"Schmalschar 50 mm","fr":"Soc étroit 50 mm"}},{"nr":"ZR-S","c":"tine","zl":520,"fit":["scorpio-s"],"n":{"pl":"Ząb roboczy z zabezpieczeniem sprężynowym","en":"Tine with spring protection","de":"Zinken mit Federsicherung","fr":"Dent avec sécurité à ressort"}},{"nr":"ZS-4040","c":"tine","zl":468,"fit":["grizzly"],"n":{"pl":"Ząb sprężynowy ślimakowy 40×40 mm","en":"Spiral spring tine 40×40 mm","de":"Spiralfederzinken 40×40 mm","fr":"Dent à ressort spiralé 40×40 mm"}},{"nr":"RO-80","c":"tine","zl":72,"fit":["humero"],"n":{"pl":"Redlica obracalna dwustronna, szer. 8 cm","en":"Reversible double-sided point, 8 cm","de":"Beidseitige Wendeschar, 8 cm breit","fr":"Soc réversible double face, 8 cm"}},{"nr":"SB-150","c":"tine","zl":136,"fit":["humero"],"n":{"pl":"Skrzydełka boczne redlicy, para","en":"Point side wings, pair","de":"Seitenflügel der Schar, Paar","fr":"Ailettes latérales de soc, la paire"}},{"nr":"ZR-H","c":"tine","zl":610,"fit":["humero"],"n":{"pl":"Ząb roboczy z zabezpieczeniem śrubowym","en":"Tine with shear-bolt protection","de":"Zinken mit Scherbolzensicherung","fr":"Dent avec sécurité à boulon"}},{"nr":"SW-SEG","c":"roller","zl":54,"fit":["bison-xl","tigre-xl","gepard"],"n":{"pl":"Skrobak wzmocniony wału segmentowego","en":"Reinforced scraper for segment roller","de":"Verstärkter Abstreifer der Segmentwalze","fr":"Racleur renforcé pour rouleau à segments"}},{"nr":"PS-01","c":"roller","zl":41,"fit":["bison-xl","gepard"],"n":{"pl":"Płozo-skrobak wału daszkowego","en":"Skid scraper for V-profile roller","de":"Kufenabstreifer der Dachprofilwalze","fr":"Patin-racleur pour rouleau à profil en V"}},{"nr":"NP-01","c":"roller","zl":28,"fit":["bison-xl","tigre-xl","gepard"],"n":{"pl":"Nakładka płozy wału sprężynowego","en":"Skid wear plate for spring roller","de":"Kufenauflage der Federwalze","fr":"Plaque d’usure de patin, rouleau à ressorts"}},{"nr":"SK-530","c":"roller","zl":37,"fit":["scorpio-s","grizzly"],"n":{"pl":"Skrobak wału rurowego ø530 mm","en":"Scraper for tube roller ø530 mm","de":"Abstreifer der Rohrstabwalze ø530 mm","fr":"Racleur de rouleau à barres ø530 mm"}},{"nr":"KW-01","c":"roller","zl":24,"fit":["humero"],"n":{"pl":"Kolec wału kolczastego, wymienny","en":"Replaceable spike for spiked roller","de":"Ersatzzinke der Stachelwalze","fr":"Pointe de rechange du rouleau à pointes"}},{"nr":"PH-330","c":"hydr","zl":94,"fit":["bison-xl","tigre-xl","grizzly"],"n":{"pl":"Przewód hydrauliczny dwuoplotowy 330 bar, 1,5 m","en":"Two-wire braided hydraulic hose 330 bar, 1.5 m","de":"Hydraulikschlauch, zweifach geflochten, 330 bar, 1,5 m","fr":"Flexible hydraulique double tresse 330 bar, 1,5 m"}},{"nr":"ZH-01","c":"hydr","zl":212,"fit":["bison-xl","grizzly"],"n":{"pl":"Zamek hydrauliczny siłownika","en":"Hydraulic cylinder lock valve","de":"Hydraulisches Sperrventil für Zylinder","fr":"Clapet de verrouillage hydraulique de vérin"}},{"nr":"AH-075","c":"hydr","zl":685,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Akumulator hydrauliczny 0,75 l","en":"Hydraulic accumulator 0.75 l","de":"Hydraulikspeicher 0,75 l","fr":"Accumulateur hydraulique 0,75 l"}},{"nr":"BD-AL","c":"hydr","zl":148,"fit":["bison-xl","grizzly"],"n":{"pl":"Aluminiowe blachy dystansowe siłownika, komplet","en":"Aluminium cylinder spacer clips, set","de":"Aluminium-Distanzclips für Zylinder, Satz","fr":"Cales d’écartement aluminium pour vérin, jeu"}},{"nr":"SW-K3","c":"frame","zl":126,"fit":["bison-xl","tigre-xl","scorpio-s"],"n":{"pl":"Sworzeń zaczepowy kat. III","en":"Hitch pin, cat. III","de":"Anbaubolzen Kat. III","fr":"Axe d’attelage cat. III"}},{"nr":"SW-K2","c":"frame","zl":96,"fit":["gepard","grizzly","humero"],"n":{"pl":"Sworzeń zaczepowy kat. II","en":"Hitch pin, cat. II","de":"Anbaubolzen Kat. II","fr":"Axe d’attelage cat. II"}},{"nr":"LED-01","c":"frame","zl":164,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Lampa tylna zespolona LED","en":"LED rear combination lamp","de":"LED-Rückleuchte","fr":"Feu arrière combiné LED"}},{"nr":"DB-01","c":"frame","zl":308,"fit":["gepard"],"n":{"pl":"Deflektor boczny płytowy z gumowym zabezpieczeniem","en":"Side deflector plate with rubber protection","de":"Seitenblech mit Gummisicherung","fr":"Déflecteur latéral à plaque avec sécurité caoutchouc"}},{"nr":"KT-500","c":"frame","zl":2460,"fit":["bison-xl"],"n":{"pl":"Koło transportowe 500/50-17, kompletne","en":"Transport wheel 500/50-17, complete","de":"Transportrad 500/50-17, komplett","fr":"Roue de transport 500/50-17, complète"}}]};
+const DATA = {"eurRate":4.3,"dealerDiscount":0.25,"pdf":{"disc":"https://akpil.pl/wp-content/uploads/2025/12/Akpil-Maszyny-rolnicze-Agregaty-talerzowe.pdf","cult":"https://www.akpil.pl/wp-content/uploads/2026/01/Akpil-Maszyny-rolnicze-Agregaty-bezorkowe.pdf"},"types":{"disc":{"pl":"Agregat talerzowy","en":"Disc harrow","de":"Kurzscheibenegge","fr":"Déchaumeur à disques"},"cult":{"pl":"Agregat podorywkowy","en":"Stubble cultivator","de":"Grubber","fr":"Déchaumeur à dents"},"chisel":{"pl":"Pług dłutowy","en":"Chisel plough","de":"Meißelpflug","fr":"Chisel"}},"machines":[{"id":"bison-xl","name":"Bison XL","type":"disc","pdf":"disc","page":6,"w":[4,6],"n2":{"pl":"32–48 talerzy ø610 mm","en":"32–48 discs, ø610 mm","de":"32–48 Scheiben, ø610 mm","fr":"32 à 48 disques, ø610 mm"},"hot":[["disc",12,64],["hub",30,74],["roller",52,66],["hydr",31,25],["frame",78,56]]},{"id":"tigre-xl","name":"Tigre XL","type":"disc","pdf":"disc","page":37,"w":[4,6],"n2":{"pl":"32–48 talerzy ø660 mm","en":"32–48 discs, ø660 mm","de":"32–48 Scheiben, ø660 mm","fr":"32 à 48 disques, ø660 mm"},"hot":[["disc",50,70],["roller",89,61],["frame",58,48],["hydr",10,51]]},{"id":"gepard","name":"Gepard","type":"disc","pdf":"disc","page":67,"w":[1.75,4],"n2":{"pl":"14–32 talerze ø560 mm","en":"14–32 discs, ø560 mm","de":"14–32 Scheiben, ø560 mm","fr":"14 à 32 disques, ø560 mm"},"hot":[["disc",24,58],["hub",48,65],["roller",87,62],["frame",37,15]]},{"id":"scorpio-s","name":"Scorpio S","type":"cult","pdf":"cult","page":19,"w":[2.5,3.6],"n2":{"pl":"8–12 zębów, wał rurowy ø530 mm","en":"8–12 tines, tube roller ø530 mm","de":"8–12 Zinken, Rohrstabwalze ø530 mm","fr":"8 à 12 dents, rouleau à barres ø530 mm"},"hot":[["tine",46,71],["guard",55,37],["disc",33,56],["roller",10,57],["frame",89,40]]},{"id":"grizzly","name":"Grizzly","type":"cult","pdf":"cult","page":62,"w":[2.5,3.5],"n2":{"pl":"11–15 zębów sprężynowych 40×40 mm","en":"11–15 spring tines, 40×40 mm","de":"11–15 Federzinken, 40×40 mm","fr":"11 à 15 dents à ressort, 40×40 mm"},"hot":[["tine",41,80],["guard",40,50],["roller",88,68],["hydr",28,30]]},{"id":"humero","name":"Humero","type":"chisel","pdf":"cult","page":73,"w":[1.6,3],"n2":{"pl":"3–7 zębów z redlicami obracalnymi","en":"3–7 tines with reversible points","de":"3–7 Zinken mit Wendescharen","fr":"3 à 7 dents à socs réversibles"},"hot":[["tine",27,83],["guard",47,56],["roller",74,50],["frame",34,9]]}],"parts":[{"nr":"TU-560-4-1","c":"disc","zl":178,"ico":1,"fit":["gepard"],"n":{"pl":"Talerz uzębiony ø560×4 mm, typ I","en":"Notched disc ø560×4 mm, type I","de":"Gezackte Scheibe ø560×4 mm, Typ I","fr":"Disque crénelé ø560×4 mm, type I"}},{"nr":"TU-560-4-2","c":"disc","zl":184,"ico":2,"fit":["gepard"],"n":{"pl":"Talerz uzębiony ø560×4 mm, typ II","en":"Notched disc ø560×4 mm, type II","de":"Gezackte Scheibe ø560×4 mm, Typ II","fr":"Disque crénelé ø560×4 mm, type II"}},{"nr":"TU-610-5-2","c":"disc","zl":238,"ico":2,"fit":["bison-xl"],"n":{"pl":"Talerz uzębiony ø610×5 mm, typ II","en":"Notched disc ø610×5 mm, type II","de":"Gezackte Scheibe ø610×5 mm, Typ II","fr":"Disque crénelé ø610×5 mm, type II"}},{"nr":"TU-610-5-1","c":"disc","zl":246,"ico":1,"fit":["bison-xl"],"n":{"pl":"Talerz uzębiony ø610×5 mm, typ I","en":"Notched disc ø610×5 mm, type I","de":"Gezackte Scheibe ø610×5 mm, Typ I","fr":"Disque crénelé ø610×5 mm, type I"}},{"nr":"TU-660-6-1","c":"disc","zl":318,"ico":1,"fit":["tigre-xl"],"n":{"pl":"Talerz uzębiony ø660×6 mm, typ I","en":"Notched disc ø660×6 mm, type I","de":"Gezackte Scheibe ø660×6 mm, Typ I","fr":"Disque crénelé ø660×6 mm, type I"}},{"nr":"TG-660-6","c":"disc","zl":345,"ico":4,"fit":["tigre-xl"],"n":{"pl":"Talerz skrajny „gwiazda” ø660 mm","en":"Outer star disc ø660 mm","de":"Randscheibe „Stern“ ø660 mm","fr":"Disque d’extrémité étoile ø660 mm"}},{"nr":"TW-455","c":"disc","zl":142,"ico":3,"fit":["scorpio-s"],"n":{"pl":"Talerz wyrównujący ø455 mm","en":"Levelling disc ø455 mm","de":"Einebnungsscheibe ø455 mm","fr":"Disque niveleur ø455 mm"}},{"nr":"PK-25","c":"hub","zl":386,"fit":["bison-xl","gepard"],"n":{"pl":"Piasta talerza z łożyskiem kasetowym, bezobsługowa","en":"Disc hub with cassette bearing, maintenance-free","de":"Scheibennabe mit Kassettenlager, wartungsfrei","fr":"Moyeu de disque à roulement cassette, sans entretien"}},{"nr":"PL-30","c":"hub","zl":428,"fit":["tigre-xl"],"n":{"pl":"Piasta talerza z uszczelnieniem labiryntowym","en":"Disc hub with labyrinth seal","de":"Scheibennabe mit Labyrinthdichtung","fr":"Moyeu de disque à joint labyrinthe"}},{"nr":"LB-22","c":"hub","zl":274,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Łożysko baryłkowe wału doprawiającego, w obudowie przeciwpyłowej","en":"Packer roller spherical bearing in dust-proof housing","de":"Pendelrollenlager der Nachläuferwalze im staubdichten Gehäuse","fr":"Roulement à rotule du rouleau arrière, en carter étanche"}},{"nr":"LW-530","c":"hub","zl":189,"fit":["scorpio-s","grizzly","humero"],"n":{"pl":"Łożysko wału w obudowie","en":"Roller bearing unit with housing","de":"Walzenlager mit Gehäuse","fr":"Palier de rouleau avec carter"}},{"nr":"OM-10","c":"hub","zl":46,"fit":["gepard"],"n":{"pl":"Osłona metalowa łożyskowania","en":"Metal bearing guard","de":"Lagerschutz aus Stahl","fr":"Protection métallique de roulement"}},{"nr":"GZ-40210","c":"guard","zl":58,"fit":["bison-xl"],"n":{"pl":"Gumowe zabezpieczenie talerza 40×210 mm","en":"Rubber disc protection 40×210 mm","de":"Gummi-Überlastsicherung der Scheibe 40×210 mm","fr":"Sécurité caoutchouc de disque 40×210 mm"}},{"nr":"GZ-35160","c":"guard","zl":47,"fit":["gepard"],"n":{"pl":"Gumowe zabezpieczenie talerza 35×160 mm","en":"Rubber disc protection 35×160 mm","de":"Gummi-Überlastsicherung der Scheibe 35×160 mm","fr":"Sécurité caoutchouc de disque 35×160 mm"}},{"nr":"AP-40","c":"guard","zl":94,"fit":["bison-xl","gepard"],"n":{"pl":"Amortyzator poliuretanowy talerza","en":"Polyurethane disc shock absorber","de":"Polyurethan-Dämpfer der Scheibe","fr":"Amortisseur polyuréthane de disque"}},{"nr":"SZ-660","c":"guard","zl":118,"fit":["tigre-xl"],"n":{"pl":"Sprężyna zabezpieczenia talerza","en":"Disc safety spring","de":"Sicherungsfeder der Scheibe","fr":"Ressort de sécurité de disque"}},{"nr":"SP-2","c":"guard","zl":162,"fit":["scorpio-s"],"n":{"pl":"Podwójna sprężyna zabezpieczenia zęba, komplet","en":"Double tine safety spring, set","de":"Doppelfeder der Zinkensicherung, Satz","fr":"Double ressort de sécurité de dent, jeu"}},{"nr":"OS-3D","c":"guard","zl":74,"fit":["grizzly"],"n":{"pl":"Ogranicznik zabezpieczenia 3D NON-STOP","en":"3D NON-STOP protection stop","de":"Anschlag der 3D-NON-STOP-Sicherung","fr":"Butée de sécurité 3D NON-STOP"}},{"nr":"SR-12","c":"guard","zl":6.4,"fit":["humero"],"n":{"pl":"Śruba zrywalna zabezpieczenia zęba M12","en":"Tine shear bolt M12","de":"Abscherschraube der Zinkensicherung M12","fr":"Boulon de cisaillement de dent M12"}},{"nr":"GS-310","c":"tine","zl":112,"fit":["scorpio-s","grizzly"],"n":{"pl":"Gęsiostopa 310 mm","en":"Duck-foot share 310 mm","de":"Gänsefußschar 310 mm","fr":"Soc patte d’oie 310 mm"}},{"nr":"RP-490","c":"tine","zl":86,"fit":["scorpio-s","grizzly"],"n":{"pl":"Redlica prosta 490×60×16 mm","en":"Straight point 490×60×16 mm","de":"Gerade Schar 490×60×16 mm","fr":"Soc droit 490×60×16 mm"}},{"nr":"RW-50","c":"tine","zl":58,"fit":["scorpio-s"],"n":{"pl":"Redliczka wąska 50 mm","en":"Narrow point 50 mm","de":"Schmalschar 50 mm","fr":"Soc étroit 50 mm"}},{"nr":"ZR-S","c":"tine","zl":520,"fit":["scorpio-s"],"n":{"pl":"Ząb roboczy z zabezpieczeniem sprężynowym","en":"Tine with spring protection","de":"Zinken mit Federsicherung","fr":"Dent avec sécurité à ressort"}},{"nr":"ZS-4040","c":"tine","zl":468,"fit":["grizzly"],"n":{"pl":"Ząb sprężynowy ślimakowy 40×40 mm","en":"Spiral spring tine 40×40 mm","de":"Spiralfederzinken 40×40 mm","fr":"Dent à ressort spiralé 40×40 mm"}},{"nr":"RO-80","c":"tine","zl":72,"fit":["humero"],"n":{"pl":"Redlica obracalna dwustronna, szer. 8 cm","en":"Reversible double-sided point, 8 cm","de":"Beidseitige Wendeschar, 8 cm breit","fr":"Soc réversible double face, 8 cm"}},{"nr":"SB-150","c":"tine","zl":136,"fit":["humero"],"n":{"pl":"Skrzydełka boczne redlicy, para","en":"Point side wings, pair","de":"Seitenflügel der Schar, Paar","fr":"Ailettes latérales de soc, la paire"}},{"nr":"ZR-H","c":"tine","zl":610,"fit":["humero"],"n":{"pl":"Ząb roboczy z zabezpieczeniem śrubowym","en":"Tine with shear-bolt protection","de":"Zinken mit Scherbolzensicherung","fr":"Dent avec sécurité à boulon"}},{"nr":"SW-SEG","c":"roller","zl":54,"fit":["bison-xl","tigre-xl","gepard"],"n":{"pl":"Skrobak wzmocniony wału segmentowego","en":"Reinforced scraper for segment roller","de":"Verstärkter Abstreifer der Segmentwalze","fr":"Racleur renforcé pour rouleau à segments"}},{"nr":"PS-01","c":"roller","zl":41,"fit":["bison-xl","gepard"],"n":{"pl":"Płozo-skrobak wału daszkowego","en":"Skid scraper for V-profile roller","de":"Kufenabstreifer der Dachprofilwalze","fr":"Patin-racleur pour rouleau à profil en V"}},{"nr":"NP-01","c":"roller","zl":28,"fit":["bison-xl","tigre-xl","gepard"],"n":{"pl":"Nakładka płozy wału sprężynowego","en":"Skid wear plate for spring roller","de":"Kufenauflage der Federwalze","fr":"Plaque d’usure de patin, rouleau à ressorts"}},{"nr":"SK-530","c":"roller","zl":37,"fit":["scorpio-s","grizzly"],"n":{"pl":"Skrobak wału rurowego ø530 mm","en":"Scraper for tube roller ø530 mm","de":"Abstreifer der Rohrstabwalze ø530 mm","fr":"Racleur de rouleau à barres ø530 mm"}},{"nr":"KW-01","c":"roller","zl":24,"fit":["humero"],"n":{"pl":"Kolec wału kolczastego, wymienny","en":"Replaceable spike for spiked roller","de":"Ersatzzinke der Stachelwalze","fr":"Pointe de rechange du rouleau à pointes"}},{"nr":"PH-330","c":"hydr","zl":94,"fit":["bison-xl","tigre-xl","grizzly"],"n":{"pl":"Przewód hydrauliczny dwuoplotowy 330 bar, 1,5 m","en":"Two-wire braided hydraulic hose 330 bar, 1.5 m","de":"Hydraulikschlauch, zweifach geflochten, 330 bar, 1,5 m","fr":"Flexible hydraulique double tresse 330 bar, 1,5 m"}},{"nr":"ZH-01","c":"hydr","zl":212,"fit":["bison-xl","grizzly"],"n":{"pl":"Zamek hydrauliczny siłownika","en":"Hydraulic cylinder lock valve","de":"Hydraulisches Sperrventil für Zylinder","fr":"Clapet de verrouillage hydraulique de vérin"}},{"nr":"AH-075","c":"hydr","zl":685,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Akumulator hydrauliczny 0,75 l","en":"Hydraulic accumulator 0.75 l","de":"Hydraulikspeicher 0,75 l","fr":"Accumulateur hydraulique 0,75 l"}},{"nr":"BD-AL","c":"hydr","zl":148,"fit":["bison-xl","grizzly"],"n":{"pl":"Aluminiowe blachy dystansowe siłownika, komplet","en":"Aluminium cylinder spacer clips, set","de":"Aluminium-Distanzclips für Zylinder, Satz","fr":"Cales d’écartement aluminium pour vérin, jeu"}},{"nr":"SW-K3","c":"frame","zl":126,"fit":["bison-xl","tigre-xl","scorpio-s"],"n":{"pl":"Sworzeń zaczepowy kat. III","en":"Hitch pin, cat. III","de":"Anbaubolzen Kat. III","fr":"Axe d’attelage cat. III"}},{"nr":"SW-K2","c":"frame","zl":96,"fit":["gepard","grizzly","humero"],"n":{"pl":"Sworzeń zaczepowy kat. II","en":"Hitch pin, cat. II","de":"Anbaubolzen Kat. II","fr":"Axe d’attelage cat. II"}},{"nr":"LED-01","c":"frame","zl":164,"fit":["bison-xl","tigre-xl"],"n":{"pl":"Lampa tylna zespolona LED","en":"LED rear combination lamp","de":"LED-Rückleuchte","fr":"Feu arrière combiné LED"}},{"nr":"DB-01","c":"frame","zl":308,"fit":["gepard"],"n":{"pl":"Deflektor boczny płytowy z gumowym zabezpieczeniem","en":"Side deflector plate with rubber protection","de":"Seitenblech mit Gummisicherung","fr":"Déflecteur latéral à plaque avec sécurité caoutchouc"}},{"nr":"KT-500","c":"frame","zl":2460,"fit":["bison-xl"],"n":{"pl":"Koło transportowe 500/50-17, kompletne","en":"Transport wheel 500/50-17, complete","de":"Transportrad 500/50-17, komplett","fr":"Roue de transport 500/50-17, complète"}}]};
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const LOC = { pl: 'pl-PL', en: 'en-GB', de: 'de-DE', fr: 'fr-FR' };
 const MAXQ = 999, VAT = 0.23;
@@ -381,14 +393,14 @@ const T = {
   pl: {
     title: 'AKPIL – części zamienne z ceną (projekt demonstracyjny)', desc: 'Projekt demonstracyjny: katalog części zamiennych AKPIL z ceną i zamówieniem online, w czterech językach.',
     demo: '<b>Projekt demonstracyjny</b> dla AKPIL. Maszyny i ich parametry pochodzą z katalogów AKPIL, lista części, numery i ceny są przykładowe.',
-    madeBy: 'Przygotował:', home: 'AKPIL – początek strony', cart: 'Koszyk', cartTitle: 'Koszyk', closeCart: 'Zamknij koszyk', openCart: 'Przejdź do koszyka',
+    skip: 'Przejdź do treści', madeBy: 'Przygotował:', home: 'AKPIL – początek strony', cart: 'Koszyk', cartTitle: 'Koszyk', closeCart: 'Zamknij koszyk', openCart: 'Przejdź do koszyka',
     cartSr: n => `, sztuk w koszyku: ${n}`,
     h1: 'Części do maszyn AKPIL', lead: 'Wybierz maszynę, znajdź część, zobacz cenę i zamów. O każdej porze, po polsku, angielsku, niemiecku i francusku.',
     qLabel: 'Nazwa lub numer części', ph: 'np. talerz 610 albo GS-310', phQ: 'Szukaj we wszystkich maszynach', find: 'Szukaj części', clear: 'Wyczyść wyszukiwanie',
     st1: 'Wybierz maszynę', st2: 'Znajdź część', st3: 'Zamów', heroAlt: 'Agregat talerzowy AKPIL Tigre XL w pracy, widok z drona',
     s1: 'Wybierz maszynę', s1p: 'Części pokazujemy dla konkretnego modelu. W pełnej wersji – dla każdej maszyny z oferty AKPIL.',
     s2: 'Znajdź część', s3: 'Zamów',
-    width: 'szerokość', mAlt: n => `${n} – zdjęcie maszyny`, hint: 'Kliknij punkt na zdjęciu, żeby zobaczyć części tego zespołu.', pdf: 'Zobacz maszynę w katalogu PDF',
+    width: 'szerokość', mAlt: n => `${n} – zdjęcie maszyny`, hint: 'Wybierz punkt na zdjęciu, żeby zobaczyć części tego zespołu.', pdf: 'Zobacz maszynę w katalogu PDF',
     priceFor: 'Ceny dla', farmer: 'Rolnik', dealer: 'Dealer',
     noteFarmer: 'Ceny netto i brutto (VAT 23%).', noteDealer: 'Ceny dealera netto – przykładowy rabat 25%.',
     catsLabel: 'Rodzaj części', all: 'Wszystkie',
@@ -406,7 +418,7 @@ const T = {
     fCountry: 'Polska', fParts: 'Dział części', fWeb: 'Strona firmy',
     footNote: 'Projekt demonstracyjny przygotowany dla AKPIL. Zdjęcia i parametry maszyn z katalogów AKPIL. Lista części, numery, ceny i rabat dealerski są przykładowe. Formularz niczego nie wysyła.',
     cempty: 'Koszyk jest pusty. Wybierz maszynę i dodaj części z listy.', toParts: 'Wybierz części',
-    sub: 'Wartość netto', vat: 'VAT 23%', tot: 'Razem brutto', totNet: 'Razem netto', vatNote: '', dealerSum: 'Ceny dealera (rabat 25%)', remove: 'Usuń', rmOf: n => `Usuń: ${n}`,
+    sub: 'Wartość netto', vat: 'VAT 23%', tot: 'Razem brutto', totNet: 'Razem netto', vatNote: 'Stawkę VAT dla kraju dostawy dział części poda w potwierdzeniu zamówienia.', dealerSum: 'Ceny dealera (rabat 25%)', remove: 'Usuń', rmOf: n => `Usuń: ${n}`,
     form: 'Dane do zamówienia', machineLeg: 'Maszyna, do której zamawiasz', fMachine: 'Model', other: 'Inna maszyna AKPIL', choose: 'Wybierz model',
     fYear: 'Rok produkcji', fSerial: 'Numer fabryczny', serialHint: 'Z tabliczki znamionowej. Pomaga dobrać właściwą wersję części.', optional: '(opcjonalnie)',
     buyerLeg: 'Kupujący', buyerQ: 'Kupuję jako', fName: 'Imię i nazwisko', fFirm: 'Nazwa firmy', fVat: 'NIP', fVatX: 'Numer VAT firmy', fCountryL: 'Kraj dostawy', fStreet: 'Ulica i numer', fZip: 'Kod pocztowy', fCity: 'Miejscowość', fTel: 'Telefon', fMail: 'E-mail', fNote: 'Uwagi',
@@ -419,14 +431,14 @@ const T = {
   en: {
     title: 'AKPIL – spare parts with prices (demo project)', desc: 'Demo project: AKPIL spare parts catalogue with prices and online ordering, in four languages.',
     demo: '<b>Demo project</b> for AKPIL. Machines and their specifications come from AKPIL catalogues; the parts list, part numbers and prices are examples.',
-    madeBy: 'Made by:', home: 'AKPIL – top of the page', cart: 'Basket', cartTitle: 'Basket', closeCart: 'Close basket', openCart: 'Go to basket',
+    skip: 'Skip to content', madeBy: 'Made by:', home: 'AKPIL – top of the page', cart: 'Basket', cartTitle: 'Basket', closeCart: 'Close basket', openCart: 'Go to basket',
     cartSr: n => `, items in basket: ${n}`,
     h1: 'Parts for AKPIL machines', lead: 'Choose your machine, find the part, see the price and order. Any time, in English, Polish, German and French.',
     qLabel: 'Part name or number', ph: 'e.g. disc 610 or GS-310', phQ: 'Search all machines', find: 'Find parts', clear: 'Clear search',
     st1: 'Choose machine', st2: 'Find part', st3: 'Order', heroAlt: 'AKPIL Tigre XL disc harrow at work, drone view',
     s1: 'Choose your machine', s1p: 'Parts are shown for each specific model. The full version covers every machine in the AKPIL range.',
     s2: 'Find the part', s3: 'Order',
-    width: 'working width', mAlt: n => `${n} – machine photo`, hint: 'Click a point on the photo to see the parts of that assembly.', pdf: 'See the machine in the PDF catalogue',
+    width: 'working width', mAlt: n => `${n} – machine photo`, hint: 'Select a point on the photo to see the parts of that assembly.', pdf: 'See the machine in the PDF catalogue',
     priceFor: 'Prices for', farmer: 'Farmer', dealer: 'Dealer',
     noteFarmer: 'Net prices in EUR, excluding VAT.', noteDealer: 'Dealer net prices in EUR, excluding VAT – sample 25% discount.',
     catsLabel: 'Part type', all: 'All',
@@ -438,7 +450,7 @@ const T = {
     results: (n, q) => `Results for “${q}” across all machines: ${n}.`, back: n => `Back to ${n} parts`,
     none: q => `No part matches “${q}”. Check the spelling or write to the parts department: zamowienia@akpil.pl.`, noneCat: 'This machine has no parts of this type.',
     exampleNote: 'The parts list, part numbers and prices are examples – in the full version they come from AKPIL’s stock system.',
-    h1t: 'Numbers, not descriptions', h1p: 'Every basket line carries the part number and machine model. The parts department has nothing to ask.',
+    h1t: 'Numbers, not descriptions', h1p: 'Every basket line carries the part number and machine model. No back-and-forth with the parts department.',
     h2t: 'Machine serial number', h2p: 'The customer enters model, year and the number from the type plate, so the right part version is easy to check.',
     h3t: 'Farmer or dealer', h3p: 'Dealers see their own prices after logging in. The parts department confirms stock, shipping and delivery date.',
     fCountry: 'Poland', fParts: 'Parts department', fWeb: 'Company website',
@@ -457,23 +469,23 @@ const T = {
   de: {
     title: 'AKPIL – Ersatzteile mit Preis (Demo-Projekt)', desc: 'Demo-Projekt: AKPIL-Ersatzteilkatalog mit Preisen und Online-Bestellung in vier Sprachen.',
     demo: '<b>Demo-Projekt</b> für AKPIL. Maschinen und technische Daten stammen aus den AKPIL-Katalogen, Teileliste, Teilenummern und Preise sind Beispiele.',
-    madeBy: 'Erstellt von:', home: 'AKPIL – Seitenanfang', cart: 'Warenkorb', cartTitle: 'Warenkorb', closeCart: 'Warenkorb schließen', openCart: 'Zum Warenkorb',
+    skip: 'Zum Inhalt springen', madeBy: 'Erstellt von:', home: 'AKPIL – Seitenanfang', cart: 'Warenkorb', cartTitle: 'Warenkorb', closeCart: 'Warenkorb schließen', openCart: 'Zum Warenkorb',
     cartSr: n => `, Artikel im Warenkorb: ${n}`,
     h1: 'Ersatzteile für AKPIL-Maschinen', lead: 'Maschine wählen, Teil finden, Preis sehen und bestellen. Rund um die Uhr, auf Deutsch, Englisch, Französisch und Polnisch.',
     qLabel: 'Teilename oder Teilenummer', ph: 'z. B. Scheibe 610, GS-310', phQ: 'In allen Maschinen suchen', find: 'Teile suchen', clear: 'Suche löschen',
     st1: 'Maschine wählen', st2: 'Teil finden', st3: 'Bestellen', heroAlt: 'AKPIL-Kurzscheibenegge Tigre XL im Einsatz, Drohnenaufnahme',
     s1: 'Maschine wählen', s1p: 'Die Teile werden für das jeweilige Modell angezeigt. Die Vollversion umfasst alle Maschinen von AKPIL.',
     s2: 'Teil finden', s3: 'Bestellen',
-    width: 'Arbeitsbreite', mAlt: n => `${n} – Maschinenfoto`, hint: 'Klicken Sie auf einen Punkt im Foto, um die Teile dieser Baugruppe zu sehen.', pdf: 'Maschine im PDF-Katalog ansehen',
+    width: 'Arbeitsbreite', mAlt: n => `${n} – Maschinenfoto`, hint: 'Wählen Sie einen Punkt auf dem Foto, um die Teile dieser Baugruppe zu sehen.', pdf: 'Maschine im PDF-Katalog ansehen',
     priceFor: 'Preise für', farmer: 'Landwirt', dealer: 'Händler',
-    noteFarmer: 'Nettopreise in EUR, ohne MwSt.', noteDealer: 'Händler-Nettopreise in EUR, ohne MwSt. – Beispielrabatt 25 %.',
+    noteFarmer: 'Nettopreise in EUR, zzgl. MwSt.', noteDealer: 'Händler-Nettopreise in EUR, zzgl. MwSt. – Beispielrabatt 25 %.',
     catsLabel: 'Teileart', all: 'Alle',
     cats: { disc: 'Scheiben', hub: 'Naben und Lager', guard: 'Überlastsicherung', tine: 'Zinken und Schare', roller: 'Walzen und Abstreifer', hydr: 'Hydraulik', frame: 'Rahmen, Räder, Licht' },
     parts: n => `${n} ${n === 1 ? 'Teil' : 'Teile'}`, fits: 'Passend für:', nr: 'Nr.',
     net: 'netto', gross: 'brutto', listPrice: 'Listenpreis', dealerPrice: 'Händlerpreis',
     add: 'Hinzufügen', added: 'Hinzugefügt', qty: 'Menge', dec: 'Menge verringern', inc: 'Menge erhöhen', qtyOf: n => `Menge: ${n}`,
     toastAdd: n => `In den Warenkorb gelegt: ${n}`, maxMsg: 'Pro Teil sind höchstens 999 Stück im Warenkorb möglich.', qtyErr: 'Die Menge ist eine ganze Zahl von 1 bis 999.',
-    results: (n, q) => `Treffer für „${q}“ in allen Maschinen: ${n}.`, back: n => `Zurück zu den Teilen der ${n}`,
+    results: (n, q) => `Treffer für „${q}“ in allen Maschinen: ${n}.`, back: n => `Zurück zu den Teilen für ${n}`,
     none: q => `Kein Teil passt zu „${q}“. Prüfen Sie die Schreibweise oder schreiben Sie an die Ersatzteilabteilung: zamowienia@akpil.pl.`, noneCat: 'Für diese Maschine gibt es keine Teile dieser Art.',
     exampleNote: 'Teileliste, Teilenummern und Preise sind Beispiele – in der Vollversion kommen sie aus dem Lagersystem von AKPIL.',
     h1t: 'Nummern statt Beschreibungen', h1p: 'Jede Position im Warenkorb hat Teilenummer und Maschinenmodell. Keine Rückfragen nötig.',
@@ -495,14 +507,14 @@ const T = {
   fr: {
     title: 'AKPIL – pièces détachées avec prix (projet de démonstration)', desc: 'Projet de démonstration : catalogue de pièces AKPIL avec prix et commande en ligne, en quatre langues.',
     demo: '<b>Projet de démonstration</b> pour AKPIL. Les machines et leurs caractéristiques proviennent des catalogues AKPIL ; la liste des pièces, les références et les prix sont des exemples.',
-    madeBy: 'Réalisé par :', home: 'AKPIL – haut de page', cart: 'Panier', cartTitle: 'Panier', closeCart: 'Fermer le panier', openCart: 'Aller au panier',
+    skip: 'Aller au contenu', madeBy: 'Réalisé par :', home: 'AKPIL – haut de page', cart: 'Panier', cartTitle: 'Panier', closeCart: 'Fermer le panier', openCart: 'Aller au panier',
     cartSr: n => `, articles dans le panier : ${n}`,
     h1: 'Pièces pour machines AKPIL', lead: 'Choisissez la machine, trouvez la pièce, voyez le prix et commandez. À toute heure, en français, anglais, allemand et polonais.',
     qLabel: 'Nom ou référence de la pièce', ph: 'ex. disque 610 ou GS-310', phQ: 'Chercher dans toutes les machines', find: 'Chercher', clear: 'Effacer la recherche',
     st1: 'Choisir la machine', st2: 'Trouver la pièce', st3: 'Commander', heroAlt: 'Déchaumeur à disques AKPIL Tigre XL au travail, vue de drone',
     s1: 'Choisissez la machine', s1p: 'Les pièces sont présentées pour chaque modèle. La version complète couvre toute la gamme AKPIL.',
     s2: 'Trouvez la pièce', s3: 'Commandez',
-    width: 'largeur de travail', mAlt: n => `${n} – photo de la machine`, hint: 'Cliquez sur un point de la photo pour voir les pièces de cet ensemble.', pdf: 'Voir la machine dans le catalogue PDF',
+    width: 'largeur de travail', mAlt: n => `${n} – photo de la machine`, hint: 'Choisissez un point sur la photo pour voir les pièces de cet ensemble.', pdf: 'Voir la machine dans le catalogue PDF',
     priceFor: 'Prix pour', farmer: 'Agriculteur', dealer: 'Concessionnaire',
     noteFarmer: 'Prix nets en EUR, hors TVA.', noteDealer: 'Prix concessionnaire HT en EUR – remise de 25 % à titre d’exemple.',
     catsLabel: 'Type de pièce', all: 'Toutes',
@@ -511,7 +523,7 @@ const T = {
     net: 'HT', gross: 'TTC', listPrice: 'prix catalogue', dealerPrice: 'prix concessionnaire',
     add: 'Ajouter', added: 'Ajouté', qty: 'Quantité', dec: 'Diminuer la quantité', inc: 'Augmenter la quantité', qtyOf: n => `Quantité : ${n}`,
     toastAdd: n => `Ajouté au panier : ${n}`, maxMsg: 'Le panier accepte au plus 999 exemplaires d’une même pièce.', qtyErr: 'La quantité est un nombre entier de 1 à 999.',
-    results: (n, q) => `Résultats pour « ${q} » dans toutes les machines : ${n}.`, back: n => `Retour aux pièces de la ${n}`,
+    results: (n, q) => `Résultats pour « ${q} » dans toutes les machines : ${n}.`, back: n => `Retour aux pièces pour ${n}`,
     none: q => `Aucune pièce ne correspond à « ${q} ». Vérifiez l’orthographe ou écrivez au service pièces : zamowienia@akpil.pl.`, noneCat: 'Cette machine n’a pas de pièces de ce type.',
     exampleNote: 'La liste des pièces, les références et les prix sont des exemples – dans la version complète, ils viennent du système de stock AKPIL.',
     h1t: 'Des références, pas des descriptions', h1p: 'Chaque ligne du panier porte la référence et le modèle de la machine. Le service pièces n’a rien à redemander.',
@@ -609,7 +621,7 @@ function renderPanel() {
   const m = M(current);
   $('#mpanel').innerHTML = `<figure class="mfig" tabindex="-1"><img src="img/m-${esc(m.id)}.webp" width="960" height="640" alt="${esc(L().mAlt(m.name))}">
     ${m.hot.map(([c, x, y]) => `<button type="button" class="hs${x > 55 ? ' flip' : ''}" data-hs="${esc(c)}" style="left:${+x}%;top:${+y}%" aria-pressed="${cat === c && !query}" aria-label="${esc(L().cats[c])}"><span class="dot" aria-hidden="true"></span><span class="lbl" aria-hidden="true">${esc(L().cats[c])}</span></button>`).join('')}</figure>
-    <div class="minfo"><h3>${esc(m.name)}</h3><p>${esc(mtype(m))}, ${esc(L().width)} <span class="nw">${esc(widthTxt(m))}</span>. ${esc(nbU(m.n2[lang]))}.</p>
+    <div class="minfo"><h3>${esc(m.name)}</h3><p>${esc(mtype(m))}, ${esc(L().width)} <span class="nw">${esc(widthTxt(m))}</span>. ${esc(nbU(m.n2[lang])).replace(/\d+(?:–| à )\d+/g, r => `<span class="nw">${r}</span>`)}.</p>
     <p class="hint">${esc(L().hint)}</p>
     <a href="${esc(DATA.pdf[m.pdf])}#page=${+m.page}" target="_blank" rel="noopener">${esc(L().pdf)}</a></div>`;
   placeLabels();
@@ -652,7 +664,7 @@ function visibleParts() {
 }
 function priceHTML(p) {
   const u = unitCents(p);
-  if (buyer === 'dealer') return `<strong class="num">${money(u)}</strong><small class="num">${esc(L().dealerPrice)}${isPL() ? ' ' + esc(L().net) : ''}, <s>${money(baseCents(p))}</s></small>`;
+  if (buyer === 'dealer') return `<strong class="num">${money(u)}</strong><small class="num">${esc(L().dealerPrice)}${isPL() ? ' ' + esc(L().net) : ''}, <span class="sr">${esc(L().listPrice)}: </span><s>${money(baseCents(p))}</s></small>`;
   return isPL()
     ? `<strong class="num">${money(u)}</strong><small class="num">${esc(L().net)}, ${money(Math.round(u * (1 + VAT)))} ${esc(L().gross)}</small>`
     : `<strong class="num">${money(u)}</strong><small>${esc(L().net)}</small>`;
@@ -708,6 +720,8 @@ $('#plist').addEventListener('click', e => {
     const nr = t.dataset.add, inp = document.querySelector(`[data-q="${CSS.escape(nr)}"]`);
     const pq = parseQty(inp.value);
     if (pq.bad && !pq.max) { inp.value = 1; toast(L().qtyErr); inp.focus(); return; }
+    // błędna ilość poprawiona przez „change” tym samym kliknięciem: nie dodajemy po cichu 1 szt., zostaje komunikat
+    if (badQty && badQty.nr === nr && performance.now() - badQty.t < 600) { badQty = null; inp.focus(); return; }
     const had = cart.get(nr) || 0;
     if (had >= MAXQ) { toast(L().maxMsg); return; }
     const total = Math.min(MAXQ, had + pq.q);
@@ -722,8 +736,10 @@ $('#plist').addEventListener('click', e => {
 $('#plist').addEventListener('change', e => {
   const inp = e.target.closest('[data-q]'); if (!inp) return;
   const r = parseQty(inp.value); if (r.bad) toast(r.max ? L().maxMsg : L().qtyErr);
+  badQty = r.bad && !r.max ? { nr: inp.dataset.q, t: performance.now() } : null;
   inp.value = r.q; draft.set(inp.dataset.q, r.q);
 });
+let badQty = null;
 
 /* wyszukiwanie */
 function setQuery(v) { query = String(v).trim().slice(0, 60); $('#q').value = query; $('#hq').value = query; $('#qClear').hidden = !query; }
@@ -752,10 +768,11 @@ function renderCart() {
     </div>`;
   }).join('');
   const tax = Math.round(sub * VAT);
-  const sums = isPL()
+  if (!form.country) form.country = defCountry();
+  // polski VAT 23% doliczamy tylko przy dostawie do Polski; przy wysyłce za granicę stawka zależy od kraju (eksport, WDT, OSS)
+  const sums = isPL() && form.country === 'PL'
     ? `<div><span>${esc(L().sub)}</span><span class="num">${money(sub)}</span></div><div><span>${esc(L().vat)}</span><span class="num">${money(tax)}</span></div><div class="tot"><span>${esc(L().tot)}</span><span class="num">${money(sub + tax)}</span></div>`
     : `<div class="tot"><span>${esc(L().totNet)}</span><span class="num">${money(sub)}</span></div><span class="vn">${esc(L().vatNote)}</span>`;
-  if (!form.country) form.country = defCountry();
   if (!form.machine) { const fits = [...cart.keys()].flatMap(nr => byNr.get(nr).fit); form.machine = fits.includes(current) ? current : (fits[0] || ''); }
   const y = new Date().getFullYear();
   const opt = (v, t, sel) => `<option value="${esc(v)}"${sel ? ' selected' : ''}>${esc(t)}</option>`;
@@ -797,7 +814,7 @@ function keepForm() { for (const k in FIELDS) { const el = document.getElementBy
 $('#dbody').addEventListener('input', e => { keepForm(); if (e.target.getAttribute('aria-invalid')) e.target.removeAttribute('aria-invalid'); });
 $('#dbody').addEventListener('change', e => {
   if (e.target.matches('select')) keepForm();
-  if (e.target.id === 'fCountry' && buyer === 'dealer') { keepFocus(renderCart); return; }
+  if (e.target.id === 'fCountry') { keepFocus(renderCart); return; }
   const inp = e.target.closest('[data-cq]'); if (!inp) return;
   keepForm();
   const r = parseQty(inp.value); if (r.bad) toast(r.max ? L().maxMsg : L().qtyErr);
@@ -826,6 +843,7 @@ $('#dbody').addEventListener('submit', e => {
     if (!form.firm.trim()) return bad(L().errFirm, 'fFirm');
     const v = form.vat.replace(/[\s.-]/g, '').toUpperCase();
     if (form.country === 'PL' ? !/^(PL)?\d{10}$/.test(v) : !/^[A-Z0-9]{5,15}$/.test(v)) return bad(form.country === 'PL' ? L().errVat : L().errVatX, 'fVat');
+    if (form.country === 'PL' && /^(PL)?0{10}$/.test(v)) return bad(L().errVatSum, 'fVat');
     if (form.country === 'PL') { const d = v.slice(-10).split('').map(Number), sum = [6, 5, 7, 2, 3, 4, 5, 6, 7].reduce((a, w, i) => a + w * d[i], 0) % 11; if (sum !== d[9]) return bad(L().errVatSum, 'fVat'); }
   }
   if (form.name.trim().length < 3) return bad(L().errName, 'fName');
@@ -885,6 +903,8 @@ function nbsp(root = document.body) {
 
 const setHH = () => document.documentElement.style.setProperty('--hh', $('header.site').offsetHeight + 'px');
 addEventListener('resize', () => { setHH(); placeLabels(); });
+// szerokość etykiet zmienia się po wczytaniu kroju – ułóż je jeszcze raz
+if (document.fonts) document.fonts.ready.then(() => { setHH(); placeLabels(); });
 
 /* język */
 function applyLang() {
