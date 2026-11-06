@@ -74,6 +74,8 @@ h1 {
 .facts { margin: 0; padding-top: 20px; border-top: 1px solid var(--line); max-width: 34em; color: var(--ink-soft); font-size: 16px; }
 .facts b { color: var(--ink); font-weight: 800; white-space: nowrap; }
 .facts small { display: block; margin-top: 8px; font-size: 13px; }
+.facts small a { color: inherit; }
+.start-note { margin: 0 0 18px; padding: 10px 14px; border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); max-width: 34em; font-size: 16px; color: var(--ink); }
 
 /* sprawdzarka */
 .check { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 28px; box-shadow: 0 24px 60px -36px rgba(29, 43, 44, .35); }
@@ -181,7 +183,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#">Salonowe<span> BDO</span></a>
-    <a class="cta-small" href="#zapisy">Zapisz się</a>
+    <a class="cta-small" href="#zapisy">Zapisz salon: 29 zł zamiast 39 zł</a>
   </div>
 </header>
 
@@ -189,10 +191,11 @@ footer p { margin: 0 0 6px; max-width: 60em; }
   <div class="hero">
     <div class="wrap">
       <div class="intro">
+        <p class="start-note"><b>Ruszamy wkrótce.</b> Zapisz salon na listę startową: pierwsze 50 salonów płaci 29 zł zamiast 39 zł miesięcznie na stałe, a pierwsze 2 miesiące są za darmo.</p>
         <h1>Ewidencja odpadów, która prowadzi się sama</h1>
-        <p class="lead">Igła, ostrze czy wacik z krwią to odpad medyczny – nawet jedna sztuka oznacza wpis do BDO i ewidencję odpadów. Podłączasz BDO raz. Kartę przekazania wystawiasz jednym kliknięciem w aplikacji, po odbiorze sami wpisujemy odpady do ewidencji, a sprawozdanie przygotowujemy przed 15 marca.</p>
+        <p class="lead">Igła, ostrze czy wacik z krwią to odpad medyczny – nawet jedna sztuka oznacza wpis do BDO i ewidencję odpadów. Karty przekazania, ewidencję i sprawozdanie do 15 marca robimy za Ciebie, a Ty tylko potwierdzasz w telefonie.</p>
       </div>
-      <p class="facts">Ponad połowa salonów beauty (<b>54%</b>) nie prowadzi ewidencji odpadów medycznych i niebezpiecznych, a kara za brak wpisu albo ewidencji sięga <b>1&nbsp;000&nbsp;000&nbsp;zł</b>.<small>Źródła: raport EMKA S.A. i Fundacji Beauty Razem 2026; art. 194 ustawy o odpadach.</small></p>
+      <p class="facts">Ponad połowa salonów beauty (<b>54%</b>) nie prowadzi ewidencji odpadów medycznych i niebezpiecznych, choć od 2025 roku nie ma już progu ilościowego, a za brak wpisu i ewidencji grożą kary administracyjne.<small>Źródło: badanie EMKA S.A. i Fundacji Beauty Razem 2026 (402 salony), <a href="https://www.wiadomoscikosmetyczne.pl/biznes-kosmetyki/prawo-kosmetyczne/co-trzeci-salon-beauty-nie-jest-zarejestrowany-w-bdo-nowe-badanie-2536084" rel="noopener" target="_blank">Wiadomości Kosmetyczne</a>; rozporządzenie Dz.U. 2024 poz. 1644.</small></p>
 
       <form class="check" id="sprawdz" aria-labelledby="sprawdz-t" novalidate>
         <h2 id="sprawdz-t">Czy Twój salon musi być w BDO?</h2>
@@ -232,7 +235,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
       <div class="does">
         <div><h3>Wpis do BDO krok po kroku</h3><p>Prowadzimy przez wniosek do urzędu marszałkowskiego i podpowiadamy, które pola wypełnić w przypadku salonu.</p></div>
         <div><h3>Karta przekazania jednym kliknięciem</h3><p>Wybierasz dzień odbioru w aplikacji, a kartę przekazania w BDO wystawiamy za Ciebie. Kody odpadów bierzemy z oficjalnego słownika BDO, więc nie ma pomyłek.</p></div>
-        <div><h3>Ewidencja bez wpisywania</h3><p>Po każdym odbiorze pobieramy z BDO kartę z masą podaną przez odbiorcę i sami dopisujemy do Twojej ewidencji, ile odpadów wytworzono i komu je przekazano.</p></div>
+        <div><h3>Ewidencja bez wpisywania</h3><p>Po każdym odbiorze pobieramy z BDO kartę z masą podaną przez odbiorcę i sami dopisujemy do Twojej ewidencji, ile odpadów wytworzono i komu je przekazano. Jeśli oddajesz do 100 kg odpadów niebezpiecznych rocznie, ewidencją są same karty przekazania – wtedy pilnujemy ich potwierdzeń.</p></div>
         <div><h3>Sprawozdanie roczne na czas</h3><p>Od połowy lutego sprawozdanie czeka w BDO wypełnione danymi z całorocznej ewidencji. Sprawdzasz je w aplikacji, klikasz „Zatwierdzam”, a składamy je za Ciebie przed 15 marca.</p></div>
         <div><h3>Teczka na kontrolę Sanepidu i WIOŚ</h3><p>Procedura postępowania z odpadami napisana pod Twój salon i gotowa do podpisania przez personel, a obok niej karty przekazania i ewidencja w jednym miejscu.</p></div>
         <div><h3>Pilnujemy terminu odbioru</h3><p>Odpady zakaźne można trzymać w lodówce najwyżej 30 dni. Przypominamy o odbiorze 5 dni przed terminem, a gdy odbiorca nie potwierdzi przejęcia albo odrzuci kartę, piszemy, co zrobić.</p></div>
@@ -245,7 +248,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
       <h2 class="sec" id="jak-t">Jak to działa</h2>
       <p class="sec-lead">Odbiór odpadów zostaje taki, jak teraz. Znikają karty, ewidencja i sprawozdanie, które dziś robisz w BDO samodzielnie.</p>
       <ol class="steps">
-        <li><h3>Podłączasz BDO raz</h3><p>Tworzysz w BDO klucz dostępu dla Salonowego BDO. Przeprowadzimy Cię przez to w około 10 minut.</p></li>
+        <li><h3>Podłączasz BDO raz</h3><p>W BDO tworzysz klucz dostępu dla Salonowego BDO – <b>nie podajesz nam hasła do BDO</b>. Klucz służy tylko do kart przekazania, ewidencji i sprawozdania, a usuwasz go w każdej chwili: nasz dostęp wygasa wtedy najpóźniej po godzinie. Przeprowadzimy Cię przez to w około 10 minut – <a href="klucz-api.html">zobacz, jak to wygląda</a>.</p></li>
         <li><h3>Zamawiasz odbiór w aplikacji</h3><p>Wystawiamy kartę przekazania w BDO. W dniu odbioru oddajesz odpady kierowcy i klikasz „Oddane”.</p></li>
         <li><h3>Ewidencja uzupełnia się sama</h3><p>Odbiorca waży odpady, a my przenosimy masę do ewidencji. W aplikacji widzisz: „Odbiór z 20.11 wpisany do ewidencji”.</p></li>
       </ol>
@@ -256,8 +259,9 @@ footer p { margin: 0 0 6px; max-width: 60em; }
     <div class="wrap price">
       <div>
         <h2 class="sec" id="cena-t">Jedna cena, bez umowy na rok</h2>
-        <div class="amount">39 zł <small>miesięcznie netto</small></div>
-        <p class="early">Albo 390 zł netto za rok. <b>Pierwsze 50 salonów z listy zapisów płaci 29 zł miesięcznie</b> tak długo, jak korzysta z usługi.</p>
+        <div class="amount">39 zł <small>miesięcznie</small></div>
+        <p class="early"><b>Pierwsze 2 miesiące za darmo</b> – bez karty i bez automatycznych opłat.</p>
+        <p class="early">Albo 390 zł za rok. <b>Pierwsze 50 salonów z listy zapisów płaci 29 zł miesięcznie</b> tak długo, jak korzysta z usługi. Ceny są końcowe – nie doliczamy VAT (zwolnienie z VAT).</p>
       </div>
       <ul>
         <li>Sprawdzenie obowiązków i dobór kodów odpadów</li>
@@ -276,7 +280,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
     <div class="wrap">
       <form class="join" id="join" novalidate>
         <h2 class="sec" id="zapisy-t">Zapisz salon na listę startową</h2>
-        <p class="intro">Zapis jest bezpłatny i do niczego nie zobowiązuje. Napiszemy, gdy ruszymy.</p>
+        <p class="intro">Zapis jest bezpłatny i do niczego nie zobowiązuje. Aplikacja jest w ostatnich testach – napiszemy do Ciebie przed startem. Miejsce wśród pierwszych 50 salonów (29 zł na stałe) liczy się od daty zapisu.</p>
         <div class="field">
           <label for="f-name">Imię</label>
           <input id="f-name" name="imie" autocomplete="given-name" required>
@@ -313,7 +317,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
         <details class="privacy">
           <summary>Kto przetwarza Twoje dane</summary>
           <p>Administratorem danych jest Marcin Lipniak, kontakt: <a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a>.</p>
-          <p>Imię, e-mail, rodzaj salonu, informację o wpisie do BDO i źródło wejścia na stronę przetwarzamy na podstawie Twojej zgody (art. 6 ust. 1 lit. a RODO), żeby napisać do Ciebie o starcie usługi i ustalić kolejność na liście.</p>
+          <p>Imię, e-mail, rodzaj salonu, informację o wpisie do BDO, źródło wejścia na stronę (np. nazwę posta albo reklamy) i wynik testu „Czy Twój salon musi być w BDO?” przetwarzamy na podstawie Twojej zgody (art. 6 ust. 1 lit. a RODO), żeby napisać do Ciebie o starcie usługi i ustalić kolejność na liście.</p>
           <p>Dane trzymamy do startu usługi, najdłużej 12 miesięcy, albo do wycofania zgody. Zapisy trafiają do arkusza Google, a stronę udostępnia GitHub – dane mogą być przetwarzane w USA na podstawie programu EU-US Data Privacy Framework.</p>
           <p>Masz prawo dostępu do danych, ich poprawienia, usunięcia, ograniczenia przetwarzania i przeniesienia, a także prawo skargi do Prezesa UODO. Podanie danych jest dobrowolne.</p>
         </details>
@@ -324,14 +328,15 @@ footer p { margin: 0 0 6px; max-width: 60em; }
   <section class="faq" aria-labelledby="faq-t">
     <div class="wrap">
       <h2 class="sec" id="faq-t">Pytania</h2>
+      <details><summary>Co z moim kluczem dostępu do BDO?</summary><p>Nie podajesz nam loginu ani hasła do BDO. Klucz służy tylko do obsługi BDO Twojego salonu: kart przekazania, ewidencji i sprawozdania. Przechowujemy go zaszyfrowany i nigdy nie prosimy o niego mailem. Instrukcja: <a href="klucz-api.html">jak utworzyć klucz API w BDO</a>. W każdej chwili możesz go usunąć w BDO – nasz dostęp wygasa wtedy najpóźniej po godzinie. Po rezygnacji usuwamy Twoje dane z naszego serwera, a ewidencja zostaje w BDO.</p></details>
+      <details><summary>Moja firma od odpadów mi pomaga – po co mi to?</summary><p>Firma odbierająca odpady potwierdza ich przejęcie, a niektóre pomagają też przy wpisie do BDO. Ewidencję i sprawozdanie roczne prowadzi jednak salon jako wytwórca odpadów – i tę część robimy za Ciebie, niezależnie od tego, która firma odbiera odpady. Jeśli Twoja firma robi już wszystko w cenie odbioru, nie potrzebujesz nas.</p></details>
       <details><summary>Czy fryzjer też musi być w BDO?</summary><p>Zależy od odpadów. Salon, w którym powstają wyłącznie odpady podobne do komunalnych, nie musi mieć wpisu. Wystarczy jednak jeden rodzaj odpadów niebezpiecznych w roku, np. opakowania po chemii z piktogramem zagrożenia, i od 2025 roku ewidencja jest obowiązkowa.</p></details>
       <details><summary>Co się zmieniło 1 stycznia 2025?</summary><p>Nowe rozporządzenie Ministra Klimatu i Środowiska (Dz.U. 2024 poz. 1644) usunęło odpady niebezpieczne z listy zwolnień. Wcześniej małe ilości niektórych z nich, np. opakowań po farbach i chemii (15 01 10*, do 200 kg rocznie), nie wymagały ewidencji – teraz prowadzi się ją bez względu na ilość. Odpady medyczne, takie jak igły (18 01 03*), nigdy nie były zwolnione.</p></details>
       <details><summary>Czy to oficjalna usługa BDO?</summary><p>Nie. BDO to system Ministerstwa Klimatu i Środowiska. Salonowe BDO to niezależna usługa, która łączy się z nim przez publiczne API, za Twoją zgodą i Twoim kluczem dostępu.</p></details>
       <details><summary>Czy muszę cokolwiek wpisywać?</summary><p>Nie. Masę odpadów podaje w karcie przekazania firma, która je odbiera, a my przenosimy ją do Twojej ewidencji. Kartę przekazania wystawiasz jednym kliknięciem, wybierając dzień odbioru w aplikacji. W dniu odbioru potwierdzasz w aplikacji przekazanie odpadów kierowcy.</p></details>
       <details><summary>Co jeśli firma nie potwierdzi odbioru w BDO?</summary><p>To częsty problem: bez potwierdzenia przejęcia karta wisi i nie da się zamknąć ewidencji ani sprawozdania. Pilnujemy tego za Ciebie. Po 3 dniach dostajesz gotową wiadomość do odbiorcy, po tygodniu przypomnienie, żeby zadzwonić, a po dwóch tygodniach pomagamy z pismem. Gdy odbiorca potwierdzi, odbiór sam trafia do ewidencji.</p></details>
       <details><summary>Co jest w teczce na kontrolę?</summary><p>Procedura postępowania z odpadami z Twoimi kodami, sposobem przechowywania i firmą odbierającą, gotowa do podpisania przez personel. Do tego wszystkie karty przekazania i ewidencja z danego roku, gotowe do pokazania kontrolerowi.</p></details>
-      <details><summary>Co z moim kluczem dostępu do BDO?</summary><p>Klucz służy tylko do obsługi BDO Twojego salonu: kart przekazania, ewidencji i sprawozdania. Przechowujemy go zaszyfrowany i nigdy nie prosimy o niego mailem. W każdej chwili możesz go usunąć w BDO – nasz dostęp wygasa wtedy najpóźniej po godzinie. Po rezygnacji usuwamy Twoje dane z naszego serwera, a ewidencja zostaje w BDO.</p></details>
-      <details><summary>Kto odpowiada za ewidencję?</summary><p>Prawnie nadal Ty, jako wytwórca odpadów. Dlatego każdy wpis widzisz w BDO i w panelu, a sprawozdanie zatwierdzasz sama.</p></details>
+      <details><summary>Kto odpowiada za ewidencję?</summary><p>Prawnie nadal Ty, jako wytwórca odpadów. Dlatego każdy wpis widzisz w BDO i w aplikacji, a nic nie trafia do sprawozdania bez Twojego „Zatwierdzam”. Jeśli błąd jest po naszej stronie, poprawiamy go bez dodatkowych opłat.</p></details>
     </div>
   </section>
 </main>
@@ -360,6 +365,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
       out.setAttribute("data-state", "tak");
       html = "<strong>Tak, salon musi prowadzić ewidencję odpadów" + (q3 === "nie" ? " i mieć wpis do BDO." : ".") + "</strong>" +
         "Od 1.01.2025 dotyczy to każdej ilości odpadów niebezpiecznych. Prawdopodobne kody:<ul><li>" + codes.join("</li><li>") + "</li></ul>" +
+        "Przy odbiorze raz w miesiącu to 12 kart przekazania w roku, ewidencja po każdym odbiorze i sprawozdanie do 15 marca. U nas: jedno kliknięcie przy odbiorze. " +
         (q3 === "nie" ? "Bez wpisu grozi kara administracyjna. " : "") + '<a class="go" href="#zapisy">Zapisz salon, zrobimy to za Ciebie</a>';
     } else if (q2 === "?") {
       out.setAttribute("data-state", "");
@@ -399,7 +405,14 @@ footer p { margin: 0 0 6px; max-width: 60em; }
     var data = new URLSearchParams(new FormData(join));
     data.set("zgoda", "tak");
     var ref = ""; try { ref = document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) {}
-    data.set("zrodlo", (new URLSearchParams(location.search).get("utm_source") || ref || "bezpośrednio").slice(0, 120));
+    // źródło w jednym polu arkusza (bez zmian w Apps Script): skąd | kampania | reklama | wynik testu
+    var qs = new URLSearchParams(location.search);
+    var parts = [qs.get("utm_source") || ref || "bezpośrednio"];
+    if (qs.get("utm_campaign")) parts.push(qs.get("utm_campaign"));
+    if (qs.get("utm_content")) parts.push(qs.get("utm_content"));
+    var quiz = out.getAttribute("data-state");
+    if (quiz !== null) parts.push("test: " + (quiz === "tak" ? "musi" : quiz === "nie" ? "nie musi" : "nie wie"));
+    data.set("zrodlo", parts.join(" | ").slice(0, 120));
     btn.disabled = true;
     btn.textContent = "Zapisuję…";
     msg.removeAttribute("data-state");

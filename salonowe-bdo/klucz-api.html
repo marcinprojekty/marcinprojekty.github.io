@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jak utworzyć klucz API w BDO – Salonowe BDO</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<style>
+@font-face { font-family: "Onest"; font-weight: 400 800; font-display: swap; src: url(fonts/onest-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-weight: 400 800; font-display: swap; src: url(fonts/onest-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+:root { --paper:#f5f6f3; --ink:#1d2b2c; --soft:#4a5a5b; --line:#d9e1dd; --accent:#c8285e; --surface:#fff; --mist:#e7ede9; color-scheme: light; }
+@media screen and (prefers-color-scheme: dark) {
+  :root { --paper:#111819; --ink:#e9efed; --soft:#a7b5b3; --line:#33413f; --accent:#ff9fbb; --surface:#1a2324; --mist:#243031; color-scheme: dark; }
+  figure svg { border-radius: 12px; }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.65 "Onest", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; overflow-wrap: anywhere; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 28px; }
+.logo { font-weight: 800; text-decoration: none; color: inherit; }
+.logo span { color: var(--accent); }
+.top a.print { font-size: 15px; color: var(--soft); }
+h1 { font-size: clamp(28px, 6vw, 40px); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 12px; text-wrap: balance; }
+h2 { font-size: 22px; line-height: 1.25; margin: 36px 0 10px; }
+h3 { font-size: 19px; margin: 28px 0 8px; }
+h4 { font-size: 17px; margin: 22px 0 6px; }
+p, li { text-wrap: pretty; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+ol, ul { padding-left: 1.4em; }
+li { margin: 4px 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 15px; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; min-width: 120px; }
+th { background: var(--mist); }
+blockquote { margin: 16px 0; padding: 8px 16px; border-left: 3px solid var(--line); color: var(--soft); }
+.lead { font-size: 19px; color: var(--soft); }
+.note { font-size: 15px; color: var(--soft); background: var(--mist); border-radius: 10px; padding: 10px 14px; }
+ol.kroki { list-style: none; padding: 0; counter-reset: krok; }
+ol.kroki > li { counter-increment: krok; margin: 0 0 28px; padding: 18px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+ol.kroki > li > h2 { margin-top: 0; font-size: 20px; }
+ol.kroki > li > h2::before { content: counter(krok) ". "; color: var(--accent); }
+figure { margin: 14px 0 0; }
+figure svg { display: block; width: 100%; height: auto; max-width: 520px; font-family: "Onest", system-ui, sans-serif; }
+figcaption { font-size: 13px; color: var(--soft); margin-top: 6px; }
+.foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--soft); }
+@media print { .top a.print, .foot { display: none; } body { background: #fff; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="top"><a class="logo" href="./">Salonowe <span>BDO</span></a><a class="print" href="#" data-print>Drukuj lub zapisz jako PDF</a></div>
+<h1>Jak utworzyć klucz API w BDO</h1>
+<p class="lead">Klucz API łączy Twoje konto w BDO z aplikacją Salonowe BDO. Tworzysz go raz, zajmuje to około 5 minut. Potrzebne jest logowanie przez login.gov.pl (profil zaufany, e-dowód albo bankowość).</p>
+<p class="note">Rysunki to schematy – w BDO ekran może wyglądać trochę inaczej. Oficjalna instrukcja z prawdziwymi zrzutami ekranu: <a href="https://bdo.mos.gov.pl/wp-content/uploads/2023/04/BDO_IS_Instrukcja-generowania-kluczy-API.pdf" rel="noopener" target="_blank">Instrukcja generowania kluczy API (BDO, PDF)</a>.</p>
+
+<ol class="kroki">
+<li>
+<h2>Zaloguj się do BDO</h2>
+<p>Wejdź na <b>rejestr-bdo.mos.gov.pl</b> i wybierz logowanie przez <b>login.gov.pl</b>.</p>
+<figure>
+<svg viewBox="0 0 360 200" role="img" aria-label="Schemat: strona logowania do BDO z przyciskiem logowania przez login.gov.pl">
+  <rect x="1" y="1" width="358" height="198" rx="12" fill="#ffffff" stroke="#d9e1dd" stroke-width="2"/>
+  <rect x="1" y="1" width="358" height="30" rx="12" fill="#e7ede9"/>
+  <rect x="14" y="9" width="250" height="14" rx="7" fill="#ffffff"/>
+  <text x="24" y="20" font-size="10" fill="#4a5a5b">rejestr-bdo.mos.gov.pl</text>
+  <text x="180" y="72" font-size="15" font-weight="700" fill="#1d2b2c" text-anchor="middle">Logowanie do BDO</text>
+  <rect x="85" y="96" width="190" height="40" rx="20" fill="#c8285e"/>
+  <text x="180" y="121" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">Zaloguj przez login.gov.pl</text>
+  <text x="180" y="166" font-size="11" fill="#4a5a5b" text-anchor="middle">profil zaufany · e-dowód · bank</text>
+</svg>
+<figcaption>Schemat ekranu logowania</figcaption>
+</figure>
+</li>
+
+<li>
+<h2>Wybierz swój salon</h2>
+<p>Na liście podmiotów przy swojej firmie kliknij <b>„Wybierz”</b>. Klucz będzie działał tylko dla tego podmiotu.</p>
+<figure>
+<svg viewBox="0 0 360 170" role="img" aria-label="Schemat: lista podmiotów z przyciskiem Wybierz przy salonie">
+  <rect x="1" y="1" width="358" height="168" rx="12" fill="#ffffff" stroke="#d9e1dd" stroke-width="2"/>
+  <text x="18" y="30" font-size="13" font-weight="700" fill="#1d2b2c">Lista podmiotów</text>
+  <rect x="14" y="46" width="332" height="46" rx="8" fill="#fbe9ef" stroke="#c8285e" stroke-width="2"/>
+  <text x="26" y="66" font-size="12" font-weight="700" fill="#1d2b2c">Twój salon</text>
+  <text x="26" y="82" font-size="10" fill="#4a5a5b">NIP 123 456 32 18 · nr rejestrowy 000123456</text>
+  <rect x="268" y="56" width="66" height="26" rx="13" fill="#c8285e"/>
+  <text x="301" y="73" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">Wybierz</text>
+  <rect x="14" y="104" width="332" height="46" rx="8" fill="#ffffff" stroke="#d9e1dd"/>
+  <text x="26" y="124" font-size="12" fill="#4a5a5b">Inny podmiot (jeśli masz kilka)</text>
+  <rect x="268" y="114" width="66" height="26" rx="13" fill="#ffffff" stroke="#d9e1dd"/>
+  <text x="301" y="131" font-size="11" fill="#4a5a5b" text-anchor="middle">Wybierz</text>
+</svg>
+<figcaption>Schemat listy podmiotów</figcaption>
+</figure>
+</li>
+
+<li>
+<h2>Otwórz zakładkę „API”</h2>
+<p>W górnym menu, w części dotyczącej Twojej firmy, wybierz <b>„API”</b>. U części użytkowników jest ono w menu <b>„Opcje” → „API”</b>.</p>
+<figure>
+<svg viewBox="0 0 360 150" role="img" aria-label="Schemat: górne menu BDO z zaznaczoną pozycją API">
+  <rect x="1" y="1" width="358" height="148" rx="12" fill="#ffffff" stroke="#d9e1dd" stroke-width="2"/>
+  <rect x="1" y="1" width="358" height="44" rx="12" fill="#1d2b2c"/>
+  <text x="18" y="28" font-size="11" fill="#ffffff">Twój salon ▾</text>
+  <text x="110" y="28" font-size="11" fill="#c9d3cf">Ewidencja</text>
+  <text x="180" y="28" font-size="11" fill="#c9d3cf">Sprawozdania</text>
+  <rect x="262" y="12" width="44" height="24" rx="12" fill="#c8285e"/>
+  <text x="284" y="28" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">API</text>
+  <path d="M284 52 L284 78" stroke="#c8285e" stroke-width="3" stroke-linecap="round"/>
+  <path d="M276 70 L284 80 L292 70" fill="none" stroke="#c8285e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="180" y="112" font-size="12" fill="#1d2b2c" text-anchor="middle">Lista aplikacji z dostępem do REST API</text>
+  <text x="180" y="130" font-size="10" fill="#4a5a5b" text-anchor="middle">(na początku pusta)</text>
+</svg>
+<figcaption>Schemat górnego menu</figcaption>
+</figure>
+</li>
+
+<li>
+<h2>Dodaj nowy klucz</h2>
+<p>Kliknij przycisk dodania nowego klucza (<b>„+”</b> albo <b>„Nowa aplikacja”</b>) i wypełnij dwa pola:</p>
+<ul>
+<li><b>Nazwa aplikacji:</b> Salonowe BDO</li>
+<li><b>Callback URL:</b> adres strony Salonowe BDO (pole jest wymagane, ale BDO go nie używa)</li>
+</ul>
+<p>Na koniec kliknij <b>„Dodaj klucz API”</b>.</p>
+<figure>
+<svg viewBox="0 0 360 210" role="img" aria-label="Schemat: formularz dodania klucza API z polami Nazwa aplikacji i Callback URL">
+  <rect x="1" y="1" width="358" height="208" rx="12" fill="#ffffff" stroke="#d9e1dd" stroke-width="2"/>
+  <text x="18" y="30" font-size="13" font-weight="700" fill="#1d2b2c">Dodaj klucz API</text>
+  <text x="18" y="56" font-size="10" fill="#4a5a5b">Nazwa aplikacji</text>
+  <rect x="18" y="62" width="324" height="30" rx="6" fill="#ffffff" stroke="#c8285e" stroke-width="2"/>
+  <text x="28" y="82" font-size="12" fill="#1d2b2c">Salonowe BDO</text>
+  <text x="18" y="112" font-size="10" fill="#4a5a5b">Callback URL</text>
+  <rect x="18" y="118" width="324" height="30" rx="6" fill="#ffffff" stroke="#c8285e" stroke-width="2"/>
+  <text x="28" y="138" font-size="12" fill="#1d2b2c">https://… (adres Salonowe BDO)</text>
+  <rect x="190" y="164" width="152" height="32" rx="16" fill="#c8285e"/>
+  <text x="266" y="185" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Dodaj klucz API</text>
+  <text x="120" y="185" font-size="12" fill="#4a5a5b" text-anchor="middle">Anuluj</text>
+</svg>
+<figcaption>Schemat formularza nowego klucza</figcaption>
+</figure>
+</li>
+
+<li>
+<h2>Skopiuj Client ID i Client Secret do aplikacji</h2>
+<p>Nowy klucz pojawi się w tabeli. Skopiuj <b>Client ID</b> i <b>Client Secret</b> w całości (z myślnikami) i wklej je w aplikacji Salonowe BDO w kroku <b>„1. Klucz API z BDO”</b>, a potem kliknij „Sprawdź klucz w BDO”.</p>
+<figure>
+<svg viewBox="0 0 360 230" role="img" aria-label="Schemat: tabela kluczy w BDO z kolumnami Client ID i Client Secret i strzałka do pól w aplikacji Salonowe BDO">
+  <rect x="1" y="1" width="358" height="110" rx="12" fill="#ffffff" stroke="#d9e1dd" stroke-width="2"/>
+  <text x="18" y="26" font-size="12" font-weight="700" fill="#1d2b2c">BDO: lista aplikacji z dostępem do REST API</text>
+  <text x="18" y="50" font-size="9" fill="#4a5a5b">Nazwa</text>
+  <text x="104" y="50" font-size="9" fill="#4a5a5b">Client ID</text>
+  <text x="232" y="50" font-size="9" fill="#4a5a5b">Client Secret</text>
+  <rect x="12" y="58" width="336" height="36" rx="6" fill="#fbe9ef"/>
+  <text x="18" y="80" font-size="10" fill="#1d2b2c">Salonowe BDO</text>
+  <text x="104" y="80" font-size="10" fill="#1d2b2c">3f2a91c0-…</text>
+  <text x="232" y="80" font-size="10" fill="#1d2b2c">k9QeT7…</text>
+  <path d="M180 116 L180 140" stroke="#c8285e" stroke-width="3" stroke-linecap="round"/>
+  <path d="M172 132 L180 142 L188 132" fill="none" stroke="#c8285e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="1" y="146" width="358" height="82" rx="12" fill="#ffffff" stroke="#d9e1dd" stroke-width="2"/>
+  <text x="18" y="168" font-size="12" font-weight="700" fill="#1d2b2c">Salonowe BDO: 1. Klucz API z BDO</text>
+  <rect x="18" y="178" width="156" height="34" rx="6" fill="#ffffff" stroke="#c8285e" stroke-width="2"/>
+  <text x="26" y="199" font-size="10" fill="#4a5a5b">Client ID</text>
+  <rect x="186" y="178" width="156" height="34" rx="6" fill="#ffffff" stroke="#c8285e" stroke-width="2"/>
+  <text x="194" y="199" font-size="10" fill="#4a5a5b">Client Secret</text>
+</svg>
+<figcaption>Schemat: skąd kopiujesz i dokąd wklejasz</figcaption>
+</figure>
+</li>
+</ol>
+
+<h2>Warto wiedzieć</h2>
+<ul>
+<li><b>Klucz należy do osoby, która go utworzyła.</b> Najprościej, gdy tworzy go właściciel salonu albo osoba, która w BDO ma dostęp do ewidencji i sprawozdań. Jeśli ta osoba straci dostęp do BDO salonu, utwórz nowy klucz i wklej go w aplikacji.</li>
+<li><b>Nie wysyłaj klucza mailem, SMS-em ani na komunikatorze</b> – nikomu, także nam. Wklejasz go tylko w aplikacji, która przechowuje go zaszyfrowanego. Nie podajesz nigdzie loginu ani hasła do BDO.</li>
+<li><b>Klucz możesz w każdej chwili usunąć</b> w tej samej tabeli w BDO (ikona usuwania → „Tak, usuń”). Aplikacja traci wtedy dostęp do BDO Twojego salonu.</li>
+<li><b>Nie masz jeszcze wpisu do BDO?</b> Najpierw potrzebny jest wpis do rejestru BDO – napisz do nas, podpowiemy, jak złożyć wniosek.</li>
+</ul>
+<p>Coś nie działa albo ekran wygląda inaczej? Napisz na <a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a> albo do strony „Salonowe BDO” na Facebooku – przeprowadzimy Cię krok po kroku.</p>
+
+<p class="foot">Salonowe BDO · kontakt: marcin.projekty.www@gmail.com</p>
+</main>
+<script src="druk.js"></script>
+</body>
+</html>
