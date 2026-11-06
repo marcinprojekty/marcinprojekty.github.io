@@ -96,7 +96,9 @@ legend { font-weight: 600; font-size: 16px; margin-bottom: 10px; padding: 0; }
 .result[data-state="nie"] { background: #e6f1eb; }
 .result strong { display: block; font-size: 18px; margin-bottom: 4px; }
 .result ul { margin: 8px 0 0; padding-left: 18px; }
-.result .go { display: inline-block; margin-top: 12px; font-weight: 600; color: var(--accent); }
+.result .go { display: inline-block; margin-top: 12px; margin-right: 14px; font-weight: 600; color: var(--accent); }
+.freebie-more { margin: 14px 0 0; }
+.freebie-more a { color: #fff; font-weight: 600; }
 .legal-note { font-size: 12.5px; color: var(--ink-soft); margin: 14px 0 0; }
 
 section { padding: 88px 0; }
@@ -197,7 +199,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
   <div class="hero">
     <div class="wrap">
       <div class="intro">
-        <p class="start-note"><b>Ruszamy wkrótce.</b> Zapisz salon na listę startową: pierwsze 50 salonów płaci 29 zł zamiast 39 zł miesięcznie na stałe, a pierwsze 2 miesiące są za darmo.</p>
+        <p class="start-note"><b>Ruszamy wkrótce.</b> Zapisz salon na listę startową: pierwsze 50 salonów płaci 29 zł zamiast 39 zł miesięcznie na stałe, a pierwszy miesiąc jest za darmo.<span class="countdown" id="do-marca"></span></p>
         <h1>Ewidencja odpadów, która prowadzi się sama</h1>
         <p class="lead">Igła, ostrze czy wacik z krwią to odpad medyczny – nawet jedna sztuka oznacza wpis do BDO i ewidencję odpadów. Karty przekazania, ewidencję i sprawozdanie do 15 marca robimy za Ciebie, a Ty tylko potwierdzasz w telefonie.</p>
       </div>
@@ -255,6 +257,7 @@ footer p { margin: 0 0 6px; max-width: 60em; }
         <div>
           <h2 class="sec" id="proc-t">Za darmo: procedura postępowania z odpadami pod Twój salon</h2>
           <p>Na kontroli sanepidu i WIOŚ pytają o procedurę. Wpisz nazwę salonu, zaznacz zabiegi i wydrukuj gotowy dokument z Twoimi kodami odpadów, zasadami przechowywania i listą podpisów personelu. Bez zapisywania się i bez podawania e-maila.</p>
+          <p class="freebie-more">Też za darmo: <a href="checklista.html">checklista na kontrolę z etykietami na worki</a> · <a href="dziennik.html">dziennik sterylizacji autoklawu do druku</a></p>
         </div>
         <a class="go-btn" href="procedura.html">Zrób procedurę – 2 minuty</a>
       </div>
@@ -278,7 +281,8 @@ footer p { margin: 0 0 6px; max-width: 60em; }
       <div>
         <h2 class="sec" id="cena-t">Jedna cena, bez umowy na rok</h2>
         <div class="amount">39 zł <small>miesięcznie</small></div>
-        <p class="early"><b>Pierwsze 2 miesiące za darmo</b> – bez karty i bez automatycznych opłat.</p>
+        <p class="early"><b>Pierwszy miesiąc za darmo</b> – bez karty i bez automatycznych opłat. Płacisz przelewem albo BLIK-iem na telefon.</p>
+        <p class="early"><b>Gwarancja sprawozdania:</b> jeśli zatwierdzisz sprawozdanie w aplikacji do 10 marca, a z naszej winy nie trafi do BDO do 15 marca, oddajemy wszystko, co zapłaciłaś za ten rok.</p>
         <p class="early">Albo 390 zł za rok. <b>Pierwsze 50 salonów z listy zapisów płaci 29 zł miesięcznie</b> tak długo, jak korzysta z usługi. Ceny są końcowe – nie doliczamy VAT (zwolnienie z VAT).</p>
       </div>
       <ul>
@@ -343,6 +347,13 @@ footer p { margin: 0 0 6px; max-width: 60em; }
     </div>
   </section>
 
+  <section aria-labelledby="wsp-t">
+    <div class="wrap">
+      <h2 class="sec" id="wsp-t">Współpraca</h2>
+      <p class="sec-lead">Prowadzisz szkołę kosmetologii, hurtownię kosmetyczną, biuro rachunkowe obsługujące salony albo piszesz dla branży beauty? Chętnie przygotujemy dla Twoich kursantek i klientek materiały o odpadach i BDO – bezpłatnie. Napisz: <a href="mailto:marcin.projekty.www@gmail.com?subject=Wsp%C3%B3%C5%82praca%20%E2%80%93%20Salonowe%20BDO">marcin.projekty.www@gmail.com</a>.</p>
+    </div>
+  </section>
+
   <section class="faq" aria-labelledby="faq-t">
     <div class="wrap">
       <h2 class="sec" id="faq-t">Pytania</h2>
@@ -384,18 +395,29 @@ footer p { margin: 0 0 6px; max-width: 60em; }
       html = "<strong>Tak, salon musi prowadzić ewidencję odpadów" + (q3 === "nie" ? " i mieć wpis do BDO." : ".") + "</strong>" +
         "Od 1.01.2025 dotyczy to każdej ilości odpadów niebezpiecznych. Prawdopodobne kody:<ul><li>" + codes.join("</li><li>") + "</li></ul>" +
         "Przy odbiorze raz w miesiącu to 12 kart przekazania w roku, ewidencja po każdym odbiorze i sprawozdanie do 15 marca. U nas: jedno kliknięcie przy odbiorze. " +
-        (q3 === "nie" ? "Bez wpisu grozi kara administracyjna. " : "") + '<a class="go" href="#zapisy">Zapisz salon, zrobimy to za Ciebie</a>';
+        (q3 === "nie" ? "Bez wpisu grozi kara administracyjna. " : "") + '<a class="go" href="#zapisy">Zapisz salon, zrobimy to za Ciebie</a>' +
+        ' <a class="go" href="procedura.html">albo zrób za darmo procedurę odpadów na kontrolę</a>';
     } else if (q2 === "?") {
       out.setAttribute("data-state", "");
       html = "<strong>Prawdopodobnie tak, jeśli na opakowaniach jest piktogram zagrożenia.</strong>Sprawdź etykiety farb, utleniaczy i acetonu: romb z czerwoną ramką oznacza zwykle odpad niebezpieczny, a wtedy ewidencja jest obowiązkowa. " +
         '<a class="go" href="#zapisy">Zapisz się, sprawdzimy to z Tobą</a>';
     } else {
       out.setAttribute("data-state", "nie");
-      html = "<strong>Raczej nie musisz mieć wpisu do BDO.</strong>Jeśli powstają u Ciebie tylko odpady podobne do komunalnych, ministerstwo zwalnia salon z wpisu. Wróć do tego testu, gdy dodasz zabiegi z igłami albo chemią.";
+      html = "<strong>Raczej nie musisz mieć wpisu do BDO.</strong>Jeśli powstają u Ciebie tylko odpady podobne do komunalnych, ministerstwo zwalnia salon z wpisu. Wróć do tego testu, gdy dodasz zabiegi z igłami albo chemią. " +
+        '<a class="go" href="dziennik.html">Masz autoklaw? Pobierz za darmo dziennik sterylizacji do druku</a>';
     }
     out.innerHTML = html;
   }
   form.addEventListener("change", render);
+
+  // licznik do terminu sprawozdania (15 marca) – prawdziwa data, bez sztucznej presji
+  (function () {
+    var t = new Date(), y = t.getFullYear(), d = new Date(y, 2, 15);
+    if (t > new Date(y, 2, 15, 23, 59)) { y += 1; d = new Date(y, 2, 15); }
+    var days = Math.ceil((d - new Date(t.getFullYear(), t.getMonth(), t.getDate())) / 86400000);
+    var el = document.getElementById("do-marca");
+    if (el) el.textContent = " Do złożenia sprawozdania za " + (y - 1) + " rok zostało " + days + " dni (termin: 15 marca " + y + ").";
+  })();
   form.addEventListener("submit", function (e) { e.preventDefault(); });
 
   // Adres wdrożenia Apps Script (arkusz „Salonowe BDO – zapisy”). Pusty = zapisy jeszcze wyłączone.

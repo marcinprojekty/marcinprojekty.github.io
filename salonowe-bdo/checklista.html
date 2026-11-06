@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checklista odpadów przed kontrolą sanepidu i WIOŚ + etykiety na worki – Salonowe BDO</title>
+<meta name="description" content="Darmowa checklista odpadów dla salonu przed kontrolą sanepidu i WIOŚ: BDO, karty przekazania, ewidencja, sprawozdanie, worki, przechowywanie. Do tego etykiety na worki z Twoimi kodami odpadów.">
+<meta property="og:title" content="Kontrola sanepidu i WIOŚ: checklista odpadów + etykiety na worki">
+<meta property="og:description" content="Wpisz nazwę salonu, zaznacz zabiegi i wydrukuj checklistę oraz etykiety. Nic nie wysyłasz.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f5f6f3">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d2b2c'/%3E%3Cpath d='M9 17l5 5 9-11' fill='none' stroke='%23c8285e' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+@font-face { font-family: "Onest"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url(fonts/onest-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url(fonts/onest-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+:root { --paper: #f5f6f3; --ink: #1d2b2c; --ink-soft: #4a5a5b; --line: #d9e1dd; --mist: #e7ede9; --accent: #c8285e; --radius: 18px; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 17px; line-height: 1.6; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+header.top { padding: 22px 0; }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-weight: 800; font-size: 19px; text-decoration: none; }
+.logo span { color: var(--accent); }
+h1 { font-size: clamp(32px, 5vw, 48px); line-height: 1.05; letter-spacing: -0.03em; margin: 12px 0 14px; }
+.lead { color: var(--ink-soft); max-width: 38em; margin: 0 0 28px; }
+form.gen { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin-bottom: 32px; }
+.field { margin-bottom: 16px; }
+.field > label, fieldset legend { display: block; font-weight: 700; margin-bottom: 6px; }
+.field small, legend small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 14px; }
+input[type=text], input[type=number] { width: 100%; font: inherit; padding: 11px 13px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+input[type=number] { max-width: 9em; }
+input[type=text]:focus, input[type=number]:focus { border-color: var(--ink); outline: none; }
+fieldset { border: 0; padding: 0; margin: 0 0 16px; min-width: 0; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; cursor: pointer; }
+.checks input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+button { font: inherit; font-weight: 700; border: 0; border-radius: 999px; padding: 13px 22px; cursor: pointer; }
+button.go { background: var(--accent); color: #fff; }
+button.alt { background: var(--ink); color: #fff; }
+.err { color: #b3261e; font-weight: 600; min-height: 1.6em; margin: 8px 0 0; }
+.note { font-size: 14px; color: var(--ink-soft); margin: 12px 0 0; }
+#wynik[hidden], .after[hidden] { display: none; }
+.after { background: var(--ink); color: #fff; border-radius: var(--radius); padding: 24px; margin: 24px 0 40px; }
+.after h2 { margin: 0 0 8px; font-size: 22px; }
+.after p { margin: 0 0 14px; color: #d8e2df; }
+.after a.cta { display: inline-block; background: var(--accent); color: #fff; font-weight: 700; padding: 12px 20px; border-radius: 999px; text-decoration: none; }
+/* dokument */
+.doc { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 32px; font-family: Calibri, Arial, sans-serif; font-size: 15px; line-height: 1.4; color: #111; overflow-wrap: anywhere; }
+.doc h2.t { font-size: 24px; margin: 0 0 6px; letter-spacing: 0; }
+.doc h3 { font-size: 16px; margin: 14px 0 4px; }
+.doc p { margin: 0 0 6px; }
+.doc table { width: 100%; border-collapse: collapse; margin: 6px 0 8px; }
+.doc th, .doc td { border: 1px solid #555; padding: 4px 6px; text-align: left; vertical-align: top; }
+.doc th { background: #eef1ef; }
+.doc td.kod { white-space: nowrap; font-weight: 600; }
+.doc ul.chk { list-style: none; margin: 0 0 6px; padding: 0; }
+.doc ul.chk li { display: flex; gap: 8px; align-items: flex-start; margin: 0 0 4px; }
+.doc ul.chk .box { flex: none; font-size: 1.25em; line-height: 1.05; }
+.doc .small { font-size: 12px; color: #555; margin-top: 10px; }
+.tablewrap { overflow-x: auto; }
+/* etykiety */
+.labels { margin-top: 24px; }
+.labels h2.lt { font-size: 20px; margin: 0 0 4px; }
+.labels p.lt { color: var(--ink-soft); font-size: 15px; margin: 0 0 12px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.l { height: 64mm; border: 0.4mm solid #333; border-radius: 2mm; display: flex; overflow: hidden; break-inside: avoid; background: #fff; color: #111; font-family: Arial, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.l .bar { width: 7mm; flex: none; }
+.l .in { padding: 3mm 4mm; flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1.2mm; font-size: 9.5pt; line-height: 1.25; }
+.l .code { font-size: 22pt; font-weight: 700; letter-spacing: .5px; line-height: 1.1; }
+.l .desc { font-size: 9pt; min-height: 8mm; }
+.l .who { font-size: 9pt; overflow-wrap: anywhere; }
+.l .who b { display: block; }
+.l .f { font-size: 10pt; margin-top: 1mm; }
+.l .term { margin-top: auto; font-size: 8.5pt; color: #444; }
+footer { padding: 24px 0 40px; font-size: 14px; color: var(--ink-soft); }
+@media (max-width: 640px) { .row { grid-template-columns: 1fr; } .doc { padding: 18px; font-size: 14px; } form.gen { padding: 18px; } .grid { grid-template-columns: 1fr; } }
+@media print {
+  @page { size: A4; margin: 12mm 13mm; }
+  @page etykiety { size: A4; margin: 8mm; }
+  body { background: #fff; font-size: 10pt; }
+  header.top, .intro, form.gen, .after, footer, .noprint { display: none !important; }
+  .wrap { max-width: none; padding: 0; }
+  .doc { border: 0; padding: 0; font-size: 9.5pt; line-height: 1.3; }
+  .doc h2.t { font-size: 15pt; margin-bottom: 3pt; }
+  .doc h3 { font-size: 10.5pt; margin: 6pt 0 2pt; break-after: avoid; }
+  .doc p { margin: 0 0 3pt; }
+  .doc th, .doc td { padding: 2pt 4pt; }
+  .doc table { margin: 3pt 0 4pt; break-inside: avoid; }
+  .doc ul.chk li { margin: 0 0 2pt; break-inside: avoid; }
+  .doc .small { font-size: 7.5pt; margin-top: 4pt; }
+  .tablewrap { overflow: visible; }
+  .labels { page: etykiety; break-before: page; margin: 0; }
+  .grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="./">Salonowe<span> BDO</span></a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <h1>Kontrola sanepidu i WIOŚ: checklista odpadów + etykiety na worki</h1>
+    <p class="lead">Przed kontrolą sprawdź na jednej kartce, czy masz wszystko, o co pytają przy odpadach: wpis do BDO, umowę, karty przekazania, ewidencję, sprawozdanie, procedurę, worki i przechowywanie. Do tego gotowe etykiety na worki z Twoimi kodami odpadów. Za darmo, do wydruku albo zapisania jako PDF.</p>
+  </div>
+
+  <form class="gen" id="gen" novalidate>
+    <div class="row">
+      <div class="field">
+        <label for="g-nazwa">Nazwa salonu</label>
+        <input type="text" id="g-nazwa" maxlength="120" autocomplete="organization" required aria-describedby="g-err">
+      </div>
+      <div class="field">
+        <label for="g-regon">REGON <small>nieobowiązkowo – bez niego na etykiecie zostanie miejsce do wpisania</small></label>
+        <input type="text" id="g-regon" maxlength="14" inputmode="numeric">
+      </div>
+    </div>
+    <fieldset class="checks" id="g-zabiegi">
+      <legend>Jakie zabiegi wykonujesz? <small>Zaznacz wszystkie, które pasują.</small></legend>
+      <label><input type="checkbox" value="igly"><span>Igły i przekłuwanie skóry (makijaż permanentny, mezoterapia, mikronakłuwanie, przekłuwanie)</span></label>
+      <label><input type="checkbox" value="podologia"><span>Podologia</span></label>
+      <label><input type="checkbox" value="mani"><span>Manicure i pedicure</span></label>
+      <label><input type="checkbox" value="kwasy"><span>Kwasy i peelingi chemiczne</span></label>
+      <label><input type="checkbox" value="farby"><span>Koloryzacja włosów</span></label>
+    </fieldset>
+    <fieldset class="checks">
+      <legend>Czy masz osobną lodówkę na odpady?</legend>
+      <label><input type="radio" name="lodowka" value="tak" checked><span>Tak – odpady zakaźne można trzymać do 30 dni</span></label>
+      <label><input type="radio" name="lodowka" value="nie"><span>Nie – odpady zakaźne trzeba oddać w ciągu 72 godzin</span></label>
+    </fieldset>
+    <div class="field">
+      <label for="g-ile">Ile etykiet na każdy kod odpadu? <small>Od 1 do 12. Na jednej kartce A4 mieści się 8 etykiet.</small></label>
+      <input type="number" id="g-ile" min="1" max="12" step="1" value="4" inputmode="numeric">
+    </div>
+    <div class="btns"><button class="go" type="submit">Pokaż checklistę i etykiety</button></div>
+    <p class="err" id="g-err" role="alert"></p>
+    <p class="note">Checklista i etykiety powstają w Twojej przeglądarce – nic nie wysyłamy i niczego nie zapisujemy.</p>
+  </form>
+
+  <section id="wynik" hidden aria-label="Gotowa checklista i etykiety">
+    <div class="btns noprint" style="margin-bottom:16px"><button class="alt" type="button" id="g-druk">Drukuj albo zapisz jako PDF</button></div>
+    <div class="doc" id="doc"></div>
+    <div class="labels" id="labels"></div>
+    <div class="after" id="after" hidden>
+      <h2>Checklista jest. A karty, ewidencja i sprawozdanie?</h2>
+      <p>Salonowe BDO wystawia karty przekazania jednym kliknięciem, po każdym odbiorze samo uzupełnia ewidencję w BDO i przygotowuje sprawozdanie do 15 marca. Ruszamy wkrótce – pierwsze 50 salonów z listy płaci 29 zł zamiast 39 zł miesięcznie na stałe, a pierwszy miesiąc jest za darmo.</p>
+      <a class="cta" href="./?utm_source=checklista#zapisy">Zapisz salon na listę startową</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Checklista przygotowana na podstawie ustawy o odpadach i rozporządzenia Ministra Zdrowia z 5.10.2017 w sprawie szczegółowego sposobu postępowania z odpadami medycznymi (Dz.U. 2017 poz. 1975). Salon sprawdza ją i dostosowuje do swoich zabiegów. To nie jest porada prawna.</p>
+  <p>Salonowe BDO nie jest powiązane z Ministerstwem Klimatu i Środowiska ani z systemem BDO. Kontakt: <a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a></p>
+</footer>
+
+<script>
+(function () {
+  // kody odpadów i terminy przechowywania – jak w aplikacji (silnik/kody.py) i w procedura.html
+  var KODY = {
+    "18 01 03*": { opis: "odpady zakaźne: igły, ostrza, waciki i materiały z krwią", nieb: true, grupa: "zakaźne", worek: "czerwony", dni: 30 },
+    "18 01 06*": { opis: "chemikalia zawierające substancje niebezpieczne", nieb: true, grupa: "niebezpieczne inne niż zakaźne", worek: "żółty", dni: 30 },
+    "18 01 01": { opis: "narzędzia zabiegowe i ich resztki bez kontaktu z materiałem zakaźnym (np. pilniki)", nieb: false, grupa: "inne niż niebezpieczne", worek: "inny niż czerwony i żółty", dni: 30 },
+    "18 01 04": { opis: "inne odpady zabiegowe bez krwi: rękawiczki, podkłady, jednorazowe ręczniki", nieb: false, grupa: "inne niż niebezpieczne", worek: "inny niż czerwony i żółty", dni: 30 },
+    "15 01 10*": { opis: "opakowania z resztkami substancji niebezpiecznych (farby, utleniacze, aceton)", nieb: true, grupa: "opakowania", worek: null, dni: null }
+  };
+  var ZABIEGI = {
+    igly: ["18 01 03*", "18 01 04"], podologia: ["18 01 03*", "18 01 01", "18 01 04"],
+    mani: ["18 01 01", "18 01 04", "15 01 10*"], kwasy: ["18 01 06*", "15 01 10*"], farby: ["15 01 10*"]
+  };
+  var KOLORY = { "czerwony": "#c62828", "żółty": "#f2c200" };
+  var form = document.getElementById("gen"), doc = document.getElementById("doc"), labels = document.getElementById("labels"),
+      err = document.getElementById("g-err");
+  function v(id) { return document.getElementById(id).value.replace(/\s+/g, " ").trim(); }
+  function el(tag, text, cls) { var e = document.createElement(tag); if (text) e.textContent = text; if (cls) e.className = cls; return e; }
+  function table(head, rows) {
+    var w = el("div", null, "tablewrap"), t = el("table"), tr = el("tr");
+    head.forEach(function (h) { tr.appendChild(el("th", h)); });
+    t.appendChild(el("thead")).appendChild(tr);
+    var tb = el("tbody");
+    rows.forEach(function (r) { var row = el("tr"); r.forEach(function (c, i) { row.appendChild(el("td", c, i === 0 ? "kod" : null)); }); tb.appendChild(row); });
+    t.appendChild(tb); w.appendChild(t); return w;
+  }
+  // punkt listy: tekst albo tablica kawałków (string lub węzeł DOM, np. link)
+  function chk(items) {
+    var ul = el("ul", null, "chk");
+    items.forEach(function (it) {
+      var li = el("li"), box = el("span", "☐", "box"), txt = el("span");
+      box.setAttribute("aria-hidden", "true");
+      (Array.isArray(it) ? it : [it]).forEach(function (part) { txt.appendChild(typeof part === "string" ? document.createTextNode(part) : part); });
+      li.appendChild(box); li.appendChild(txt); ul.appendChild(li);
+    });
+    return ul;
+  }
+  function przechowywanie(k, lodowka) {
+    var x = KODY[k];
+    if (!x.dni) return "zamknięty pojemnik, oddać przy kolejnym odbiorze";
+    if (x.nieb) return lodowka ? "do 30 dni w lodówce do 10°C" : "do 72 h w temp. 10–18°C";
+    return "do 30 dni";
+  }
+  function etykieta(k, nazwa, regon, lodowka) {
+    var x = KODY[k];
+    var l = el("div", null, "l"), bar = el("div", null, "bar"), inn = el("div", null, "in");
+    bar.style.background = KOLORY[x.worek || ""] || "#55606a";
+    inn.appendChild(el("div", k, "code"));
+    inn.appendChild(el("div", x.opis, "desc"));
+    var who = el("div", null, "who");
+    who.appendChild(el("b", nazwa));
+    who.appendChild(el("span", "REGON " + (regon || "……………")));
+    inn.appendChild(who);
+    inn.appendChild(el("div", "Otwarcie: data ……………… godz. ………", "f"));
+    inn.appendChild(el("div", "Zamknięcie: data ……………… godz. ………", "f"));
+    var term = "";
+    if (x.dni && x.nieb) term = lodowka ? "Przechowywać najdłużej 30 dni w temp. do 10°C" : "Przechowywać najdłużej 72 h w temp. 10–18°C";
+    else if (x.dni) term = "Przechowywać najdłużej " + x.dni + " dni";
+    if (term) inn.appendChild(el("div", term, "term"));
+    l.appendChild(bar); l.appendChild(inn);
+    return l;
+  }
+  function render(e) {
+    e.preventDefault();
+    err.textContent = "";
+    var nazwa = v("g-nazwa");
+    var wybrane = Array.prototype.map.call(form.querySelectorAll("#g-zabiegi input:checked"), function (i) { return i.value; });
+    var ileRaw = v("g-ile"), ile = Number(ileRaw);
+    if (!nazwa) { err.textContent = "Wpisz nazwę salonu."; document.getElementById("g-nazwa").focus(); return; }
+    if (!wybrane.length) { err.textContent = "Zaznacz co najmniej jeden zabieg."; form.querySelector("#g-zabiegi input").focus(); return; }
+    if (!/^\d+$/.test(ileRaw) || ile < 1 || ile > 12) { err.textContent = "Liczba etykiet na kod: od 1 do 12."; document.getElementById("g-ile").focus(); return; }
+    var kody = [];
+    wybrane.forEach(function (z) { ZABIEGI[z].forEach(function (k) { if (kody.indexOf(k) < 0) kody.push(k); }); });
+    var lodowka = form.querySelector('input[name="lodowka"]:checked').value === "tak";
+    var regon = v("g-regon");
+    var has = function (k) { return kody.indexOf(k) >= 0; };
+
+    // część 1: checklista
+    doc.textContent = "";
+    var add = function (n) { doc.appendChild(n); };
+    add(el("h2", "Checklista odpadów przed kontrolą sanepidu i WIOŚ", "t"));
+    add(el("p", nazwa + (regon ? ", REGON " + regon : "")));
+    add(el("p", "Data sprawdzenia: ……………………   Sprawdził(a): ……………………………………"));
+    add(el("h3", "Odpady w salonie"));
+    add(table(["Kod", "Co to jest", "Worek / pojemnik", "Przechowywanie"], kody.map(function (k) {
+      var x = KODY[k]; return [k, x.opis, x.worek || "zamykany pojemnik, osobno od odpadów komunalnych", przechowywanie(k, lodowka)];
+    })));
+
+    add(el("h3", "Dokumenty"));
+    var link = el("a", "darmowy wzór procedury");
+    link.href = "./procedura.html";
+    add(chk([
+      "Salon ma wpis do rejestru BDO, a numer rejestrowy jest pod ręką (dane w BDO są aktualne: nazwa, adres, miejsce prowadzenia działalności).",
+      "Jest aktualna umowa z firmą, która odbiera odpady.",
+      "Za ostatni rok są karty przekazania odpadów (KPO) w BDO dla każdego odbioru, potwierdzone przez odbiorcę.",
+      "Ewidencja odpadów w BDO: karty ewidencji dla każdego kodu albo uproszczona ewidencja – przy odpadach niebezpiecznych do 100 kg rocznie może wystarczyć ewidencja na samych kartach przekazania. Sprawdź, który wariant dotyczy salonu.",
+      "Roczne sprawozdanie o wytworzonych odpadach za poprzedni rok złożone w BDO do 15 marca.",
+      ["Procedura postępowania z odpadami jest w salonie i podpisał ją cały personel (", link, ")."]
+    ]));
+
+    add(el("h3", "Worki, pojemniki i etykiety"));
+    var kolory = [];
+    if (has("18 01 03*")) kolory.push("czerwony – odpady zakaźne (18 01 03*)");
+    if (has("18 01 06*")) kolory.push("żółty – chemikalia niebezpieczne (18 01 06*)");
+    var inne = kody.filter(function (k) { return KODY[k].worek && KODY[k].worek.indexOf("inny") === 0; });
+    if (inne.length) kolory.push("inny kolor – pozostałe odpady zabiegowe (" + inne.join(", ") + ")");
+    var p2 = [];
+    if (kolory.length) p2.push("Worki i pojemniki we właściwych kolorach: " + kolory.join("; ") + ".");
+    if (has("15 01 10*")) p2.push("Opakowania z resztkami substancji niebezpiecznych (15 01 10*) w zamykanym pojemniku, osobno od odpadów komunalnych.");
+    p2.push("Na każdym worku i pojemniku jest etykieta z kodem odpadu, nazwą salonu, numerem REGON oraz datą i godziną otwarcia i zamknięcia (etykiety do druku na następnej stronie).");
+    if (has("18 01 03*")) p2.push("Igły, ostrza i inne ostre odpady trafiają do sztywnego pojemnika odpornego na przekłucie.");
+    p2.push("Worki i pojemniki są napełniane najwyżej do 2/3 objętości, a zamkniętych nie otwiera się ponownie.");
+    add(chk(p2));
+
+    add(el("h3", "Przechowywanie do odbioru"));
+    var p3 = [];
+    var niebezp = kody.filter(function (k) { return KODY[k].nieb && KODY[k].dni; });
+    var zwykle = kody.filter(function (k) { return !KODY[k].nieb && KODY[k].dni; });
+    if (niebezp.length) p3.push(lodowka
+      ? "Odpady " + niebezp.join(", ") + " leżą w wydzielonej lodówce w temperaturze do 10°C najdłużej 30 dni – daty zamknięcia na etykietach to potwierdzają."
+      : "Bez lodówki odpady " + niebezp.join(", ") + " leżą w temperaturze 10–18°C najdłużej 72 godziny – daty i godziny zamknięcia na etykietach to potwierdzają.");
+    if (zwykle.length) p3.push("Odpady " + zwykle.join(", ") + " leżą najdłużej 30 dni.");
+    p3.push("Miejsce przechowywania jest oznakowane, niedostępne dla klientów, regularnie myte i dezynfekowane.");
+    add(chk(p3));
+
+    add(el("h3", "Personel"));
+    add(chk(["Każda osoba wykonująca zabiegi wie, co robić po zranieniu lub kontakcie z krwią: przemyć ranę wodą z mydłem, zdezynfekować, zanotować zdarzenie, poinformować osobę odpowiedzialną i jak najszybciej skontaktować się z lekarzem."]));
+    add(el("p", "Wzór przygotowany w Salonowym BDO na podstawie ustawy o odpadach i rozporządzenia Ministra Zdrowia z 5.10.2017 (Dz.U. 2017 poz. 1975) obowiązujących w dniu wydruku. Salon sprawdza go i dostosowuje do swoich zabiegów. To nie jest porada prawna.", "small"));
+
+    // część 2: etykiety
+    labels.textContent = "";
+    labels.appendChild(el("h2", "Etykiety na worki i pojemniki", "lt noprint"));
+    labels.appendChild(el("p", "Wytnij i naklej na worek albo pojemnik. Datę i godzinę otwarcia i zamknięcia wpisz długopisem. Przy druku etykiety zaczynają się od nowej strony.", "lt noprint"));
+    var grid = el("div", null, "grid");
+    kody.forEach(function (k) { for (var i = 0; i < ile; i++) grid.appendChild(etykieta(k, nazwa, regon, lodowka)); });
+    labels.appendChild(grid);
+
+    document.title = "Checklista odpadów – " + nazwa;
+    document.getElementById("wynik").hidden = false;
+    document.getElementById("after").hidden = false;
+    document.getElementById("g-druk").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  form.addEventListener("submit", render);
+  document.getElementById("g-druk").addEventListener("click", function () { window.print(); });
+})();
+</script>
+</body>
+</html>
