@@ -139,6 +139,12 @@ button.go-btn { grid-column: 1 / -1; justify-self: start; font: inherit; font-we
 button.go-btn:hover { background: #b01f50; }
 button.go-btn:active { transform: translateY(1px); }
 button.go-btn:disabled { opacity: .7; cursor: progress; }
+.freebie { display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: center; background: var(--ink); color: #fff; border-radius: var(--radius-lg); padding: 36px; }
+.freebie .sec { color: #fff; margin-top: 0; }
+.freebie p { margin: 0; color: #d8e2df; max-width: 40em; }
+a.go-btn { display: inline-block; text-decoration: none; font-weight: 600; font-size: 17px; background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 15px 30px; white-space: nowrap; }
+a.go-btn:hover { background: #b01f50; }
+@media (max-width: 760px) { .freebie { grid-template-columns: 1fr; padding: 24px; } a.go-btn { white-space: normal; text-align: center; } }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .form-msg { grid-column: 1 / -1; margin: 0; font-weight: 500; }
 .privacy { grid-column: 1 / -1; font-size: 13px; color: #c9d4d2; }
@@ -239,6 +245,18 @@ footer p { margin: 0 0 6px; max-width: 60em; }
         <div><h3>Sprawozdanie roczne na czas</h3><p>Od połowy lutego sprawozdanie czeka w BDO wypełnione danymi z całorocznej ewidencji. Sprawdzasz je w aplikacji, klikasz „Zatwierdzam”, a składamy je za Ciebie przed 15 marca.</p></div>
         <div><h3>Teczka na kontrolę Sanepidu i WIOŚ</h3><p>Procedura postępowania z odpadami napisana pod Twój salon i gotowa do podpisania przez personel, a obok niej karty przekazania i ewidencja w jednym miejscu.</p></div>
         <div><h3>Pilnujemy terminu odbioru</h3><p>Odpady zakaźne można trzymać w lodówce najwyżej 30 dni. Przypominamy o odbiorze 5 dni przed terminem, a gdy odbiorca nie potwierdzi przejęcia albo odrzuci kartę, piszemy, co zrobić.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="proc-t">
+    <div class="wrap">
+      <div class="freebie">
+        <div>
+          <h2 class="sec" id="proc-t">Za darmo: procedura postępowania z odpadami pod Twój salon</h2>
+          <p>Na kontroli sanepidu i WIOŚ pytają o procedurę. Wpisz nazwę salonu, zaznacz zabiegi i wydrukuj gotowy dokument z Twoimi kodami odpadów, zasadami przechowywania i listą podpisów personelu. Bez zapisywania się i bez podawania e-maila.</p>
+        </div>
+        <a class="go-btn" href="procedura.html">Zrób procedurę – 2 minuty</a>
       </div>
     </div>
   </section>

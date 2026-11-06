@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Darmowa procedura postępowania z odpadami dla salonu – Salonowe BDO</title>
+<meta name="description" content="Procedura postępowania z odpadami pod Twój salon: kody odpadów, przechowywanie, przekazanie, ewidencja i lista podpisów personelu. Gotowa do wydruku w 2 minuty, za darmo.">
+<meta property="og:title" content="Darmowa procedura postępowania z odpadami dla salonu">
+<meta property="og:description" content="Wpisz nazwę salonu, zaznacz zabiegi i wydrukuj procedurę na kontrolę. Nic nie wysyłasz.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f5f6f3">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d2b2c'/%3E%3Cpath d='M9 17l5 5 9-11' fill='none' stroke='%23c8285e' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+@font-face { font-family: "Onest"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url(fonts/onest-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Onest"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url(fonts/onest-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+:root { --paper: #f5f6f3; --ink: #1d2b2c; --ink-soft: #4a5a5b; --line: #d9e1dd; --mist: #e7ede9; --accent: #c8285e; --radius: 18px; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 17px; line-height: 1.6; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+header.top { padding: 22px 0; }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-weight: 800; font-size: 19px; text-decoration: none; }
+.logo span { color: var(--accent); }
+h1 { font-size: clamp(32px, 5vw, 48px); line-height: 1.05; letter-spacing: -0.03em; margin: 12px 0 14px; }
+.lead { color: var(--ink-soft); max-width: 38em; margin: 0 0 28px; }
+form.gen { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin-bottom: 32px; }
+.field { margin-bottom: 16px; }
+.field > label, fieldset legend { display: block; font-weight: 700; margin-bottom: 6px; }
+.field small, legend small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 14px; }
+input[type=text] { width: 100%; font: inherit; padding: 11px 13px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); }
+input[type=text]:focus { border-color: var(--ink); outline: none; }
+fieldset { border: 0; padding: 0; margin: 0 0 16px; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; cursor: pointer; }
+.checks input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+button { font: inherit; font-weight: 700; border: 0; border-radius: 999px; padding: 13px 22px; cursor: pointer; }
+button.go { background: var(--accent); color: #fff; }
+button.alt { background: var(--ink); color: #fff; }
+.err { color: #b3261e; font-weight: 600; min-height: 1.6em; margin: 8px 0 0; }
+.note { font-size: 14px; color: var(--ink-soft); margin: 12px 0 0; }
+#wynik[hidden], .after[hidden] { display: none; }
+.after { background: var(--ink); color: #fff; border-radius: var(--radius); padding: 24px; margin: 24px 0 40px; }
+.after h2 { margin: 0 0 8px; font-size: 22px; }
+.after p { margin: 0 0 14px; color: #d8e2df; }
+.after a.cta { display: inline-block; background: var(--accent); color: #fff; font-weight: 700; padding: 12px 20px; border-radius: 999px; text-decoration: none; }
+/* dokument */
+.doc { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 32px; font-family: Calibri, Arial, sans-serif; font-size: 15px; line-height: 1.45; color: #111; }
+.doc h2.t { font-size: 24px; margin: 0 0 6px; letter-spacing: 0; }
+.doc h3 { font-size: 16px; margin: 18px 0 6px; }
+.doc p { margin: 0 0 8px; }
+.doc ul { margin: 0 0 8px; padding-left: 20px; }
+.doc li { margin: 0 0 4px; }
+.doc table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; }
+.doc th, .doc td { border: 1px solid #555; padding: 5px 7px; text-align: left; vertical-align: top; }
+.doc th { background: #eef1ef; }
+.doc td.kod { white-space: nowrap; font-weight: 600; }
+.doc table.sign td { height: 30px; }
+.doc .small { font-size: 12px; color: #555; margin-top: 14px; }
+.tablewrap { overflow-x: auto; }
+footer { padding: 24px 0 40px; font-size: 14px; color: var(--ink-soft); }
+@media (max-width: 640px) { .row { grid-template-columns: 1fr; } .doc { padding: 18px; font-size: 14px; } form.gen { padding: 18px; } }
+@media print {
+  @page { size: A4; margin: 16mm 15mm; }
+  body { background: #fff; font-size: 10.5pt; }
+  header.top, .intro, form.gen, .after, footer, .noprint { display: none !important; }
+  .wrap { max-width: none; padding: 0; }
+  .doc { border: 0; padding: 0; font-size: 10.5pt; }
+  .doc h2.t { font-size: 18pt; }
+  .doc h3 { font-size: 12pt; break-after: avoid; }
+  .doc table { break-inside: avoid; }
+  .tablewrap { overflow: visible; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="./">Salonowe<span> BDO</span></a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <h1>Procedura postępowania z odpadami dla Twojego salonu</h1>
+    <p class="lead">Na kontroli sanepidu i WIOŚ pytają o procedurę postępowania z odpadami. Wpisz nazwę salonu, zaznacz zabiegi, a dostaniesz gotowy dokument z Twoimi kodami odpadów, zasadami przechowywania i listą podpisów personelu. Za darmo, do wydruku albo zapisania jako PDF.</p>
+  </div>
+
+  <form class="gen" id="gen" novalidate>
+    <div class="field">
+      <label for="g-nazwa">Nazwa salonu</label>
+      <input type="text" id="g-nazwa" maxlength="120" autocomplete="organization" required>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="g-adres">Adres <small>nieobowiązkowo</small></label>
+        <input type="text" id="g-adres" maxlength="160" autocomplete="street-address">
+      </div>
+      <div class="field">
+        <label for="g-regon">REGON <small>nieobowiązkowo – wpisuje się go też na etykietach worków</small></label>
+        <input type="text" id="g-regon" maxlength="14" inputmode="numeric">
+      </div>
+    </div>
+    <fieldset class="checks" id="g-zabiegi">
+      <legend>Jakie zabiegi wykonujesz? <small>Zaznacz wszystkie, które pasują.</small></legend>
+      <label><input type="checkbox" value="igly"><span>Igły i przekłuwanie skóry (makijaż permanentny, mezoterapia, mikronakłuwanie, przekłuwanie)</span></label>
+      <label><input type="checkbox" value="podologia"><span>Podologia</span></label>
+      <label><input type="checkbox" value="mani"><span>Manicure i pedicure</span></label>
+      <label><input type="checkbox" value="kwasy"><span>Kwasy i peelingi chemiczne</span></label>
+      <label><input type="checkbox" value="farby"><span>Koloryzacja włosów</span></label>
+    </fieldset>
+    <fieldset class="checks">
+      <legend>Czy masz osobną lodówkę na odpady?</legend>
+      <label><input type="radio" name="lodowka" value="tak" checked><span>Tak – odpady zakaźne można trzymać do 30 dni</span></label>
+      <label><input type="radio" name="lodowka" value="nie"><span>Nie – odpady zakaźne trzeba oddać w ciągu 72 godzin</span></label>
+    </fieldset>
+    <div class="row">
+      <div class="field">
+        <label for="g-odbiorca">Firma, która odbiera odpady <small>nieobowiązkowo</small></label>
+        <input type="text" id="g-odbiorca" maxlength="120">
+      </div>
+      <div class="field">
+        <label for="g-osoba">Osoba odpowiedzialna <small>nieobowiązkowo</small></label>
+        <input type="text" id="g-osoba" maxlength="80" autocomplete="name">
+      </div>
+    </div>
+    <div class="btns"><button class="go" type="submit">Pokaż procedurę</button></div>
+    <p class="err" id="g-err" role="alert"></p>
+    <p class="note">Procedura powstaje w Twojej przeglądarce – nic nie wysyłamy i niczego nie zapisujemy.</p>
+  </form>
+
+  <section id="wynik" hidden aria-label="Gotowa procedura">
+    <div class="btns noprint" style="margin-bottom:16px"><button class="alt" type="button" id="g-druk">Drukuj albo zapisz jako PDF</button></div>
+    <div class="doc" id="doc"></div>
+    <div class="after" id="after" hidden>
+      <h2>Procedura jest. A karty, ewidencja i sprawozdanie?</h2>
+      <p>Salonowe BDO wystawia karty przekazania jednym kliknięciem, po każdym odbiorze samo uzupełnia ewidencję w BDO i przygotowuje sprawozdanie do 15 marca. Ruszamy wkrótce – pierwsze 50 salonów z listy płaci 29 zł zamiast 39 zł miesięcznie na stałe, a pierwsze 2 miesiące są za darmo.</p>
+      <a class="cta" href="./?utm_source=procedura#zapisy">Zapisz salon na listę startową</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Wzór przygotowany na podstawie ustawy o odpadach i rozporządzenia Ministra Zdrowia z 5.10.2017 w sprawie szczegółowego sposobu postępowania z odpadami medycznymi (Dz.U. 2017 poz. 1975). Salon sprawdza go i dostosowuje do swoich zabiegów. To nie jest porada prawna.</p>
+  <p>Salonowe BDO nie jest powiązane z Ministerstwem Klimatu i Środowiska ani z systemem BDO. Kontakt: <a href="mailto:marcin.projekty.www@gmail.com">marcin.projekty.www@gmail.com</a></p>
+</footer>
+
+<script>
+(function () {
+  // kody odpadów i terminy przechowywania – jak w aplikacji (silnik/kody.py)
+  var KODY = {
+    "18 01 03*": { opis: "odpady zakaźne: igły, ostrza, waciki i materiały z krwią", nieb: true, grupa: "zakaźne", worek: "czerwony", dni: 30 },
+    "18 01 06*": { opis: "chemikalia zawierające substancje niebezpieczne", nieb: true, grupa: "niebezpieczne inne niż zakaźne", worek: "żółty", dni: 30 },
+    "18 01 01": { opis: "narzędzia zabiegowe i ich resztki bez kontaktu z materiałem zakaźnym (np. pilniki)", nieb: false, grupa: "inne niż niebezpieczne", worek: "inny niż czerwony i żółty", dni: 30 },
+    "18 01 04": { opis: "inne odpady zabiegowe bez krwi: rękawiczki, podkłady, jednorazowe ręczniki", nieb: false, grupa: "inne niż niebezpieczne", worek: "inny niż czerwony i żółty", dni: 30 },
+    "15 01 10*": { opis: "opakowania z resztkami substancji niebezpiecznych (farby, utleniacze, aceton)", nieb: true, grupa: "opakowania", worek: null, dni: null }
+  };
+  var ZABIEGI = {
+    igly: ["18 01 03*", "18 01 04"], podologia: ["18 01 03*", "18 01 01", "18 01 04"],
+    mani: ["18 01 01", "18 01 04", "15 01 10*"], kwasy: ["18 01 06*", "15 01 10*"], farby: ["15 01 10*"]
+  };
+  var form = document.getElementById("gen"), doc = document.getElementById("doc"), err = document.getElementById("g-err");
+  function v(id) { return document.getElementById(id).value.replace(/\s+/g, " ").trim(); }
+  function el(tag, text, cls) { var e = document.createElement(tag); if (text) e.textContent = text; if (cls) e.className = cls; return e; }
+  function list(items) { var ul = el("ul"); items.forEach(function (t) { ul.appendChild(el("li", t)); }); return ul; }
+  function table(head, rows, cls) {
+    var w = el("div", null, "tablewrap"), t = el("table", null, cls), tr = el("tr");
+    head.forEach(function (h) { tr.appendChild(el("th", h)); });
+    t.appendChild(el("thead")).appendChild(tr);
+    var tb = el("tbody");
+    rows.forEach(function (r) { var row = el("tr"); r.forEach(function (c, i) { row.appendChild(el("td", c, i === 0 && cls !== "sign" ? "kod" : null)); }); tb.appendChild(row); });
+    t.appendChild(tb); w.appendChild(t); return w;
+  }
+  function render(e) {
+    e.preventDefault();
+    err.textContent = "";
+    var nazwa = v("g-nazwa");
+    var wybrane = Array.prototype.map.call(form.querySelectorAll("#g-zabiegi input:checked"), function (i) { return i.value; });
+    if (!nazwa) { err.textContent = "Wpisz nazwę salonu."; document.getElementById("g-nazwa").focus(); return; }
+    if (!wybrane.length) { err.textContent = "Zaznacz co najmniej jeden zabieg."; form.querySelector("#g-zabiegi input").focus(); return; }
+    var kody = [];
+    wybrane.forEach(function (z) { ZABIEGI[z].forEach(function (k) { if (kody.indexOf(k) < 0) kody.push(k); }); });
+    var lodowka = form.querySelector('input[name="lodowka"]:checked').value === "tak";
+    var regon = v("g-regon"), adres = v("g-adres"), odb = v("g-odbiorca"), osoba = v("g-osoba");
+    var dzis = new Date().toLocaleDateString("pl-PL", { day: "2-digit", month: "2-digit", year: "numeric" });
+
+    doc.textContent = "";
+    var add = function (n) { doc.appendChild(n); };
+    add(el("h2", "Procedura postępowania z odpadami w salonie", "t"));
+    add(el("p", [nazwa, adres, regon ? "REGON " + regon : ""].filter(Boolean).join(", ")));
+    add(el("p", "Obowiązuje od: " + dzis + ". Dotyczy: wszystkich osób wykonujących zabiegi w salonie. Osoba odpowiedzialna: " + (osoba || "…………………………") + "."));
+    add(el("h3", "1. Cel"));
+    add(el("p", "Procedura chroni klientów i personel przed zakażeniem oraz zapewnia, że odpady z zabiegów są zbierane, przechowywane, przekazywane i ewidencjonowane zgodnie z przepisami."));
+    add(el("h3", "2. Odpady powstające w salonie"));
+    add(table(["Kod", "Co to jest", "Rodzaj", "Pojemnik / worek"], kody.map(function (k) {
+      var x = KODY[k]; return [k, x.opis, (x.nieb ? "niebezpieczny – " : "") + x.grupa, x.worek || "zamykany pojemnik, osobno od odpadów komunalnych"];
+    })));
+    add(el("p", "Gwiazdka przy kodzie oznacza odpad niebezpieczny, zgodnie z katalogiem odpadów i systemem BDO."));
+    add(el("h3", "3. Zbieranie"));
+    add(list([
+      "Odpady zbiera się w miejscu ich powstania, od razu po zabiegu, do oznakowanego worka albo pojemnika.",
+      "Igły, ostrza i inne ostre odpady wrzuca się do sztywnego pojemnika odpornego na przekłucie. Igły nie zgina się i nie nakłada na nią osłonki.",
+      "Odpady zakaźne trafiają do czerwonego worka lub pojemnika, chemikalia niebezpieczne do żółtego, pozostałe odpady zabiegowe do worka w innym kolorze.",
+      "Worek lub pojemnik napełnia się najwyżej do 2/3 objętości. Zamkniętego worka ani pojemnika nie otwiera się ponownie.",
+      "Uszkodzony worek lub pojemnik wkłada się w całości do nowego, takiego samego.",
+      "Odpadów zabiegowych nie wolno wrzucać do odpadów komunalnych ani do kanalizacji."]));
+    add(el("h3", "4. Oznakowanie"));
+    add(el("p", "Każdy worek i pojemnik ma etykietę z kodem odpadu, nazwą salonu, numerem REGON oraz datą i godziną otwarcia i zamknięcia. Etykiety zwykle są na pojemnikach od firmy odbierającej odpady – dane salonu oraz datę i godzinę wpisuje się na nich długopisem."));
+    add(el("h3", "5. Przechowywanie do odbioru"));
+    var niebezp = kody.filter(function (k) { return KODY[k].nieb && KODY[k].dni; });
+    var inne = kody.filter(function (k) { return !KODY[k].nieb && KODY[k].dni; });
+    var opak = kody.filter(function (k) { return !KODY[k].dni; });
+    var p5 = [];
+    if (niebezp.length) p5.push(lodowka
+      ? "Odpady " + niebezp.join(", ") + " przechowuje się w wydzielonej lodówce w temperaturze do 10°C najdłużej 30 dni."
+      : "Salon nie ma lodówki na odpady, więc odpady " + niebezp.join(", ") + " przechowuje się w temperaturze 10–18°C najdłużej 72 godziny.");
+    if (inne.length) p5.push("Odpady " + inne.join(", ") + " przechowuje się najdłużej 30 dni.");
+    if (opak.length) p5.push("Odpady " + opak.join(", ") + " trzyma się w zamkniętym pojemniku, z dala od klientów, i oddaje przy kolejnym odbiorze.");
+    p5.push("Miejsce przechowywania jest oznakowane, niedostępne dla klientów i regularnie myte oraz dezynfekowane.");
+    add(list(p5));
+    add(el("h3", "6. Przekazanie odpadów"));
+    add(el("p", "Odpady odbiera " + (odb || "firma z wymaganymi zezwoleniami") + " na podstawie umowy. Każdy odbiór ma kartę przekazania odpadów w BDO. Kartę wystawia salon, a masę odpadów potwierdza odbiorca."));
+    add(el("p", "Osoba przekazująca odpady sprawdza, czy kod na karcie zgadza się z kodem na etykiecie, i potwierdza przekazanie odpadów kierowcy."));
+    add(el("h3", "7. Ewidencja i sprawozdanie"));
+    add(el("p", "Ewidencję odpadów prowadzi się w BDO na kartach ewidencji, osobno dla każdego kodu, na podstawie potwierdzonych kart przekazania. Do 15 marca składa się w BDO roczne sprawozdanie o wytworzonych odpadach za poprzedni rok."));
+    add(el("h3", "8. Zranienie lub kontakt z krwią"));
+    add(list([
+      "Ranę od razu przemyć wodą z mydłem, nie tamować krwawienia, zdezynfekować i zabezpieczyć opatrunkiem.",
+      "Zanotować datę, godzinę i okoliczności zdarzenia oraz poinformować osobę odpowiedzialną.",
+      "Jak najszybciej, najlepiej w ciągu 2 godzin, skontaktować się z lekarzem w sprawie dalszego postępowania."]));
+    add(el("h3", "Zapoznałam / zapoznałem się z procedurą"));
+    add(table(["Imię i nazwisko", "Data", "Podpis"], [0, 1, 2, 3, 4, 5].map(function () { return ["", "", ""]; }), "sign"));
+    add(el("p", "Wzór przygotowany w Salonowym BDO na podstawie przepisów obowiązujących w dniu wydruku. Salon sprawdza go i dostosowuje do swoich zabiegów. To nie jest porada prawna.", "small"));
+
+    document.title = "Procedura odpady – " + nazwa;
+    document.getElementById("wynik").hidden = false;
+    document.getElementById("after").hidden = false;
+    document.getElementById("g-druk").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  form.addEventListener("submit", render);
+  document.getElementById("g-druk").addEventListener("click", function () { window.print(); });
+})();
+</script>
+</body>
+</html>
