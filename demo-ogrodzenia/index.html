@@ -47,6 +47,7 @@
   dl { margin: 0 0 14px; display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; font-variant-numeric: tabular-nums; }
   dt { color: var(--cichy); } dd { margin: 0; text-align: right; font-weight: 600; }
   dl .razem { border-top: 1px solid var(--linia); padding-top: 8px; color: var(--tekst); font-weight: 700; }
+  .vat + .vat { margin-left: 8px; }
   .vat { display: inline-flex; border: 1px solid var(--beton-ciemny); border-radius: 999px; overflow: hidden; margin-bottom: 12px; }
   .vat button { font: inherit; border: 0; background: #fff; padding: 8px 16px; min-height: 40px; cursor: pointer; color: var(--tekst); }
   .vat button[aria-pressed=true] { background: var(--akcent); color: #fff; font-weight: 600; }
@@ -92,7 +93,11 @@
 
   <section class="karta wynik" aria-label="Wycena">
     <div class="rysunek" aria-hidden="true"><svg id="rysunek" viewBox="0 0 520 190" role="img"></svg></div>
-    <div class="vat" role="group" aria-label="Sposób pokazania ceny">
+    <p class="podpowiedz" style="margin:0 0 6px">Wariant pokazu:</p>
+    <div class="vat" role="group" aria-label="Wariant kalkulatora">
+      <button type="button" id="z-cena" aria-pressed="true">z ceną</button><button type="button" id="bez-ceny" aria-pressed="false">bez ceny</button>
+    </div>
+    <div class="vat" role="group" aria-label="Sposób pokazania ceny" id="vat">
       <button type="button" id="netto" aria-pressed="false">netto</button><button type="button" id="brutto" aria-pressed="true">brutto</button>
     </div>
     <div aria-live="polite">
@@ -100,7 +105,7 @@
       <p class="suma-opis" id="suma-opis"></p>
       <dl id="rozbicie"></dl>
     </div>
-    <p class="podpowiedz">Cena orientacyjna. Transport wyceniamy osobno po podaniu miejscowości. Przy bramie lub furtce ostateczną liczbę przęseł potwierdzamy przy pomiarze.</p>
+    <p class="podpowiedz" id="uwaga-cena"></p>
     <details><summary>Jak to liczymy</summary><p id="jak-liczymy"></p></details>
   </section>
 
@@ -112,7 +117,7 @@
         <div><label class="etykieta" for="telefon">Telefon</label><input type="tel" id="telefon" autocomplete="tel" inputmode="tel"></div>
         <div class="cala"><label class="etykieta" for="miejsce">Miejscowość (do wyceny transportu)</label><input type="text" id="miejsce" autocomplete="address-level2"></div>
       </div>
-      <button class="glowny" type="submit">Wyślij zapytanie z tą wyceną</button>
+      <button class="glowny" type="submit" id="wyslij">Wyślij zapytanie</button>
       <div id="po-wyslaniu" hidden>
         <p class="ok" role="status">Tak wyglądałaby wiadomość, którą firma dostaje na maila – z kompletem danych, bez dopytywania:</p>
         <p class="podglad" id="podglad"></p>
@@ -131,32 +136,39 @@ const FIRMY = {
   "pol-bet": { nazwa: "POL-BET", przeslo: 2, ceny: "z cennika", zrodlo: "pol-bet.pl/cennik", odczyt: "12.11.2026", montazJednostka: "przęsło",
     wys: [{ m: 1, plyty: 2, komplet: 150, slup: 50, montaz: 60 }, { m: 1.5, plyty: 3, komplet: 205, slup: 55, montaz: 90 },
           { m: 2, plyty: 4, komplet: 265, slup: 65, montaz: 120 }, { m: 2.5, plyty: 5, komplet: 370, slup: 120, montaz: 170 }] },
+  "wolomin": { nazwa: "Ogrodzenia Wołomin", przeslo: 2, ceny: "z cennika", zrodlo: "wolominogrodzenia.pl", odczyt: "12.11.2026", cenyOd: true,
+    wys: [{ m: 1.5, plyty: 3, komplet: 170, slup: 50 }, { m: 2, plyty: 4, komplet: 220, slup: 60 }, { m: 2.25, plyty: 4.5, komplet: 270, slup: 80 }] },
   "wzor": { nazwa: "Twoja firma", przeslo: 2, ceny: "przykładowe", montazJednostka: "przęsło",
     wys: [{ m: 1, plyty: 2, komplet: 160, slup: 55, montaz: 65 }, { m: 1.5, plyty: 3, komplet: 215, slup: 60, montaz: 95 },
           { m: 2, plyty: 4, komplet: 275, slup: 70, montaz: 125 }, { m: 2.5, plyty: 5, komplet: 380, slup: 125, montaz: 175 }] }
 };
+// Firmy bez publicznego cennika: pokaz zaczyna się od wariantu BEZ ceny (klient widzi liczbę przęseł, cenę podaje firma w odpowiedzi).
+const NAZWY = { "ogbet": "OGBET", "habs": "HABS", "alk-bet": "Alk-Bet", "mirbet": "MIRBET", "betonex": "BETONEX", "wolbet": "WOLBET", "nekla": "Ogrodzenia Nekla",
+  "duet": "Duet Tomiczki", "mibet": "Mibet", "mdm": "MDM Ogrodzenia", "banas": "BANAŚ", "plytex": "PŁYTEX", "umienino": "Ogrodzenia Umienino", "remplyt": "REMPŁYT",
+  "dragon": "DRAGON Ogrodzenia", "kwapisz": "KWAPISZ", "betonik": "Betonik", "parbet": "PARBET", "dembet": "DEMBET", "euro-plot": "EURO PŁOT",
+  "gawecki": "Ogrodzenia Gawęcki", "wielabet": "Wielabet", "nowaczyk": "Zakład Betoniarski Nowaczyk", "mobet": "MOBET", "celka": "CELKA" };
 const klucz = new URLSearchParams(location.search).get("f");
-const F = FIRMY[klucz] || FIRMY.wzor;
+const F = FIRMY[klucz] || (NAZWY[klucz] ? { ...FIRMY.wzor, nazwa: NAZWY[klucz], ceny: "brak" } : FIRMY.wzor);
 const VAT = 0.23, $ = (id) => document.getElementById(id);
 const zl = (n) => new Intl.NumberFormat("pl-PL", { style: "currency", currency: "PLN", maximumFractionDigits: 0 }).format(n);
 const metry = (n) => String(n).replace(".", ",") + " m";
-const odmiana = (n, a, b, c) => n === 1 ? a : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c;
-let brutto = true;
+const ile = (n) => String(n).replace(".", ",");
+const odmiana = (n, a, b, c) => n === 1 ? a : n % 1 ? b : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? b : c;
+let brutto = true, zCena = F.ceny !== "brak";
 
 $("firma").textContent = "Kalkulator ogrodzenia · " + F.nazwa;
 document.title = "Kalkulator ogrodzenia betonowego – " + F.nazwa + " (wersja pokazowa)";
-$("zrodlo").textContent = F.ceny === "z cennika" ? `Ceny z cennika na ${F.zrodlo} (odczyt ${F.odczyt}), netto + 23% VAT.` : "Ceny na tej stronie są przykładowe – w prawdziwej wersji będą z cennika firmy.";
 $("wysokosci").append(...F.wys.map((w, i) => { const l = document.createElement("label");
-  l.innerHTML = `<input type="radio" name="wys" value="${i}"${w.m === 2 || (i === F.wys.length - 1 && !F.wys.some((x) => x.m === 2)) ? " checked" : ""}><span>${metry(w.m)}<small>${w.plyty} ${odmiana(w.plyty, "płyta", "płyty", "płyt")}</small></span>`; return l; }));
-if (!F.wys.some((w) => w.montaz)) $("pole-montaz").hidden = true;
+  l.innerHTML = `<input type="radio" name="wys" value="${i}"${w.m === 2 || (i === F.wys.length - 1 && !F.wys.some((x) => x.m === 2)) ? " checked" : ""}><span>${metry(w.m)}<small>${ile(w.plyty)} ${odmiana(w.plyty, "płyta", "płyty", "płyt")}</small></span>`; return l; }));
 
 function rysuj(n, w) {
-  const widac = Math.min(n, 5), szer = 96, slup = 10, dol = 172, wysPlyty = 26, gora = dol - w.plyty * wysPlyty;
+  const widac = Math.min(n, 5), szer = 96, slup = 10, dol = 172, wysPlyty = 26, gora = dol - w.plyty * wysPlyty, polowka = (w.plyty % 1) * wysPlyty;
   let s = "", x = (520 - (widac * (szer + slup) + slup)) / 2;
   for (let i = 0; i <= widac; i++) {
     s += `<rect x="${x}" y="${gora - 10}" width="${slup}" height="${dol - gora + 10}" rx="2" fill="#8f8c84"/>`;
-    if (i < widac) for (let p = 0; p < w.plyty; p++)
-      s += `<rect x="${x + slup}" y="${gora + p * wysPlyty}" width="${szer}" height="${wysPlyty - 2}" fill="#b9b6ae"/><path d="M${x + slup + 8} ${gora + p * wysPlyty + 12}h${szer - 16}" stroke="#a5a29a" stroke-width="2"/>`;
+    if (i < widac && polowka) s += `<rect x="${x + slup}" y="${gora}" width="${szer}" height="${polowka - 2}" fill="#b9b6ae"/>`;   // płyta 25 cm na górze
+    if (i < widac) for (let p = 0; p < Math.floor(w.plyty); p++)
+      s += `<rect x="${x + slup}" y="${gora + polowka + p * wysPlyty}" width="${szer}" height="${wysPlyty - 2}" fill="#b9b6ae"/><path d="M${x + slup + 8} ${gora + polowka + p * wysPlyty + 12}h${szer - 16}" stroke="#a5a29a" stroke-width="2"/>`;
     x += szer + slup;
   }
   if (n > widac) s += `<text x="510" y="20" text-anchor="end" font-size="15" font-weight="700" fill="#1d2420">+ jeszcze ${n - widac}</text>`;
@@ -166,39 +178,57 @@ function rysuj(n, w) {
 function licz() {
   const L = Math.max(0, parseFloat(String($("dlugosc").value).replace(",", ".")) || 0);
   const w = F.wys[+document.querySelector("input[name=wys]:checked").value];
-  const n = Math.ceil(L / F.przeslo - 1e-9), zMontazem = $("montaz").checked && !!w.montaz;
-  const material = n * w.komplet + (n ? w.slup : 0), montaz = zMontazem ? n * w.montaz : 0;
+  const n = Math.ceil(L / F.przeslo - 1e-9), chceMontaz = $("montaz").checked, liczMontaz = chceMontaz && zCena && !!w.montaz;
+  const material = n * w.komplet + (n ? w.slup : 0), montaz = liczMontaz ? n * w.montaz : 0;
   const mnoznik = brutto ? 1 + VAT : 1, razem = (material + montaz) * mnoznik;
-  $("przesla-opis").textContent = n ? `${n} ${odmiana(n, "przęsło", "przęsła", "przęseł")} po ${metry(F.przeslo)} i ${n + 1} ${odmiana(n + 1, "słupek", "słupki", "słupków")}` : "Podaj długość ogrodzenia.";
-  $("montaz-opis").textContent = w.montaz ? `${zl(w.montaz)} netto za ${F.montazJednostka} przy wysokości ${metry(w.m)}` : "";
-  $("suma").textContent = zl(razem);
-  $("suma-opis").textContent = `${brutto ? "brutto" : "netto"} · ${metry(L)} ogrodzenia o wysokości ${metry(w.m)}${zMontazem ? " z montażem" : ""}`;
-  $("rozbicie").innerHTML = `<dt>Przęsła (${n} × ${zl(w.komplet * mnoznik)})</dt><dd>${zl(n * w.komplet * mnoznik)}</dd>
-    <dt>Słupek końcowy</dt><dd>${zl((n ? w.slup : 0) * mnoznik)}</dd>${zMontazem ? `<dt>Montaż (${n} × ${zl(w.montaz * mnoznik)})</dt><dd>${zl(montaz * mnoznik)}</dd>` : ""}
-    <dt class="razem">Razem ${brutto ? "brutto" : "netto"}</dt><dd class="razem">${zl(razem)}</dd>`;
-  $("jak-liczymy").textContent = `Długość dzielimy na przęsła po ${metry(F.przeslo)} i zaokrąglamy w górę. Każde przęsło to komplet: ${w.plyty} ${odmiana(w.plyty, "płyta", "płyty", "płyt")} i słupek. Na końcu dochodzi jeden słupek zamykający.`;
+  const przesel = `${n} ${odmiana(n, "przęsło", "przęsła", "przęseł")}`, slupkow = `${n + 1} ${odmiana(n + 1, "słupek", "słupki", "słupków")}`;
+  const opisWymiarow = `${metry(L)} ogrodzenia o wysokości ${metry(w.m)}${chceMontaz ? " z montażem" : ""}`;
+  $("przesla-opis").textContent = n ? `${przesel} po ${metry(F.przeslo)} i ${slupkow}` : "Podaj długość ogrodzenia.";
+  $("montaz-opis").textContent = zCena && w.montaz ? `${zl(w.montaz)} netto za ${F.montazJednostka} przy wysokości ${metry(w.m)}` : "wycenę montażu firma podaje w odpowiedzi";
+  $("vat").hidden = !zCena;
+  $("wyslij").textContent = zCena ? "Wyślij zapytanie z tą wyceną" : "Wyślij zapytanie z tymi wymiarami";
+  if (zCena) {
+    $("suma").textContent = (F.cenyOd ? "od " : "") + zl(razem);
+    $("suma-opis").textContent = `${brutto ? "brutto" : "netto"} · ${opisWymiarow}${chceMontaz && !liczMontaz ? " (montaż wyceniany osobno)" : ""}`;
+    $("rozbicie").innerHTML = `<dt>Przęsła (${n} × ${zl(w.komplet * mnoznik)})</dt><dd>${zl(n * w.komplet * mnoznik)}</dd>
+      <dt>Słupek końcowy</dt><dd>${zl((n ? w.slup : 0) * mnoznik)}</dd>${liczMontaz ? `<dt>Montaż (${n} × ${zl(w.montaz * mnoznik)})</dt><dd>${zl(montaz * mnoznik)}</dd>` : ""}
+      <dt class="razem">Razem ${brutto ? "brutto" : "netto"}</dt><dd class="razem">${zl(razem)}</dd>`;
+    $("uwaga-cena").textContent = "Cena orientacyjna. Transport wyceniamy osobno po podaniu miejscowości. Przy bramie lub furtce ostateczną liczbę przęseł potwierdzamy przy pomiarze.";
+  } else {
+    $("suma").textContent = przesel;
+    $("suma-opis").textContent = opisWymiarow;
+    $("rozbicie").innerHTML = `<dt>Przęsła po ${metry(F.przeslo)}</dt><dd>${n}</dd><dt>Słupki</dt><dd>${n + 1}</dd><dt>Płyty</dt><dd>${ile(n * w.plyty)}</dd>
+      <dt class="razem">Cena</dt><dd class="razem">w odpowiedzi od firmy</dd>`;
+    $("uwaga-cena").textContent = "W tym wariancie klient nie widzi cen. Wysyła zapytanie z gotowym zestawieniem, a cenę dostaje od firmy.";
+  }
+  $("zrodlo").textContent = !zCena ? "Wariant bez ceny: cennik zostaje u firmy."
+    : F.ceny === "z cennika" ? `Ceny z cennika na ${F.zrodlo} (odczyt ${F.odczyt}), netto + 23% VAT.` : "Ceny w wariancie z ceną są przykładowe – w prawdziwej wersji będą z cennika firmy.";
+  $("jak-liczymy").textContent = `Długość dzielimy na przęsła po ${metry(F.przeslo)} i zaokrąglamy w górę. Każde przęsło to komplet: ${ile(w.plyty)} ${odmiana(w.plyty, "płyta", "płyty", "płyt")} i słupek. Na końcu dochodzi jeden słupek zamykający.`;
   rysuj(n, w);
-  return { L, w, n, zMontazem, netto: material + montaz };
+  return { L, w, n, chceMontaz, przesel, slupkow, netto: material + montaz };
 }
 
 for (const el of [$("dlugosc"), $("montaz"), ...document.querySelectorAll("input[name=wys]")]) el.addEventListener("input", () => { if (el === $("dlugosc")) $("suwak").value = $("dlugosc").value; licz(); });
 $("suwak").addEventListener("input", () => { $("dlugosc").value = $("suwak").value; licz(); });
+const wariant = (czy) => { zCena = czy; $("z-cena").setAttribute("aria-pressed", String(czy)); $("bez-ceny").setAttribute("aria-pressed", String(!czy)); licz(); };
+$("z-cena").addEventListener("click", () => wariant(true));
+$("bez-ceny").addEventListener("click", () => wariant(false));
 for (const [id, czy] of [["netto", false], ["brutto", true]]) $(id).addEventListener("click", () => { brutto = czy; $("netto").setAttribute("aria-pressed", String(!czy)); $("brutto").setAttribute("aria-pressed", String(czy)); licz(); });
 $("zapytanie").addEventListener("submit", (e) => {
   e.preventDefault();
   const d = licz();
   $("podglad").textContent = `Nowe zapytanie ze strony
 
-Ogrodzenie: ${metry(d.L)}, wysokość ${metry(d.w.m)} (${d.n} ${odmiana(d.n, "przęsło", "przęsła", "przęseł")}, ${d.n + 1} ${odmiana(d.n + 1, "słupek", "słupki", "słupków")})
-Montaż: ${d.zMontazem ? "tak" : "nie"}
-Wycena z kalkulatora: ${zl(d.netto)} netto (${zl(d.netto * (1 + VAT))} brutto), bez transportu
+Ogrodzenie: ${metry(d.L)}, wysokość ${metry(d.w.m)} (${d.przesel}, ${d.slupkow}, płyt: ${ile(d.n * d.w.plyty)})
+Montaż: ${d.chceMontaz ? "tak" : "nie"}
+${zCena ? `Wycena z kalkulatora: ${F.cenyOd ? "od " : ""}${zl(d.netto)} netto (${zl(d.netto * (1 + VAT))} brutto), bez transportu` : "Klient czeka na cenę"}
 
 Klient: ${$("imie").value.trim() || "(nie podano)"}, tel. ${$("telefon").value.trim() || "(nie podano)"}
 Miejscowość: ${$("miejsce").value.trim() || "(nie podano)"}`;
   $("po-wyslaniu").hidden = false;
   $("po-wyslaniu").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
 });
-licz();
+wariant(zCena);
 </script>
 </body>
 </html>
