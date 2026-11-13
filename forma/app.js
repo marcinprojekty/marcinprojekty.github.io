@@ -3654,6 +3654,7 @@ ${body}`;
     })).catch(() => {
     });
   }
+  for (const ev of ["gesturestart", "gesturechange"]) document.addEventListener(ev, (e) => e.preventDefault(), { passive: false });
   (document.fonts?.ready || Promise.resolve()).then(() => {
     render();
     if (firstRun) setTimeout(() => toast("Pierwsze uruchomienie programu. Żeby przenieść swoje wpisy z przeglądarki: tam w Ustawieniach pobierz kopię, a tutaj ją wczytaj.", 9e3), 900);

@@ -61,6 +61,9 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
+/* telefon: strona nie jeździ na boki, nie przybliża się podwójnym stuknięciem i nie odbija przy przewijaniu */
+html, body { overflow-x: clip; overscroll-behavior: none; }
+html { touch-action: pan-x pan-y; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   background: var(--ground); color: var(--text); font: 400 var(--fs-body)/1.45 var(--font);
   -webkit-font-smoothing: antialiased; font-feature-settings: "cv11", "ss01";
@@ -578,3 +581,6 @@ main.fit .demo-bar { margin-bottom: 10px; padding: 6px 12px; }
   table.ex td[data-l] { text-align: left !important; }
   table.ex td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; color: var(--faint); }
 }
+
+/* iPhone przybliża stronę przy pisaniu w polu z czcionką mniejszą niż 16 px (na końcu, żeby wygrało z font: inherit) */
+@media (pointer: coarse) { input, select, textarea { font-size: 16px; } }
