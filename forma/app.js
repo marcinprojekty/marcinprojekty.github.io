@@ -109,7 +109,7 @@
     for (const [d, e] of own(obj(s.days))) {
       if (!day(d) || !obj(e)) continue;
       const o = {};
-      for (const k of ["w", "kcal", "p", "f", "c", "steps"]) {
+      for (const k of ["w", "kcal", "p", "f", "c", "steps", "sl", "ss", "hr"]) {
         const n = num(e[k]);
         if (n != null && n >= 0) o[k] = n;
       }
@@ -121,7 +121,7 @@
       for (const [k, x] of own(s.sessions)) {
         if (!obj(x) || !arr(x.sets) || !day(str(x.date).slice(0, 10))) continue;
         const sid = str(k).replace(/[^\w :.-]/g, "");
-        out.sessions[sid] = { id: sid, date: str(x.date).slice(0, 10), time: str(x.time), title: str(x.title), dur: str(x.dur), sets: x.sets.filter(obj).map((t) => ({ e: str(t.e), w: num(t.w) ?? 0, r: Math.max(0, Math.round(num(t.r) ?? 0)), t: ["NORMAL_SET", "DROP_SET", "LEFT_SET", "RIGHT_SET"].includes(t.t) ? t.t : "NORMAL_SET" })) };
+        out.sessions[sid] = { id: sid, date: str(x.date).slice(0, 10), time: str(x.time), title: str(x.title), dur: str(x.dur), ...x.kind ? { kind: str(x.kind) } : {}, sets: x.sets.filter(obj).map((t) => ({ e: str(t.e), w: num(t.w) ?? 0, r: Math.max(0, Math.round(num(t.r) ?? 0)), t: ["NORMAL_SET", "DROP_SET", "LEFT_SET", "RIGHT_SET"].includes(t.t) ? t.t : "NORMAL_SET" })) };
       }
     }
     const li = obj(s.lastImport);
@@ -158,6 +158,7 @@
     out.orders = (arr(s.orders) || []).filter(obj).slice(-200).map((o) => ({ key: id(o.key), shop: str(o.shop), no: o.no ? str(o.no) : null, date: day(o.date) || today(), status: ost.includes(o.status) ? o.status : "ordered", items: (arr(o.items) || []).filter(obj).slice(0, 40).map((x) => ({ item: str(x.item), name: str(x.name), qty: Math.min(20, Math.max(1, Math.round(num(x.qty) ?? 1))) })), tracking: o.tracking ? str(o.tracking) : null, courier: o.courier ? str(o.courier) : null, updated: typeof o.updated === "string" ? o.updated.slice(0, 30) : null, stocked: o.stocked === true }));
     out.mailSeen = (arr(s.mailSeen) || []).filter((x) => typeof x === "string").slice(-3e3).map((x) => x.slice(0, 300));
     out.mailInit = s.mailInit === true;
+    for (const k of ["healthReq", "healthAck"]) if (num(s[k]) > 0) out[k] = num(s[k]);
     out.rm = Object.fromEntries(own(obj(s.rm)).filter(([k, v]) => ["bench", "squat", "dead", "ohp"].includes(k) && num(v) > 0).map(([k, v]) => [k, num(v)]));
     out._ts = Object.fromEntries(own(obj(s._ts)).filter(([, v]) => typeof v === "number" && Number.isFinite(v)).slice(0, 2e4).map(([k, v]) => [String(k).slice(0, 300), v]));
     if (obj(s.cartMine)) out.cartMine = Object.fromEntries(own(s.cartMine).filter(([, v]) => arr(v)).slice(0, 200).map(([k, v]) => [str(k), [str(v[0]), str(v[1]), safeUrl(v[2]) ? str(v[2]) : null, num(v[3]) ?? null, str(v[4]), str(v[5])]]));
@@ -165,6 +166,11 @@
     out.cartIn = Object.fromEntries(own(obj(s.cartIn)).filter(([, v]) => day(v)).map(([k, v]) => [str(k), day(v)]));
     out.cartPick = Object.fromEntries(own(obj(s.cartPick)).filter(([, v]) => v === "mine" || v === "alt").map(([k, v]) => [str(k), v]));
     out.cartSkip = Object.fromEntries(own(obj(s.cartSkip)).filter(([, v]) => v === true).map(([k]) => [str(k), true]));
+    const L = obj(s.live);
+    out.live = L && arr(L.ex) ? { start: num(L.start) || Date.now(), tpl: str(L.tpl), lastI: num(L.lastI) || 0, restEnd: num(L.restEnd) || null, restTotal: num(L.restTotal) || 0, ex: L.ex.filter(obj).map((x) => ({ name: str(x.name), rest: num(x.rest) || 180, sets: (arr(x.sets) || []).filter(obj).map((t) => ({ w: str(t.w), r: str(t.r), done: t.done === true })) })).filter((x) => x.name) } : null;
+    out.templates = (arr(s.templates) || []).filter(obj).map((t, i) => ({ id: id(t.id), n: num(t.n) ?? i, name: str(t.name).slice(0, 60), ex: (arr(t.ex) || []).filter(obj).map((x) => ({ name: str(x.name), sets: Math.min(10, Math.max(1, Math.round(num(x.sets) || 3))) })).filter((x) => x.name) })).filter((t) => t.name && t.ex.length);
+    out.restDefault = Math.min(600, Math.max(0, num(s.restDefault) || 0));
+    out.restPref = Object.fromEntries(own(obj(s.restPref)).filter(([, v]) => num(v) > 0).map(([k, v]) => [str(k), num(v)]));
     return out;
   }
   function load() {
@@ -428,7 +434,7 @@
       }
     }
     const value = tdee ?? formula;
-    const rateKg = P.ratePct / 100 * bw;
+    const rateKg = P.rateKg || P.ratePct / 100 * bw;
     const target = Math.round((value + rateKg * 7700 / 7) / 10) * 10;
     const proteinTarget = P.protein;
     return { value, method, conf, formula, avgK, change, span, kcalDays: kd.length, win, rate, bw, target, rateKg, proteinTarget, series };
@@ -496,9 +502,10 @@
     if (DEMO || !P.nextGoal || today() < P.goalDate) return;
     P.goal = P.nextGoal;
     P.ratePct = P.nextRate;
+    P.rateKg = P.nextKg;
     P.nextGoal = "";
     P.goalDate = addDays(P.goalDate, 182);
-    save(`Nowa faza: ${P.goal}, tempo ${signed(P.ratePct, f2)}% masy na tydzień`);
+    save(`Nowa faza: ${P.goal}, tempo ${signed(energy().rateKg, f2)} kg na tydzień`);
   }
   const main = $("#main");
   let firstPaint = true;
@@ -515,6 +522,7 @@
     ["treningi", "Treningi", "dumbbell"],
     ["cialo", "Mięśnie", "body"],
     ["dieta", "Dieta i TDEE", "energy"],
+    ["statystyki", "Statystyki", "bars"],
     ["suplementy", "Suplementy", "pill"],
     ["koszyk", "Koszyk", "cart"],
     ["pielegnacja", "Pielęgnacja", "drop"],
@@ -524,7 +532,7 @@
   ];
   function renderNav(route2) {
     const soon = S.supps.filter((x) => ["soon", "out"].includes(suppState(x).k)).length;
-    $("#nav").innerHTML = NAV.filter(([id]) => (id !== "pielegnacja" || S.profile.skin !== false) && !(DEMO && id === "raport")).map(([id, label, icon]) => `<a href="#/${id}" data-route="${id}"${route2 === id || ["cwiczenie", "trening", "metody"].includes(route2) && id === "treningi" ? ' aria-current="page"' : ""}>${ic(icon, "")}${label}${id === "suplementy" && soon ? `<span class="badge num" aria-label="${soon} do zamówienia">${soon}</span>` : ""}</a>`).join("");
+    $("#nav").innerHTML = NAV.filter(([id]) => (id !== "pielegnacja" || S.profile.skin !== false) && !(DEMO && id === "raport")).map(([id, label, icon]) => `<a href="#/${id}" data-route="${id}"${route2 === id || ["cwiczenie", "trening", "metody", "teraz"].includes(route2) && id === "treningi" ? ' aria-current="page"' : ""}>${ic(icon, "")}${label}${id === "suplementy" && soon ? `<span class="badge num" aria-label="${soon} do zamówienia">${soon}</span>` : ""}</a>`).join("");
     $$(".sidebar .foot a").forEach((a) => a.toggleAttribute("aria-current", route2 === "ustawienia"));
     if (route2 === "ustawienia") $(".sidebar .foot a").setAttribute("aria-current", "page");
   }
@@ -533,7 +541,7 @@
     const ss = sessionsSorted();
     const last = ss[0];
     const d = S.days[today()];
-    if (!DEMO) $("#fresh").innerHTML = last ? `CSV: <b>${f0.format(ss.length)} ${plural(ss.length, "trening", "treningi", "treningów")}</b>, ostatni ${dRel(last.date)}${d ? " · dzisiejszy wpis zapisany" : " · <b>brak dzisiejszego wpisu</b>"}` : "Brak treningów: wrzuć eksport CSV z aplikacji treningowej";
+    if (!DEMO) $("#fresh").innerHTML = last ? `Treningi: <b>${f0.format(ss.length)} ${plural(ss.length, "trening", "treningi", "treningów")}</b>, ostatni ${dRel(last.date)}${d ? " · dzisiejszy wpis zapisany" : " · <b>brak dzisiejszego wpisu</b>"}` : "Brak treningów: wrzuć eksport CSV z aplikacji treningowej";
     const T = [["noc", "Noc", "#638eff", "#0c0d0f"], ["grafit", "Grafit", "#c3c3c6", "#131314"], ["bursztyn", "Bursztyn", "#c7a36e", "#121110"], ["jasny", "Jasny", "#3e5a7c", "#f4f4f2"]];
     $("#themes").innerHTML = T.map(([id, n, a, g]) => `<button type="button" data-theme="${id}" aria-label="Motyw: ${n}" title="${n}" aria-pressed="${S.theme === id}" style="background:${a};border-color:${g === "#f4f4f2" ? "#c9c9c5" : "var(--control)"}"></button>`).join("");
   }
@@ -592,6 +600,24 @@
     const [r, ...rest] = h.split("/");
     return { r: r || "pulpit", arg: rest.join("/") };
   }
+  const HL = { kroki: ["steps", 0, 1e5, 0], sen: ["sl", 0, 24, 2], ocena: ["ss", 0, 100, 0], tetno: ["hr", 25, 220, 0] };
+  const hNum = (s) => parseFloat(String(s ?? "").replace(/\s/g, "").replace(",", ".").replace(/[^\d.]/g, ""));
+  function healthLink(r, arg) {
+    const ok = (d2) => /^\d{4}-\d{2}-\d{2}$/.test(d2 || "");
+    if (r === "kroki") return arg.split(",").map((p) => p.split("=")).filter(([d2]) => ok(d2?.trim())).map(([d2, n]) => [d2.trim(), { steps: Math.round(hNum(n)) }]).filter(([, v2]) => v2.steps >= 0 && v2.steps <= 1e5);
+    const [d, ...parts] = arg.split("/");
+    if (!ok(d)) return [];
+    const v = {};
+    for (const p of parts) {
+      const [k, n] = p.split("="), h = HL[k?.trim()], x = hNum(n);
+      if (h && x >= h[1] && x <= h[2]) v[h[0]] = +x.toFixed(h[3]);
+    }
+    return Object.keys(v).length ? [[d, v]] : [];
+  }
+  const sleepText = (h) => `${Math.floor(h)} h ${pad2(Math.round(h % 1 * 60))} min`;
+  const healthText = (v) => [v.steps != null && `${f0.format(v.steps)} kroków`, v.sl != null && `sen ${sleepText(v.sl)}`, v.hr != null && `tętno ${v.hr}`].filter(Boolean).join(", ");
+  console.assert(JSON.stringify(healthLink("zdrowie", "2026-11-16/kroki=8 432/sen=7,4/tetno=58/xx=1")) === '[["2026-11-16",{"steps":8432,"sl":7.4,"hr":58}]]', "healthLink");
+  console.assert(JSON.stringify(healthLink("kroki", "2026-11-16=8432,zle=5")) === '[["2026-11-16",{"steps":8432}]]', "healthLink kroki");
   function render(opts = {}) {
     phaseCheck();
     let { r, arg } = route();
@@ -606,6 +632,16 @@
     if (DEMO && r === "raport") {
       r = "pulpit";
       history.replaceState(null, "", "#/pulpit");
+    }
+    if (r === "kroki" || r === "zdrowie") {
+      const got = DEMO ? [] : healthLink(r, arg);
+      for (const [d, v] of got) S.days[d] = { ...S.days[d] || {}, ...v };
+      if (got.length) {
+        save("Zapisano z Apple Zdrowie: " + got.map(([d, v]) => `${d.slice(8)}.${d.slice(5, 7)} ${healthText(v)}`).join("; "));
+        syncNow();
+      }
+      r = "dieta";
+      history.replaceState(null, "", "#/dieta");
     }
     if (!DEMO && !S.profile.name && r !== "start" && r !== "ustawienia") {
       r = "start";
@@ -623,8 +659,9 @@
     const view = VIEWS[r] || VIEWS.pulpit;
     pending.length = 0;
     main.classList.toggle("fit", r === "pulpit" || !VIEWS[r]);
+    const noSync = !DEMO && !NATIVE && r !== "ustawienia" && !syncCfg()?.code && (matchMedia("(display-mode: standalone)").matches || navigator.standalone);
     try {
-      main.innerHTML = (DEMO ? '<div class="demo-bar"><span class="demo-pill">Przykład</span><span class="grow">To zmyślone dane, nic się nie zapisuje.</span></div>' : "") + view(arg);
+      main.innerHTML = (DEMO ? '<div class="demo-bar"><span class="demo-pill">Przykład</span><span class="grow">To zmyślone dane, nic się nie zapisuje.</span></div>' : "") + (noSync ? '<div class="demo-bar"><span class="grow">Ten telefon nie jest połączony z komputerem. Wpisz kod z komputera albo zeskanuj QR (nie twórz nowego kodu).</span><a class="btn small primary" href="#/ustawienia">Połącz</a></div>' : "") + view(arg);
     } catch (e) {
       console.error(e);
       pending.length = 0;
@@ -663,6 +700,133 @@
     const d = parse(s);
     return `${WD[d.getDay()]}, ${d.getDate()} ${MG[d.getMonth()]}`;
   }
+  let dashDay = null, dashBusy = false;
+  function dashStep(n) {
+    const t = today();
+    dashGo(addDays(dashDay && dashDay < t ? dashDay : t, n));
+  }
+  function dashInner(E, dd) {
+    const t = today();
+    dd = dd || dashCur();
+    const isT = dd === t, M = macroPlan(E), dT = S.days[dd] || {};
+    const mac = (l, v, goal, u, cls, okOver) => {
+      const x = v || 0, left = goal - x, over = !okOver && x > goal * 1.05;
+      return `<div class="mac ${cls}"><div class="mac-l">${l}</div><div class="mac-v num"><b>${f0.format(x)}</b><span> / ${f0.format(goal)} ${u}</span></div><div class="mac-track"><span class="bar-fill${over ? " over" : ""}" data-w="${Math.min(100, x / goal * 100)}"></span></div><div class="mac-left faint">${left > 0 ? `zostało ${f0.format(left)} ${u}` : left === 0 || okOver ? "cel zrobiony" : `ponad o ${f0.format(-left)} ${u}`}</div></div>`;
+    };
+    const burn = E.value, eaten = dT.kcal || 0, bal = eaten - burn, plan = M.kcal - burn;
+    const good = plan < 0 ? bal <= plan + 150 : Math.abs(bal - plan) <= 200;
+    const balance = `<div class="bal"><div><span class="label">${isT ? "Spalasz dziś" : "Spalanie"}</span><b class="num">≈ ${f0.format(burn)}</b><small>kcal</small></div><div class="bal-op" aria-hidden="true">−</div><div><span class="label">Zjedzone</span><b class="num">${f0.format(eaten)}</b><small>kcal</small></div><div class="bal-op" aria-hidden="true">=</div><div><span class="label">${bal <= 0 ? "Deficyt" : "Nadwyżka"}</span><b class="num ${eaten ? good ? "pos" : "neg" : ""}">${f0.format(Math.abs(bal))}</b><small>kcal · plan: ${plan <= 0 ? "deficyt" : "nadwyżka"} ${f0.format(Math.abs(plan))}</small></div></div>`;
+    return `    ${balance}
+    <div class="macs">${mac("Kalorie", dT.kcal, M.kcal, "kcal", "k")}${mac("Białko", dT.p, M.p, "g", "p", true)}${mac("Tłuszcz", dT.f, M.f, "g", "f")}${mac("Węglowodany", dT.c, M.c, "g", "c")}</div>
+    <div class="foot faint" style="font-size:12px">Białko i tłuszcz stałe, węgle dopełniają kalorie. <a class="link" href="#/ustawienia">Zmień cele →</a></div>
+`;
+  }
+  const dashWk0 = (dd) => addDays(dd, -((parse(dd).getDay() + 6) % 7));
+  function dashHead(E, dd) {
+    const t = today(), isT = dd === t, ddName = isT ? "Dziś" : dd === addDays(t, -1) ? "Wczoraj" : cap(WD[parse(dd).getDay()]);
+    return `<div class="card-head">${ic("energy")}<h2>${esc(ddName)}</h2><span class="faint dd-date">${esc(parse(dd).getDate() + " " + MG[parse(dd).getMonth()])}</span><span class="dd-nav"><button type="button" class="btn small" data-dd="-1" aria-label="Poprzedni dzień">‹</button><button type="button" class="btn small" data-dd="1" aria-label="Następny dzień"${isT ? " disabled" : ""}>›</button></span><div class="right">${E.method === "dane" ? "spalanie z twoich danych" : "spalanie ze wzoru"}</div></div>`;
+  }
+  function dashStrip(dd) {
+    const t = today(), wk0 = dashWk0(dd);
+    return `<div class="wk" role="group" aria-label="Dzień tygodnia" data-wk="${wk0}"><span class="wk-ind" aria-hidden="true" style="--i:${diffDays(wk0, dd)}"></span>${["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nd"].map((l, i) => {
+      const d = addDays(wk0, i);
+      return `<button type="button" class="wk-d${d === dd ? " on" : ""}${d === t ? " today" : ""}" data-dday="${d}"${d > t ? " disabled" : ""} aria-pressed="${d === dd}" aria-label="${esc(weekdayLong(d))}"><span>${l}</span><b class="num">${parse(d).getDate()}</b><i${S.days[d]?.kcal ? ' class="ok"' : ""}></i></button>`;
+    }).join("")}</div>`;
+  }
+  function dashTop(d) {
+    const top = $(".macro .dd-top");
+    if (!top) return;
+    $(".card-head", top).outerHTML = dashHead(energy(), d);
+    const wk = $(".wk", top);
+    if (wk.dataset.wk !== dashWk0(d)) {
+      wk.outerHTML = dashStrip(d);
+      return;
+    }
+    $(".wk-ind", wk).style.setProperty("--i", diffDays(wk.dataset.wk, d));
+    $$(".wk-d", wk).forEach((b) => {
+      const on = b.dataset.dday === d;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on);
+    });
+  }
+  const dashCur = () => {
+    const t = today();
+    return dashDay && dashDay < t ? dashDay : t;
+  };
+  function dashPeek(d) {
+    const body = $(".macro .dd-body");
+    let p = $(".macro .dd-peek");
+    if (!p) {
+      p = document.createElement("div");
+      p.className = "dd-peek";
+      p.setAttribute("aria-hidden", "true");
+      body.after(p);
+    }
+    if (p.dataset.d !== d) {
+      p.dataset.d = d;
+      p.innerHTML = dashInner(energy(), d);
+      $$(".bar-fill", p).forEach((x) => {
+        x.style.transition = "none";
+        x.style.transform = `scaleX(${x.dataset.w / 100})`;
+      });
+    }
+    Object.assign(p.style, { left: body.offsetLeft + "px", top: body.offsetTop + "px", width: body.offsetWidth + "px" });
+    return p;
+  }
+  const dashPage = () => $(".macro")?.clientWidth || 400;
+  function dashDrag(dx) {
+    const body = $(".macro .dd-body"), cur = dashCur(), d = dx > 0 ? addDays(cur, -1) : dashDay ? addDays(cur, 1) : null, W = dashPage();
+    if (!d) {
+      $(".macro .dd-peek")?.remove();
+      body.style.transform = `translateX(${dx * 0.25}px)`;
+      return dx * 0.25;
+    }
+    body.style.transform = `translateX(${dx}px)`;
+    dashPeek(d).style.transform = `translateX(${dx - Math.sign(dx) * W}px)`;
+    return dx;
+  }
+  async function dashGo(d, fromDx = 0) {
+    const t = today(), cur = dashCur(), body = $(".macro .dd-body");
+    if (dashBusy || !body) {
+      if (!body && d <= t) {
+        dashDay = d === t ? null : d;
+        rerender();
+      }
+      return;
+    }
+    const W = dashPage(), ease = "cubic-bezier(.25,.8,.25,1)", clear = () => {
+      body.style.transform = "";
+    };
+    if (d > t || d === cur) {
+      const p2 = $(".macro .dd-peek");
+      if (fromDx && !isReduced()) {
+        dashBusy = true;
+        await Promise.all([body.animate([{ transform: `translateX(${fromDx}px)` }, { transform: "none" }], { duration: 200, easing: ease }).finished, p2?.animate([{ transform: p2.style.transform }, { transform: `translateX(${-Math.sign(fromDx) * W}px)` }], { duration: 200, easing: ease, fill: "forwards" }).finished]);
+        dashBusy = false;
+      }
+      p2?.remove();
+      clear();
+      return;
+    }
+    dashBusy = true;
+    dashDay = d === t ? null : d;
+    dashTop(d);
+    const dir = d < cur ? 1 : -1, p = dashPeek(d), dur = Math.max(160, 320 * (1 - Math.abs(fromDx) / W)), sec = body.parentElement, h = sec.offsetHeight, dh = p.offsetHeight - body.offsetHeight;
+    clear();
+    try {
+      if (!isReduced()) await Promise.all([
+        body.animate([{ transform: `translateX(${fromDx}px)` }, { transform: `translateX(${dir * W}px)` }], { duration: dur, easing: ease, fill: "forwards" }).finished,
+        p.animate([{ transform: `translateX(${fromDx - dir * W}px)` }, { transform: "none" }], { duration: dur, easing: ease, fill: "forwards" }).finished,
+        dh && sec.animate([{ height: h + "px" }, { height: h + dh + "px" }], { duration: dur, easing: ease, fill: "forwards" }).finished
+      ]);
+      body.innerHTML = p.innerHTML;
+      p.remove();
+      body.getAnimations().forEach((x) => x.cancel());
+      sec.getAnimations().forEach((x) => x.cancel());
+    } finally {
+      dashBusy = false;
+    }
+  }
   VIEWS.pulpit = () => {
     const E = energy(), t = today(), ss = sessionsSorted(), last = ss[0], P = S.profile;
     const series = E.series, latest = series.at(-1);
@@ -676,7 +840,7 @@
     <div class="card-head">${ic("trend")}<h2>Waga</h2>${E.rate != null ? `<div class="right"><span class="pill num">${signed(E.rate, f2)} kg / tydz.</span></div>` : ""}</div>
     ${latest ? `<div class="row"><div class="lead num"><span data-count="${latest.tr.toFixed(1)}" data-dec="1">${f1.format(latest.tr)}</span><span class="unit">kg</span></div><div class="faint">trend · ostatni pomiar ${f1.format(latest.w)} kg ${dRel(latest.date)}</div></div>
       <div class="chart fill" id="chWeight" style="margin-top:8px"></div>` : `<div class="lead num faint">–</div><div class="empty" style="margin-top:16px">Brak pomiarów. Zważ się rano po toalecie, przed jedzeniem, i dodaj <button class="link" data-act="log">wpis dnia</button>.</div>`}
-    <div class="foot faint" style="font-size:13px">Cel: ${P.goal} do ${dLong(P.goalDate)} · ${weeksLeft} ${plural(weeksLeft, "tydzień", "tygodnie", "tygodni")}${P.nextGoal ? ` · potem ${P.nextGoal} ${signed(P.nextRate, f2)}%/tydz.` : ""}</div>
+    <div class="foot faint" style="font-size:13px">Cel: ${P.goal} do ${dLong(P.goalDate)} · ${weeksLeft} ${plural(weeksLeft, "tydzień", "tygodnie", "tygodni")}${P.nextGoal ? ` · potem ${P.nextGoal} ${signed(P.nextKg || P.nextRate / 100 * E.bw, f2)} kg/tydz.` : ""}</div>
   </section>`;
     if (latest) chart(() => {
       const start = addDays(t, -29), labels = [], raw = [], tr = [];
@@ -696,27 +860,7 @@
       el.querySelector(".chart-legend")?.remove();
       animateLines(el);
     });
-    const dToday = S.days[t] || {};
-    const ringV = dToday.kcal ? Math.min(1, dToday.kcal / E.target) : 0;
-    const pr = dToday.p || 0;
-    const eCard = `<section class="card c4" data-go="#/dieta">
-    <div class="card-head">${ic("energy")}<h2>Energia</h2><div class="right">${E.method === "dane" ? `z ${E.kcalDays} dni${E.conf === "niska" ? " · niska pewność" : ""}` : "szacunek ze wzoru"}</div></div>
-    <div class="kpi num">Spalanie ≈ <span data-count="${E.value}">${f0.format(E.value)}</span><span class="unit">kcal</span></div>
-    <div class="split" style="margin-top:16px;align-items:center">
-      <div><div class="chart" id="chRing" style="display:flex;justify-content:center"></div></div>
-      <div class="stack">
-        <span class="label">Cel na dziś</span><span class="num" style="font-size:16px">${f0.format(E.target)} kcal</span>
-        <span class="label" style="margin-top:8px">Białko</span><span class="num" style="font-size:16px">${f0.format(pr)} <span class="faint">/ ${f0.format(E.proteinTarget)} g</span></span>
-        <span style="height:4px;background:var(--chart-track);border-radius:9px;overflow:hidden;margin-top:4px"><span class="bar-fill" data-w="${Math.min(100, pr / E.proteinTarget * 100)}" style="display:block;height:100%;width:0;background:var(--accent);border-radius:9px"></span></span>
-      </div>
-    </div>
-    ${E.method !== "dane" ? `<div class="foot faint" style="font-size:12px">Po 2 tygodniach wpisów spalanie policzę z twojej wagi i kalorii.</div>` : ""}
-  </section>`;
-    chart(() => {
-      const el = $("#chRing");
-      Charts.ring(el, { value: ringV, label: dToday.kcal ? f0.format(dToday.kcal) : "0", sub: `z ${f0.format(E.target)} kcal`, size: 112, stroke: 5 });
-      animateRing(el);
-    });
+    const eCard = `<section class="card c12 macro" data-go="#/dieta" data-noswipe><div class="dd-top">${dashHead(E, dashCur())}${dashStrip(dashCur())}</div><div class="dd-body">${dashInner(E)}</div></section>`;
     let tCard;
     if (last) {
       const tops = topSets(last, 3);
@@ -802,7 +946,7 @@
       }
     });
     return `<div class="title-row"><div><h1>${greeting()}, ${esc(P.name)}</h1><div class="sub">${cap(weekdayLong(t))} · <span class="finding">${finding}</span></div></div></div>
-    <div class="grid stretch dash">${wCard}${eCard}${tCard}${iCard}${rCard}${sCard}${kCard}${wCard2}${cCard}</div>`;
+    <div class="grid stretch dash">${eCard}${wCard}${tCard}${iCard}${rCard}${sCard}${kCard}${wCard2}${cCard}</div>`;
   };
   const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const getVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -1422,7 +1566,6 @@
   })();
   VIEWS.dieta = () => {
     const E = energy(), P = S.profile, t = today();
-    const entries = Object.keys(S.days).sort().reverse().slice(0, 45);
     chart(() => {
       const el = $("#chW90");
       if (!el) return;
@@ -1444,9 +1587,8 @@
       if (lg) $("#lgW90").appendChild(lg);
       animateLines(el);
     });
-    const trendRow = (d) => E.series.find((p) => p.date === d);
     return `<div class="title-row"><div><h1>Dieta i TDEE</h1><div class="sub">${E.method === "dane" ? `Spalanie policzone z ${E.kcalDays} dni kalorii i zmiany wagi o ${signed(E.change, f2)} kg w ${E.span} dni (regresja liniowa z pomiarów).${E.conf === "niska" ? " Niska pewność: pełna dokładność po ~28 dniach (Hall i Chow 2011), pierwsze 2–4 tygodnie po zmianie kalorii zawyża woda." : ""}` : `Na razie szacunek ze wzoru Mifflina. Spalanie z twoich danych policzę po 14 dniach z kaloriami i ważeniem, a dokładne po ~28 dniach (Hall i Chow 2011).`}</div></div>
-      <div class="actions"><button class="btn primary" data-act="log">Wpis dnia</button></div></div>
+      <div class="actions">${healthBtn()}<button class="btn primary" data-act="log">Wpis dnia</button></div></div>
     <div class="grid">
       <section class="card c8"><div class="card-head"><h2>Waga</h2><div class="right" id="lgW90"></div></div>
         ${E.series.length ? `<div class="seg" role="group" aria-label="Zakres wykresu" style="max-width:100%;overflow-x:auto;margin-bottom:12px;align-self:flex-start">${W_RANGES.map(([v, l]) => `<button type="button" data-wr="${v}" aria-pressed="${wRange === v}">${l}</button>`).join("")}</div><div class="chart" id="chW90"></div>` : `<div class="empty">Brak pomiarów. Codzienne ważenie rano da najdokładniejszy trend.</div>`}</section>
@@ -1461,16 +1603,198 @@
         <div style="margin-top:16px;padding:14px 16px;background:var(--raised);border-radius:12px"><div class="label">Propozycja na ten tydzień</div><div class="kpi num" style="margin-top:4px">${f0.format(E.target)}<span class="unit">kcal · ${f0.format(P.protein)} g białka</span></div></div>
         <div class="form-grid" style="margin-top:16px">
           <label class="field">Cel<select data-prof="goal"><option value="redukcja"${P.goal === "redukcja" ? " selected" : ""}>Redukcja</option><option value="rekompozycja"${P.goal === "rekompozycja" ? " selected" : ""}>Rekompozycja</option><option value="masa"${P.goal === "masa" ? " selected" : ""}>Masa</option></select></label>
-          <label class="field">Tempo (% masy / tydz.)<input type="number" step="0.05" data-prof="ratePct" value="${P.ratePct}"></label>
+          <label class="field">Tempo (kg / tydz., minus = chudnięcie)<input type="number" step="0.05" data-prof="rateKg" value="${+E.rateKg.toFixed(2)}"></label>
         </div>
       </section>
-      <section class="card c12"><div class="card-head"><h2>Dziennik</h2><div class="right">kliknij wiersz, żeby poprawić</div></div>
-        ${entries.length ? `<table class="rows"><thead><tr><th>Dzień</th><th class="num">Waga</th><th class="num hide-phone">Trend</th><th class="num">Kalorie</th><th class="num">Białko</th><th class="num hide-phone">Kroki</th><th class="hide-phone">Notatka</th></tr></thead><tbody>
-          ${entries.map((d) => {
-      const e = S.days[d], tp = trendRow(d);
-      return `<tr class="click" data-log="${d}" tabindex="0"><td>${dLong(d, false)}</td><td class="num">${e.w ? f1.format(e.w) : '<span class="faint">–</span>'}</td><td class="num muted hide-phone">${tp ? f1.format(tp.tr) : "–"}</td><td class="num">${e.kcal ? f0.format(e.kcal) : '<span class="faint">–</span>'}</td><td class="num">${e.p ? f0.format(e.p) + " g" : '<span class="faint">–</span>'}</td><td class="num muted hide-phone">${e.steps ? f0.format(e.steps) : "–"}</td><td class="muted hide-phone" style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.note || "")}</td></tr>`;
+      ${calCard(E)}
+    </div>`;
+  };
+  const MN = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
+  let calMonth = today().slice(0, 7), calSel = today();
+  const daySessions = (d) => Object.values(S.sessions).filter((s) => s.date === d);
+  function calCard(E) {
+    const [y, m] = calMonth.split("-").map(Number), first = new Date(y, m - 1, 1), n = new Date(y, m, 0).getDate(), off = (first.getDay() + 6) % 7, t = today();
+    const target = E.target, cells = [];
+    for (let i = 0; i < off; i++) cells.push('<span class="cal-x"></span>');
+    const sum = { kcal: [], p: [], steps: [], sl: [], w: [], tr: 0 };
+    for (let i = 1; i <= n; i++) {
+      const d = `${calMonth}-${pad2(i)}`, e = S.days[d] || {}, tr = daySessions(d).length, fut = d > t;
+      for (const k of ["kcal", "p", "steps", "sl", "w"]) if (e[k] != null) sum[k].push(e[k]);
+      sum.tr += tr;
+      const lvl = e.kcal == null ? "" : e.kcal > target * 1.1 ? " over" : e.kcal < target * 0.75 ? " under" : " ok";
+      cells.push(`<button type="button" class="cal-d${lvl}${d === calSel ? " sel" : ""}${d === t ? " now" : ""}" data-cday="${d}"${fut ? " disabled" : ""} aria-label="${i} ${MG[m - 1]}${e.kcal != null ? ", " + f0.format(e.kcal) + " kcal" : ""}${tr ? ", trening" : ""}" aria-pressed="${d === calSel}">
+      <span class="cal-n">${i}</span><span class="cal-k num">${e.kcal != null ? f0.format(e.kcal) : ""}</span>
+      <span class="cal-dots">${tr ? '<i class="dt-tr"></i>' : ""}${e.w != null ? '<i class="dt-w"></i>' : ""}${e.sl != null ? '<i class="dt-sl"></i>' : ""}</span></button>`);
+    }
+    const avg = (a, f = f0) => a.length ? f.format(a.reduce((s, x) => s + x, 0) / a.length) : "–";
+    const canNext = calMonth < t.slice(0, 7);
+    return `<section class="card c12 cal-card"><div class="card-head"><h2>Kalendarz</h2><div class="right">kliknij dzień</div></div>
+    <div class="cal-nav"><button type="button" class="btn small" data-cal="-1" aria-label="Poprzedni miesiąc">‹</button><b>${MN[m - 1]} ${y}</b><button type="button" class="btn small" data-cal="1" aria-label="Następny miesiąc"${canNext ? "" : " disabled"}>›</button>${calMonth !== t.slice(0, 7) ? '<button type="button" class="btn small" data-cal="0">Dziś</button>' : ""}</div>
+    <div class="cal-grid" role="group" aria-label="Dni miesiąca">${["Pn", "Wt", "Śr", "Cz", "Pt", "Sb", "Nd"].map((x) => `<span class="cal-h">${x}</span>`).join("")}${cells.join("")}</div>
+    <div class="cal-legend"><span><i class="lg ok"></i>w celu</span><span><i class="lg over"></i>ponad cel</span><span><i class="lg under"></i>dużo poniżej</span><span><i class="dt-tr"></i>trening</span><span><i class="dt-w"></i>waga</span><span><i class="dt-sl"></i>sen</span></div>
+    <div class="cal-sum"><div><span>Średnio kcal</span><b class="num">${avg(sum.kcal)}</b></div><div><span>Białko</span><b class="num">${avg(sum.p)}${sum.p.length ? " g" : ""}</b></div><div><span>Kroki</span><b class="num">${avg(sum.steps)}</b></div><div><span>Sen</span><b class="num">${sum.sl.length ? sleepText(sum.sl.reduce((s, x) => s + x, 0) / sum.sl.length) : "–"}</b></div><div><span>Treningi</span><b class="num">${sum.tr}</b></div></div>
+    ${calDetail(calSel, E)}</section>`;
+  }
+  function calDetail(d, E) {
+    const e = S.days[d] || {}, P = S.profile, ses = daySessions(d), tp = E.series.find((p) => p.date === d);
+    const bar = (label, v, goal, unit) => `<div class="cal-bar"><div class="cal-bar-top"><span>${label}</span><b class="num">${v != null ? f0.format(v) : "–"}${goal ? ` <span class="faint">/ ${f0.format(goal)}</span>` : ""} ${unit}</b></div>${goal ? `<div class="cal-track"><i style="width:${Math.min(100, (v || 0) / goal * 100)}%"></i></div>` : ""}</div>`;
+    const row = (l, v) => `<li><span class="grow muted">${l}</span><span class="num">${v}</span></li>`;
+    return `<div class="cal-detail"><div class="cal-detail-head"><h3>${dLong(d)}</h3><button type="button" class="btn small" data-log="${d}">Popraw wpis</button></div>
+    <div class="cal-bars">${bar("Kalorie", e.kcal, P.kcal > 0 ? P.kcal : E.target, "kcal")}${bar("Białko", e.p, P.protein, "g")}${bar("Tłuszcz", e.f, P.fat, "g")}${bar("Węglowodany", e.c, macroPlan(E).cBase, "g")}</div>
+    <ul class="list">${row("Waga", e.w != null ? f1.format(e.w) + " kg" + (tp ? ` <span class="faint">(trend ${f1.format(tp.tr)})</span>` : "") : "–")}${row("Kroki", e.steps != null ? f0.format(e.steps) : "–")}${row("Sen", e.sl != null ? sleepText(e.sl) + (e.ss != null ? ` <span class="faint">· ocena ${e.ss}/100</span>` : "") : "–")}${row("Trening", ses.length ? ses.map((s) => `<a href="#/trening/${encodeURIComponent(s.id)}">${esc(s.title || "Trening")}</a> <span class="faint">${esc((s.dur || "").replace(/^00:/, "").slice(0, 5))}</span>`).join(", ") : "–")}</ul>
+    ${e.note ? `<p class="muted" style="margin:10px 0 0">${esc(e.note)}</p>` : ""}</div>`;
+  }
+  let healthBusy = false;
+  function healthBtn() {
+    if (NATIVE?.healthRun) return '<button class="btn" data-act="healthRun">Pobierz z Makro i Huawei</button>';
+    if (!syncCfg()?.code || DEMO) return "";
+    const r = S.healthReq, ok = r && (S.healthAck || 0) >= r, hm = (t) => new Date(t).toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit" });
+    const st = !r || Date.now() - r > 60 * 6e4 ? "" : ok ? `komputer przyjął prośbę z ${hm(r)}` : `czeka na komputer od ${hm(r)}`;
+    return `<button class="btn" data-act="healthRun" title="Komputer z włączoną Formą pobierze dane z Makro i Huawei">Pobierz z Makro i Huawei${st ? `<span class="faint" style="font-size:11px;margin-left:6px">${st}</span>` : ""}</button>`;
+  }
+  function healthRemote() {
+    S.healthReq = Date.now();
+    save();
+    syncNow();
+    toast("Wysłane do komputera. Forma na komputerze odbierze to w ciągu ~3 minut, pobieranie trwa kolejne ~3 minuty. Komputer musi być włączony z Formą.", 8e3);
+    render({ animate: false, scroll: false });
+  }
+  function healthCheckReq() {
+    if (!NATIVE?.healthRun || !(S.healthReq > (S.healthAck || 0)) || Date.now() - S.healthReq > 60 * 6e4) return;
+    S.healthAck = S.healthReq;
+    save();
+    healthRun();
+  }
+  async function healthRun() {
+    if (healthBusy) {
+      toast("Pobieranie już trwa.");
+      return;
+    }
+    const before = await NATIVE.healthLast();
+    if (!await NATIVE.healthRun()) {
+      toast("Nie udało się uruchomić pobierania (brak zadania w Harmonogramie?).", 6e3);
+      return;
+    }
+    healthBusy = true;
+    toast("Pobieram z Makro i Huawei w tle, to ok. 3 minuty. Gdy przyjdą nowe dane, Forma odświeży się sama.", 7e3);
+    for (let i = 0; i < 40; i++) {
+      await new Promise((r) => setTimeout(r, 15e3));
+      const last = await NATIVE.healthLast();
+      if (last !== before) {
+        healthBusy = false;
+        toast(/BŁĄD/.test(last) ? "Pobieranie z błędem: " + last.split("BŁĄD: ").pop().slice(0, 140) : "Gotowe, nic nowego w Makro i Huawei.", 8e3);
+        return;
+      }
+    }
+    healthBusy = false;
+  }
+  const MET = { Cardio: 7, Rozciąganie: 2.5, Inny: 4 };
+  function trainKcal(x, w) {
+    const n = (x.sets || []).length, min = durMin(x.dur) || n * 3;
+    const met = MET[x.kind] || Math.min(6, Math.max(3.5, 3.5 + (n / Math.max(min, 1) * 10 - 1.5)));
+    return (met - 1) * w * (min / 60);
+  }
+  function burnDay(d, series) {
+    const P = S.profile, e = S.days[d] || {};
+    const w = trendAt(series, d) ?? series[0]?.tr ?? 71;
+    const bmr = 10 * w + 6.25 * P.height - 5 * age() + (P.sex === "m" ? 5 : -161);
+    const base = bmr * 1.2, steps = (e.steps || 0) * 5e-4 * w;
+    const train = daySessions(d).reduce((s, x) => s + trainKcal(x, w), 0);
+    return { bmr, base, steps, train, total: base + steps + train };
+  }
+  function macroPlan(E = energy()) {
+    const P = S.profile, kcal = P.kcal > 0 ? P.kcal : E.target, p = P.protein, f = P.fat, c = Math.max(0, Math.round((kcal - 4 * p - 9 * f) / 4));
+    return { kcal, p, f, c, cBase: c };
+  }
+  const STAT_R = [[7, "Tydzień"], [30, "Miesiąc"], [90, "3 mies."], [182, "6 mies."], [365, "Rok"], [0, "Wszystko"], ["own", "Własny"]];
+  let statR = (() => {
+    try {
+      const v = localStorage.getItem("forma.statR");
+      return v == null ? 30 : v === "own" ? "own" : +v;
+    } catch {
+      return 30;
+    }
+  })();
+  let statOd = addDays(today(), -29), statDo = today();
+  function statRange() {
+    const t = today(), all = Object.keys(S.days).sort();
+    if (statR === "own") return statOd <= statDo ? [statOd, statDo] : [statDo, statOd];
+    if (!statR) return [all[0] || t, t];
+    return [addDays(t, -(statR - 1)), t];
+  }
+  VIEWS.statystyki = () => {
+    const E = energy(), series = E.series, P = S.profile, [od, doo] = statRange(), n = diffDays(od, doo) + 1;
+    const ds = Array.from({ length: n }, (_, i) => addDays(od, i));
+    const rows = ds.map((d) => ({ d, e: S.days[d] || {}, b: burnDay(d, series), tr: daySessions(d) }));
+    const vals = (k) => rows.map((r) => r.e[k]).filter((v) => v != null);
+    const avg = (a) => a.length ? a.reduce((s, x) => s + x, 0) / a.length : null;
+    const kRows = rows.filter((r) => r.e.kcal != null);
+    const eat = avg(vals("kcal")), burnAll = avg(rows.map((r) => r.b.total)), burnK = avg(kRows.map((r) => r.b.total));
+    const bal = kRows.length ? avg(kRows.map((r) => r.e.kcal - r.b.total)) : null;
+    const p = avg(vals("p")), f = avg(vals("f")), c = avg(vals("c"));
+    const ses = rows.flatMap((r) => r.tr), sesMin = ses.reduce((s, x) => s + durMin(x.dur), 0);
+    const wA = trendAt(series, od) ?? series.find((x) => x.date >= od)?.tr, wB = trendAt(series, doo);
+    const macroK = p != null && f != null && c != null ? p * 4 + f * 9 + c * 4 : null;
+    const pct = (g, k) => macroK ? Math.round(g * k * 100 / macroK) + "%" : "";
+    const tile = (l, v, s = "") => `<div class="st-tile"><span>${l}</span><b class="num">${v}</b>${s ? `<small>${s}</small>` : ""}</div>`;
+    const kc = (v) => v == null ? "–" : f0.format(Math.round(v / 10) * 10);
+    const by = n <= 62 ? "d" : n <= 400 ? "w" : "m";
+    const key = (d) => by === "d" ? d : by === "w" ? weekKey(d) : d.slice(0, 7);
+    const groups = [];
+    for (const r of rows) {
+      const k = key(r.d);
+      if (groups.at(-1)?.k !== k) groups.push({ k, rs: [] });
+      groups.at(-1).rs.push(r);
+    }
+    const gLabel = (k) => by === "d" ? dLong(k, false) : by === "w" ? `tydz. od ${dShort(k)}` : `${MN[+k.slice(5) - 1]} ${k.slice(0, 4)}`;
+    chart(() => {
+      const el = $("#chBurn");
+      if (!el) return;
+      const step = n > 120 ? 7 : 1, pts = [];
+      for (let i = 0; i < rows.length; i += step) {
+        const g = rows.slice(i, i + step), ke = g.filter((r) => r.e.kcal != null);
+        pts.push({ l: dShort(g[0].d), b: avg(g.map((r) => r.b.total)), k: ke.length ? avg(ke.map((r) => r.e.kcal)) : null });
+      }
+      Charts.line(el, { labels: pts.map((x) => x.l), series: [{ name: "Spalone", values: pts.map((x) => Math.round(x.b)) }, { name: "Zjedzone", values: pts.map((x) => x.k == null ? null : Math.round(x.k)), colour: getVar("--chart-muted") }], format: (v) => f0.format(v) + " kcal", tickFormat: (v) => f0.format(v), height: 240, ...yRange(pts.flatMap((x) => [x.b, x.k]), 100) });
+      const lg = el.querySelector(".chart-legend");
+      if (lg) $("#lgBurn").appendChild(lg);
+      animateLines(el);
+      const es = $("#chSteps");
+      if (!es) return;
+      const sp = [];
+      for (let i = 0; i < rows.length; i += step) {
+        const g = rows.slice(i, i + step).filter((r) => r.e.steps != null);
+        sp.push({ l: dShort(rows[i].d), v: g.length ? Math.round(avg(g.map((r) => r.e.steps))) : 0 });
+      }
+      Charts.bars(es, { labels: sp.map((x) => x.l), values: sp.map((x) => x.v), format: (v) => f0.format(v) + " kroków", tickFormat: (v) => f0.format(v), height: 180 });
+    });
+    return `<div class="title-row"><div><h1>Statystyki</h1><div class="sub">${dLong(od)} – ${dLong(doo)} · ${days(n)}. Średnie liczone z dni, w których coś zapisano.</div></div><div class="actions">${healthBtn()}</div></div>
+    <div class="st-range"><div class="seg" role="group" aria-label="Okres">${STAT_R.map(([v, l]) => `<button type="button" data-sr="${v}" aria-pressed="${statR === v}">${l}</button>`).join("")}</div>
+      ${statR === "own" ? `<div class="st-own"><label class="field">Od<input type="date" data-srf="od" value="${statOd}" max="${today()}"></label><label class="field">Do<input type="date" data-srf="do" value="${statDo}" max="${today()}"></label></div>` : ""}</div>
+    <div class="grid">
+      <section class="card c12"><div class="card-head"><h2>Energia</h2><div class="right">${kRows.length} z ${n} dni z kaloriami</div></div>
+        <div class="st-tiles">
+          ${tile("Zjedzone średnio", kc(eat), "kcal / dzień")}
+          ${tile("Spalone średnio", kc(burnAll), "kcal / dzień, szacunek")}
+          ${tile("Bilans", bal == null ? "–" : signed(Math.round(bal / 10) * 10, f0), bal == null ? "" : `kcal / dzień · ok. ${signed(bal * 7 / 7700, f2)} kg / tydz.`)}
+          ${tile("Waga (trend)", wA != null && wB != null ? signed(wB - wA, f1) + " kg" : "–", wB != null ? `teraz ${f1.format(wB)} kg` : "")}
+        </div>
+        <div class="card-head" style="margin-top:18px"><h3>Spalone i zjedzone${n > 120 ? " (średnie tygodniowe)" : ""}</h3><div class="right" id="lgBurn"></div></div>
+        <div class="chart" id="chBurn"></div>
+        <p class="faint st-note">Spalanie to szacunek: podstawowa przemiana materii (Mifflin–St Jeor, waga z trendu) × 1,2 + kroki + treningi (MET). ${E.method === "dane" ? `Dla porównania spalanie wyliczone z wagi i kalorii z ostatnich 28 dni: <b>${f0.format(E.value)} kcal</b>${burnK ? ` (szacunek z kroków na te same dni byłby ok. ${kc(avg(rows.filter((r) => r.d >= addDays(today(), -27)).map((r) => r.b.total)))} kcal)` : ""}.` : ""}</p>
+      </section>
+      <section class="card c6"><div class="card-head"><h2>Makro średnio</h2><div class="right">${vals("p").length} dni</div></div>
+        <div class="st-tiles st-3">${tile("Białko", p == null ? "–" : f0.format(p) + " g", [pct(p, 4), p != null ? `${f1.format(p / (wB || E.bw))} g/kg · cel ${P.protein} g` : ""].filter(Boolean).join(" · "))}${tile("Tłuszcz", f == null ? "–" : f0.format(f) + " g", pct(f, 9))}${tile("Węglowodany", c == null ? "–" : f0.format(c) + " g", pct(c, 4))}</div></section>
+      <section class="card c6"><div class="card-head"><h2>Ruch i sen</h2></div>
+        <div class="st-tiles">${tile("Kroki średnio", vals("steps").length ? f0.format(avg(vals("steps"))) : "–", vals("steps").length ? `łącznie ${f0.format(vals("steps").reduce((s, x) => s + x, 0))}` : "")}${tile("Sen średnio", vals("sl").length ? sleepText(avg(vals("sl"))) : "–", vals("sl").length ? `${vals("sl").length} nocy${vals("ss").length ? ` · ocena ${f0.format(avg(vals("ss")))}/100` : ""}` : "")}${tile("Treningi", String(ses.length), ses.length ? `łącznie ${Math.round(sesMin / 60)} h ${pad2(Math.round(sesMin % 60))} min · ${f1.format(ses.length / n * 7)} / tydz.` : "")}${tile("Tętno spoczynkowe", vals("hr").length ? f0.format(avg(vals("hr"))) + " /min" : "–", vals("hr").length ? "średnio, z Huawei" : "")}${tile("Spalone na treningach", kc(rows.reduce((s, r) => s + r.b.train, 0)), "kcal łącznie")}</div>
+        ${vals("steps").length ? '<div class="chart" id="chSteps" style="margin-top:14px"></div>' : '<div class="empty" style="margin-top:14px">Brak kroków w tym okresie. Przychodzą z Huawei Zdrowie.</div>'}</section>
+      <section class="card c12"><div class="card-head"><h2>${by === "d" ? "Dzień po dniu" : by === "w" ? "Tydzień po tygodniu" : "Miesiąc po miesiącu"}</h2><div class="right">${by === "d" ? "kliknij dzień, żeby poprawić" : "średnie dzienne"}</div></div>
+        <div class="st-table"><table class="rows"><thead><tr><th>${by === "d" ? "Dzień" : "Okres"}</th><th class="num">Zjedzone</th><th class="num">Spalone</th><th class="num">Bilans</th><th class="num hide-phone">Podstawa</th><th class="num hide-phone">Kroki</th><th class="num hide-phone">Trening</th><th class="num hide-phone">Sen</th></tr></thead><tbody>
+        ${groups.slice().reverse().map(({ k, rs }) => {
+      const ke = rs.filter((r) => r.e.kcal != null), K = ke.length ? avg(ke.map((r) => r.e.kcal)) : null, B = avg(rs.map((r) => r.b.total)), st = rs.filter((r) => r.e.steps != null), sl = rs.filter((r) => r.e.sl != null), bl = ke.length ? avg(ke.map((r) => r.e.kcal - r.b.total)) : null;
+      return `<tr${by === "d" ? ` class="click" data-log="${k}" tabindex="0"` : ""}><td>${gLabel(k)}</td><td class="num" data-l="zjedzone">${kc(K)}</td><td class="num" data-l="spalone">${kc(B)}</td><td data-l="bilans" class="num ${bl == null ? "" : bl > 0 ? "st-up" : "st-down"}">${bl == null ? "–" : signed(Math.round(bl / 10) * 10, f0)}</td><td class="num muted hide-phone">${kc(avg(rs.map((r) => r.b.base)))}</td><td class="num muted hide-phone">${st.length ? f0.format(avg(st.map((r) => r.e.steps))) : "–"}</td><td class="num muted hide-phone">${rs.some((r) => r.tr.length) ? kc(avg(rs.map((r) => r.b.train))) : "–"}</td><td class="num muted hide-phone">${sl.length ? sleepText(avg(sl.map((r) => r.e.sl))) : "–"}</td></tr>`;
     }).join("")}
-        </tbody></table>` : `<div class="empty">Pusto. Pierwszy wpis: przycisk „Wpis dnia” u góry.</div>`}</section>
+        </tbody></table></div></section>
     </div>`;
   };
   let suppFilter = "all";
@@ -1807,7 +2131,7 @@
   async function processFiles(files) {
     const list = [...files];
     if (!list.length) return;
-    if (route().r !== "wrzuc") location.hash = "#/wrzuc";
+    if (route().r !== "wrzuc") location.replace("#/wrzuc");
     for (const f of list) {
       const it = { id: uid(), name: f.name || "plik", kind: "busy", msg: "czytam…" };
       inbox.unshift(it);
@@ -1942,7 +2266,7 @@
     S.days[today()] = { ...S.days[today()] || {}, w: parseFloat(v.w) };
     if (v.kit === "basic" && !S.supps.length) S.supps = OB_KIT.map(([name, brand, pack, unit, dose, perWeek]) => ({ id: uid(), name, brand, pack, unit, dose, perWeek, iso: "ok", note: "", stock: 0, stockDate: null, active: true, url: "", per: null }));
     save(`Witaj, ${S.profile.name}!`);
-    location.hash = "#/pulpit";
+    location.replace("#/pulpit");
     render();
   }
   const DEMO_KEY = "forma.demo";
@@ -2015,7 +2339,7 @@
     version++;
     lastRec = null;
     applyTheme();
-    location.hash = "#/pulpit";
+    location.replace("#/pulpit");
     render();
   }
   function demoOff() {
@@ -2119,7 +2443,7 @@
   function buildReport(n) {
     const t = today(), P = S.profile, E = energy(), start = addDays(t, -(n - 1)), L = [];
     L.push(`# Forma: raport z ${dLong(t)} (ostatnie ${n} dni)`, "");
-    L.push("## Profil i cel", `- ${age()} lat, ${P.height} cm, ${P.sex === "k" ? "kobieta" : "mężczyzna"}. Cel: ${P.goal}, tempo ${signed(P.ratePct, f2)}% masy/tydz., termin ${dLong(P.goalDate)}.`, "");
+    L.push("## Profil i cel", `- ${age()} lat, ${P.height} cm, ${P.sex === "k" ? "kobieta" : "mężczyzna"}. Cel: ${P.goal}, tempo ${signed(energy().rateKg, f2)} kg/tydz., termin ${dLong(P.goalDate)}.`, "");
     const ser = E.series.filter((p) => p.date >= start);
     const kd = Object.keys(S.days).filter((d) => d >= start && d <= t).sort();
     const withK = kd.filter((d) => S.days[d].kcal), withP = kd.filter((d) => S.days[d].p);
@@ -2172,6 +2496,14 @@
       L.push("", "## Notatki z dziennika");
       for (const d of notes) L.push(`- ${dShort(d)}: ${S.days[d].note}`);
     }
+    L.push(
+      "",
+      "## Jak AI zapisuje jedzenie (Claude Code na komputerze, folder gym)",
+      '- Jedzenie opisane w czacie wpisuj bez pytania: `node program/jedzenie.js RRRR-MM-DD kcal białko tłuszcz węgle --nazwa "spaghetti 644 g" opis`. Data = dzień, w którym to zjadłem. Nazwa krótka: co i ile.',
+      "- Wpis od razu trafia do Formy. Do Makro (posiłek Lunch, nazwa „Forma 18.11: spaghetti 644 g”) dodaje go automatyczny odczyt o 8, 14 i 22 albo od razu `node program/makro-sync.js dodaj`. Zaległe dni nadrabia sam, każdy wpis w swój dzień.",
+      "- Zrzut sumy dnia z Makro: te same liczby i `--makro` na końcu zamiast nazwy i opisu (zastępuje sumę z Makro, do Makro nic nie dodaje).",
+      "- Wpisy z czatu są w dane/jedzenie-czat.json; „makro: true” = już jest w Makro i Forma liczy go w sumie z Makro, nie podwójnie."
+    );
     L.push("", "Na podstawie tego raportu: oceń postępy, dostosuj kalorie i plan, i zapytaj mnie, co było trudne.");
     return L.join("\n");
   }
@@ -2182,9 +2514,9 @@
     <div class="grid">
       <section class="card c6"><div class="card-head"><h2>Profil i cel</h2><div class="right">zapisuje się samo</div></div>
         <div class="form-grid">${f("name", "Imię", "text")}${f("height", "Wzrost (cm)")}${f("birth", "Data urodzenia", "date")}${f("activity", "Współczynnik aktywności", "number", 'step="0.05"')}
-        ${f("protein", "Białko (g / dzień)")}${f("ratePct", "Tempo (% masy / tydz.)", "number", 'step="0.05"')}${f("goalDate", "Termin celu", "date")}${f("lead", "Dostawa suplementów (dni)")}
+        ${f("kcal", `Kalorie (kcal / dzień, 0 = ze spalania, teraz ${f0.format(energy().target)})`)}${f("protein", "Białko (g / dzień)")}${f("fat", "Tłuszcz (g / dzień)")}<label class="field">Tempo (kg / tydz., minus = chudnięcie)<input type="number" step="0.05" data-prof="rateKg" value="${+energy().rateKg.toFixed(2)}"></label>${f("goalDate", "Termin celu", "date")}${f("lead", "Dostawa suplementów (dni)")}
         ${f("upLo", "Góra ciała: powt. od")}${f("upHi", "Góra ciała: powt. do")}${f("legLo", "Nogi: powt. od")}${f("legHi", "Nogi: powt. do")}${f("benchLo", "Ławka 5×2: % rekordu od")}${f("benchHi", "Ławka 5×2: % rekordu do")}${f("benchGoal", "Ławka: cel szac. 1RM (kg, 0 = bez)")}
-        <label class="field">Po terminie celu przejdź na<select data-prof="nextGoal">${[["", "nic, zostaw jak jest"], ["masa", "masa"], ["rekompozycja", "rekompozycja"], ["redukcja", "redukcja"]].map(([v, l]) => `<option value="${v}"${P.nextGoal === v ? " selected" : ""}>${l}</option>`).join("")}</select></label>${f("nextRate", "Tempo następnej fazy (% masy / tydz.)", "number", 'step="0.05"')}</div>
+        <label class="field">Po terminie celu przejdź na<select data-prof="nextGoal">${[["", "nic, zostaw jak jest"], ["masa", "masa"], ["rekompozycja", "rekompozycja"], ["redukcja", "redukcja"]].map(([v, l]) => `<option value="${v}"${P.nextGoal === v ? " selected" : ""}>${l}</option>`).join("")}</select></label><label class="field">Tempo następnej fazy (kg / tydz.)<input type="number" step="0.05" data-prof="nextKg" value="${+(P.nextKg || P.nextRate / 100 * energy().bw).toFixed(2)}"></label></div>
         <div class="faint" style="font-size:12px;margin-top:12px">Tempo: redukcja −0,5%/tydz. (Helms 2014 zaleca 0,5–1%, wolniej lepiej chroni mięśnie, Garthe 2011), masa +0,25%/tydz., czyli ok. 0,75 kg/mies. (Iraki 2019: 0,25–0,5%). Rekompozycja −0,25% to reguła praktyczna, bez badań. Współczynnik aktywności 1,6 (FAO/WHO: siedzący tryb 1,55 + trening) używam tylko, dopóki nie ma 2 tygodni danych.</div></section>
       
       <section class="card c6"><div class="card-head"><h2>Dane</h2></div>
@@ -2217,27 +2549,16 @@
   function openLog(date = today()) {
     const d = $("#logDialog"), f = $("#logForm"), e = S.days[date] || {};
     f.date.value = date;
-    f.w.value = e.w ?? "";
-    f.kcal.value = e.kcal ?? "";
-    f.p.value = e.p ?? "";
-    f.fat.value = e.f ?? "";
-    f.carb.value = e.c ?? "";
-    f.steps.value = e.steps ?? "";
-    f.note.value = e.note ?? "";
+    logFill(f, e);
     d.showModal();
     setTimeout(() => (e.w ? f.kcal : f.w).focus(), 30);
   }
-  $("#logForm").date.addEventListener("change", (ev) => {
-    const e = S.days[ev.target.value] || {};
-    const f = $("#logForm");
-    f.w.value = e.w ?? "";
-    f.kcal.value = e.kcal ?? "";
-    f.p.value = e.p ?? "";
-    f.fat.value = e.f ?? "";
-    f.carb.value = e.c ?? "";
-    f.steps.value = e.steps ?? "";
+  const LOGF = [["w", "w"], ["kcal", "kcal"], ["p", "p"], ["fat", "f"], ["carb", "c"], ["steps", "steps"], ["sl", "sl"]];
+  function logFill(f, e) {
+    for (const [n, k] of LOGF) f[n].value = e[k] ?? "";
     f.note.value = e.note ?? "";
-  });
+  }
+  $("#logForm").date.addEventListener("change", (ev) => logFill($("#logForm"), S.days[ev.target.value] || {}));
   $("#logForm").addEventListener("submit", (ev) => {
     ev.preventDefault();
     const d = $("#logDialog");
@@ -2246,7 +2567,8 @@
     if (val !== "save") return;
     const f = $("#logForm");
     const num = (v) => v === "" ? void 0 : parseFloat(String(v).replace(",", "."));
-    const e = { w: num(f.w.value), kcal: num(f.kcal.value), p: num(f.p.value), f: num(f.fat.value), c: num(f.carb.value), steps: num(f.steps.value), note: f.note.value.trim() || void 0 };
+    const e = Object.fromEntries(LOGF.map(([n, k]) => [k, num(f[n].value)]));
+    e.note = f.note.value.trim() || void 0;
     Object.keys(e).forEach((k) => e[k] === void 0 && delete e[k]);
     if (Object.keys(e).length) S.days[f.date.value] = e;
     else delete S.days[f.date.value];
@@ -2433,12 +2755,22 @@
     setTimeout(() => URL.revokeObjectURL(a.href), 2e3);
   }
   document.addEventListener("click", (ev) => {
-    const go = ev.target.closest("[data-go]");
-    if (go && !ev.target.closest("a,button,input,label,select,textarea,[data-act],[data-check]")) {
-      location.hash = go.dataset.go;
+    const ddB = ev.target.closest("[data-dd]");
+    if (ddB) {
+      dashStep(+ddB.dataset.dd);
       return;
     }
-    const t = ev.target.closest("[data-act],[data-theme],[data-buy],[data-edit-supp],[data-edit-prod],[data-finish],[data-bought],[data-wr],[data-edit-lab],[data-sf],[data-rd],[data-ck],[data-addstep],[data-delstep],[data-addorder],[data-cbuy],[data-cskip],[data-cunskip],[data-dstep],[data-cpick],[data-ostock],[data-odone],[data-inbdrop],[data-inbjson],[data-ob],[data-method],[data-cin],[data-cout],[data-copen],[data-mus],[data-bodymode],tr[data-href],tr[data-log]");
+    const ddD = ev.target.closest("[data-dday]");
+    if (ddD) {
+      dashGo(ddD.dataset.dday);
+      return;
+    }
+    const go = ev.target.closest("[data-go]");
+    if (go && !ev.target.closest("a,button,input,label,select,textarea,[data-act],[data-check]")) {
+      location.replace(go.dataset.go);
+      return;
+    }
+    const t = ev.target.closest("[data-act],[data-theme],[data-buy],[data-edit-supp],[data-edit-prod],[data-finish],[data-bought],[data-wr],[data-edit-lab],[data-sf],[data-rd],[data-ck],[data-addstep],[data-delstep],[data-addorder],[data-cbuy],[data-cskip],[data-cunskip],[data-dstep],[data-cpick],[data-ostock],[data-odone],[data-inbdrop],[data-inbjson],[data-ob],[data-method],[data-cin],[data-cout],[data-copen],[data-mus],[data-bodymode],[data-cal],[data-cday],[data-sr],[data-log],tr[data-href]");
     if (!t) return;
     if (t.matches("#themes [data-theme]")) {
       S.theme = t.dataset.theme;
@@ -2464,7 +2796,21 @@
       return;
     }
     if (t.dataset.href) {
-      location.hash = t.dataset.href;
+      location.replace(t.dataset.href);
+      return;
+    }
+    if (t.dataset.sr != null) {
+      statR = t.dataset.sr === "own" ? "own" : +t.dataset.sr;
+      if (statR === "own") {
+        const [x, y] = [addDays(today(), -29), today()];
+        statOd = statOd || x;
+        statDo = statDo || y;
+      }
+      try {
+        localStorage.setItem("forma.statR", statR);
+      } catch {
+      }
+      rerender();
       return;
     }
     if (t.dataset.wr != null) {
@@ -2478,6 +2824,18 @@
     }
     if (t.dataset.log) {
       openLog(t.dataset.log);
+      return;
+    }
+    if (t.dataset.cal != null) {
+      const k = +t.dataset.cal, [y, m] = calMonth.split("-").map(Number);
+      calMonth = k ? iso(new Date(y, m - 1 + k, 1)).slice(0, 7) : today().slice(0, 7);
+      if (!k) calSel = today();
+      rerender();
+      return;
+    }
+    if (t.dataset.cday) {
+      calSel = t.dataset.cday;
+      rerender();
       return;
     }
     if (t.dataset.buy) {
@@ -2696,13 +3054,17 @@
         toast("Synchronizacja zadziała po opublikowaniu aplikacji.");
         return;
       }
+      if (!confirm("Nowy kod oddzieli to urządzenie od pozostałych.\n\nJeśli synchronizacja działa już na komputerze albo telefonie, anuluj i wpisz tamten kod w „Mam już kod”.\n\nUtworzyć nowy kod?")) return;
       setSyncCfg({ code: newSyncCode() });
       fillSync();
       syncNow(true);
     } else if (a === "syncNow") syncNow(true);
     else if (a === "syncQr") showSyncQr();
     else if (a === "syncScan") scanSyncQr();
-    else if (a === "syncShow") {
+    else if (a === "healthRun") {
+      if (NATIVE?.healthRun) healthRun();
+      else healthRemote();
+    } else if (a === "syncShow") {
       const el = $("#syncCode");
       if (el) el.textContent = syncCfg()?.code || "";
     } else if (a === "syncCopy") navigator.clipboard.writeText(syncCfg()?.code || "").then(() => toast("Skopiowano kod. Wklej go na telefonie."), () => toast("Nie udało się skopiować, kliknij „Pokaż” i przepisz."));
@@ -2801,7 +3163,13 @@
         return;
       }
       S.profile[k] = v;
-      if (k === "goal" && t.tagName === "SELECT") S.profile.ratePct = { redukcja: -0.5, rekompozycja: -0.25, masa: 0.25 }[t.value];
+      const bw = energy().bw;
+      if (k === "rateKg") S.profile.ratePct = v / bw * 100;
+      if (k === "nextKg") S.profile.nextRate = v / bw * 100;
+      if (k === "goal" && t.tagName === "SELECT") {
+        S.profile.ratePct = { redukcja: -0.5, rekompozycja: -0.25, masa: 0.25 }[t.value];
+        S.profile.rateKg = Math.round(S.profile.ratePct / 100 * bw * 20) / 20;
+      }
       save("Zapisano");
       if (route().r !== "ustawienia") rerender();
     }
@@ -2810,6 +3178,14 @@
     if (ev.target.dataset?.obv) {
       ob.v[ev.target.dataset.obv] = ev.target.value;
       return;
+    }
+  });
+  document.addEventListener("change", (ev) => {
+    const k = ev.target.dataset?.srf;
+    if (k && ev.target.value) {
+      if (k === "od") statOd = ev.target.value;
+      else statDo = ev.target.value;
+      rerender();
     }
   });
   document.addEventListener("change", (ev) => {
@@ -2881,11 +3257,93 @@
     if (e.dataTransfer.files.length) processFiles(e.dataTransfer.files);
   });
   $("#logBtn").addEventListener("click", () => openLog());
-  $("#menuBtn").addEventListener("click", () => {
-    const o = $("#sidebar").classList.toggle("open");
+  const setMenu = (o) => {
+    $("#sidebar").classList.toggle("open", o);
     $("#menuBtn").setAttribute("aria-expanded", o);
+  };
+  $("#menuBtn").addEventListener("click", () => setMenu(!$("#sidebar").classList.contains("open")));
+  let sw = null, dsw = null;
+  document.addEventListener("touchstart", (e) => {
+    const c = !dashBusy && e.target.closest(".macro")?.querySelector(".dd-body");
+    dsw = c && e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY, c, h: null } : null;
+  }, { passive: true });
+  document.addEventListener("touchmove", (e) => {
+    if (!dsw) return;
+    const dx = e.touches[0].clientX - dsw.x, dy = e.touches[0].clientY - dsw.y;
+    if (dsw.h == null && Math.hypot(dx, dy) > 10) dsw.h = Math.abs(dx) >= 1.5 * Math.abs(dy);
+    if (dsw.h) {
+      e.preventDefault();
+      const nx = dashDrag(dx), dt = e.timeStamp - (dsw.t || e.timeStamp);
+      if (dt > 0) dsw.v = (nx - (dsw.dx || 0)) / dt;
+      dsw.t = e.timeStamp;
+      dsw.dx = nx;
+    }
+  }, { passive: false });
+  const dswEnd = () => {
+    if (!dsw) return;
+    const { dx = 0, h, v = 0 } = dsw;
+    dsw = null;
+    if (!h || !dx) return;
+    const flick = Math.abs(v) > 0.35 && Math.sign(v) === Math.sign(dx);
+    dashGo(Math.abs(dx) > 60 || flick ? addDays(dashCur(), dx > 0 ? -1 : 1) : dashCur(), dx);
+  };
+  document.addEventListener("touchend", dswEnd);
+  document.addEventListener("touchcancel", dswEnd);
+  const scrollsSideways = (el) => {
+    for (let n = el; n && n !== document.body; n = n.parentElement) if (n.scrollWidth > n.clientWidth + 2 && /auto|scroll/.test(getComputedStyle(n).overflowX)) return true;
+    return false;
+  };
+  addEventListener("touchstart", (e) => {
+    const t = e.touches[0], el = e.target;
+    sw = e.touches.length === 1 && $("#menuBtn").offsetParent && !document.querySelector("dialog[open]") && !el.closest("input,textarea,select,canvas,svg,.seg,[data-noswipe]") && !scrollsSideways(el) ? { x: t.clientX, y: t.clientY, open: $("#sidebar").classList.contains("open"), drag: false, pts: [] } : null;
+  }, { passive: true });
+  addEventListener("touchmove", (e) => {
+    if (!sw) return;
+    const t = e.touches[0], dx = t.clientX - sw.x, dy = t.clientY - sw.y;
+    if (!sw.drag) {
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      if (Math.abs(dx) < 1.5 * Math.abs(dy) || dx > 0 === sw.open) {
+        sw = null;
+        return;
+      }
+      sw.drag = true;
+      $("#sidebar").style.transition = "none";
+    }
+    e.preventDefault();
+    const W = innerWidth, x = Math.max(-W, Math.min(0, (sw.open ? 0 : -W) + dx));
+    $("#sidebar").style.transform = `translateX(${x}px)`;
+    sw.pts.push([e.timeStamp, t.clientX]);
+    if (sw.pts.length > 5) sw.pts.shift();
+  }, { passive: false });
+  addEventListener("touchend", (e) => {
+    if (!sw?.drag) {
+      sw = null;
+      return;
+    }
+    const dx = e.changedTouches[0].clientX - sw.x, p = sw.pts, v = p.length > 1 ? (p[p.length - 1][1] - p[0][1]) / Math.max(1, p[p.length - 1][0] - p[0][0]) : 0;
+    const W = innerWidth, open = sw.open ? !(dx < -W / 3 || v < -0.4) : dx > W / 3 || v > 0.4;
+    const sb = $("#sidebar");
+    sb.style.transition = "";
+    sb.style.transform = "";
+    setMenu(open);
+    sw = null;
+  });
+  addEventListener("touchcancel", () => {
+    if (sw?.drag) {
+      const sb = $("#sidebar");
+      sb.style.transition = "";
+      sb.style.transform = "";
+    }
+    sw = null;
   });
   addEventListener("hashchange", () => render());
+  document.addEventListener("click", (ev) => {
+    const a = ev.target.closest('a[href^="#"]');
+    if (!a || ev.defaultPrevented || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+    ev.preventDefault();
+    if (a.getAttribute("href") !== location.hash) location.replace(a.getAttribute("href"));
+    else render();
+  });
   let rz, rzW = innerWidth;
   addEventListener("resize", () => {
     clearTimeout(rz);
@@ -2956,10 +3414,10 @@
     };
     make();
     start();
-    let sw = innerWidth;
+    let sw2 = innerWidth;
     addEventListener("resize", () => {
-      if (innerWidth === sw && innerHeight <= H) return;
-      sw = innerWidth;
+      if (innerWidth === sw2 && innerHeight <= H) return;
+      sw2 = innerWidth;
       make();
       start();
     });
@@ -3226,7 +3684,662 @@ ${body}`;
     }).catch(() => {
     });
   }
-  const SYNC_SCALARS = ["profile", "rm", "theme", "cartOff", "cartPick", "cartSkip", "cartIn", "cartMine", "cartSame", "lastImport", "mailInit"];
+  const KINDS = ["Trening siłowy", "Cardio", "Rozciąganie", "Inny"];
+  const mmss = (sec) => {
+    sec = Math.max(0, Math.round(sec));
+    return `${pad2(Math.floor(sec / 60))}:${pad2(sec % 60)}`;
+  };
+  const hmmss = (sec) => {
+    sec = Math.max(0, Math.floor(sec));
+    return `${Math.floor(sec / 3600)}:${pad2(Math.floor(sec / 60) % 60)}:${pad2(sec % 60)}`;
+  };
+  const restText = (sec) => (sec % 60 ? `${Math.floor(sec / 60)} min ${sec % 60} s` : `${sec / 60} min`).replace(/^0 min /, "");
+  const liveNum = (v) => {
+    const n = parseFloat(String(v).replace(",", "."));
+    return Number.isFinite(n) ? n : null;
+  };
+  const dayTitle = (d) => {
+    const h = d.getHours();
+    return h < 11 ? "Trening rano" : h < 17 ? "Trening po południu" : "Trening wieczorem";
+  };
+  function prevSets(name) {
+    const p = exercises().get(name)?.last;
+    return p ? p.sets.filter((s) => s.t !== "DROP_SET") : [];
+  }
+  function liveStats() {
+    let vol = 0, n = 0;
+    for (const x of S.live?.ex || []) for (const s of x.sets) if (s.done) {
+      n++;
+      vol += (liveNum(s.w) || 0) * (liveNum(s.r) || 0);
+    }
+    return { vol, n };
+  }
+  let liveSaveT = null;
+  const liveKeep = () => {
+    clearTimeout(liveSaveT);
+    liveSaveT = setTimeout(persist, 400);
+  };
+  function liveStart() {
+    if (!S.live) {
+      S.live = { start: Date.now(), ex: [], restEnd: null, restTotal: 0 };
+      persist();
+    }
+    if (route().r !== "teraz") location.replace("#/teraz");
+    else rerender();
+  }
+  function liveAddEx(names, top) {
+    for (const it of names) {
+      const name = it.name || it, prev = prevSets(name), n = it.sets || Math.max(1, Math.min(prev.length || 3, 6));
+      S.live.ex.push({ name, rest: S.restPref?.[name] || restDef(), sets: Array.from({ length: n }, () => ({ w: "", r: "", done: false })) });
+    }
+    persist();
+    rerender();
+    if (top) window.scrollTo({ top: 0 });
+    else requestAnimationFrame(() => $$(".lv-ex", main).at(-1)?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+  VIEWS.teraz = () => {
+    const L = S.live;
+    if (!L) return `<div class="lv"><div class="lv-empty"><h1>Nowy trening</h1><p class="faint">Dodajesz ćwiczenia, odhaczasz serie, a po zakończeniu trening trafia do rekordów i wykresów.</p><button class="btn primary lv-big" data-lv="start">Zacznij trening</button></div></div>`;
+    const { vol, n } = liveStats();
+    const ex = L.ex.map((x, i) => {
+      const prev = prevSets(x.name);
+      const rows = x.sets.map((s, j) => {
+        const p = prev[j];
+        return `<div class="lv-row${s.done ? " done" : ""}" data-i="${i}" data-j="${j}">
+        <span class="lv-no num">${j + 1}</span>
+        <span class="lv-prev num">${p ? `${fmtSet(p)}` : "—"}</span>
+        <input class="num" data-lvw${KP ? " readonly" : ""} inputmode="decimal" enterkeyhint="next" aria-label="Seria ${j + 1}: kilogramy" value="${esc(s.w)}" placeholder="${p ? esc(String(p.w).replace(".", ",")) : "0"}">
+        <input class="num" data-lvr${KP ? " readonly" : ""} inputmode="numeric" enterkeyhint="done" aria-label="Seria ${j + 1}: powtórzenia" value="${esc(s.r)}" placeholder="${p ? p.r : ""}">
+        <button type="button" class="lv-ok" data-lv="done" aria-pressed="${!!s.done}" aria-label="Seria ${j + 1} zrobiona"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+      </div>`;
+      }).join("");
+      const ts = [];
+      for (let t = 30; t <= 360; t += 15) ts.push(t);
+      if (!ts.includes(x.rest)) ts.push(x.rest);
+      const opts = ts.sort((p, q) => p - q).map((t) => `<option value="${t}"${t === x.rest ? " selected" : ""}>${restText(t)}</option>`);
+      return `<section class="lv-ex" data-i="${i}">
+      <div class="lv-ex-head"><div class="grow"><h2>${esc(x.name)}</h2><span class="faint">${esc(groupOf(x.name))}</span></div>
+        <details class="lv-menu"><summary class="btn small text" aria-label="Opcje ćwiczenia">•••</summary><div class="lv-pop">
+          <button type="button" data-lv="up"${i ? "" : " disabled"}>Przesuń wyżej</button>
+          <button type="button" data-lv="dropset"${x.sets.length > 1 ? "" : " disabled"}>Usuń ostatnią serię</button>
+          <button type="button" class="neg" data-lv="delex">Usuń ćwiczenie</button></div></details></div>
+      <label class="lv-rest">${ic("clock", "ic")}Przerwa <select data-lvrest aria-label="Przerwa po serii">${opts.join("")}</select></label>
+      <div class="lv-grid"><div class="lv-row lv-hd"><span>Nr</span><span>Poprzednio</span><span>kg</span><span>Powt.</span><span></span></div>${rows}</div>
+      <button type="button" class="btn lv-add" data-lv="addset">+ Dodaj serię</button>
+    </section>`;
+    }).join("");
+    return `<div class="lv">
+    <div class="lv-top">
+      <button type="button" class="lv-pill${L.restEnd ? " on" : ""}" data-lv="rest" aria-label="Minutnik przerwy">${ic("clock", "ic")}<span id="lvRest">${L.restEnd ? mmss((L.restEnd - Date.now()) / 1e3) : "Przerwa"}</span><i id="lvRestBar"></i></button>
+      <button type="button" class="btn primary" data-lv="finish"${n ? "" : " disabled"}>Zakończ</button>
+    </div>
+    ${PUSH && !DEMO && !pushOn() ? '<button type="button" class="lv-bell" data-lv="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="grow"><b>Powiadomienie o końcu przerwy</b><span>Przyjdzie z wibracją, nawet gdy telefon jest zablokowany</span></span><span class="lv-bell-on">Włącz</span></button>' : ""}
+    <div class="lv-stats"><div><span>Czas</span><b class="num acc" id="lvDur">${hmmss((Date.now() - L.start) / 1e3)}</b></div><div><span>Objętość</span><b class="num" id="lvVol">${f0.format(vol)} kg</b></div><div><span>Serie</span><b class="num" id="lvSets">${n}</b></div></div>
+    ${ex || (S.templates?.length ? tplList() : '<div class="lv-none"><b>Nie dodano ćwiczeń</b><span class="faint">Dodaj ćwiczenia, a potem zapisz ten zestaw jako swój trening, żeby następnym razem wybrać go jednym stuknięciem.</span></div>')}
+    <button type="button" class="btn primary lv-big" data-lv="pick">Dodaj ćwiczenia</button>
+    <div class="lv-foot">${L.ex.length ? `<button type="button" class="btn text" data-lv="tplsave">${L.tpl ? `Zapisz zmiany w „${esc(L.tpl)}”` : "Zapisz jako mój trening"}</button>` : ""}<button type="button" class="btn text danger" data-lv="discard">Odrzuć trening</button></div>
+  </div>`;
+  };
+  function tplList() {
+    return `<section class="lv-tpls"><h2 class="lv-h">Moje treningi</h2>${S.templates.map((t) => {
+      const groups = [...new Set(t.ex.map((x) => groupOf(x.name)).filter((g) => g !== "Inne"))];
+      const sets = t.ex.reduce((n, x) => n + x.sets, 0);
+      return `<div class="lv-tpl"><button type="button" class="lv-tpl-go" data-lv="tpl" data-t="${esc(t.id)}"><b>${esc(t.name)}</b><span class="faint">${t.ex.length} ${plural(t.ex.length, "ćwiczenie", "ćwiczenia", "ćwiczeń")} · ${sets} ${plural(sets, "seria", "serie", "serii")}${groups.length ? ` · ${esc(groups.join(", "))}` : ""}</span><span class="lv-tpl-ex">${esc(t.ex.map((x) => x.name).join(" · "))}</span></button><button type="button" class="btn small text" data-lv="tpldel" data-t="${esc(t.id)}" aria-label="Usuń ${esc(t.name)}">Usuń</button></div>`;
+    }).join("")}<p class="faint lv-tpl-hint">Albo dodaj ćwiczenia ręcznie poniżej.</p></section>`;
+  }
+  function liveTick() {
+    const L = S.live;
+    const lb = $("#liveBtn");
+    if (lb) {
+      lb.classList.toggle("on", !!L);
+      lb.innerHTML = L ? `<i class="lv-dot"></i><span class="num">${hmmss((Date.now() - L.start) / 1e3).replace(/^0:/, "")}</span>` : `${ic("dumbbell", "ic")}Trening`;
+    }
+    if (!L) return;
+    const d = $("#lvDur");
+    if (d) d.textContent = hmmss((Date.now() - L.start) / 1e3);
+    const left = L.restEnd ? (L.restEnd - Date.now()) / 1e3 : null;
+    if (L.restEnd && left <= 0) {
+      L.restEnd = null;
+      pushPlanned = false;
+      persist();
+      restDone();
+    }
+    const r = $("#lvRest"), bar = $("#lvRestBar");
+    if (r) {
+      r.textContent = L.restEnd ? mmss(left) : "Przerwa";
+      r.parentElement.classList.toggle("on", !!L.restEnd);
+    }
+    if (bar) bar.style.transform = `scaleX(${L.restEnd ? Math.max(0, left / L.restTotal) : 0})`;
+    const rd = $("#restDialog");
+    if (rd?.open) drawRest(rd);
+  }
+  setInterval(liveTick, 500);
+  let audio = null;
+  const unlockAudio = () => {
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      if (audio.state === "suspended") audio.resume();
+    } catch {
+    }
+  };
+  function restDone() {
+    toast("Koniec przerwy");
+    try {
+      navigator.vibrate?.([200, 100, 200]);
+    } catch {
+    }
+    if (!audio) return;
+    for (const t of [0, 0.25]) {
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.frequency.value = 880;
+      g.gain.setValueAtTime(1e-4, audio.currentTime + t);
+      g.gain.exponentialRampToValueAtTime(0.25, audio.currentTime + t + 0.02);
+      g.gain.exponentialRampToValueAtTime(1e-4, audio.currentTime + t + 0.18);
+      o.connect(g).connect(audio.destination);
+      o.start(audio.currentTime + t);
+      o.stop(audio.currentTime + t + 0.2);
+    }
+  }
+  const restDef = () => S.restDefault || 180;
+  const REST_PRE = [60, 90, 120, 150, 180, 240, 300];
+  function parseRest(v) {
+    v = String(v).trim().replace(/\s*(s|sek|sekund)\.?$/i, "");
+    let m = v.match(/^(\d{1,2})[:.,](\d{1,2})$/), sec;
+    if (m) sec = m[2].length === 1 ? Math.round((+m[1] + +m[2] / 10) * 60) : +m[1] * 60 + +m[2];
+    else if (m = v.match(/^\d{1,4}$/)) sec = v.length >= 3 ? +v.slice(0, -2) * 60 + +v.slice(-2) : +v <= 10 ? +v * 60 : +v;
+    return sec >= 5 && sec <= 900 ? sec : 0;
+  }
+  console.assert(parseRest("2:15") === 135 && parseRest("215") === 135 && parseRest("3") === 180 && parseRest("90") === 90 && parseRest("1,5") === 90 && parseRest("45 s") === 45 && !parseRest("abc"), "parseRest");
+  function startRest(sec) {
+    S.live.restEnd = Date.now() + sec * 1e3;
+    S.live.restTotal = sec;
+    persist();
+    liveTick();
+    pushPlan();
+  }
+  const PUSH = !NATIVE && location.hostname.endsWith(".pages.dev") && "PushManager" in window && "serviceWorker" in navigator && !!window.PUSH_KEY;
+  const pushSub = () => {
+    try {
+      return JSON.parse(localStorage.getItem("forma.push") || "null");
+    } catch {
+      return null;
+    }
+  };
+  const pushOn = () => PUSH && !DEMO && !!pushSub() && Notification.permission === "granted";
+  let pushT = null, pushPlanned = false;
+  function nextSetText() {
+    const L = S.live, from = Math.max(0, L.lastI || 0);
+    for (let k = 0; k < L.ex.length; k++) {
+      const x = L.ex[(from + k) % L.ex.length], j = x.sets.findIndex((s) => !s.done);
+      if (j < 0) continue;
+      const p = prevSets(x.name)[j];
+      return `${x.name} · seria ${j + 1} z ${x.sets.length}${p ? ` · ostatnio ${fmtSet(p)}` : ""}`;
+    }
+    return "Wszystkie serie zrobione. Zakończ trening w Formie.";
+  }
+  function pushSend(job) {
+    return fetch("/api/push", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sub: pushSub(), ...job }), keepalive: true }).catch(() => {
+    });
+  }
+  function pushPlan() {
+    if (!pushOn()) return;
+    clearTimeout(pushT);
+    pushT = setTimeout(() => {
+      const L = S.live;
+      if (L?.restEnd && L.restEnd > Date.now() + 1500) {
+        pushPlanned = true;
+        pushSend({ at: L.restEnd, title: "Koniec przerwy", body: nextSetText() });
+      } else if (pushPlanned) {
+        pushPlanned = false;
+        pushSend({ cancel: true });
+      }
+    }, 400);
+  }
+  async function enablePush() {
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm !== "granted") {
+        toast("Bez zgody na powiadomienia to nie zadziała. Zmienisz to w Ustawieniach iPhone’a → Powiadomienia → Forma.", 7e3);
+        return;
+      }
+      const reg = await navigator.serviceWorker.ready;
+      const key = Uint8Array.from(atob(window.PUSH_KEY.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((window.PUSH_KEY.length + 3) % 4)), (c) => c.charCodeAt(0));
+      const sub = await reg.pushManager.getSubscription() || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
+      localStorage.setItem("forma.push", JSON.stringify(sub));
+      pushSend({ at: Date.now() + 8e3, title: "Forma", body: "Powiadomienia działają. Tak przyjdzie „Koniec przerwy”." });
+      toast("Włączone. Za kilka sekund przyjdzie próbne powiadomienie.", 5e3);
+      rerender();
+    } catch (e) {
+      toast(`Nie udało się włączyć powiadomień (${e?.message || e}).`, 7e3);
+    }
+  }
+  function drawRest(d) {
+    const L = S.live;
+    if (!L) {
+      d.close();
+      return;
+    }
+    const left = L.restEnd ? Math.max(0, (L.restEnd - Date.now()) / 1e3) : d.dataset.sec ? +d.dataset.sec : restDef();
+    const cur = L.restEnd ? L.restTotal : +d.dataset.sec;
+    $$('[data-rest^="set:"]', d).forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.rest.slice(4) === cur)));
+    const tot = L.restEnd ? L.restTotal : left, C = 2 * Math.PI * 46;
+    $(".rest-num", d).textContent = mmss(left);
+    $(".rest-arc", d).setAttribute("stroke-dasharray", `${(C * (tot ? left / tot : 0)).toFixed(1)} ${C.toFixed(1)}`);
+    $('[data-rest="go"]', d).textContent = L.restEnd ? "Pomiń" : "Start";
+  }
+  function openRest() {
+    let d = $("#restDialog");
+    if (!d) {
+      d = document.createElement("dialog");
+      d.id = "restDialog";
+      d.className = "rest-dlg";
+      d.setAttribute("aria-label", "Minutnik przerwy");
+      document.body.appendChild(d);
+      d.innerHTML = `<form method="dialog"><div class="rest-ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="none" stroke="var(--control)" stroke-width="3"/><circle class="rest-arc" cx="50" cy="50" r="46" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg><b class="rest-num num" aria-live="off"></b></div>
+      <div class="rest-pre-wrap"><span>Przerwa po każdej serii</span><div class="rest-pre" role="group" aria-label="Przerwa po każdej serii">${REST_PRE.map((s) => `<button type="button" class="chip" data-rest="set:${s}">${mmss(s).replace(/^0/, "")}</button>`).join("")}</div></div>
+      <div class="rest-own"><input type="text" inputmode="decimal" autocomplete="off" placeholder="Własny, np. 2:15" aria-label="Własny czas przerwy, minuty i sekundy"><button type="button" class="btn small" data-rest="own">Ustaw</button></div>
+      <div class="rest-btns"><button type="button" class="btn" data-rest="-10">−10 s</button><button type="button" class="btn primary" data-rest="go">Start</button><button type="button" class="btn" data-rest="10">+10 s</button></div>
+      <div class="dialog-actions" style="justify-content:center"><button class="btn text" type="button" data-close>Zamknij</button></div></form>`;
+      d.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && e.target.matches(".rest-own input")) {
+          e.preventDefault();
+          $('[data-rest="own"]', d).click();
+        }
+      });
+      d.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-rest]");
+        if (!b || !S.live) {
+          if (e.target === d) d.close();
+          return;
+        }
+        const L2 = S.live, a = b.dataset.rest;
+        unlockAudio();
+        if (a.startsWith("set:") || a === "own") {
+          const sec = a === "own" ? parseRest($(".rest-own input", d).value) : +a.slice(4);
+          if (!sec) {
+            toast("Wpisz czas, np. 2:15, 215 albo 90 (sekund).", 4e3);
+            $(".rest-own input", d).focus();
+            return;
+          }
+          $(".rest-own input", d).value = "";
+          $(".rest-own input", d).blur();
+          S.restDefault = sec;
+          d.dataset.sec = sec;
+          for (const x of L2.ex) x.rest = sec;
+          S.restPref = {};
+          if (L2.restEnd) {
+            L2.restEnd = Math.max(Date.now() + 1e3, L2.restEnd + (sec - L2.restTotal) * 1e3);
+            L2.restTotal = sec;
+          }
+          persist();
+          rerender();
+          pushPlan();
+          drawRest(d);
+          liveTick();
+          return;
+        }
+        if (a === "go") {
+          if (L2.restEnd) {
+            L2.restEnd = null;
+            persist();
+          } else startRest(+d.dataset.sec || restDef());
+        } else {
+          const dv = +a;
+          if (L2.restEnd) {
+            L2.restEnd = Math.max(Date.now() + 1e3, L2.restEnd + dv * 1e3);
+            L2.restTotal = Math.max(10, L2.restTotal + dv);
+            persist();
+          } else d.dataset.sec = Math.max(10, (+d.dataset.sec || 180) + dv);
+        }
+        drawRest(d);
+        liveTick();
+        pushPlan();
+      });
+    }
+    const L = S.live;
+    d.dataset.sec = L?.restEnd ? L.restTotal : L?.ex[L.lastI || 0]?.rest || restDef();
+    drawRest(d);
+    d.showModal();
+  }
+  let pickSel = /* @__PURE__ */ new Set(), pickGroup = "";
+  function pickList() {
+    const ex = exercises(), seen = /* @__PURE__ */ new Set(), out = [];
+    for (const x of [...ex.values()].sort((a, b) => a.last?.sid < b.last?.sid ? 1 : -1)) {
+      seen.add(x.name.toLowerCase());
+      out.push({ name: x.name, group: x.group, top: x.lastTop, date: x.last?.date });
+    }
+    for (const [g, list] of Object.entries(window.MUSCLE || {})) for (const e of list) if (!seen.has(e.toLowerCase())) {
+      seen.add(e.toLowerCase());
+      out.push({ name: e, group: g });
+    }
+    return out;
+  }
+  function drawPick(d) {
+    const q = $("input[type=search]", d).value.trim().toLowerCase();
+    const all = pickList(), list = all.filter((x) => (!pickGroup || x.group === pickGroup) && (!q || x.name.toLowerCase().includes(q) || x.group.toLowerCase().includes(q)));
+    const exact = q && all.some((x) => x.name.toLowerCase() === q);
+    const groups = [...new Set(all.map((x) => x.group))];
+    $(".pick-chips", d).innerHTML = ["", ...groups].map((g) => `<button type="button" class="chip" data-pg="${esc(g)}" aria-pressed="${g === pickGroup}">${g ? esc(g) : "Wszystkie"}</button>`).join("");
+    $(".pick-list", d).innerHTML = (q && !exact ? `<label class="pick-row pick-new"><input type="checkbox" data-pn="${esc($("input[type=search]", d).value.trim())}"${pickSel.has($("input[type=search]", d).value.trim()) ? " checked" : ""}><span class="grow"><b>Dodaj nowe: „${esc($("input[type=search]", d).value.trim())}”</b><span class="faint">własne ćwiczenie</span></span><i class="pick-box"></i></label>` : "") + (list.length ? list.slice(0, 200).map((x) => `<label class="pick-row"><input type="checkbox" data-pn="${esc(x.name)}"${pickSel.has(x.name) ? " checked" : ""}><span class="grow"><b>${esc(x.name)}</b><span class="faint">${esc(x.group)}${x.top ? ` · ostatnio ${fmtSet(x.top)}, ${dShort(x.date)}` : ""}</span></span><i class="pick-box"></i></label>`).join("") : '<p class="faint" style="padding:12px 4px">Nic nie pasuje.</p>');
+    const b = $("[data-pickadd]", d);
+    b.disabled = !pickSel.size;
+    b.textContent = pickSel.size ? `Dodaj (${pickSel.size})` : "Dodaj";
+  }
+  function openPick() {
+    let d = $("#pickDialog");
+    if (!d) {
+      d = document.createElement("dialog");
+      d.id = "pickDialog";
+      d.className = "pick-dlg";
+      d.setAttribute("aria-label", "Dodaj ćwiczenia");
+      document.body.appendChild(d);
+      d.innerHTML = `<form method="dialog"><div class="pick-head"><h2>Dodaj ćwiczenia</h2><button type="button" class="btn small text" data-close aria-label="Zamknij">Zamknij</button></div>
+      <input type="search" placeholder="Szukaj ćwiczenia" autocomplete="off" aria-label="Szukaj ćwiczenia"><div class="pick-chips"></div><div class="pick-list"></div>
+      <button type="button" class="btn primary lv-big" data-pickadd disabled>Dodaj</button></form>`;
+      $("input[type=search]", d).addEventListener("input", () => drawPick(d));
+      $("input[type=search]", d).addEventListener("keydown", (e) => {
+        if (e.key === "Enter") e.preventDefault();
+      });
+      d.addEventListener("change", (e) => {
+        const n = e.target.dataset.pn;
+        if (n == null) return;
+        if (e.target.checked) pickSel.add(n);
+        else pickSel.delete(n);
+        drawPick(d);
+      });
+      d.addEventListener("click", (e) => {
+        const g = e.target.closest("[data-pg]");
+        if (g) {
+          pickGroup = g.dataset.pg;
+          drawPick(d);
+          return;
+        }
+        if (e.target.closest("[data-pickadd]") && pickSel.size) {
+          const names = [...pickSel];
+          d.close();
+          liveAddEx(names);
+        }
+      });
+    }
+    pickSel = /* @__PURE__ */ new Set();
+    pickGroup = "";
+    $("input[type=search]", d).value = "";
+    drawPick(d);
+    d.showModal();
+    $(".pick-list", d).scrollTop = 0;
+  }
+  function openFinish() {
+    const L = S.live;
+    if (!L) return;
+    const { vol, n } = liveStats();
+    if (!n) {
+      toast("Odhacz przynajmniej jedną serię.");
+      return;
+    }
+    let d = $("#finishDialog");
+    if (!d) {
+      d = document.createElement("dialog");
+      d.id = "finishDialog";
+      d.setAttribute("aria-labelledby", "finTitle");
+      document.body.appendChild(d);
+    }
+    const st = new Date(L.start), mins = Math.max(1, Math.round((Date.now() - L.start) / 6e4));
+    const exN = L.ex.filter((x) => x.sets.some((s) => s.done)).length;
+    d.innerHTML = `<form method="dialog" id="finishForm"><h2 id="finTitle">Zakończ trening</h2>
+    <p class="faint" style="margin:-6px 0 0;font-size:13px">${exN} ${plural(exN, "ćwiczenie", "ćwiczenia", "ćwiczeń")} · ${n} ${plural(n, "seria", "serie", "serii")} · ${f0.format(vol)} kg</p>
+    <div class="form-grid">
+      <label class="field full">Nazwa<input type="text" name="title" value="${esc(L.tpl || dayTitle(st))}" maxlength="60"></label>
+      <label class="field full">Kiedy<input type="datetime-local" name="at" value="${iso(st)}T${pad2(st.getHours())}:${pad2(st.getMinutes())}" required></label>
+      <label class="field">Czas trwania (min)<input type="number" name="min" min="1" max="600" inputmode="numeric" value="${mins}" required></label>
+      <label class="field">Rodzaj<select name="kind">${KINDS.map((k) => `<option${k === "Trening siłowy" ? " selected" : ""}>${k}</option>`).join("")}</select></label>
+    </div>
+    <button class="btn primary lv-big" value="save">Zapisz</button>
+    <div class="dialog-actions fin-actions"><button class="btn text danger" type="button" data-lv="discard">Odrzuć trening</button><button class="btn" type="button" data-close>Wróć do treningu</button></div></form>`;
+    $("#finishForm", d).onsubmit = (ev) => {
+      ev.preventDefault();
+      const f = ev.target;
+      const [date, time] = f.at.value.split("T");
+      if (!date || !time) return;
+      let id = `${date} ${time}:00`;
+      for (let k = 1; Object.hasOwn(S.sessions, id); k++) id = `${date} ${time}:${pad2(k)}`;
+      const sets = [];
+      for (const x of L.ex) for (const s of x.sets) if (s.done) sets.push({ e: x.name, w: liveNum(s.w) || 0, r: Math.round(liveNum(s.r) || 0), t: "NORMAL_SET" });
+      S.sessions[id] = { id, date, time, title: f.title.value.trim() || dayTitle(st), dur: `${pad2(Math.floor(+f.min.value / 60))}:${pad2(+f.min.value % 60)}:00`, kind: f.kind.value, sets };
+      S.restPref = { ...S.restPref || {}, ...Object.fromEntries(L.ex.filter((x) => x.rest !== restDef()).map((x) => [x.name, x.rest])) };
+      S.live = null;
+      pushPlan();
+      d.close();
+      save("Trening zapisany");
+      location.replace(`#/trening/${encodeURIComponent(id)}`);
+    };
+    d.showModal();
+  }
+  function liveDiscard() {
+    if (!S.live) return;
+    if (!confirm("Odrzucić ten trening? Zapisane serie przepadną.")) return;
+    $("#finishDialog")?.open && $("#finishDialog").close();
+    S.live = null;
+    pushPlan();
+    persist();
+    toast("Trening odrzucony");
+    location.replace("#/pulpit");
+  }
+  document.addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-lv]");
+    if (!b) return;
+    const a = b.dataset.lv, box = b.closest("[data-i]"), i = box ? +box.dataset.i : -1, L = S.live;
+    if (a === "start") {
+      liveStart();
+      return;
+    }
+    if (a === "discard") {
+      liveDiscard();
+      return;
+    }
+    if (a === "tpldel") {
+      const t = S.templates.find((x) => x.id === b.dataset.t);
+      if (t && confirm(`Usunąć „${t.name}” z Moich treningów?`)) {
+        S.templates = S.templates.filter((x) => x !== t);
+        save("Usunięto");
+        rerender();
+      }
+      return;
+    }
+    if (!L) return;
+    if (a === "tpl") {
+      const t = S.templates.find((x) => x.id === b.dataset.t);
+      if (!t) return;
+      L.tpl = t.name;
+      liveAddEx(t.ex, true);
+      return;
+    }
+    if (a === "tplsave") {
+      const name = (prompt("Nazwa treningu (np. Nogi)", L.tpl || "") || "").trim().slice(0, 60);
+      if (!name) return;
+      const ex = L.ex.map((x) => ({ name: x.name, sets: Math.max(1, x.sets.length) }));
+      const old = (S.templates = S.templates || []).find((t) => t.name.toLowerCase() === name.toLowerCase());
+      if (old && old.name !== L.tpl && !confirm(`„${old.name}” już jest. Zastąpić go tym zestawem?`)) return;
+      if (old) {
+        old.ex = ex;
+        old.name = name;
+      } else S.templates.push({ id: uid(), n: S.templates.length, name, ex });
+      L.tpl = name;
+      save(`Zapisano „${name}” w Moich treningach`);
+      rerender();
+      return;
+    }
+    if (a === "bell") {
+      enablePush();
+      return;
+    }
+    if (a === "pick") openPick();
+    else if (a === "rest") {
+      unlockAudio();
+      openRest();
+    } else if (a === "finish") openFinish();
+    else if (a === "addset") {
+      const x = L.ex[i], last = x.sets.at(-1);
+      x.sets.push({ w: last?.w || "", r: last?.r || "", done: false });
+      persist();
+      rerender();
+    } else if (a === "dropset") {
+      L.ex[i].sets.pop();
+      persist();
+      rerender();
+    } else if (a === "delex") {
+      if (L.ex[i].sets.some((s) => s.done) && !confirm(`Usunąć ${L.ex[i].name} razem z odhaczonymi seriami?`)) return;
+      L.ex.splice(i, 1);
+      persist();
+      rerender();
+    } else if (a === "up" && i > 0) {
+      [L.ex[i - 1], L.ex[i]] = [L.ex[i], L.ex[i - 1]];
+      persist();
+      rerender();
+    } else if (a === "done") {
+      unlockAudio();
+      kpHide();
+      const row = b.closest(".lv-row"), j = +row.dataset.j, s = L.ex[i].sets[j];
+      if (!s.done) {
+        const iw = $("[data-lvw]", row), ir = $("[data-lvr]", row);
+        if (s.w === "" && iw.placeholder) s.w = iw.placeholder;
+        if (s.r === "" && ir.placeholder) s.r = ir.placeholder;
+        if (!(liveNum(s.r) > 0)) {
+          toast("Wpisz liczbę powtórzeń.");
+          ir.focus();
+          return;
+        }
+        s.done = true;
+        L.lastI = i;
+        startRest(L.ex[i].rest);
+      } else s.done = false;
+      persist();
+      rerender();
+    }
+    if (b.closest("details")) b.closest("details").open = false;
+  });
+  document.addEventListener("input", (ev) => {
+    const t = ev.target;
+    if (!S.live || !t.closest?.(".lv")) return;
+    const row = t.closest(".lv-row"), i = +t.closest("[data-i]")?.dataset.i;
+    if (t.matches("[data-lvrest]")) {
+      const x = S.live.ex[i];
+      x.rest = +t.value;
+      S.restPref = { ...S.restPref || {}, [x.name]: x.rest };
+      liveKeep();
+      return;
+    }
+    if (!row) return;
+    const s = S.live.ex[i].sets[+row.dataset.j];
+    if (t.matches("[data-lvw]")) s.w = t.value.replace(".", ",");
+    else if (t.matches("[data-lvr]")) s.r = t.value.replace(/\D/g, "");
+    if (s.done) {
+      const { vol } = liveStats();
+      const v = $("#lvVol");
+      if (v) v.textContent = `${f0.format(vol)} kg`;
+    }
+    liveKeep();
+  });
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key !== "Enter" || !ev.target.matches?.(".lv-row input")) return;
+    ev.preventDefault();
+    const all = $$(".lv-row input", main);
+    all[all.indexOf(ev.target) + 1]?.focus() ?? ev.target.blur();
+  });
+  const KP = matchMedia("(pointer: coarse)").matches;
+  let kpT = null, kpFresh = false;
+  const kpEl = () => {
+    let k = $("#kp");
+    if (k) return k;
+    k = document.createElement("div");
+    k.id = "kp";
+    k.className = "kp";
+    k.hidden = true;
+    k.setAttribute("role", "group");
+    k.setAttribute("aria-label", "Klawiatura");
+    const key = (v, label, cls = "") => `<button type="button" class="kp-k ${cls}" data-k="${v}" aria-label="${label}">${label}</button>`;
+    k.innerHTML = key("1", "1") + key("2", "2") + key("3", "3") + `<button type="button" class="kp-k kp-side" data-k="hide" aria-label="Schowaj klawiaturę"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>` + key("4", "4") + key("5", "5") + key("6", "6") + `<button type="button" class="kp-k kp-side" data-k="plus"></button>` + key("7", "7") + key("8", "8") + key("9", "9") + `<button type="button" class="kp-k kp-side" data-k="minus"></button>` + key(",", ",") + key("0", "0") + `<button type="button" class="kp-k" data-k="del" aria-label="Usuń"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h11v14H9l-6-7z"/><path d="M12.5 9.5l5 5M17.5 9.5l-5 5"/></svg></button><button type="button" class="kp-k kp-go" data-k="next">Dalej</button>`;
+    k.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-k]");
+      if (b) kpPress(b.dataset.k);
+    });
+    document.body.appendChild(k);
+    return k;
+  };
+  const kpInputs = () => $$(".lv-row input", main);
+  function kpOpen(t) {
+    if (kpT && kpT !== t) kpT.classList.remove("kp-on");
+    kpT = t;
+    kpFresh = true;
+    t.classList.add("kp-on");
+    const k = kpEl(), kg2 = t.matches("[data-lvw]");
+    $('[data-k=","]', k).disabled = !kg2;
+    $('[data-k="plus"]', k).textContent = kg2 ? "+2,5" : "+1";
+    $('[data-k="minus"]', k).textContent = kg2 ? "−2,5" : "−1";
+    $('[data-k="plus"]', k).setAttribute("aria-label", kg2 ? "Dodaj 2,5 kg" : "Dodaj 1 powtórzenie");
+    $('[data-k="minus"]', k).setAttribute("aria-label", kg2 ? "Odejmij 2,5 kg" : "Odejmij 1 powtórzenie");
+    const all = kpInputs();
+    $('[data-k="next"]', k).textContent = all.indexOf(t) < all.length - 1 ? "Dalej" : "Gotowe";
+    k.hidden = false;
+    document.body.classList.add("kp-open");
+    requestAnimationFrame(() => {
+      const r = t.closest(".lv-row").getBoundingClientRect(), top = innerHeight - k.offsetHeight - 12;
+      if (r.bottom > top) window.scrollBy({ top: r.bottom - top, behavior: "smooth" });
+      else if (r.top < 70) window.scrollBy({ top: r.top - 80, behavior: "smooth" });
+    });
+  }
+  function kpHide() {
+    kpT?.classList.remove("kp-on");
+    kpT = null;
+    const k = $("#kp");
+    if (k) k.hidden = true;
+    document.body.classList.remove("kp-open");
+  }
+  function kpPress(k) {
+    const t = kpT;
+    if (!t || !t.isConnected) {
+      kpHide();
+      return;
+    }
+    if (k === "hide") {
+      kpHide();
+      return;
+    }
+    if (k === "next") {
+      const all = kpInputs(), n = all[all.indexOf(t) + 1];
+      if (n) kpOpen(n);
+      else kpHide();
+      return;
+    }
+    const kg2 = t.matches("[data-lvw]");
+    let v = kpFresh ? "" : t.value;
+    if (k === "del") v = (kpFresh ? t.value : v).slice(0, -1);
+    else if (k === "plus" || k === "minus") {
+      const base = liveNum(t.value) ?? liveNum(t.placeholder) ?? 0, step = kg2 ? 2.5 : 1;
+      const n = Math.max(0, Math.round((base + (k === "plus" ? step : -step)) * 100) / 100);
+      v = kg2 ? String(n).replace(".", ",") : String(Math.round(n));
+    } else if (k === ",") {
+      if (!v.includes(",")) v = (v || "0") + ",";
+    } else if (/^\d$/.test(k)) {
+      const nv = v === "0" ? k : v + k;
+      if (kg2 ? /^\d{0,3}(,\d{0,2})?$/.test(nv) : /^\d{0,3}$/.test(nv)) v = nv;
+    }
+    kpFresh = false;
+    t.value = v;
+    t.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  if (KP) {
+    document.addEventListener("click", (e) => {
+      const t = e.target.closest?.(".lv-row input");
+      if (t) {
+        kpOpen(t);
+        return;
+      }
+      if (kpT && !e.target.closest?.("#kp")) kpHide();
+    }, true);
+    addEventListener("hashchange", kpHide);
+  }
+  $("#liveBtn")?.addEventListener("click", liveStart);
+  const SYNC_SCALARS = ["profile", "rm", "theme", "cartOff", "cartPick", "cartSkip", "cartIn", "cartMine", "cartSame", "lastImport", "mailInit", "healthReq", "healthAck"];
   function recordsOf(st) {
     const m = /* @__PURE__ */ new Map();
     for (const k of SYNC_SCALARS) if (st[k] !== void 0 && st[k] !== null) m.set(k, st[k]);
@@ -3245,10 +4358,11 @@ ${body}`;
     arr("skin.products", st.skin?.products);
     if (st.skin?.routine) m.set("skin.routine", st.skin.routine);
     map("skin.checks", st.skin?.checks);
+    arr("tpl", st.templates);
     return m;
   }
   function fromRecords(m, base) {
-    const st = { ...base, days: {}, sessions: {}, checkins: {}, supps: [], labs: [], orders: [], skin: { routine: base.skin?.routine || { am: [], pm: [] }, products: [], checks: {} } };
+    const st = { ...base, days: {}, sessions: {}, checkins: {}, templates: [], supps: [], labs: [], orders: [], skin: { routine: base.skin?.routine || { am: [], pm: [] }, products: [], checks: {} } };
     for (const k of SYNC_SCALARS) delete st[k];
     for (const [k, v] of m) {
       const i = k.indexOf("/"), pre = i < 0 ? k : k.slice(0, i), id = i < 0 ? null : k.slice(i + 1);
@@ -3261,9 +4375,11 @@ ${body}`;
       else if (pre === "supps" || pre === "labs" || pre === "orders") st[pre].push(v);
       else if (pre === "skin.products") st.skin.products.push(v);
       else if (pre === "skin.checks") st.skin.checks[id] = v;
+      else if (pre === "tpl") st.templates.push(v);
     }
     const order = new Map((base.supps || []).map((x, i) => [x.id, i]));
     st.supps.sort((a, b) => (order.get(a.id) ?? 1e9) - (order.get(b.id) ?? 1e9));
+    st.templates = (st.templates || []).sort((a, b) => (a.n ?? 0) - (b.n ?? 0));
     return st;
   }
   let lastRec = null;
@@ -3313,7 +4429,28 @@ ${body}`;
       else localStorage.removeItem(SYNC_KEY);
     } catch {
     }
+    syncMirror(c?.code || null);
   };
+  const SYNC_MIRROR = new Request("/__forma-kod");
+  let mirrored;
+  function syncMirror(code) {
+    if (!("caches" in window) || code === mirrored) return;
+    mirrored = code;
+    caches.open("forma-kod").then((c) => code ? c.put(SYNC_MIRROR, new Response(code)) : c.delete(SYNC_MIRROR)).catch(() => {
+    });
+  }
+  async function syncRestore() {
+    if (syncCfg()?.code || !("caches" in window)) return;
+    try {
+      const r = await (await caches.open("forma-kod")).match(SYNC_MIRROR), code = r && cleanCode(await r.text());
+      if (code?.length === 25) {
+        mirrored = code;
+        localStorage.setItem(SYNC_KEY, JSON.stringify({ code: code.replace(/(.{5})(?!$)/g, "$1-") }));
+        render({ animate: false, scroll: false });
+      }
+    } catch {
+    }
+  }
   function newSyncCode() {
     const b = crypto.getRandomValues(new Uint8Array(25));
     return [...b].map((x) => SYNC_ABC[x % 32]).join("").replace(/(.{5})(?!$)/g, "$1-");
@@ -3351,6 +4488,8 @@ ${body}`;
       return;
     }
     syncState.busy = true;
+    syncState.pending = false;
+    clearTimeout(syncState.timer);
     if (manual) toast("Synchronizuję…");
     try {
       if (!syncState.keys || syncState.keys.code !== cfg.code) syncState.keys = { code: cfg.code, ...await syncKeys(cfg.code) };
@@ -3392,6 +4531,7 @@ ${body}`;
       syncState.last = (/* @__PURE__ */ new Date()).toISOString();
       syncState.err = null;
       setSyncCfg({ ...cfg, last: syncState.last });
+      healthCheckReq();
       if (manual) toast("Zsynchronizowano");
     } catch (e) {
       syncState.err = e.message || String(e);
@@ -3473,8 +4613,9 @@ ${body}`;
   }
   function syncSoon() {
     if (!syncCfg()?.code) return;
+    syncState.pending = true;
     clearTimeout(syncState.timer);
-    syncState.timer = setTimeout(() => syncNow(), 4e3);
+    syncState.timer = setTimeout(() => syncNow(), 1500);
   }
   function syncCard() {
     return `<section class="card c12"><div class="card-head"><h2>Synchronizacja z telefonem</h2><div class="right" id="syncState"></div></div><div id="syncBody"></div></section>`;
@@ -3505,7 +4646,7 @@ ${body}`;
   const foldTxt = (t) => String(t).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l");
   function paletteItems() {
     const go = (r) => () => {
-      location.hash = "#/" + r;
+      location.replace("#/" + r);
     };
     const ex = exercises();
     const exList = Array.isArray(ex) ? ex : [...ex?.values?.() || []];
@@ -3517,19 +4658,19 @@ ${body}`;
       { t: "Atlas ćwiczeń", k: "Zakładka", run: () => {
         bodyMode = "atlas";
         bodySel = null;
-        location.hash = "#/cialo";
+        location.replace("#/cialo");
         render();
       } },
       ...Object.entries(window.MUSCLES || {}).map(([m, l]) => ({ t: `Ćwiczenia: ${l}`, k: "Atlas", run: () => {
         bodyMode = "atlas";
         bodySel = m;
-        location.hash = "#/cialo";
+        location.replace("#/cialo");
         render();
       } })),
       { t: "Wczytaj eksport treningów (CSV)", k: "Akcja", run: () => $("#fileCsv").click() },
       ...DEMO ? [] : [{ t: "Skopiuj raport dla Claude", k: "Akcja", run: () => {
         navigator.clipboard.writeText(buildReport(repDays)).then(() => toast("Skopiowano raport. Wklej go do nowej rozmowy."), () => {
-          location.hash = "#/raport";
+          location.replace("#/raport");
         });
       } }],
       { t: "Pobierz kopię danych (JSON)", k: "Akcja", run: () => download(`forma-kopia-${today()}.json`, JSON.stringify(S, null, 1), "application/json") },
@@ -3625,7 +4766,7 @@ ${body}`;
       if (!m) return;
       const n = +m[1];
       ev.preventDefault();
-      location.hash = "#/" + (n === 0 ? "ustawienia" : NAV[n - 1]?.[0] || "pulpit");
+      location.replace("#/" + (n === 0 ? "ustawienia" : NAV[n - 1]?.[0] || "pulpit"));
     }
   });
   S = DEMO ? demoState() : load();
@@ -3635,12 +4776,15 @@ ${body}`;
   persist();
   applyTheme();
   starfield();
+  navigator.storage?.persist?.().catch(() => {
+  });
+  syncRestore().then(() => syncMirror(syncCfg()?.code || null));
   setTimeout(() => syncNow(), 2500);
   setInterval(() => {
-    if (!document.hidden) syncNow();
+    if (!document.hidden || NATIVE) syncNow();
   }, 3 * 6e4);
   document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) syncNow();
+    if (!document.hidden || syncState.pending) syncNow();
   });
   addEventListener("online", () => syncNow());
   if ("serviceWorker" in navigator && location.protocol === "https:") {
@@ -3673,9 +4817,30 @@ ${body}`;
         console.warn(e);
       }
     });
+    const inbox2 = async () => {
+      const txt = await NATIVE.inboxRead?.();
+      if (!txt) return;
+      let box;
+      try {
+        box = JSON.parse(txt);
+      } catch {
+        return;
+      }
+      const days2 = Object.entries(box.days || {}).filter(([d, v]) => /^\d{4}-\d{2}-\d{2}$/.test(d) && v && typeof v === "object");
+      for (const [d, v] of days2) S.days[d] = { ...S.days[d] || {}, ...Object.fromEntries(Object.entries(v).filter(([, n]) => typeof n === "number" && Number.isFinite(n))) };
+      if (days2.length) {
+        save();
+        render({ animate: false, scroll: false });
+      }
+      await NATIVE.inboxDone(txt);
+    };
+    if (NATIVE.inboxRead) {
+      inbox2();
+      setInterval(inbox2, 5e3);
+    }
     NATIVE.onNav((r) => {
       if (r === "log") openLog();
-      else if (VIEWS[r]) location.hash = "#/" + r;
+      else if (VIEWS[r]) location.replace("#/" + r);
     });
     const remind = () => {
       for (const x of runningOut()) {
