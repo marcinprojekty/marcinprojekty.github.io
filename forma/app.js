@@ -2505,11 +2505,11 @@
     return `<div class="title-row"><div><h1>Ustawienia</h1><div class="sub">${NATIVE ? "Dane zapisują się w pliku na komputerze, a kopia z każdego dnia osobno (ostatnie 30 dni)." : "Wersja demonstracyjna: zmyślone dane, zmiany znikają po odświeżeniu strony."}</div></div></div>
     <div class="grid">
       <section class="card c6"><div class="card-head"><h2>Profil i cel</h2><div class="right">zapisuje się samo</div></div>
-        <div class="form-grid">${f("name", "Imię", "text")}${f("height", "Wzrost (cm)")}${f("birth", "Data urodzenia", "date")}${f("activity", "Współczynnik aktywności", "number", 'step="0.05"')}
+        <div class="form-grid">${f("name", "Imię", "text")}${f("height", "Wzrost (cm)")}${f("birth", "Data urodzenia", "date")}<label class="field">Aktywność na co dzień<select data-prof="activity">${(OB_ACT.some(([v]) => v === +P.activity) ? OB_ACT : [...OB_ACT, [+P.activity, "Własna", "ustawiona wcześniej"]]).map(([v, l, d]) => `<option value="${v}"${v === +P.activity ? " selected" : ""}>${l}: ${d} (×${String(v).replace(".", ",")})</option>`).join("")}</select></label>
         ${f("kcal", `Kalorie (kcal / dzień, 0 = ze spalania, teraz ${f0.format(energy().target)})`)}${f("protein", "Białko (g / dzień)")}${f("fat", "Tłuszcz (g / dzień)")}<label class="field">Tempo (kg / tydz., minus = chudnięcie)<input type="number" step="0.05" data-prof="rateKg" value="${+energy().rateKg.toFixed(2)}"></label>${f("goalDate", "Termin celu", "date")}${f("lead", "Dostawa suplementów (dni)")}
         ${f("upLo", "Góra ciała: powt. od")}${f("upHi", "Góra ciała: powt. do")}${f("legLo", "Nogi: powt. od")}${f("legHi", "Nogi: powt. do")}${f("benchLo", "Ławka 5×2: % rekordu od")}${f("benchHi", "Ławka 5×2: % rekordu do")}${f("benchGoal", "Ławka: cel szac. 1RM (kg, 0 = bez)")}
         <label class="field">Po terminie celu przejdź na<select data-prof="nextGoal">${[["", "nic, zostaw jak jest"], ["masa", "masa"], ["rekompozycja", "rekompozycja"], ["redukcja", "redukcja"]].map(([v, l]) => `<option value="${v}"${P.nextGoal === v ? " selected" : ""}>${l}</option>`).join("")}</select></label><label class="field">Tempo następnej fazy (kg / tydz.)<input type="number" step="0.05" data-prof="nextKg" value="${+(P.nextKg || P.nextRate / 100 * energy().bw).toFixed(2)}"></label></div>
-        <div class="faint" style="font-size:12px;margin-top:12px">Tempo: redukcja −0,5%/tydz. (Helms 2014 zaleca 0,5–1%, wolniej lepiej chroni mięśnie, Garthe 2011), masa +0,25%/tydz., czyli ok. 0,75 kg/mies. (Iraki 2019: 0,25–0,5%). Rekompozycja −0,25% to reguła praktyczna, bez badań. Współczynnik aktywności 1,6 (FAO/WHO: siedzący tryb 1,55 + trening) używam tylko, dopóki nie ma 2 tygodni danych.</div></section>
+        <div class="faint" style="font-size:12px;margin-top:12px">Tempo: redukcja −0,5%/tydz. (Helms 2014 zaleca 0,5–1%, wolniej lepiej chroni mięśnie, Garthe 2011), masa +0,25%/tydz., czyli ok. 0,75 kg/mies. (Iraki 2019: 0,25–0,5%). Rekompozycja −0,25% to reguła praktyczna, bez badań. Aktywność liczy się tylko na start: po 2 tygodniach wpisów wagi i jedzenia spalanie wychodzi z twoich danych.</div></section>
       
       <section class="card c6"><div class="card-head"><h2>Dane</h2></div>
         <ul class="list">
@@ -3143,7 +3143,7 @@
     }
     if (t.dataset.prof) {
       const k = t.dataset.prof;
-      const v = t.type === "number" ? parseFloat(String(t.value).replace(",", ".")) : t.value;
+      const v = t.type === "number" || k === "activity" ? parseFloat(String(t.value).replace(",", ".")) : t.value;
       if (t.type === "number" && !Number.isFinite(v) || t.type === "date" && !/^\d{4}-\d{2}-\d{2}$/.test(v) || t.type === "text" && !String(v).trim()) {
         toast("To pole nie może być puste, zostawiam poprzednią wartość.");
         rerender();
