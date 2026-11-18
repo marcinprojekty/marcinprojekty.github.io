@@ -2496,14 +2496,6 @@
       L.push("", "## Notatki z dziennika");
       for (const d of notes) L.push(`- ${dShort(d)}: ${S.days[d].note}`);
     }
-    L.push(
-      "",
-      "## Jak AI zapisuje jedzenie (Claude Code na komputerze, folder gym)",
-      '- Jedzenie opisane w czacie wpisuj bez pytania: `node program/jedzenie.js RRRR-MM-DD kcal białko tłuszcz węgle --nazwa "spaghetti 644 g" opis`. Data = dzień, w którym to zjadłem. Nazwa krótka: co i ile.',
-      "- Wpis od razu trafia do Formy. Do Makro (posiłek Lunch, nazwa „Forma 18.11: spaghetti 644 g”) dodaje go automatyczny odczyt o 8, 14 i 22 albo od razu `node program/makro-sync.js dodaj`. Zaległe dni nadrabia sam, każdy wpis w swój dzień.",
-      "- Zrzut sumy dnia z Makro: te same liczby i `--makro` na końcu zamiast nazwy i opisu (zastępuje sumę z Makro, do Makro nic nie dodaje).",
-      "- Wpisy z czatu są w dane/jedzenie-czat.json; „makro: true” = już jest w Makro i Forma liczy go w sumie z Makro, nie podwójnie."
-    );
     L.push("", "Na podstawie tego raportu: oceń postępy, dostosuj kalorie i plan, i zapytaj mnie, co było trudne.");
     return L.join("\n");
   }
